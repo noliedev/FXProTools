@@ -1,0 +1,44 @@
+
+.affwp-pb-bonuses-wrapper{width: 100%; margin-bottom: 2em; float: left;}
+
+.affwp-pb-bonus-wrapper{width: 12.4em; margin-top: 2em; margin-right: 1.5em; margin-bottom: 1em; padding: 1em; float: left; border: 1px solid; border-color: #666;}
+
+.affwp-pb-bonus-amount{margin-top: -2.2em; margin-bottom: 1em; text-align: center;}
+
+.affwp-pb-bonus-amount p{width: 7em; padding: .3em 0; margin-left: auto; margin-right: auto; border: 1px solid; border-color: #666; background: #fff; font-weight: bold;}
+
+.affwp-pb-bonus-title{margin-bottom: 1em; padding-bottom: .5em; font-weight: bold; text-align: center; text-transform: uppercase; border-bottom: 1px solid; border-color: #555;}
+
+.affwp-pb-bonus-progress{margin-top: 2em; margin-bottom: 1em;}
+
+/* HTML 5 Progress Bar */
+.affwp-pb-bonus-progress progress[value]{
+  /* Reset the default appearance */
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+
+  /* Get rid of default border in Firefox. */
+  border: none;
+
+  /* Dimensions */
+  width: 100%; height: 2em;
+
+  /* For IE10 */
+  color: #bbb; 
+}
+
+/* HTML 5 Progress Bar Container */
+.affwp-pb-bonus-progress progress[value]::-webkit-progress-bar {background-color: #eee;}
+
+/* HTML 5 Progress Bar Value */
+.affwp-pb-bonus-progress progress[value]::-webkit-progress-value {background-color: #bbb;}
+
+.affwp-pb-bonus-progress-text{width: 100%; float: left; margin-top: -1.95em; padding-top: 1%; position: relative; z-index: 9; font-size: 15px; font-size: .95em; font-weight: bold; text-align: center;}
+
+.affwp-pb-bonus-info{}
+
+.affwp-pb-bonus-info p{height: 4em; font-size: 14px; font-size: 1em;}
+
+.affwp-pb-bonus-pre-bonus{margin-top: 1em; margin-bottom: .5em; padding-top: .5em; font-weight: bold; text-align: center; border-top: 1px solid; border-color: #555;}
+
+.affwp-pb-bonus-pre-bonus-title{text-align: center;}
+
