@@ -14,4 +14,10 @@ $theme = wp_get_theme('storefront');
 $storefront_version	= $theme['Version'];
 
 // Load the individual class required by this theme
-require_once( 'inc/class-storefront-child.php' );
+$core_settings = array(
+	'class-storefront-admin.php',
+	'class-storefront-theme.php'
+);
+foreach ($core_settings as $setting) {
+	require_once('inc/'.$setting);
+}

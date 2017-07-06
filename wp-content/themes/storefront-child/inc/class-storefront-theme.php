@@ -1,20 +1,29 @@
 <?php
+/**
+ * ---------------------------------
+ * Storefront Child - Theme Settings
+ * ---------------------------------
+ * Storefront child theme related settings
+ */
+
 if(!defined('ABSPATH')){
 	exit;
 }
 
-if(!class_exists('StoreFrontChild')){
+if(!class_exists('StoreFrontTheme')){
 
-	class StoreFrontChild {
+	class StoreFrontTheme {
 		
-		// Setup Class
-		public function __construct() {
+		// Initialize function(s)
+		public function __construct()
+		{
 			add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
 			add_action('wp_enqueue_scripts', array($this, 'enqueue_child_styles'), 99);
 		}
 
 		// Storefront Styles - Parent
-		public function enqueue_styles() {
+		public function enqueue_styles()
+		{
 			global $storefront_version;
 			wp_enqueue_style(
 				'storefront-style',
@@ -24,7 +33,8 @@ if(!class_exists('StoreFrontChild')){
 		}
 
 		// Storefront Styles - Child
-		public function enqueue_child_styles() {
+		public function enqueue_child_styles()
+		{
 			global $storefront_version, $storefront_child_version;
 			wp_enqueue_style(
 				'storefront-child-style',
@@ -38,4 +48,4 @@ if(!class_exists('StoreFrontChild')){
 
 }
 
-return new StoreFrontChild();
+return new StoreFrontTheme();
