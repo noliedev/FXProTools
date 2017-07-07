@@ -1,0 +1,66 @@
+/*!
+Theme Name: Fxprotools Theme
+Author: Jben
+Description: Fxprotools theme using bootstrap 3, sass and gulp
+Version: 1
+*/
+
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
+
+// ---------
+// LIBRARIES
+// ---------
+// Bootstrap
+@import "../library/bootstrap-sass/_bootstrap";
+// Bourbon SASS
+@import "../library/bourbon/_bourbon";
+// Hover CSS
+@import "../library/hover-css/_hover-effects";
+// Animate CSS
+@import "../library/animate-css/_animate";
+
+// -----------------
+// VARIABLES, MIXINS
+// -----------------
+@import "_theme-variables";
+@import "_theme-mixins";
+
+// --------------
+// THEME ELEMENTS
+//---------------
+@import "_typography";
+@import "_navigation";
+@import "_top_navigation";
+@import "_buttons";
+@import "_badges_labels";
+@import "_elements";
+@import "_sidebar";
+@import "_base";
+@import "_pages";
+@import "_chat";
+@import "_metismenu";
+@import "_spinners";
+
+// -----------------
+// MEDIA QUERY STYLE
+// -----------------
+@import "_media";
+
+// ------------
+// CUSTOM STYLE
+// -------------
+// Override Styles Here
+@import "_theme-custom";
+
+// Clear layout on print mode
+@media print {
+  nav.navbar-static-side {
+    display: none;
+  }
+  body { overflow: visible !important; }
+
+  #page-wrapper {
+    margin: 0;
+  }
+}

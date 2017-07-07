@@ -10,11 +10,10 @@ if(!defined('ABSPATH')){
 	exit;
 }
 
-if(!class_exists('StoreFrontAdmin')){
+if(!class_exists('CoreAdmin')){
 
-	class StoreFrontAdmin {
+	class CoreAdmin {
 		
-		// Initialize function(s)
 		public function __construct()
 		{
 			add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
@@ -54,7 +53,7 @@ if(!class_exists('StoreFrontAdmin')){
 			remove_menu_page('upload.php');                 // Media
 			remove_menu_page('edit.php?post_type=page');    // Pages
 			remove_menu_page('edit-comments.php');          // Comments
-			// remove_menu_page('themes.php');                 // Appearance
+			remove_menu_page('themes.php');                 // Appearance
 			remove_menu_page('plugins.php');                // Plugins
 			remove_menu_page('users.php');                  // Users
 			remove_menu_page('tools.php');                  // Tools
@@ -123,4 +122,4 @@ if(!class_exists('StoreFrontAdmin')){
 
 }
 
-return new StoreFrontAdmin();
+return new CoreAdmin();
