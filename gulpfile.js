@@ -35,7 +35,7 @@ var theme_location = './wp-content/themes/fxprotools-theme',
 		    theme_location + '/vendors/flot/jquery.flot.time.js',
 			// Common Scripts
 			theme_location + '/assets/js/common.js',
-			theme_location + '/assets/js/dashboard.js'
+			// theme_location + '/assets/js/dashboard.js'
 			// Custom Scripts
 			// Add your scripts here
 		],
@@ -74,21 +74,21 @@ gulp.task('theme-js', function(){
 // ------------
 // VENDOR - CSS
 // ------------
-gulp.task('vendor-css', function(){
-	gulp.src(config.vendor_css)
-		.pipe(concat('vendor.bundle.css'))
-		.pipe(cssnano())
-		.pipe(gulp.dest(config.output+'/dist'));
-});
+// gulp.task('vendor-css', function(){
+// 	gulp.src(config.vendor_css)
+// 		.pipe(concat('vendor.bundle.css'))
+// 		.pipe(cssnano())
+// 		.pipe(gulp.dest(config.output+'/dist'));
+// });
 
 // ---------------
 // VENDOR - ASSETS
 // ---------------
-gulp.task('vendor-assets', function(){
-	gulp.src(config.vendor_assets)
-		.pipe(flatten())
-		.pipe(gulp.dest(config.output+'/dist'));
-});
+// gulp.task('vendor-assets', function(){
+// 	gulp.src(config.vendor_assets)
+// 		.pipe(flatten())
+// 		.pipe(gulp.dest(config.output+'/dist'));
+// });
 
 // ------------
 // ADMIN - SASS
@@ -108,7 +108,6 @@ gulp.task('admin-sass', function(){
 gulp.task('default', ['theme-sass', 'theme-js'], function(){
 	gulp.watch(config.theme_sass, ['theme-sass']);
 	gulp.watch(config.theme_js, ['theme-js']);
-	// gulp.watch(config.vendor_css, ['vendor-css']);
 });
 
 gulp.task('admin', ['admin-sass'], function(){

@@ -21,9 +21,8 @@ if(!class_exists('CoreAdmin')){
 			add_filter('login_headerurl', array($this, 'login_logo_link'));
 			add_action('admin_menu',  array($this, 'remove_admin_menus'), 99);
 			add_action('admin_init', array($this, 'remove_dashboard_meta'));
-			add_filter('login_redirect', array($this, 'dashboard_redirect'));
-
-			add_action('admin_menu', array($this, 'test_page'));
+			
+			// add_filter('login_redirect', array($this, 'dashboard_redirect'));
 		}
 
 		// Storefront Styles - Admin
@@ -51,13 +50,13 @@ if(!class_exists('CoreAdmin')){
 			remove_menu_page('jetpack');                    // Jetpack
 			remove_menu_page('edit.php');                   // Posts
 			remove_menu_page('upload.php');                 // Media
-			remove_menu_page('edit.php?post_type=page');    // Pages
+			// remove_menu_page('edit.php?post_type=page');    // Pages
 			remove_menu_page('edit-comments.php');          // Comments
-			remove_menu_page('themes.php');                 // Appearance
-			remove_menu_page('plugins.php');                // Plugins
-			remove_menu_page('users.php');                  // Users
-			remove_menu_page('tools.php');                  // Tools
-			remove_menu_page('options-general.php');        // Settings
+			// remove_menu_page('themes.php');                 // Appearance
+			// remove_menu_page('plugins.php');                // Plugins
+			// remove_menu_page('users.php');                  // Users
+			// remove_menu_page('tools.php');                  // Tools
+			// remove_menu_page('options-general.php');        // Settings
 		}
 
 		// Remove Dashboard Widgets
@@ -89,32 +88,6 @@ if(!class_exists('CoreAdmin')){
 				}
 			} else {
 				return $redirect;
-			}
-		}
-
-		// Custom page - Test
-		public function test_page()
-		{
-			$page_settings = add_menu_page(
-				'Test Page',
-				'Test Page',
-				'manage_options',
-				'test-page',
-				'page_content',
-				'dashicons-email',
-				9
-			);
-			add_action('load-' . $page_settings, 'page_assets');
-
-			function page_assets(){	
-				// CSS/JS					
-			}
-
-			function page_content(){
-				$screen = get_current_screen();
-				echo '<pre>';
-				print_r($screen);
-				echo '</pre>';
 			}
 		}
 
