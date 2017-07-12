@@ -99,8 +99,8 @@ function wc_add_subscription_bs($user_email, $product_id)
 
 	$sub_args = array(
 		'customer_id'      => $user->id,
-		// 'billing_period'   => $period,
-		// 'billing_interval' => $interval,
+		'billing_period'   => $period,
+		'billing_interval' => $interval,
 	);
 
 	$subscription = wcs_create_subscription($sub_args);
