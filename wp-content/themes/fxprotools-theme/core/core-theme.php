@@ -1,9 +1,9 @@
 <?php
 /**
- * ---------------------------------
- * Storefront Child - Theme Settings
- * ---------------------------------
- * Storefront child theme related settings
+ * ---------------------------
+ * Fxprotools - Theme Settings
+ * ---------------------------
+ * Fxprotools theme related settings
  */
 
 if(!defined('ABSPATH')){

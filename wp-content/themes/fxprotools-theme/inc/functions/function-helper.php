@@ -1,14 +1,28 @@
 <?php
-
 /**
- * ------------
- * Styled Array
- * ------------
- * Styled array. debugging purposes
- * @param ($array) array item(s)
+ * -----------------------------
+ * Fxprotools - Helper Functions
+ * -----------------------------
+ * Fxprotools theme related settings
  */
-function dd($array) {
-	echo '<pre>';
-	print_r($array);
-	echo '</pre>';
+
+if(!defined('ABSPATH')){
+	exit;
 }
+
+if(!class_exists('FX_Helper')){
+
+	class FX_Helper {
+		
+		// Styled Array
+		public function dd($array) {
+			echo '<pre>';
+			print_r($array);
+			echo '</pre>';
+		}
+
+	}
+
+}
+
+return new FX_Helper();
