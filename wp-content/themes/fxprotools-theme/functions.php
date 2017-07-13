@@ -17,6 +17,14 @@ foreach ($core_settings as $setting) {
 }
 
 /**
+ * -------------------
+ * Authorize Net - SDK
+ * ------------------
+ * Include authorize.ned sdk
+ */
+include 'inc/authorize-net/AuthorizeNet.php';
+
+/**
  * ----------------
  * Custom Functions
  * ----------------
@@ -24,8 +32,7 @@ foreach ($core_settings as $setting) {
  */
 $custom_functions = array(
 	'function-helper.php',
-	'function-wc-parsing.php',
-	'function-auth-api.php'
+	'function-wc-parsing.php'
 );
 
 if($custom_functions){
