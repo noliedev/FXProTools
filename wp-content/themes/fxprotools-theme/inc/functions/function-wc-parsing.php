@@ -114,4 +114,11 @@ function wc_add_subscription_bs($user_email, $product_id)
 	$subscription->calculate_totals();
 }
 
-
+function wc_parse_subscription()
+{
+	ini_set('max_execution_time', 0);
+	$users = get_users(array('role__not_in' => 'administrator'));
+	foreach($users as $user){
+		wc_add_subscription_bs($user->user_email, 48);
+	}
+}
