@@ -13,6 +13,6 @@
 	<?php //do_action( 'storefront_before_site' ); ?>
 
 	<div id="wrapper">
-		<?php get_template_part('template/navigation-side') ?>
+		<?php get_template_part('inc/template/navigation-side') ?>
 		<div id="page-wrapper" class="gray-bg">
-		<?php get_template_part('template/navigation-top') ?>
+		<?php get_template_part('inc/template/navigation-top') ?>

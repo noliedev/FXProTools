@@ -3,7 +3,7 @@
 <div class="wrapper wrapper-content animated fadeInLeft">
 	
 	<?php
-		dd( AuthorizeNetException::testAuthentication() );
+		dd(testAuthentication());
 	?>
 
 </div>
