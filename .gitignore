@@ -9,6 +9,9 @@ node_modules/
 # ignore config - localhost settings
 wp-config.php
 
+# ignore vendor folder -
+vendor/
+
 # ignore everything in the "wp-content" directory, except:
 # "mu-plugins" directory
 # "plugins" directory
