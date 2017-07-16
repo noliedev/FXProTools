@@ -22,19 +22,21 @@ function testAuthentication()
     $request = new AnetAPI\GetCustomerProfileIdsRequest();
     $request->setMerchantAuthentication($merchantAuthentication);
     $controller = new AnetController\GetCustomerProfileIdsController($request);
-    $response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
-    if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") )
-    {
-        echo "GetCustomerProfileId's SUCCESS: " . "\n";
-        $profileIds[] = $response->getIds();
-        echo "There are " . count($profileIds[0]) . " Customer Profile ID's for this Merchant Name and Transaction Key" . "\n";
-     }
-    else
-    {
-        echo "GetCustomerProfileId's ERROR :  Invalid response\n";
-        $errorMessages = $response->getMessages()->getMessage();
-        echo "Response : " . $errorMessages[0]->getCode() . "  " .$errorMessages[0]->getText() . "\n";
-    }
-    return $response;
+    
+    return $controller;
+    // $response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
+    // if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") )
+    // {
+    //     echo "GetCustomerProfileId's SUCCESS: " . "\n";
+    //     $profileIds[] = $response->getIds();
+    //     echo "There are " . count($profileIds[0]) . " Customer Profile ID's for this Merchant Name and Transaction Key" . "\n";
+    //  }
+    // else
+    // {
+    //     echo "GetCustomerProfileId's ERROR :  Invalid response\n";
+    //     $errorMessages = $response->getMessages()->getMessage();
+    //     echo "Response : " . $errorMessages[0]->getCode() . "  " .$errorMessages[0]->getText() . "\n";
+    // }
+    // return $response;
    
 }
