@@ -1,5 +1,5 @@
 <?php
-require 'anet_php_sdk/autoload.php'; 
+require  $_SERVER['DOCUMENT_ROOT'] . '/fxprotools/vendor/autoload.php';
 
 define('AUTHORIZENET_API_LOGIN_ID', '6XP44snrs6q');
 define('AUTHORIZENET_TRANSACTION_KEY', '9r94EZzZq588bn4L');
@@ -7,14 +7,14 @@ define('AUTHORIZENET_TRANSACTION_KEY', '9r94EZzZq588bn4L');
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
 
-function testAuthentication()
+function get_customer_profile_ids()
 {	
 
 	$merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
     $merchantAuthentication->setName(AUTHORIZENET_API_LOGIN_ID);
     $merchantAuthentication->setTransactionKey(AUTHORIZENET_TRANSACTION_KEY);
 
-     // Set the transaction's refId
+    // Set the transaction's refId
     $refId = 'ref' . time();
 
     // Get all existing customer profile ID's

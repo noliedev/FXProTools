@@ -1,11 +1,7 @@
-<?php get_header(); ?>
+<?php get_header() ?>
 
 <div class="wrapper wrapper-content animated fadeInLeft">
-	
-	<?php
-		dd(testAuthentication());
-	?>
-
+	<?php  dd(get_customer_profile_ids()); ?>
 </div>
 
-<?php get_footer(); ?>
+<?php get_footer() ?>
