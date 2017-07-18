@@ -122,3 +122,25 @@ function wc_parse_subscription()
 		wc_add_subscription_bs($user->user_email, 48);
 	}
 }
+
+function wp_parse_user($username, $password, $email)
+{
+	if (!username_exists($username)  && !email_exists($email)){
+		$user_data = array(
+			'user_login'    => $username,
+			'user_pass'     => $password,
+			'user_nicename' => $username,
+			'user_email'    => $email,
+			'role'          => 'subscriber'
+		);
+		$user_id = wp_insert_user($user_data);
+		$status = ( !is_wp_error($user_id) ? 'success' : 'failed' );
+		// Added automatically to wocommerce subscriptions
+		if($status == 'success') {
+			wc_add_subscription_bs($email, 48);
+		}
+	} else {
+		$status = 'failed';
+	}
+	return $status;
+}

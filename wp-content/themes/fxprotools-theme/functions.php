@@ -33,3 +33,4 @@ if($custom_functions){
 		require_once('inc/'.$function);
 	}
 }
+
