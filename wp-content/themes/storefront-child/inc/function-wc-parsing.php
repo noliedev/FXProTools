@@ -1,19 +1,51 @@
 <?php
+
+/**
+ * ----------------
+ * Add Custom Users
+ * ----------------
+ * Parsing custom users to wp users and subscribe to business
+ */
+function wp_parse_user($username, $password, $email, $phone_number, $start_date)
+{	
+	if (!username_exists($username)  && !email_exists($email)){
+		$user_data = array(
+			'user_login'    => $username,
+			'user_pass'     => $password,
+			'user_nicename' => $username,
+			'user_email'    => $email,
+			'role'          => 'subscriber'
+		);
+		$user_id = wp_insert_user($user_data);
+		$status = ( !is_wp_error($user_id) ? 'success' : 'failed' );
+		
+		if($status == 'success') {
+			// Update WooCommerce Billing Phone Nummber
+			update_user_meta($user_id, 'billing_phone', $phone_number);
+			// Added automatically to wocommerce subscriptions
+			wc_parse_subscription($email, 48, $start_date);
+		}
+	} else {
+		$status = 'failed';
+	}
+	return $status;
+}
+
 /**
  * --------------------------------------
  * WC Add Subscription - Business Product
  * --------------------------------------
  * Add subscription to business product(id: 48)
  */
-function wc_add_subscription_bs($user_email, $product_id)
+function wc_parse_subscription($user_email, $product_id, $start_date)
 {
 	$user     = get_user_by('email', $user_email);
 	$quantity = 1;
 	$period   = WC_Subscriptions_Product::get_period($product_id);
 	$interval = WC_Subscriptions_Product::get_interval($product_id);
 
-	$date['start_date']   = date('Y-m-d H:i:s', strtotime('2017/6/1'));
-	$date['next_payment'] = date('Y-m-d H:i:s', strtotime('2017/9/1'));
+	$date['start_date']   = date('Y-m-d H:i:s', strtotime($start_date));
+	$date['next_payment'] = date('Y-m-d H:i:s', strtotime('2017/9/20'));
 
 	$sub_args = array(
 		'status'           => 'active',
@@ -29,33 +61,12 @@ function wc_add_subscription_bs($user_email, $product_id)
 	$subscription->calculate_totals();
 }
 
-function wc_parse_subscription()
-{
-	ini_set('max_execution_time', 0);
-	$users = get_users(array('role__not_in' => 'administrator'));
-	foreach($users as $user){
-		wc_add_subscription_bs($user->user_email, 48);
-	}
-}
+// function wc_parse_subscription()
+// {
+// 	ini_set('max_execution_time', 0);
+// 	$users = get_users(array('role__not_in' => 'administrator'));
+// 	foreach($users as $user){
+// 		wc_parse_subscription($user->user_email, 48);
+// 	}
+// }
 
-function wp_parse_user($username, $password, $email)
-{
-	if (!username_exists($username)  && !email_exists($email)){
-		$user_data = array(
-			'user_login'    => $username,
-			'user_pass'     => $password,
-			'user_nicename' => $username,
-			'user_email'    => $email,
-			'role'          => 'subscriber'
-		);
-		$user_id = wp_insert_user($user_data);
-		$status = ( !is_wp_error($user_id) ? 'success' : 'failed' );
-		// Added automatically to wocommerce subscriptions
-		if($status == 'success') {
-			wc_add_subscription_bs($email, 48);
-		}
-	} else {
-		$status = 'failed';
-	}
-	return $status;
-}
