@@ -10,34 +10,14 @@ var gulp = require('gulp'),
 	cssreplace = require('gulp-replace'),
 	livereload = require('gulp-livereload');
 
-var theme_location = './wp-content/themes/fxprotools-theme',
+var theme_location = './wp-content/themes/storefront-child',
 	config = {
-		admin_sass: theme_location + '/assets/sass/admin/**/*.scss',
-		theme_sass: theme_location + '/assets/sass/theme/**/*.scss',
-		vendor_css: theme_location + '/vendors/**/*.css',
-		vendor_assets: theme_location + '/vendors/**/*.{png,jpg,gif,eot,ttf,woff,eof,svg}',
+		admin_sass: theme_location + '/assets/sass/style-admin.scss',
+		theme_sass: theme_location + '/assets/sass/style-theme.scss',
+		// vendor_css: theme_location + '/vendors/**/*.css',
+		// vendor_assets: theme_location + '/vendors/**/*.{png,jpg,gif,eot,ttf,woff,eof,svg}',
 		theme_js: [
-			// Vendor Files - Common
-			theme_location + '/assets/js/core/jquery-3.1.1.min.js',
-			theme_location + '/assets/js/core/bootstrap.min.js',
-			theme_location + '/assets/js/core/bootstrap.min.js',
-			theme_location + '/assets/js/core/bootstrap.min.js',
-			theme_location + '/vendors/metisMenu/jquery.metisMenu.js',
-			theme_location + '/vendors/slimscroll/jquery.slimscroll.min.js',
-			theme_location + '/vendors/pace/pace.min.js',
-			// Script - Dashboard
-			theme_location + '/vendors/flot/jquery.flot.js',
-		    theme_location + '/vendors/flot/jquery.flot.tooltip.min.js',
-		    theme_location + '/vendors/flot/jquery.flot.spline.js',
-		    theme_location + '/vendors/flot/jquery.flot.resize.js',
-		    theme_location + '/vendors/flot/jquery.flot.pie.js',
-		    theme_location + '/vendors/flot/jquery.flot.symbol.js',
-		    theme_location + '/vendors/flot/jquery.flot.time.js',
-			// Common Scripts
-			theme_location + '/assets/js/common.js',
-			// theme_location + '/assets/js/dashboard.js'
-			// Custom Scripts
-			// Add your scripts here
+			// Include scripts here
 		],
 		output: theme_location
 	};
