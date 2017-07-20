@@ -116,7 +116,7 @@
 			return eps_get_page_permalink( 'eps-affiliates' );
 		}
 
-		return esp_get_endpoint_url( $endpoint, '', eps_get_page_permalink( 'eps-affiliates' ) );
+		return eps_get_endpoint_url( $endpoint, '', eps_get_page_permalink( 'eps-affiliates' ) );
 	}
 /**
  * ------------------------------------------------------------------------
@@ -132,7 +132,7 @@
  * @return string
  * ------------------------------------------------------------------------
 */
-	function esp_get_endpoint_url( $endpoint, $value = '', $permalink = '' ) {
+	function eps_get_endpoint_url( $endpoint, $value = '', $permalink = '' ) {
 		if ( ! $permalink ) {
 			$permalink = get_permalink();
 		}
@@ -172,7 +172,7 @@
 	}
 /**
  * ------------------------------------------------------------------------
- * Retrieve page ids - used for afl dashboardfound.
+ * Retrieve page ids - used for afl dashboard found.
  * ------------------------------------------------------------------------
  *
  * @param string $page
@@ -180,6 +180,8 @@
  * ------------------------------------------------------------------------
 */
 	function eps_get_page_id( $page ) {
-		$page = apply_filters( 'eps_get_' . $page . '_page_id', get_option( 'eps_' . $page . '_page_id' ) );
-		return $page ? absint( $page ) : 81;
+		$page = get_page_by_title( $page );
+		$page = $page->ID;
+
+		return $page ? absint( $page ) : 0;
 	}

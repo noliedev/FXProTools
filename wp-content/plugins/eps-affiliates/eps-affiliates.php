@@ -12,8 +12,6 @@
 	 * EPS-Affiliates is contains over all functionalities of the site which uses the 
 	 * matrix plan.
 	 *
-	 * EPS-Affiliates is not a distributed Plugin for wordpress.
-	 *
 	 * @package EPS-Affiliates
 	 * @category Core
 	 * @author < pratheesh@epixelsolutions.com >
@@ -234,6 +232,24 @@
 		 *
 	 	*/
 			private function includes() {
+				//common functions callback
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.common.php';
+
+				//system permissions 
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'eps-permissions.php';
+				
+				//all the hooks
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-hooks.php';
+				
+				//query variables
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-query.php';
+
+				//required conditions when install
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/install.php';
+
+				//required conditions when un-install
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/un-install.php';
+				
 				//route
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-route-url.php';
 				
@@ -249,17 +265,31 @@
 				//admin menus
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/class-menu.php';
 
-				//required conditions when install
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/install.php';
-
+				/* ------Here comes all the admin menu callback functions : Begin ------------*/
 				//Menu callbacks for advanced configuration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-advanced-conf.php';
-
 				// Menu callback for compensation plan
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-compensation-plan-conf.php';
+				// Menu callback for roles and permission settings
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-roles-nd-permission-conf.php';
+
+				// Menu callback for rank configuration 
+
+				/* ------ Here comes all the member menu callback : Begin  -----------------*/
+				//add new member
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-add-new-member-callback.php';
+				
+				/* ------ Here comes all the member menu callback : End  -------------------*/
+				
+
+					// Menu callback for rank configuration 
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-rank-conf.php';
+				// Menu callback for Pool Bonus configuration 
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-pool-bonus-conf.php';
 
 				//common files callback
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.common.php';
+				/* ------Here comes all the menu callback functions : End ------------*/
 
 				//install tables
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.tables.php';
@@ -267,6 +297,13 @@
 				//eps-afl-dashboard menus templates
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-template-hooks.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-template-functions.php';
+
+				//page function 
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-page-functions.php';
+				//ajax callbacks
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-ajax-callbacks.php';
+				
+
 
 
 			}
@@ -322,12 +359,13 @@ function eps_affiliate() {
  * Custom print function
  * -------------------------------------------------------------------------
 */
-function pr($data = array(), $ex = FALSE){
-	echo '<pre>';
-	print_r($data);
-	echo '</pre>';
-	if ($ex){
-		exit();
+	function pr($data = array(), $ex = FALSE){
+		echo '<pre>';
+		print_r($data);
+		echo '</pre>';
+		if ($ex){
+			exit();
+		}
 	}
-}
 eps_affiliate();
+?>
