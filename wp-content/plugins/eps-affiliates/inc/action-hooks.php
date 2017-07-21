@@ -38,7 +38,20 @@
  * ------------------------------------------------------------
 */
 	add_action( 'eps_account_content', 'eps_account_content' );
+<<<<<<< HEAD
 	
+=======
+/*
+ * ------------------------------------------------------------
+ * Create some roles on init
+ * ------------------------------------------------------------
+*/
+ 	add_action('init', 'add_roles_on_init' );
+
+	function add_roles_on_init() {
+	  add_role( 'afl_member', 'AFL Member', array( 'read' => true, 'level_0' => true,'level_1' => true) );
+	}
+>>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 /*
  * ------------------------------------------------------------
  * Replace the menu icons using css
@@ -52,6 +65,7 @@
 */
  add_action('wp_ajax_users_auto_complete', 'users_auto_complete_callback');
  add_action('wp_ajax_nopriv_users_auto_complete', 'users_auto_complete_callback');
+<<<<<<< HEAD
 
 /*
  * ------------------------------------------------------------
@@ -80,3 +94,5 @@
 	}
 
 
+=======
+>>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735

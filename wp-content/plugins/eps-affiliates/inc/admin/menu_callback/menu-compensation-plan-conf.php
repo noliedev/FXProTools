@@ -21,7 +21,10 @@ function afl_admin_compensation_plan_config_(){
 	 	}
 	 }
 
+<<<<<<< HEAD
  	afl_content_wrapper_begin();
+=======
+>>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 
 	$table 								= array();
 	$table['#name'] 			= '';
@@ -81,7 +84,10 @@ function afl_admin_compensation_plan_config_(){
 	$render_table .= afl_form_close();
 
 	echo $render_table;
+<<<<<<< HEAD
  	afl_content_wrapper_end();
+=======
+>>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 
 }
 

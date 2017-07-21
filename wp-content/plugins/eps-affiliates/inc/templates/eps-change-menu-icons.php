@@ -10,7 +10,7 @@
   display: none;
 }
 #adminmenu #toplevel_page_user-network div.wp-menu-image:before {
-  	content: "\f0c0";
+    content: "\f0c0";
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;
@@ -23,7 +23,7 @@
   display: none;
 }
 #adminmenu #toplevel_page_e-wallet div.wp-menu-image:before {
-  	content: "\f0d6";
+    content: "\f0d6";
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;
@@ -35,7 +35,7 @@
   display: none;
 }
 #adminmenu #toplevel_page_business div.wp-menu-image:before {
-  	content: "\f0f7";
+    content: "\f0f7";
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;
@@ -46,7 +46,7 @@
   display: none;
 }
 #adminmenu #toplevel_page_manage-members div.wp-menu-image:before {
-  	content: "\f007";
+    content: "\f007";
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;
@@ -57,7 +57,7 @@
   display: none;
 }
 #adminmenu #toplevel_page_promotional-tools div.wp-menu-image:before {
-  	content: "\f064";
+    content: "\f064";
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;

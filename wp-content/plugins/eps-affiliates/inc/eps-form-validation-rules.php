@@ -32,7 +32,11 @@
 		//user name legth
 		public function rule_name_length ($name = '',$value = '') {
 			if (!empty($value)) {
+<<<<<<< HEAD
 				if ( 1 > strlen( $value ) ) {
+=======
+				if ( 4 > strlen( $value ) ) {
+>>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 					$response['status'] 	= 0;
 					$response['message'] 	= $name.' too short. At least 4 characters is required';
 				} else {

@@ -4,6 +4,7 @@
  * get users name and id
  * ------------------------------------------------
 */
+<<<<<<< HEAD
 function users_auto_complete_callback($search_key = '') {
 	if (isset($_POST['search_key'])) {
 		$search_key = $_POST['search_key'];
@@ -21,3 +22,13 @@ function users_auto_complete_callback($search_key = '') {
 	echo json_encode($response);
 	die();
 }
+=======
+function users_auto_complete_callback() {
+	$users[] = array('value'=>'1','data'=>'u1');
+	$users[] = array('value'=>'2','data'=>'u2');
+	$users[] = array('value'=>'3','data'=>'u3');
+	$users[] = array('value'=>'4','data'=>'u4');
+	echo json_encode($users);
+	die();
+}
+>>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735

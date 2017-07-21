@@ -23,8 +23,6 @@
 	 		$this->afl_business_transactions();
 	 		$this->afl_business_funds();
 	 		$this->afl_user_transactions_overview();
-
-
 	 	}
 	 	//downgrade the database version
 	 	public function migration_downgrade() {
@@ -154,6 +152,7 @@
 	 * User Transactions
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
+
 		private function afl_user_transactions(){
 			$table_name = $this->tbl_prefix . 'afl_user_transactions';
 			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
@@ -202,6 +201,7 @@
 	 * Afl business transactions
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
+
 		private function afl_business_transactions () {
 			$table_name = $this->tbl_prefix . 'afl_business_transactions';
 			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
@@ -248,6 +248,7 @@
 	 * Business Funds 
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
+
 		private function afl_business_funds () {
 			$table_name = $this->tbl_prefix . 'afl_business_funds';
 			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
@@ -261,6 +262,7 @@
 					) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='Stores the user transactions overview';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
+
 			
 			global $wpdb;
 			//indexes
