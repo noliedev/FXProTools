@@ -20,37 +20,29 @@ class Eps_affiliates_tables {
  	 * ----------------------------------------------------------------
 	*/
 		public function __construct(){
-			global $wpdb;
-			$tbl_prefix 		 = $wpdb->prefix;
-			$charset_collate = $wpdb->get_charset_collate();
-			$this->afl_variables();
+			//get the version of the plugin
+			$version 	= EPSAFFILIATE_DB_VERSION;
+			//check a file exist in the folder
+			if ($version) {
+				$version = str_replace('.', '_', $version);
+				$file_name = EPSAFFILIATE_PLUGIN_DIR.'migrations/Migration_database_version_'.$version.'.php';
+				if (file_exists($file_name)) {
+					include_once($file_name);
+					//check class exist
+					if (class_exists("Migration_database_version_".$version)) {
+						$class_name 	 = 'Migration_database_version_'.$version;		 
+						$migration_obj = new $class_name;
+						//run the upgrade function 
+						if (method_exists($migration_obj, 'migration_upgrade')) {
+							$migration_obj->migration_upgrade();
+						}
+						//run downgrade function
+						if (method_exists($migration_obj, 'migration_downgrade')) {
+							$migration_obj->migration_downgrade();
+						}
+					}
+				}
+			}
 		}
-
-	/*
- 	 * ----------------------------------------------------------------
-	 * Variables Table
- 	 * ----------------------------------------------------------------
-	*/
-	function afl_variables(){
-		$table_name = $tbl_prefix . 'afl_variable';
-
-		$sql = "CREATE TABLE IF NOT EXISTS `".$table_name."` (
-				  `name` varchar(250) NOT NULL DEFAULT 'default' COMMENT 'The name of the variable.',
-				  `merchant_id` varchar(250) NOT NULL DEFAULT 'default' COMMENT 'Merchant Id',
-				  `extra_params` varchar(250) NOT NULL DEFAULT '' COMMENT 'Extra Params',
-				  `project_name` varchar(250) NOT NULL DEFAULT 'default' COMMENT 'Project name',
-				  `value` longblob NOT NULL COMMENT 'The value of the variable.'
-				) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Variable table';";
-
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
-	}
-	/**
- 	 * ----------------------------------------------------------------
-	 *  User details table
- 	 * ----------------------------------------------------------------
-	*/
 }
 
-
-$afl_tables = new Eps_affiliates_tables();

@@ -11,4 +11,26 @@ $(function () {
         //$('.absolute-wrapper').toggleClass('slide-in');
         
     });
+     $('.auto_complete').on('keyup click',function(){
+  		var autoArray = [];
+    	var path 			 = $(this).attr('data-path');
+    	var search_key = $(this).val();
+    	if (path != '#' && search_key!=undefined) {
+    		$.ajax({
+			   	type :'POST',
+			   	data : {
+			   		action:path,
+			   	},
+			   	url:ajax_object.ajaxurl,
+			   	success: function(data){
+							var arr = JSON.parse(data);
+							var i 	= 0;
+							var data_array = [];
+							$('.auto_complete').typeahead({
+                source: arr,
+              });
+			   	}
+			  });
+    	}
+    });
 });

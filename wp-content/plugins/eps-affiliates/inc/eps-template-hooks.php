@@ -20,8 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 */
 	function afl_dashboard( ) {
 		
-		afl_get_template( 'eps-affiliates.php', array(
-		) );
+		// afl_get_template( 'eps-affiliates.php', array(
+		// ) );
 	}
-echo afl_dashboard();
-add_action( 'eps_account_content', 'eps_account_content' );
+// echo afl_dashboard();
+// 

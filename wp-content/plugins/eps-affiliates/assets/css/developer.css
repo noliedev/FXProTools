@@ -1,3 +1,6 @@
+/*  ------------------- Main Wrapper -------------------------------------- */
+.wrapper-md {padding: 20px;}
+
 :focus {
   outline: none;
 }

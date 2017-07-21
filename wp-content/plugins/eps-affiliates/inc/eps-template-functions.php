@@ -6,7 +6,7 @@ if ( ! function_exists( 'eps_account_content' ) ) {
 	 */
 	function eps_account_content() {
 		global $wp;
-		
+
 		foreach ( $wp->query_vars as $key => $value ) {
 			// Ignore pagename param.
 			if ( 'pagename' === $key ) {

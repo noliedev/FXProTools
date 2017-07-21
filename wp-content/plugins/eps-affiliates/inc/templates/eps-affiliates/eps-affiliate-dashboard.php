@@ -34,5 +34,4 @@ do_action( 'eps_afl_before_account_navigation' );
 </nav>
 
 
-<?php do_action( 'eps_account_content' ); ?>
 <?php do_action( 'eps_afl_after_account_navigation' ); ?>

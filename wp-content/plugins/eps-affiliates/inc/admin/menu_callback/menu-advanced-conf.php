@@ -20,6 +20,8 @@ function afl_admin_advanced_config_(){
 	 	}
 	 }
 
+ 	afl_content_wrapper_begin();
+
 	$table 								= array();
 	$table['#name'] 			= '';
 	$table['#title'] 			= '<h2>Advanced system configuration</h2>';
@@ -102,6 +104,8 @@ function afl_admin_advanced_config_(){
 	$render_table .= afl_form_close();
 
 	echo $render_table;
+
+ 	afl_content_wrapper_end();
 
 }
 
