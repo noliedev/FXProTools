@@ -1,5 +1,4 @@
 <?php 
-<<<<<<< HEAD
 class Eps_affiliates_uninstall {
 	public function __construct () {
 		$this->remove_roles();
@@ -70,15 +69,3 @@ class Eps_affiliates_uninstall {
 
 			$obj = new Eps_affiliates_uninstall();
 		}
-=======
-/*
- * ------------------------------------------------------------
- * Un-Install functions and Features 
- * ------------------------------------------------------------
-*/
-	function eps_affiliates_uninstall() {
-		if (get_option( 'eps_afl_is_installed' ) ) {
-			update_option( 'eps_afl_is_installed', '0' );
-		}
-	}
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735

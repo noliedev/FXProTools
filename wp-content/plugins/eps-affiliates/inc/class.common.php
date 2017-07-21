@@ -18,13 +18,8 @@ class Eps_affiliates_common {
 		private static $instance;
 
 		public function __construct(){
-<<<<<<< HEAD
 			add_action( 'init', array($this,'_load_common_styles'));
 			add_action( 'init', array($this,'_load_common_scritps'));
-=======
-			$this->_load_common_scritps();
-			$this->_load_common_styles();
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 		}
 	/*
  	 * ----------------------------------------------------------------
@@ -32,7 +27,6 @@ class Eps_affiliates_common {
  	 * ----------------------------------------------------------------
 	*/
 		public function _load_common_scritps() {
-<<<<<<< HEAD
 			wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
 			wp_enqueue_script( 'jquery-js' );
 
@@ -51,13 +45,6 @@ class Eps_affiliates_common {
 			wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
 			wp_enqueue_script( 'common-js' );
 
-=======
-			wp_enqueue_script( 'jquery-js', EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
-			wp_enqueue_script( 'bootstrap-js', EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap.min.js');
-			wp_enqueue_script( 'jquery-ui', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/jquery-ui/jquery-ui.min.js');
-			wp_enqueue_script( 'autocomplete-js', EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.autocomplete.min.js');
-			wp_enqueue_script( 'common-js', EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 	    wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));        
 		} 
 	/*
@@ -220,7 +207,6 @@ $common_include = new Eps_affiliates_common();
 			case 'text':
 				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
 				$html .= '<label for="'.str_replace('_','-',$key).'" class="col-md-2 col-form-label">';
-<<<<<<< HEAD
 				$html .= isset($element['#title']) ? $element['#title'] : '';
 				$html .= '</label>';
 				$html .= '<div class="col-md-10">';
@@ -234,21 +220,6 @@ $common_include = new Eps_affiliates_common();
 				$html .= '</label>';
 				$html .= '<div class="col-md-10">';
 				$html .= '<input type = "password" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';	
-=======
-				$html .= isset($element['#title']) ? $element['#title'] : '';
-				$html .= '</label>';
-				$html .= '<div class="col-md-10">';
-				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="'.$class.'" value="'.$deflt.'">';	
-				$html .= '</div>';
-			break;
-			case 'password':
-				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'" class="col-md-2 col-form-label">';
-				$html .= isset($element['#title']) ? $element['#title'] : '';
-				$html .= '</label>';
-				$html .= '<div class="col-md-10">';
-				$html .= '<input type = "password" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="'.$class.'" value="'.$deflt.'">';	
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 				$html .= '</div>';
 			break;
 			case 'checkbox':
@@ -266,26 +237,15 @@ $common_include = new Eps_affiliates_common();
 				$html .= '<div class="'.$class.'">'.$element['#markup'].'</div>';	
 			break;
 			case 'submit':
-<<<<<<< HEAD
 				$html .= '<input type="submit" class="'.$class.'" value="'.$element['#value'].'" name="submit">';	
 			break;
 			case 'label':
 				$html .= '<label class="'.$class.'">'.$element['#title'].'</label>';	
-=======
-				$html = '<input type="submit" class="'.$class.'" value="'.$element['#value'].'" name="submit">';	
-			break;
-			case 'label':
-				$html = '<label class="'.$class.'">'.$element['#title'].'</label>';	
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 				$html .= '<br><small>'.$description.'</small>';
 			break;
 
 			case 'select';
-<<<<<<< HEAD
 				$html .= '<select class="form-control '.$class.'" name="'.$key.'" >';
-=======
-				$html .= '<select class="'.$class.'" name="'.$key.'" >';
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 				foreach ($element['#options'] as $data => $value) {
 						if($element['#default_value'] == $data)
 							$html .= '<option selected value='.$data .'>'.$value.'</option>';			
@@ -308,12 +268,7 @@ $common_include = new Eps_affiliates_common();
 				$html .= isset($element['#title']) ? $element['#title'] : '';
 				$html .= '</label>';
 				$html .= '<div class="col-md-10">';
-<<<<<<< HEAD
 				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control auto_complete '.$class.'" value="'.$deflt.'" data-path="'.$path.'">';	
-=======
-				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="auto_complete '.$class.'" value="'.$deflt.'" data-path="'.$path.'">';	
-				$html .= '<p id="outputcontent">Choose a currency and the results will display here.</p>';
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 				$html .= '</div>';
 			break;
 		}
@@ -417,7 +372,6 @@ $common_include = new Eps_affiliates_common();
 				return $default;
 		}
 	}
-<<<<<<< HEAD
 
 /*
  * ---------------------------------------------------------------------------------- 
@@ -475,8 +429,6 @@ $common_include = new Eps_affiliates_common();
 		}
 	}
 
-=======
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 /*
  * ----------------------------------------------------------------------------------
  * AFL get level 
@@ -903,7 +855,6 @@ if(!function_exists('afl_get_rank_names')){
 	    foreach ( $reg_errors->get_error_messages() as $error ) {
 	    	$wp_error .= '<p>* '.$error.'</p>';
 	    }
-<<<<<<< HEAD
 	    if (!empty($wp_error)) 
 	   		return wp_set_message($wp_error,'danger');
 		}
@@ -936,8 +887,3 @@ if(!function_exists('afl_get_rank_names')){
  function afl_content_wrapper_end (){
  	echo '</div>';
  }
-=======
-	   	return wp_set_message($wp_error,'danger');
-		}
- }
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735

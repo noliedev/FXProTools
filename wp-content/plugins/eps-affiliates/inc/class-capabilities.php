@@ -56,22 +56,12 @@
 			if ( is_object( $wp_roles ) ) {
 				/* ------ Site Admin Permission capabilities ------------*/
 					$wp_roles->add_cap( 'administrator', 'advanced_configurations' );
-<<<<<<< HEAD
 					$wp_roles->add_cap( 'administrator', 'compensation_plan_configurations' );
 					$wp_roles->add_cap( 'administrator', 'afl_roles_configuration');
 					$wp_roles->add_cap( 'administrator', 'business_system_members');
 					$wp_roles->add_cap( 'afl_member', 'eps_system_member');
 					// $wp_roles->add_cap( 'business_admin', 'eps_system_member');
 
-=======
-				/* ------ View Network ----------------------------------*/
-					$wp_roles->add_cap( 'administrator', 'afl_network_view' );
-				/* ------- Add new Member --------------------------------*/
-					$wp_roles->add_cap( 'administrator', 'afl_add_new_member' );
-					$wp_roles->add_cap( 'administrator', 'compensation_plan_configurations' );
-					$wp_roles->add_cap( 'afl_member', 'edit_posts' );
-					$wp_roles->add_cap( 'administrator', 'afl_roles_configuration');
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 			}
 		}
 
@@ -104,12 +94,8 @@
 				// 	$wp_roles->remove_cap( 'administrator', 'advanced_configurations' );
 				// 	$wp_roles->remove_cap( 'administrator', 'compensation_plan_configurations' );
 				
-<<<<<<< HEAD
 					$wp_roles->remove_cap( 'business_admin', 'edit_posts' );
 					$wp_roles->remove_cap( 'afl_member', 'edit_posts' );
-=======
-					// $wp_roles->remove_cap( 'afl_member', 'advanced_configurations_afl_member' );
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 					// $wp_roles->remove_cap( 'afl_member', 'afl_network_view_afl_member' );
 					// $wp_roles->remove_cap( 'afl_member', 'afl_add_new_member_afl_member' );
 			}
@@ -195,8 +181,4 @@
 	
 }
 // $obj = new Eps_affiliates_Capabilities;
-<<<<<<< HEAD
 // $obj->remove_caps();
-=======
-// $obj->add_caps();
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735

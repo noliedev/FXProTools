@@ -15,18 +15,11 @@
 			afl_roles_config_settings_form_submit($_POST);
 		}
 
-<<<<<<< HEAD
  		afl_content_wrapper_begin();
 
 		global $wp_roles;
 	  $all_roles 			= $wp_roles->roles;
 	  $editable_roles = apply_filters('editable_roles', $all_roles);
-=======
-		global $wp_roles;
-	  $all_roles 			= $wp_roles->roles;
-	  $editable_roles = apply_filters('editable_roles', $all_roles);
-	  
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 	  //exclude some roles
 	  $excluded_roles = array(
 	  	'editor',
@@ -100,11 +93,8 @@
 
 		echo $render_table;
 
-<<<<<<< HEAD
  		afl_content_wrapper_end();
 
-=======
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 	}
 /*
  * ---------------------------------------------------------------------

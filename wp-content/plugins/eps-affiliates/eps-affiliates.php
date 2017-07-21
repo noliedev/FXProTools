@@ -272,11 +272,8 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-compensation-plan-conf.php';
 				// Menu callback for roles and permission settings
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-roles-nd-permission-conf.php';
-<<<<<<< HEAD
 				//Menu callback add business system memebers
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-business-system-members.php';
-=======
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 
 				// Menu callback for rank configuration 
 
@@ -307,14 +304,10 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-page-functions.php';
 				//ajax callbacks
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-ajax-callbacks.php';
-<<<<<<< HEAD
 				//member registration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-registration.php';
 				
 					
-=======
-				
->>>>>>> a3eb117dca110ed02010bf0895e5c78cdae5e735
 
 
 

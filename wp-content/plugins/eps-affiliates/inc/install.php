@@ -15,6 +15,7 @@ function eps_affiliates_install() {
 	//install tables
 	$afl_tables = new Eps_affiliates_tables;
 
+
 	//create page 
 	if ( ! get_option( 'eps_afl_is_installed' ) ) {
 		$affiliate_area = wp_insert_post(
@@ -28,7 +29,7 @@ function eps_affiliates_install() {
 			)
 		);
 	}
-	//set the variable
+	//set the variable for install
 	update_option( 'eps_afl_is_installed', '1' );
 	//set the variable for page id
 	update_option( 'eps_affiliate_page', $affiliate_area );
