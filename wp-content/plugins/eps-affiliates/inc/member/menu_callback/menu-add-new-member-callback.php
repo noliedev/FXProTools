@@ -5,7 +5,10 @@
  * ---------------------------------------------
 */
  function afl_add_new_member () {
-	 
+	 $obj = new Eps_affiliates_registration;
+	 $post = array('uid'=>13,'sponsor_uid'=>3);
+	 $obj->afl_join_member($post);
+
  	$post = array();
  	if ( isset($_POST['submit'] ) ) {
         $rules = create_validation_rules($_POST);
@@ -190,11 +193,11 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
         $userdata = array(
         'user_login'    	=>   $username,
         'user_email'    	=>   $email,
-        'user_pass'     	=>   $password,
+        'user_pass'     	=>   md5($password),
         'first_name'    	=>   $first_name,
-        'sur_name'     		=>   $sur_name,
-        'sponsor_id'  		=>   $sponsor,
-        'user_registered'	=>   afl_date(),
+        'last_name'     	=>   $sur_name,
+        // 'sponsor_id'  		=>   $sponsor,
+        // 'user_registered'	=>   afl_date(),
         );
         // pr($userdata);
         $user = wp_insert_user( $userdata );

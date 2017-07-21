@@ -33,4 +33,30 @@ $(function () {
 			  });
     	}
     });
+/*
+ * -------------------------------------------
+* Data tables 
+ * -------------------------------------------
+*/
+  if ($('.custom-data-tables').length) {
+
+      var table; 
+      table = $(".custom-data-tables").DataTable({
+       "processing": true, 
+       "serverSide": true, 
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_user_downlines_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2,3], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
+
 });

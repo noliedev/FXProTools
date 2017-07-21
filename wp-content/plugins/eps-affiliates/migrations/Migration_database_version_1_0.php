@@ -118,6 +118,7 @@
 					  `modified` int(10) unsigned DEFAULT '0' COMMENT 'Modified',
 					  `member_rank` int(10) unsigned DEFAULT '0' COMMENT 'Rank',
 					  `position` varchar(100) DEFAULT NULL COMMENT 'Genealogy position',
+					  `relative_position` varchar(100) DEFAULT NULL COMMENT 'Genealogy relative position',
 					  `rejoined_phase` int(10) unsigned DEFAULT '0' COMMENT 'Rejoined Phase',
 					  `amount_paid` int(10) unsigned NOT NULL DEFAULT '0',
 					  `order_id` int(10) unsigned NOT NULL DEFAULT '0',

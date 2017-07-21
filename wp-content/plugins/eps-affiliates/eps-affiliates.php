@@ -215,6 +215,10 @@
 					define( 'EPSAFFILIATE_PLUGIN_ASSETS', plugin_dir_url('eps-affiliates/assets/css',__FILE__));
 				}
 
+				//Affiliates plan path
+				if ( ! defined( 'EPSAFFILIATE_PLUGIN_PLAN' ) ) {
+					define( 'EPSAFFILIATE_PLUGIN_PLAN', plugin_dir_url('eps-affiliates/inc/plan',__FILE__));
+				}
 				// Make sure CAL_GREGORIAN is defined.
 				if ( ! defined( 'CAL_GREGORIAN' ) ) {
 					define( 'CAL_GREGORIAN', 1 );
@@ -277,11 +281,7 @@
 
 				// Menu callback for rank configuration 
 
-				/* ------ Here comes all the member menu callback : Begin  -----------------*/
-				//add new member
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-add-new-member-callback.php';
 				
-				/* ------ Here comes all the member menu callback : End  -------------------*/
 				
 
 					// Menu callback for rank configuration 
@@ -306,7 +306,14 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-ajax-callbacks.php';
 				//member registration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-registration.php';
+					
+				/* ------ Here comes all the member menu callback : Begin  -----------------*/
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-add-new-member-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-genealogy-tree-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-downline-members-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-exporer-callback.php';
 				
+				/* ------ Here comes all the member menu callback : End  -------------------*/
 					
 
 

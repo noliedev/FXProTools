@@ -15,4 +15,4 @@ function eps_page_endpoint_title( $title ) {
 	return $title;
 }
 
-add_filter( 'the_title', 'eps_page_endpoint_title' );
+// add_filter( 'the_title', 'eps_page_endpoint_title' );

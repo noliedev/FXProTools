@@ -137,7 +137,7 @@ $common_include = new Eps_affiliates_common();
 		//table responsive 
 
 		$table_html 	.= '<div class="table-responsive">';
-		$table_html 	.= '<table class="'.$classes.'">';
+		$table_html 	.= '<table class="table table-striped table-bordered dt-responsive nowrap '.$classes.'">';
 
 		/* -----------table head :  Begin	----------*/
 		$table_html 	.= '<thead>';
@@ -268,7 +268,7 @@ $common_include = new Eps_affiliates_common();
 				$html .= isset($element['#title']) ? $element['#title'] : '';
 				$html .= '</label>';
 				$html .= '<div class="col-md-10">';
-				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control auto_complete '.$class.'" value="'.$deflt.'" data-path="'.$path.'">';	
+				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control auto_complete '.$class.'" value="'.$deflt.'" data-path="'.$path.'" autocomplete="off" >';	
 				$html .= '</div>';
 			break;
 		}
@@ -887,3 +887,123 @@ if(!function_exists('afl_get_rank_names')){
  function afl_content_wrapper_end (){
  	echo '</div>';
  }
+/*
+ * -----------------------------------------------------------------------------
+ * get the downlines details of uid
+ * -----------------------------------------------------------------------------
+*/
+	function afl_get_user_downlines ($uid = '3', $filter = array(), $count = false){
+		global $wpdb;
+
+		$query = array();
+		$query['#select'] = 'wp_afl_user_downlines';
+
+		$query['#join'] 	= array(
+			'wp_users' => array(
+				'#condition' => '`wp_users`.`ID`=`wp_afl_user_downlines`.`downline_user_id`'
+			)
+		);
+
+		$query['#where'] = array(
+			'`wp_afl_user_downlines`.`uid`=3'
+		);
+
+		$query['#order_by'] = array(
+			'`level`' => 'ASC'
+		);
+
+		$limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+	
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+
+		if (!empty($filter['search_valu'])) {
+			$query['#like'] = array('`display_name`' => $filter['search_valu']);
+		}
+		$result = db_select($query, 'get_results');
+
+		// pr($result = db_select($query, 'get_results'),1);
+		if ($count)
+			return count($result); 
+		return $result;
+	}
+/*
+ * -----------------------------------------------------------------------
+ * Database select query 
+ * -----------------------------------------------------------------------
+*/
+	function db_select($data = array(), $fetch_mode = '') {
+		global $wpdb;
+		$sql = '';
+		$alias = isset($data['#alias']) ? $data['#alias'] : '';
+		$fields = '';
+		if (isset($data['#fields'])) {
+			foreach ($data['#fields'] as $key => $value) {
+				foreach ($value as $field) {
+					$fields .= ',`'.$key.'`.`'.$field.'`';
+				}
+			}
+		}
+		$fields = !empty($fields) ? $fields : '*';
+
+		//select from
+		if ($data['#select'] && empty($alias)){
+			$sql .= 'SELECT '.$fields.' FROM `'.$data['#select'].'` ';
+		} else if ($data['#select'] && !empty($alias)) {
+			$sql .= 'SELECT '.$fields.' as '.$alias.' FROM `'.$data['#select'].'` ';
+		}
+		//join
+		if (isset($data['#join']) ){
+			foreach ($data['#join'] as $table => $value) {
+					$sql .= 'JOIN `'.$table.'`'.'ON '.$value['#condition'].' ';
+			}
+		}
+		//where condition
+		$where_flag 	= 0;
+		if (isset($data['#where'])) {
+			$where_flag = 1;
+
+			$where = 'WHERE ';
+			if (count($data['#where']) > 1 ){
+				$where .= $data['#where'][0];
+				$sql 	 .= $where;
+				foreach ($data['#where'] as $condition) {
+					$sql .= ' AND '.$condition.' ';
+				}
+			} else {
+				foreach ($data['#where'] as $condition) {
+					$sql .= 'WHERE '.$condition.' ';
+				}
+			}
+		}
+		//like 
+		if(isset($data['#like'])){
+
+			if (!$where_flag) {
+				$sql .= 'WHERE ';
+			}
+			foreach ($data['#like'] as $key => $value) {
+				$sql .= 'AND '.$key.' LIKE "%'.$value.'%"'.' ';	
+			}
+		}
+
+		
+
+		//order by
+		if (isset($data['#order_by'])) {
+			foreach ($data['#order_by'] as $key => $order) {
+				$sql .= 'ORDER BY '.$key.' '.$order.' ';
+			}
+		}
+
+		//limit
+		if (isset($data['#limit'])) {
+				$sql .= 'LIMIT '.$data['#limit'].' ';
+		}
+		// pr($sql);
+		return $wpdb->$fetch_mode($sql);
+	}

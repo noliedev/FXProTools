@@ -78,5 +78,10 @@
 	    }
 	    return false;
 	}
-
-
+/*
+ * ------------------------------------------------------------
+ * Users downline users datatable
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_user_downlines_data_table', 'afl_user_downlines_data_table_callback');
+ add_action('wp_ajax_nopriv_afl_user_downlines_data_table', 'afl_user_downlines_data_table_callback');
