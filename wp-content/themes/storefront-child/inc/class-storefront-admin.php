@@ -22,7 +22,6 @@ if(!class_exists('StoreFrontAdmin')){
 			add_filter('login_headerurl', array($this, 'login_logo_link'));
 			add_action('admin_menu',  array($this, 'remove_admin_menus'), 99);
 			add_action('admin_init', array($this, 'remove_dashboard_meta'));
-			add_filter('login_redirect', array($this, 'dashboard_redirect'));
 		}
 
 		// Storefront Styles - Admin
