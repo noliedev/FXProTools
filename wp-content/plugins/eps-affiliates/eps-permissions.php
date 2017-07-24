@@ -76,6 +76,10 @@
 			'#title' 				=> __('AFL manage Business system members'),
 			'#description' 	=> 'Add or eidt the business system members '
 		);
-		
+		//rank configurations
+		$permissions['system_rank_configurations'] = array(
+			'#title' 				=> __('AFL system rank configurations'),
+			'#description' 	=> 'affiliates system rank configurations '
+		);
 		return $permissions;
 	}

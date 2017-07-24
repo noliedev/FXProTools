@@ -562,6 +562,7 @@ if(!function_exists('afl_get_levels')){
 		if ( is_array( $args ) && isset( $args ) ) :
 			extract( $args );
 		endif;
+		
 		$template_file = afl_locate_template( $template_name, $tempate_path, $default_path );
 		if ( ! file_exists( $template_file ) ) :
 			_doing_it_wrong( __FUNCTION__, sprintf( '<code>%s</code> does not exist.', $template_file ), '1.0.0' );
@@ -905,7 +906,7 @@ if(!function_exists('afl_get_rank_names')){
 		);
 
 		$query['#where'] = array(
-			'`wp_afl_user_downlines`.`uid`=3'
+			'`wp_afl_user_downlines`.`uid`='.$uid.''
 		);
 
 		$query['#order_by'] = array(
@@ -1007,3 +1008,79 @@ if(!function_exists('afl_get_rank_names')){
 		// pr($sql);
 		return $wpdb->$fetch_mode($sql);
 	}
+/*
+ * -----------------------------------------------------------------------
+ * Genealogy Node details
+ * -----------------------------------------------------------------------
+*/
+	function afl_genealogy_node($uid = '') {
+		if (empty($uid))
+			$uid = get_current_user_id();
+
+		$query = array();
+   	$query['#select'] = 'wp_afl_user_genealogy';
+  	$query['#join']  = array(
+      'wp_users' => array(
+        '#condition' => '`wp_users`.`ID`=`wp_afl_user_genealogy`.`uid`'
+      )
+    );
+   	$query['#where'] = array(
+      '`wp_afl_user_genealogy`.`uid`='.$uid.''
+    );
+    $result = db_select($query, 'get_row');
+    return $result;
+	}
+ /* -----------------------------------------------------------------------
+ * convert to Commerce Amount 
+ * -----------------------------------------------------------------------
+*/
+function afl_commerce_amount($amount_paid){
+  return $amount_paid * 100;
+}
+/*
+ * -----------------------------------------------------------------------
+ * convert to Commerce Amount 
+ * -----------------------------------------------------------------------
+*/
+function afl_get_commerce_amount($amount_paid){
+  return $amount_paid / 100;
+}
+/*
+ * -----------------------------------------------------------------------
+ * convert to payment amount 
+ * -----------------------------------------------------------------------
+*/
+
+function afl_payment_amount($amount = 0){
+  return $amount * 1000;
+}
+/*
+ * -----------------------------------------------------------------------
+ * Convert from payment Amount 
+ * -----------------------------------------------------------------------
+*/
+function afl_get_payment_amount($amount = 0){
+  if($amount == 0){
+    return 0;
+  }
+  return $amount / 1000;
+  
+}
+/*
+ * -----------------------------------------------------------------------
+ * get upline users IDS
+ * -----------------------------------------------------------------------
+*/
+ function afl_get_upline_uids ($uid = '', $uids = array()) {
+ 	if (empty($uid))
+ 		$uid = get_current_user_id();
+ 	$node  = afl_genealogy_node($uid);
+ 	if ($node) {
+ 		if ($node->parent_uid) {
+ 			$uids[] =  $node->parent_uid;
+ 			return afl_get_upline_uids($node->parent_uid,$uids);
+ 		}
+ 	}
+ 	return $uids;
+ }
+

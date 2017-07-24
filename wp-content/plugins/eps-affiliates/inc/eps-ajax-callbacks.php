@@ -56,11 +56,21 @@ function users_auto_complete_callback($search_key = '') {
    foreach ($downlines_data as $key => $value) {
    	$output['data'][] = [
    		$value->ID,
-   		$value->display_name,
+      $value->display_name,
+   		$value->relative_position,
    		$value->level,
    		date('Y-m-d',$value->created)
    	];
    }
    echo json_encode($output);
  	die();
+ }
+
+/*
+ * -------------------------------------------------------------------------
+ * Expand Genealogy tree
+ * -------------------------------------------------------------------------
+*/
+ function afl_expand_user_genealogy_tree () {
+  afl_get_template('plan/matrix/genealogy-tree-expanded.php');
  }

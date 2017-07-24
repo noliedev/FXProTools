@@ -85,3 +85,11 @@
 */
  add_action('wp_ajax_afl_user_downlines_data_table', 'afl_user_downlines_data_table_callback');
  add_action('wp_ajax_nopriv_afl_user_downlines_data_table', 'afl_user_downlines_data_table_callback');
+
+/*
+ * ------------------------------------------------------------
+ * Genealogy tree expand
+ * ------------------------------------------------------------
+*/
+	add_action('wp_ajax_afl_user_expand_genealogy', 'afl_expand_user_genealogy_tree');
+ 	add_action('wp_ajax_nopriv_afl_user_expand_genealogy', 'afl_expand_user_genealogy_tree');

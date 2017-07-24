@@ -58,6 +58,15 @@
 					'#menu_slug' 			=> 'compensation-plan-configurations', 
 					'#page_callback' 	=> 'afl_admin_compensation_plan_configuration', 
 				);
+				//rank configuration
+				$menu['rank_configurations'] = array(
+					'#parent'					=> 'system-configurations',
+					'#page_title'			=> __( 'Rank Configurations', 'eps-affiliates' ),
+					'#menu_title' 		=> __( 'Rank Configurations', 'eps-affiliates' ),
+					'#access_callback'=> 'system_rank_configurations', 
+					'#menu_slug' 			=> 'rank-configurations', 
+					'#page_callback' 	=> 'afl_admin_rank_configuration', 
+				);
 				//role permission set
 				$menu['role_permissions'] = array(
 					'#parent'					=> 'system-configurations',

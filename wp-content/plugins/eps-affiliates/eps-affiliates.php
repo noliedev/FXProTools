@@ -217,8 +217,9 @@
 
 				//Affiliates plan path
 				if ( ! defined( 'EPSAFFILIATE_PLUGIN_PLAN' ) ) {
-					define( 'EPSAFFILIATE_PLUGIN_PLAN', plugin_dir_url('eps-affiliates/inc/plan',__FILE__));
+					define( 'EPSAFFILIATE_PLUGIN_PLAN', plugin_dir_url('eps-affiliates/inc/plan/matrix',__FILE__));
 				}
+
 				// Make sure CAL_GREGORIAN is defined.
 				if ( ! defined( 'CAL_GREGORIAN' ) ) {
 					define( 'CAL_GREGORIAN', 1 );
@@ -254,6 +255,9 @@
 				//required conditions when un-install
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/un-install.php';
 				
+				//common Payment functios
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/afl_payment_funs.php';
+
 				//route
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-route-url.php';
 				
@@ -276,8 +280,7 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-compensation-plan-conf.php';
 				// Menu callback for roles and permission settings
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-roles-nd-permission-conf.php';
-				//Menu callback add business system memebers
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-business-system-members.php';
+				
 
 				// Menu callback for rank configuration 
 
@@ -314,9 +317,6 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-exporer-callback.php';
 				
 				/* ------ Here comes all the member menu callback : End  -------------------*/
-					
-
-
 
 			}
 		/**

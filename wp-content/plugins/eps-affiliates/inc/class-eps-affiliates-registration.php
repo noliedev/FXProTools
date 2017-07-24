@@ -7,6 +7,7 @@
 class Eps_affiliates_registration {
 
 	public function afl_join_member ($post_data = array()) {
+	
 		$plan_width = afl_variable_get('matrix_plan_width',3);
 		if (!empty($post_data)) {
 			//insert to the geanealogy 
@@ -22,11 +23,11 @@ class Eps_affiliates_registration {
 					// also the count of the uids must lessthan or equals maximum of level users
 					$query 			= 'SELECT count(`downline_user_id`) as count, `level` FROM `wp_afl_user_downlines` WHERE `uid`= %d GROUP BY `level` HAVING count(`downline_user_id`) < POWER(3,`level`)';
 				  $row 				= $wpdb->get_row($wpdb->prepare($query,$sponsor));
-				  // pr($row);
+				  
 				  $max_query 	= 'SELECT MAX(`level`) FROM `wp_afl_user_downlines` WHERE `uid`= %d';
 				  $max_level	= $wpdb->get_var($wpdb->prepare($max_query,$sponsor));
-				  // pr('Max level ------ ' .$max_level);
-				  pr('');
+				  
+				  
 				  /**
  					 * ----------------------------------------------------------------------------
  					 * Here get the maximum level.
@@ -114,7 +115,7 @@ class Eps_affiliates_registration {
 				  		$positions_array[] = $value->relative_position;
 				  	}
 				  	sort($positions_array);
-				  	// pr($positions_array);
+				  	
 
 				  	if(count($positions_array)%2 === 0){
 						    $var = (count($positions_array)-1)/2;
@@ -128,7 +129,7 @@ class Eps_affiliates_registration {
 								$next_relative_position 	= pow($plan_width, $level) - ($middle_relative_position - 1 );
 						}
 
-				  	// pr($middle_relative_position);
+				  	
 				  	$relative_position = $next_relative_position;
 				  	
 
@@ -151,7 +152,7 @@ class Eps_affiliates_registration {
 					 	$downline_ins_data['joined_year'] 			= $afl_date_splits['y'];
 					 	$downline_ins_data['joined_week'] 			= $afl_date_splits['w'];
 					 	$downline_ins_data['joined_date'] 			= afl_date_combined($afl_date_splits);
-					 	// pr($downline_ins_data);
+					 	
 					 	$data_format = array(
 					 		'%d',
 					 		'%d',
@@ -167,8 +168,28 @@ class Eps_affiliates_registration {
 					 		'%d',
 					 		'%s'
 					 	);
-				 		// $downline_ins_id = $wpdb->insert($downline_table, $downline_ins_data, $data_format);
+				 		$downline_ins_id = $wpdb->insert($downline_table, $downline_ins_data, $data_format);
+				 		//after this need to insert the upline users downline
+				 		$uplines = afl_get_upline_uids($sponsor);
+				 		foreach ($uplines as $upline_uid) {
+				 			$level = $level + 1;
+				 			$downline_ins_data['uid'] 							= $upline_uid;
+						 	$downline_ins_data['downline_user_id'] 	= $post_data['uid'];
+						 	$downline_ins_data['level'] 						= $level;
+						 	$downline_ins_data['status'] 						=	1;
+						 	$downline_ins_data['position'] 					=	1;
+						 	$downline_ins_data['relative_position']	=	$relative_position;
+						 	$downline_ins_data['created'] 					= afl_date();
+						 	$downline_ins_data['member_rank'] 			= 0;
+						 	$downline_ins_data['joined_day'] 				= $afl_date_splits['d'];
+						 	$downline_ins_data['joined_month'] 			= $afl_date_splits['m'];
+						 	$downline_ins_data['joined_year'] 			= $afl_date_splits['y'];
+						 	$downline_ins_data['joined_week'] 			= $afl_date_splits['w'];
+						 	$downline_ins_data['joined_date'] 			= afl_date_combined($afl_date_splits);
 
+				 			$downline_ins_id = $wpdb->insert($downline_table, $downline_ins_data, $data_format);
+
+				 		}
 					}
 
 					//get parent position 
@@ -189,12 +210,13 @@ class Eps_affiliates_registration {
 				 	$ins_data['joined_year'] 				= $afl_date_splits['y'];
 				 	$ins_data['joined_week'] 				= $afl_date_splits['w'];
 				 	$ins_data['joined_date'] 				= afl_date_combined($afl_date_splits);
-				 	// pr($ins_data);
-				 	// $ins_id = $wpdb->insert($table_name, $ins_data);
-				  	pr('Parent : --------------- '. $parent);
-				 		pr('Level : --------------- '. $level);
-				  	pr('Relative Position : --------------- '. $relative_position);
-				  	pr('uid : --------------- '. $post_data['uid']);
+				 	
+				 	$ins_id = $wpdb->insert($table_name, $ins_data);
+				 		// pr($parent);
+				  	// pr('Parent : --------------- '. $parent);
+				 		// pr('Level : --------------- '. $level);
+				  	// pr('Relative Position : --------------- '. $relative_position);
+				  	// pr('uid : --------------- '. $post_data['uid']);
 				}
 			}
 		}
