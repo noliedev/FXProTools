@@ -31,7 +31,8 @@ foreach ($core_settings as $setting) {
 $custom_functions = array(
 	'function-helper.php',
 	'function-wc-parsing.php',
-	'function-authorize-net.php'
+	'class-anet-api.php'
+
 );
 
 if($custom_functions){
