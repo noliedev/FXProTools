@@ -60,7 +60,8 @@ if(!class_exists('AuthAPI')){
 
 		// }
 
-		public function get_auth_user_profile($profile_id)
+		// Get user information - profile and payment information
+		public function get_user_info($profile_id)
 		{
 			$merchantAuthentication = $this->anet_authentication(self::AUTHORIZENET_API_LOGIN_ID, self::AUTHORIZENET_TRANSACTION_KEY);
 
@@ -68,18 +69,98 @@ if(!class_exists('AuthAPI')){
 			$request->setMerchantAuthentication($merchantAuthentication);
 			$request->setCustomerProfileId($profile_id);
 			$controller = new AnetController\GetCustomerProfileController($request);
-			$response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
+			$anetResponse = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
 			
-			if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") ){
-				$selectedProfile        = $response->getProfile();
-				$res['profile']         = $selectedProfile;
-				$res['payment_profile'] = $selectedProfile->getPaymentProfiles();
-				$res['status']          = $response->getMessages()->getResultCode();
+			if ( ($anetResponse != null) && ($anetResponse->getMessages()->getResultCode() == "Ok") ) {
+				$basicInfo   = $anetResponse->getProfile();
+				$paymentInfo = $basicInfo->getPaymentProfiles();
+				
+				$info['profile'] = array(
+					'customer_id'  => $basicInfo->getCustomerProfileId(),
+					'merchant_id'  => $basicInfo->getmerchantCustomerId(),
+					'description'  => $basicInfo->getDescription(),
+					'email'        => $basicInfo->getEmail(),
+				);
+
+				$info['payment_profile'] = array(
+					'customer_profile_id'         => $paymentInfo[0]->getCustomerProfileId(),
+					'customer_payment_profile_id' => $paymentInfo[0]->getCustomerPaymentProfileId(),
+					'defaul_payment_profile'      => $paymentInfo[0]->getDefaultPaymentProfile(),
+					'payment' => array(
+						'credit_card' => array(
+							'card_number'     => $paymentInfo[0]->getPayment()->getCreditCard()->getCardNumber(),
+							'expiration_date' => $paymentInfo[0]->getPayment()->getCreditCard()->getExpirationDate(),
+							'card_type'       => $paymentInfo[0]->getPayment()->getCreditCard()->getCardType(),
+							'card_art'        => $paymentInfo[0]->getPayment()->getCreditCard()->getCardArt()
+						),
+					),
+					'drivers_license'  => $paymentInfo[0]->getDriversLicense(),
+					'tax_id'           => $paymentInfo[0]->getTaxId(),
+					'subscription_ids' => '', // Leave it blank for a while
+					'customer_type'    => $paymentInfo[0]->getCustomerType(),
+					'billing_info'     => array(
+						'phone_number' => $paymentInfo[0]->getBillTo()->getPhoneNumber(),
+						'fax_number'   => $paymentInfo[0]->getBillTo()->getFaxNumber(),
+						'email'        => $paymentInfo[0]->getBillTo()->getEmail(),
+						'first_name'   => $paymentInfo[0]->getBillTo()->getFirstName(),
+						'last_name'    => $paymentInfo[0]->getBillTo()->getLastName(),
+						'company'      => $paymentInfo[0]->getBillTo()->getCompany(),
+						'address'      => $paymentInfo[0]->getBillTo()->getAddress(),
+						'city'         => $paymentInfo[0]->getBillTo()->getCity(),
+						'state'        => $paymentInfo[0]->getBillTo()->getState(),
+						'zip'          => $paymentInfo[0]->getBillTo()->getZip(),
+						'country'      => $paymentInfo[0]->getBillTo()->getCountry(),
+					),
+				);
+	
+				array_push($info['profile'], $info['payment_profile']);
+				
+				$response['info']   = $info['profile'];
+				$response['status'] = $anetResponse->getMessages()->getResultCode();
 			} else {
-				$res['status'] = $response->getMessages()->getResultCode();
+				$response['status'] = $anetResponse->getMessages()->getResultCode();
 			}
 
-			return $res;
+			return $response;
+		}
+
+		// Get shipping information
+		public function get_shipping_info($profile_id)
+		{
+			$merchantAuthentication = $this->anet_authentication(self::AUTHORIZENET_API_LOGIN_ID, self::AUTHORIZENET_TRANSACTION_KEY);
+			$request = new AnetAPI\GetCustomerShippingAddressRequest();
+		  	$request->setMerchantAuthentication($merchantAuthentication);
+		  	$request->setCustomerProfileId($profile_id);
+		  	
+		  	$controller   = new AnetController\GetCustomerShippingAddressController($request);
+		  	$anetResponse = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+		  	if ( ($anetResponse != null) && ($anetResponse->getMessages()->getResultCode() == "Ok") ) {
+		  		$response['shipping_info'] = array(
+					'first_name' 	      => $anetResponse->getAddress()->getFirstName(),
+					'last_name' 	      => $anetResponse->getAddress()->getLastName(),
+					'company' 	          => $anetResponse->getAddress()->getCompany(),
+					'address' 	          => $anetResponse->getAddress()->getAddress(),
+					'city' 		          => $anetResponse->getAddress()->getCity(),
+					'state' 		      => $anetResponse->getAddress()->getState(),
+					'zip' 		          => $anetResponse->getAddress()->getZip(),
+					'country' 	          => $anetResponse->getAddress()->getCountry(),
+					'phone_number' 	      => $anetResponse->getAddress()->getPhoneNumber(),
+					'fax_number' 	      => $anetResponse->getAddress()->getFaxNumber(),
+					'customer_address_id' => $anetResponse->getAddress()->getCustomerAddressId(),
+		  		);
+		  		$response['status'] = $anetResponse->getMessages()->getResultCode();
+		  	} else {
+				$response['status'] = $anetResponse->getMessages()->getResultCode();
+			}
+
+			return $response;
+		}
+
+		// Get payment information
+		public function get_payment_info($profile_id)
+		{
+
 		}
 
 		// Authentication

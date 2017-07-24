@@ -32,7 +32,6 @@ $custom_functions = array(
 	'function-helper.php',
 	'function-wc-parsing.php',
 	'class-anet-api.php'
-
 );
 
 if($custom_functions){
