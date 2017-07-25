@@ -57,3 +57,8 @@
 .hv-wrapper .hv-item .hv-item-children .hv-item-child:last-child:after {
   width: calc(50% + 1px); 
 }
+/* ----------------- Custom --------------------------- */
+.expand-tree{
+  cursor: pointer;
+}
+/* .hv-container{overflow-x: scroll;} */

@@ -5,6 +5,7 @@
  * -------------------------------------------------------------------
 */
 function afl_admin_rank_configuration() {  
+	echo afl_eps_page_header();
 
 	if ( isset($_POST['submit']) ) {  
 	 $validation = afl_admin_rank_configuration_form_validation($_POST);

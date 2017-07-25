@@ -51,11 +51,11 @@ p.simple-card {
   text-align: center; 
 }
 .genealogy-hierarchy .person > img {
-  height: 110px;
-  border: 5px solid #FFF;
+  height: 80px;
+  border: 5px solid #ccc;
   border-radius: 50%;
   overflow: hidden;
-  background-color: #fff; 
+  background-color: #ccc; 
 }
 .genealogy-hierarchy .person .genealogy-user-name {
   background-color: #fff;

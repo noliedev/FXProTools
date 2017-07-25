@@ -45,6 +45,9 @@ class Eps_affiliates_common {
 			wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
 			wp_enqueue_script( 'common-js' );
 
+			wp_register_script( 'widget-scripts',  EPSAFFILIATE_PLUGIN_ASSETS.'js/widget-scripts.js');
+			wp_enqueue_script( 'widget-scripts' );
+
 	    wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));        
 		} 
 	/*
@@ -56,6 +59,7 @@ class Eps_affiliates_common {
 			wp_enqueue_style( 'fontawsome-css', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/font-awesome-4.7.0/css/font-awesome.min.css');
 			wp_enqueue_style( 'bootstrap-css', EPSAFFILIATE_PLUGIN_ASSETS.'css/bootstrap/css/bootstrap.css');
 			wp_enqueue_style( 'jquery-ui', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/jquery-ui/jquery-ui.min.css');
+			wp_enqueue_style( 'app', EPSAFFILIATE_PLUGIN_ASSETS.'css/app.css');
 			wp_enqueue_style( 'developer', EPSAFFILIATE_PLUGIN_ASSETS.'css/developer.css');
 		} 
 }
@@ -95,9 +99,14 @@ $common_include = new Eps_affiliates_common();
 			$html .= $prefix;
 
 		$html .= '<form action="' .$action. '"" method="'.$method.'" id="" accept-charset="UTF-8" class="'.$classes.'"> ';
+		$html .= '<div class="panel panel-default">';
+		$html .= '<div class="panel-body">';
 			foreach ($elements as $key => $element) {
 				$html .= html_input_render($element,$key,$attributes);
 			}
+		$html .= '</div>';
+		$html .= '</div>';
+
 			if ($suffix)
 				$html .= $suffix;
 		return $html;
@@ -206,32 +215,49 @@ $common_include = new Eps_affiliates_common();
 		switch ($element_type) {
 			case 'text':
 				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'" class="col-md-2 col-form-label">';
+				$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
 				$html .= isset($element['#title']) ? $element['#title'] : '';
 				$html .= '</label>';
-				$html .= '<div class="col-md-10">';
+				// $html .= '<div class="col-md-10">';
 				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';	
-				$html .= '</div>';
+				// $html .= '</div>';
 			break;
 			case 'password':
 				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'" class="col-md-2 col-form-label">';
+				$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
 				$html .= isset($element['#title']) ? $element['#title'] : '';
 				$html .= '</label>';
-				$html .= '<div class="col-md-10">';
+				// $html .= '<div class="col-md-10">';
 				$html .= '<input type = "password" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';	
-				$html .= '</div>';
+				// $html .= '</div>';
 			break;
 			case 'checkbox':
+
 				$checked = (!empty($element['#default_value']) && isset($element['#default_value'])) ? TRUE : FALSE ;
-				$html .= '<label for="'.str_replace('_','-',$key).'">';
+				
+				// if ($checked) {
+				// 	$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" checked="'.$checked.'" >';	
+				// }else {
+				// 	$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'">';	
+				// }
+				// $html .= '<label for="'.str_replace('_','-',$key).'">';
+				// $html .= isset($element['#title']) ? $element['#title'] : '';
+				// $html .= '</label>';
+
+				$html .= '<div class="form-item clearfix form-type-checkbox form-item-afl-board-reoining">';
+				$html .='<label class="i-checks">';
+
+				if ($checked) {
+					$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-checkbox checkbox form-control '.$class.'" checked="'.$checked.'" >';	
+				}else {
+					$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-checkbox checkbox form-control '.$class.'">';	
+				}
+				$html .= '<i></i></label>  <label class="option" for="'.str_replace('_','-',$key).'">';
 				$html .= isset($element['#title']) ? $element['#title'] : '';
 				$html .= '</label>';
-				if ($checked) {
-					$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" checked="'.$checked.'" >';	
-				}else {
-					$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'">';	
-				}
+				$html .= '</div>';
+
+				
 			break;
 			case 'markup':
 				$html .= '<div class="'.$class.'">'.$element['#markup'].'</div>';	
@@ -240,7 +266,7 @@ $common_include = new Eps_affiliates_common();
 				$html .= '<input type="submit" class="'.$class.'" value="'.$element['#value'].'" name="submit">';	
 			break;
 			case 'label':
-				$html .= '<label class="'.$class.'">'.$element['#title'].'</label>';	
+				$html .= '<label class="label-style '.$class.'">'.$element['#title'].'</label>';	
 				$html .= '<br><small>'.$description.'</small>';
 			break;
 
@@ -264,12 +290,12 @@ $common_include = new Eps_affiliates_common();
 			case 'auto_complete':
 				$path  = isset($element['#auto_complete_path']) ? $element['#auto_complete_path'] : '#';
 				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'" class="col-md-2 col-form-label">';
+				$html .= '<label for="'.str_replace('_','-',$key).'" class="">';
 				$html .= isset($element['#title']) ? $element['#title'] : '';
 				$html .= '</label>';
-				$html .= '<div class="col-md-10">';
+				// $html .= '<div class="col-md-10">';
 				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control auto_complete '.$class.'" value="'.$deflt.'" data-path="'.$path.'" autocomplete="off" >';	
-				$html .= '</div>';
+				// $html .= '</div>';
 			break;
 		}
 
@@ -945,7 +971,10 @@ if(!function_exists('afl_get_rank_names')){
 		if (isset($data['#fields'])) {
 			foreach ($data['#fields'] as $key => $value) {
 				foreach ($value as $field) {
-					$fields .= ',`'.$key.'`.`'.$field.'`';
+					if (!empty($fields))
+						$fields .= ',`'.$key.'`.`'.$field.'`';
+					else
+						$fields .= '`'.$key.'`.`'.$field.'`';
 				}
 			}
 		}
@@ -1083,4 +1112,38 @@ function afl_get_payment_amount($amount = 0){
  	}
  	return $uids;
  }
+/*
+ * -----------------------------------------------------------------------
+ * Truncate tables
+ * -----------------------------------------------------------------------
+*/
+if (!function_exists('afl_truncate')) {
+	function afl_truncate($table, $reset = FALSE){
+		global $wpdb;
+		$tbl_prefix = $wpdb->prefix;
+		$table 			= $tbl_prefix . $table;
+		if($wpdb->get_var("SHOW TABLES LIKE '$table'") == $table) {
+			$wpdb->query('TRUNCATE TABLE `'.$table.'`');
+	     if($reset === TRUE){
+	        $wpdb->query('ALTER TABLE `'.$table.'` AUTO_INCREMENT = 1');
+	     }
 
+	  }
+	}
+}
+/*
+ * -----------------------------------------------------------------------
+ * All the Page title design
+ * -----------------------------------------------------------------------
+*/
+ function afl_page_title() {
+ 	return '<h1>'.get_admin_page_title().'</h1>';
+ }
+/*
+ * -----------------------------------------------------------------------
+ * Dashboard Header template
+ * -----------------------------------------------------------------------
+*/
+ function afl_eps_page_header () {
+ 	return afl_get_template('dashboard/eps_dashboard_header.php');
+ }

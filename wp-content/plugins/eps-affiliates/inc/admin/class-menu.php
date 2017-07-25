@@ -23,6 +23,9 @@
 
 				add_action( 'admin_menu', array( $this , 'afl_system_settings') );
 
+				add_action( 'admin_menu', array( $this , 'eps_affiiliates_dashboard') );
+
+				
 
 
 
@@ -84,6 +87,15 @@
 					'#access_callback'=> 'business_system_members', 
 					'#menu_slug' 			=> 'business-system-members', 
 					'#page_callback' 	=> 'afl_add_edit_business_system_members', 
+				);
+				//genealogy configuration
+				$menu['genealogy_configuration'] = array(
+					'#parent'					=> 'system-configurations',
+					'#page_title'			=> __( 'Genealogy Configurations', 'Genealogy Configurations' ),
+					'#menu_title' 		=> __( 'Genealogy Configurations', 'Genealogy Configurations' ),
+					'#access_callback'=> 'system_settings', 
+					'#menu_slug' 			=> 'genealogy-configurations', 
+					'#page_callback' 	=> 'afl_system_genealogy_configurations', 
 				);
 				afl_system_admin_menu($menu);
 
@@ -456,7 +468,17 @@
 					'#weight'					=>	6
 				);
 			}
-
+		/*
+		 * --------------------------------------------------------------------------
+		 * Eps affiliates dashboard 
+		 * --------------------------------------------------------------------------
+		*/
+			public function eps_affiiliates_dashboard () {
+				add_dashboard_page( 'EPS Dashboard', 'EPS Dashboard', 'read', 'eps-dashboard', array( $this,'eps_affiliates_dashboard_callback') );
+			}
+			public function eps_affiliates_dashboard_callback () {
+				afl_get_template('dashboard/eps_dashboard_template.php');
+			}
 	}
 
 

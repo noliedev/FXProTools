@@ -6,6 +6,23 @@
    $query['#join']  = array(
       'wp_users' => array(
         '#condition' => '`wp_users`.`ID`=`wp_afl_user_downlines`.`downline_user_id`'
+      ),
+      'wp_afl_user_genealogy' => array(
+        '#condition' => '`wp_afl_user_genealogy`.`uid`=`wp_afl_user_downlines`.`downline_user_id`'
+      ),
+    );
+   $query['#fields']  = array(
+      'wp_users' => array(
+        'display_name'
+      ),
+      'wp_afl_user_downlines' => array(
+        'downline_user_id',
+        'uid',
+        'relative_position',
+        'level'
+      ),
+      'wp_afl_user_genealogy' => array(
+        'parent_uid'
       )
     );
    $query['#where'] = array(
@@ -16,16 +33,21 @@
       '`level`' => 'ASC'
     );
     $downlines = db_select($query, 'get_results');
-
+    // pr($downlines);
     $tree = array();
     //get the downlines levels
     $levels = array();
+    $positions = array();
     foreach ($downlines as $key => $row) {
       $tree[$row->downline_user_id] = $row;
       $level[$row->relative_position] = $row->downline_user_id;
+      $positions[$row->parent_uid][$row->relative_position] = $row->downline_user_id;
     }
     $parent = afl_genealogy_node($uid);
-    // pr($tree);
+    
+    $this_user_downlines =  isset($positions[$uid])  ? $positions[$uid] : array();
+    ksort($this_user_downlines);
+    
     $plan_width = afl_variable_get('matrix_plan_width',3);
 if (!empty($parent)) :
   ?>
@@ -38,562 +60,69 @@ if (!empty($parent)) :
 
                     <div class="hv-item-parent">
                         <div class="person">
-                            <img src="https://pbs.twimg.com/profile_images/762654833455366144/QqQhkuK5.jpg" alt="">
+                            <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png'; ?>" alt="">
                             <p class="name">
                                 <?= $parent->display_name; ?>
                             </p>
                         </div>
                     </div>
-                    <?php if (!empty($tree)) : ?>
+                    <!-- Check the users occure in all levels -->
                     <div class="hv-item-children">
                     <?php 
-                      foreach ($tree as $key => $row) { ?>
+                    for ($i = 1; $i <= $plan_width; $i++) : 
+
+                      if (isset($level[$i])) : ?>
                         <div class="hv-item-child">
 
                             <div class="hv-item">
-
-                                <div class="hv-item-parent">
+                                  <div class="">
                                     <div class="person">
-                                        <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
+                                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png'; ?>" alt="">
                                         <p class="name">
-                                                 Wilner <b>/ Creative Director</b>
+                                          <?= $tree[$level[$i]]->display_name; ?>
                                         </p>
+                                      <span class="expand-tree" data-user-id ="<?= $level[$i];?>" onclick="expandTree(this)">
+                                        <i class="fa fa-plus-circle fa-2x"></i>
+                                      </span>
                                     </div>
+                                  </div>
+                                <!-- check he has downlines -->
+                                <div class="append-child-<?= $level[$i];?>">
+                                  
                                 </div>
-
-                                <div class="hv-item-children">
-
-                                    <div class="hv-item-child">
-                                        <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-
-                                        <!-- <div class="person">
-                                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="">
-                                            <p class="name">
-                                                Anne Potts <b>/ UI Designer</b>
-                                            </p>
-                                        </div> -->
-                                    </div>
-
-
-                                    <div class="hv-item-child">
-                                        <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="hv-item-child">
-                                        <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
 
                             </div>
                         </div>
-                     <?php } ?>
-                        <div class="hv-item-child">
+                      <?php else : ?>
+                          <div class="hv-item-child">
 
                             <div class="hv-item">
-
-                                <div class="hv-item-parent">
+                                  <div class="">
                                     <div class="person">
-                                        <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
+                                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
                                         <p class="name">
-                                                 Wilner <b>/ Creative Director</b>
+                                          No user
                                         </p>
                                     </div>
-                                </div>
-
-                                <div class="hv-item-children">
-
-                                    <div class="hv-item-child">
-                                        <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-
-                                        <!-- <div class="person">
-                                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="">
-                                            <p class="name">
-                                                Anne Potts <b>/ UI Designer</b>
-                                            </p>
-                                        </div> -->
-                                    </div>
-
-
-                                    <div class="hv-item-child">
-                                        <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="hv-item-child">
-                                        <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                  </div>
                             </div>
                         </div>
-
-
-                        <div class="hv-item-child">
-                            <!-- Key component -->
-                            <div class="hv-item">
-
-                                <div class="hv-item-parent">
-                                    <div class="person">
-                                        <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="">
-                                        <p class="name">
-                                            Gordon Clark <b>/ Senior Developer</b>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="hv-item-children">
-
-                                    <div class="hv-item-child">
-                                       <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="hv-item-child">
-                                        <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="hv-item-child">
-                                       <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="hv-item-child">
-                            <!-- Key component -->
-                            <div class="hv-item">
-
-                                <div class="hv-item-parent">
-                                    <div class="person">
-                                        <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="">
-                                        <p class="name">
-                                            Gordon Clark <b>/ Senior Developer</b>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="hv-item-children">
-
-                                    <div class="hv-item-child">
-                                        <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="hv-item-child">
-                                        <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="hv-item-child">
-                                        <div class="hv-item-parent">
-                                            <div class="person">
-                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">
-                                                <p class="name">
-                                                         Wilner <b>/ Creative Director</b>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="hv-item-children">
-                                           <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                          <div class="hv-item-child">
-                                              <div class="person">
-                                                  <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
-                                                  <p class="name">
-                                                      Dan Butler <b>/ UI Designer</b>
-                                                  </p>
-                                              </div>
-                                          </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
+                      <?php endif; ?>
+                    <?php endfor;  ?>
                     </div>
-                  <?php endif; ?>
-
                 </div>
-
             </div>
         </div>
     </section>
 <?php endif; ?>
+
+<script type="text/javascript">
+  // $('.expand-tee').click(function(){
+    
+  //   $(this).find('i').toggleClass('fa-times-circle fa-plus-circle');
+  //   var id = $(this).attr('id');
+  //   $(this).parent().parent().addClass('hv-item-parent');
+  //   $('.append-child-'+id).html('<div class="hv-item-children">                                <div class="hv-item-child">                                                                               <div class="person">                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">                                                <p class="name">                                                         Wilner <b>/ Creative Director</b>                                                </p>                                            </div>                                                                           </div>                                    <div class="hv-item-child">                                                                                    <div class="person">                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">                                                <p class="name">                                                         Wilner <b>/ Creative Director</b>                                                </p>                                            </div>                                                                           </div>                                    <div class="hv-item-child">                                                                                    <div class="person">                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">                                                <p class="name">                                                         Wilner <b>/ Creative Director</b>                                                </p>                                            </div>                                                                            </div>                                </div>');
+  // });
+</script>

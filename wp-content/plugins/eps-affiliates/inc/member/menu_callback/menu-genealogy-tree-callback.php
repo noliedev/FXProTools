@@ -1,5 +1,7 @@
 <?php 
 function afl_genealogy_tree() {
+	echo afl_eps_page_header();
+	
 	// define( 'EPSAFFILIATE_PLUGIN_PLAN', plugin_dir_url('eps-affiliates/inc/plan'));
 
 	

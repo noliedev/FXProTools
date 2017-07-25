@@ -1,6 +1,7 @@
 <?php 
 
 function afl_add_edit_business_system_members () {
+	echo afl_eps_page_header();
 	afl_add_edit_business_system_members_form();
 }
 
