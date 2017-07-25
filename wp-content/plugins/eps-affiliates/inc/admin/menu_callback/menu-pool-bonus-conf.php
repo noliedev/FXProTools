@@ -6,6 +6,8 @@
  * -------------------------------------------------------------------
 */
 function afl_admin_pool_bonus_configuration(){
+	echo afl_eps_page_header();
+	
 	if ( isset($_POST['submit']) ) {  
 	 $validation = afl_admin_pool_bonus_configuration_form_validation($_POST);
 	 	if (!empty($validation)) {

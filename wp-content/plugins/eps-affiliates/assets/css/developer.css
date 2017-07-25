@@ -1,5 +1,5 @@
 /*  ------------------- Main Wrapper -------------------------------------- */
-.wrapper-md {padding: 20px;}
+.wrapper-md {padding: 20px;background-color: #f0f3f4;}
 
 :focus {
   outline: none;
@@ -159,3 +159,69 @@
     margin: 0;
   }
 }
+
+/* ---------------- Custom readio and checkbox styling -----------------------------*/
+  input[type=checkbox] { 
+     
+    display: none; 
+    overflow: hidden; 
+  } 
+   
+   
+  label { 
+     
+    margin:2px; 
+    display:block; 
+  } 
+  .custom { 
+     
+    margin:20px; 
+    display:block; 
+  } 
+   
+  input[type=checkbox]:checked + label:before { 
+     
+    content: "\2713"; 
+     
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2); 
+    color: #72777c; 
+     
+    text-align: center; 
+     
+    line-height: 15px; 
+    border: 2px solid; 
+    /* border-radius: 5px;  */
+    font-size: 14px; 
+    padding: 2px 5px; 
+    margin-right: 5px; 
+    font-weight: bold; 
+  } 
+   
+   
+  input[type=checkbox] + label:before { 
+     
+    content: "\2003"; 
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2); 
+    text-align: center; 
+     
+    line-height: 15px; 
+    border: 2px solid; 
+    /* border-radius: 5px;  */
+    font-size: 14px; 
+    padding: 2px 4px; 
+     
+    color: #ccc; 
+    margin-right: 5px; 
+     
+    font-weight: bold; 
+     
+  }
+
+
+.label-style {
+  font-weight: bold;
+}
+.bg-gray {
+  background-color: #ccc;
+}
+.region-title-extra > .block{display: inline-block;}

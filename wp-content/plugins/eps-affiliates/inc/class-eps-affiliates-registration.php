@@ -136,15 +136,27 @@ class Eps_affiliates_registration {
 				 	}
 				 	$afl_date_splits = afl_date_splits(afl_date());
 
+					$parent = $this->afl_get_relative_parent($relative_position,$level,$sponsor);
+					//relative position is found based on the sponsor and the parent based relative position found here
+
+					$parent_raltive_position = 0 ;
+					$reminder = $relative_position % $plan_width;
+					// if no reminder, then $plan_width position, else reminder position
+					$parent_raltive_position = ($reminder == 0 ) ? $plan_width : $reminder; 
+					//examples
+					// 1/3 : rem 1 then 1 th
+					// 2/3 : rem 2 then 2 th
+					// 3/3 : rem 0 then 3 th
 				 	//insert to the downlines
+
 					$downline_table = $wpdb->prefix . 'afl_user_downlines';
 					if($wpdb->get_var("SHOW TABLES LIKE '$downline_table'") == $downline_table) {
-						$downline_ins_data['uid'] 							= $sponsor;
+						$downline_ins_data['uid'] 							= $parent;
 					 	$downline_ins_data['downline_user_id'] 	= $post_data['uid'];
-					 	$downline_ins_data['level'] 						= $level;
+					 	$downline_ins_data['level'] 						= 1;
 					 	$downline_ins_data['status'] 						=	1;
 					 	$downline_ins_data['position'] 					=	1;
-					 	$downline_ins_data['relative_position']	=	$relative_position;
+					 	$downline_ins_data['relative_position']	=	$parent_raltive_position;
 					 	$downline_ins_data['created'] 					= afl_date();
 					 	$downline_ins_data['member_rank'] 			= 0;
 					 	$downline_ins_data['joined_day'] 				= $afl_date_splits['d'];
@@ -168,14 +180,22 @@ class Eps_affiliates_registration {
 					 		'%d',
 					 		'%s'
 					 	);
+					 	
 				 		$downline_ins_id = $wpdb->insert($downline_table, $downline_ins_data, $data_format);
 				 		//after this need to insert the upline users downline
-				 		$uplines = afl_get_upline_uids($sponsor);
+				 		/*
+				 		 * -----------------------------------------------------------------
+				 		 * here adds the downline details to the sponsors
+				 		 * -----------------------------------------------------------------
+				 		*/
+				 		$uplines 	= afl_get_upline_uids($parent);
+				 		$sp_level = 1;
+
 				 		foreach ($uplines as $upline_uid) {
-				 			$level = $level + 1;
+				 			$sp_level = $sp_level + 1;
 				 			$downline_ins_data['uid'] 							= $upline_uid;
 						 	$downline_ins_data['downline_user_id'] 	= $post_data['uid'];
-						 	$downline_ins_data['level'] 						= $level;
+						 	$downline_ins_data['level'] 						= $sp_level;
 						 	$downline_ins_data['status'] 						=	1;
 						 	$downline_ins_data['position'] 					=	1;
 						 	$downline_ins_data['relative_position']	=	$relative_position;
@@ -187,6 +207,21 @@ class Eps_affiliates_registration {
 						 	$downline_ins_data['joined_week'] 			= $afl_date_splits['w'];
 						 	$downline_ins_data['joined_date'] 			= afl_date_combined($afl_date_splits);
 
+						 	$data_format = array(
+					 		'%d',
+					 		'%d',
+					 		'%d',
+					 		'%d',
+					 		'%d',
+					 		'%d',
+					 		'%d',
+					 		'%d',
+					 		'%d',
+					 		'%d',
+					 		'%d',
+					 		'%d',
+					 		'%s'
+					 	);
 				 			$downline_ins_id = $wpdb->insert($downline_table, $downline_ins_data, $data_format);
 
 				 		}
@@ -194,6 +229,7 @@ class Eps_affiliates_registration {
 
 					//get parent position 
 					$parent = $this->afl_get_relative_parent($relative_position,$level,$sponsor);
+					
 				 	//insert the genealogy details 
 				 	
 				 	$ins_data = array();
@@ -212,11 +248,41 @@ class Eps_affiliates_registration {
 				 	$ins_data['joined_date'] 				= afl_date_combined($afl_date_splits);
 				 	
 				 	$ins_id = $wpdb->insert($table_name, $ins_data);
-				 		// pr($parent);
-				  	// pr('Parent : --------------- '. $parent);
-				 		// pr('Level : --------------- '. $level);
-				  	// pr('Relative Position : --------------- '. $relative_position);
-				  	// pr('uid : --------------- '. $post_data['uid']);
+				 	
+				 	//add the user to the parents first level
+
+				 	$downline_ins_data['uid'] 							= $parent;
+				 	$downline_ins_data['downline_user_id'] 	= $post_data['uid'];
+				 	$downline_ins_data['level'] 						= 1;
+				 	$downline_ins_data['status'] 						=	1;
+				 	$downline_ins_data['position'] 					=	1;
+				 	$downline_ins_data['relative_position']	=	$relative_position;
+				 	$downline_ins_data['created'] 					= afl_date();
+				 	$downline_ins_data['member_rank'] 			= 0;
+				 	$downline_ins_data['joined_day'] 				= $afl_date_splits['d'];
+				 	$downline_ins_data['joined_month'] 			= $afl_date_splits['m'];
+				 	$downline_ins_data['joined_year'] 			= $afl_date_splits['y'];
+				 	$downline_ins_data['joined_week'] 			= $afl_date_splits['w'];
+				 	$downline_ins_data['joined_date'] 			= afl_date_combined($afl_date_splits);
+				 	
+				 	$data_format = array(
+				 		'%d',
+				 		'%d',
+				 		'%d',
+				 		'%d',
+				 		'%d',
+				 		'%d',
+				 		'%d',
+				 		'%d',
+				 		'%d',
+				 		'%d',
+				 		'%d',
+				 		'%d',
+				 		'%s'
+				 	);
+
+				 	// $downline_ins_id = $wpdb->insert($downline_table, $downline_ins_data, $data_format);
+
 				}
 			}
 		}

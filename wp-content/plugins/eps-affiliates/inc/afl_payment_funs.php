@@ -53,7 +53,7 @@ function afl_business_transaction ($business_transactions = array()) {
  *                2 => Debit
  * -----------------------------------------------------------------------
 */
-function afl_member_transaction($transaction = array(), $business = TRUE, $do_check = TRUE){
+function afl_member_transaction($transaction = array(), $business = TRUE){
   if(empty($transaction)){
     return FALSE;
   }
@@ -63,7 +63,7 @@ function afl_member_transaction($transaction = array(), $business = TRUE, $do_ch
   
   $afl_date = afl_date();
   $afl_date_splits = afl_date_splits($afl_date);
-  $transaction_table = $wpdb->prefix . 'afl_user_transactions`';
+  $transaction_table = $wpdb->prefix . 'afl_user_transactions';
   try{
 
     $transaction['balance'] = 0;
@@ -75,18 +75,8 @@ function afl_member_transaction($transaction = array(), $business = TRUE, $do_ch
       $transaction['balance'] = $transaction['amount_paid'] * -1;
       $transaction['notes'] = $transaction['notes'];
     }
-    if(isset($transaction['comn_amt_or_perc']) && !empty($transaction['comn_amt_or_perc'])){
-      $transaction['comn_amt_or_perc'] = $transaction['comn_amt_or_perc'];
-    }else{
-      $transaction['comn_amt_or_perc'] = 0;
-    }
 
-    if(isset($transaction['int_return']) && !empty($transaction['int_return'])){
-      $transaction['int_return'] = $transaction['int_return'];
-    }else{
-      $transaction['int_return'] = 0;
-    }
-    
+    $transaction['rejoined_phase'] = 0;
     $transaction['created'] = $afl_date;
     $transaction['transaction_day'] = $afl_date_splits['d'];
     $transaction['transaction_month'] = $afl_date_splits['m'];
@@ -95,13 +85,9 @@ function afl_member_transaction($transaction = array(), $business = TRUE, $do_ch
     $transaction['transaction_date'] = afl_date_combined($afl_date_splits);
     $transaction['merchant_id'] = $afl_merchant_id;
     $transaction['project_name'] = $afl_project_name;
-    if(! $do_check) {
-      $check = FALSE;
-    }
-
-    if(! $check){
+    $transaction['payout_id'] = 'Null';
      $business_trans_id = $wpdb->insert($transaction_table, $transaction);
-    }
+      
       if($business === TRUE){
         $business_transactions = array();
         $business_transactions['uid'] = $transaction['uid'];

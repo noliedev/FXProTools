@@ -5,6 +5,7 @@
  * ---------------------------------------------
 */
  function afl_add_new_member () {
+ 	echo afl_eps_page_header();
 	 // $obj = new Eps_affiliates_registration;
 	 // $post = array('uid'=>50,'sponsor_uid'=>37);
 	 // $obj->afl_join_member($post);
@@ -68,8 +69,9 @@
     			$business_transactions['notes'] = 'Enrolment Fee';
     			$business_transactions['currency_code'] = 'USD';
     			$business_transactions['order_id'] = 1;
-	      //   $business_transaction = afl_business_transaction($business_transactions);
-
+	       	
+	       	// $business_transaction = afl_business_transaction($business_transactions);
+    			$user_transaction = afl_member_transaction($business_transactions);
 	         //user get the uid,if a uid get then insert to genealogy
 
 
@@ -245,13 +247,10 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
         $userdata = array(
         'user_login'    	=>   $username,
         'user_email'    	=>   $email,
-        'user_pass'     	=>   md5($password),
+        'user_pass'     	=>   $password,
         'first_name'    	=>   $first_name,
         'last_name'     	=>   $sur_name,
-        // 'sponsor_id'  		=>   $sponsor,
-        // 'user_registered'	=>   afl_date(),
         );
-        // pr($userdata);
         $user = wp_insert_user( $userdata );
         return $user;
     }

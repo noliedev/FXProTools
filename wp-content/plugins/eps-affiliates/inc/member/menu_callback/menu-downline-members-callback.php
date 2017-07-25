@@ -1,5 +1,7 @@
 <?php 
 function afl_downline_members() { 
+	echo afl_eps_page_header();
+	
 	$uid = get_current_user_id();
 
 	if (isset($_GET['uid'])) {

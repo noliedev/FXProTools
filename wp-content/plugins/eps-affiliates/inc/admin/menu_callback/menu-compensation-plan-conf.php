@@ -5,6 +5,7 @@
  * -------------------------------------------------------------------
 */
 function afl_admin_compensation_plan_configuration() {
+	echo afl_eps_page_header();
 	afl_admin_compensation_plan_config_();
 }
 

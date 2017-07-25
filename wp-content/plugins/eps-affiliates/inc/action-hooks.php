@@ -93,3 +93,20 @@
 */
 	add_action('wp_ajax_afl_user_expand_genealogy', 'afl_expand_user_genealogy_tree');
  	add_action('wp_ajax_nopriv_afl_user_expand_genealogy', 'afl_expand_user_genealogy_tree');
+
+/*
+ * ------------------------------------------------------------
+ * E wallet summary datatable
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_user_ewallet_summary_data_table', 'afl_user_ewallet_summary_data_table_callback');
+ add_action('wp_ajax_nopriv_afl_user_ewallet_summary_data_table', 'afl_user_ewallet_summary_data_table_callback');
+
+/*
+ * ------------------------------------------------------------
+ * E wallet all transaction datatable
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_user_ewallet_all_transaction_data_table', 'afl_user_ewallet_all_transaction_data_table');
+ add_action('wp_ajax_nopriv_afl_user_ewallet_all_transaction_data_table', 'afl_user_ewallet_all_transaction_data_table');
+
