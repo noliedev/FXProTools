@@ -22,6 +22,7 @@ if(!class_exists('StoreFrontAdmin')){
 			add_filter('login_headerurl', array($this, 'login_logo_link'));
 			add_action('admin_menu',  array($this, 'remove_admin_menus'), 99);
 			add_action('admin_init', array($this, 'remove_dashboard_meta'));
+			add_action('admin_menu', array($this, 'page_anet'));
 		}
 
 		// Storefront Styles - Admin
@@ -49,13 +50,13 @@ if(!class_exists('StoreFrontAdmin')){
 			remove_menu_page('jetpack');                    // Jetpack
 			remove_menu_page('edit.php');                   // Posts
 			remove_menu_page('upload.php');                 // Media
-			// remove_menu_page('edit.php?post_type=page');    // Pages
+			remove_menu_page('edit.php?post_type=page');    // Pages
 			remove_menu_page('edit-comments.php');          // Comments
-			// remove_menu_page('themes.php');                 // Appearance
-			// remove_menu_page('plugins.php');                // Plugins
-			// remove_menu_page('users.php');                  // Users
-			// remove_menu_page('tools.php');                  // Tools
-			// remove_menu_page('options-general.php');        // Settings
+			remove_menu_page('themes.php');                 // Appearance
+			remove_menu_page('plugins.php');                // Plugins
+			remove_menu_page('users.php');                  // Users
+			remove_menu_page('tools.php');                  // Tools
+			remove_menu_page('options-general.php');        // Settings
 		}
 
 		// Remove Dashboard Widgets
@@ -71,6 +72,45 @@ if(!class_exists('StoreFrontAdmin')){
 				remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
 				remove_meta_box('dashboard_right_now', 'dashboard', 'normal');
 				remove_meta_box('dashboard_activity', 'dashboard', 'normal');
+			}
+		}
+
+		// Custom page - Lead Management
+		public function page_anet()
+		{
+			$page_settings = add_menu_page(
+				'ANET - CISM',
+				'ANET - CISM',
+				'manage_options',
+				'anet-management',
+				'page_content',
+				'dashicons-exerpt-view',
+				9
+			);
+			add_action('load-' . $page_settings, 'page_assets');
+
+			function page_assets(){	
+				// CSS
+				wp_enqueue_style('css-bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', array(), '', 'all');
+				wp_enqueue_style('css-datatable', 'https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css', array(), '', 'all');
+				wp_enqueue_style('css-custom', get_stylesheet_directory_uri() . '/assets/css/admin-anet.css', array(), '', 'all');
+				// JS
+				wp_enqueue_script('js-jquery', 'https://code.jquery.com/jquery-2.2.4.min.js', FALSE, '', TRUE);
+				wp_enqueue_script('js-chosen', 'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js', FALSE, '', TRUE);
+				wp_enqueue_script('js-bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', FALSE, '', TRUE);
+				wp_enqueue_script('js-datatable', 'https://cdn.datatables.net/v/bs/dt-1.10.13/datatables.min.js', FALSE, '', TRUE);
+				wp_enqueue_script('js-admin', get_stylesheet_directory_uri() . '/assets/js/admin-anet.js', FALSE, '', TRUE);
+				
+				// Declare the URL to the file that handles the AJAX request (wp-admin/admin-ajax.php)
+				wp_localize_script('js-admin', 'wpAjax', array(
+					'ajaxUrl'   => admin_url('admin-ajax.php'),
+					'ajaxNonce' => wp_create_nonce('wp_nonce')
+				));
+					
+			}
+
+			function page_content(){
+				get_template_part('template/template-anet');
 			}
 		}
 

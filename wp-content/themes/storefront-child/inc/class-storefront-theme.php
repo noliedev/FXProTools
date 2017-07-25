@@ -34,7 +34,7 @@ if(!class_exists('StoreFrontTheme')){
 
 		// Storefront Styles - Child
 		public function enqueue_child_styles()
-		{
+		{	
 			global $storefront_version, $storefront_child_version;
 			wp_enqueue_style(
 				'storefront-child-style',
@@ -42,6 +42,11 @@ if(!class_exists('StoreFrontTheme')){
 				array('storefront-style'),
 				$storefront_version
 			);
+			// Disable loading of jquery on wordpress core
+			if(!is_admin()){				
+				wp_deregister_script('jquery'); 
+				wp_deregister_script('wp-embed');
+			}
 		}
 
 	}

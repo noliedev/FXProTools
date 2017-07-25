@@ -21,44 +21,33 @@ if(!class_exists('AuthAPI')){
 		const AUTHORIZENET_API_LOGIN_ID = '6XP44snrs6q';
 		const AUTHORIZENET_TRANSACTION_KEY = '9r94EZzZq588bn4L';
 
-		// public function get_auth_users()
-		// {
-		//     $merchantAuthentication = anet_authentication(AUTHORIZENET_API_LOGIN_ID, AUTHORIZENET_TRANSACTION_KEY);
-		    
-		//     // Set the transaction's refId
-		//     $refId = 'ref' . time();
+		// Get all users
+		public function get_all_users()
+		{
+			$merchantAuthentication = $this->anet_authentication(self::AUTHORIZENET_API_LOGIN_ID, self::AUTHORIZENET_TRANSACTION_KEY);
 
-		//     // Get all existing customer profile ID's
-		//     $request = new AnetAPI\GetCustomerProfileIdsRequest();
-		//     $request->setMerchantAuthentication($merchantAuthentication);
-		//     $controller = new AnetController\GetCustomerProfileIdsController($request);
-		//     $response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
+			// Get all existing customer profile ID's
+			$request = new AnetAPI\GetCustomerProfileIdsRequest();
+			$request->setMerchantAuthentication($merchantAuthentication);
+			$controller = new AnetController\GetCustomerProfileIdsController($request);
+			$anetResponse = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
 
-		//     if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") ) {
-		//         $res['profile_ids'] = $response->getIds();
-		        
-		//         $profiles = array();
-		//         foreach ($res['profile_ids'] as $key => $id) {
-		//             // $request = new AnetAPI\GetCustomerProfileRequest();
-		//             // $request->setMerchantAuthentication($merchantAuthentication);
-		//             // $request->setCustomerProfileId($id);
-		//             // $controller = new AnetController\GetCustomerProfileController($request);
-		//             // $response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
-		            
-		//             // if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") ){
-		//             //     $profiles[$id] = $response->getProfile();
-		//             // }
-		//         }
+			if ( ($anetResponse != null) && ($anetResponse->getMessages()->getResultCode() == "Ok") ) {
+				// $response['data']   =
+				$profile_ids = $anetResponse->getIds();
+				$users = array();
+				foreach ($profile_ids as $key => $pid) {
+					$get     =  $this->get_user_info($pid);
+					$users[] = $get['data'];
+				}
+				$response['data'] = $users;
+				$response['status'] = $anetResponse->getMessages()->getResultCode();
+			} else {
+				$response['status'] = $anetResponse->getMessages()->getResultCode();
+			}
 
-		//         $res['status'] = $response->getMessages()->getResultCode();
-		//     } else {
-		//         $res['status'] = $response->getMessages()->getResultCode();
-		//     }
-
-
-		//     dd($profiles);
-
-		// }
+			return $response;
+		}
 
 		// Get user information - profile and payment information
 		public function get_user_info($profile_id)
@@ -72,17 +61,13 @@ if(!class_exists('AuthAPI')){
 			$anetResponse = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
 			
 			if ( ($anetResponse != null) && ($anetResponse->getMessages()->getResultCode() == "Ok") ) {
-				$basicInfo   = $anetResponse->getProfile();
-				$paymentInfo = $basicInfo->getPaymentProfiles();
-				
-				$info['profile'] = array(
-					'customer_id'  => $basicInfo->getCustomerProfileId(),
-					'merchant_id'  => $basicInfo->getmerchantCustomerId(),
-					'description'  => $basicInfo->getDescription(),
-					'email'        => $basicInfo->getEmail(),
-				);
-
-				$info['payment_profile'] = array(
+				$basicInfo       = $anetResponse->getProfile();
+				$paymentInfo     = $basicInfo->getPaymentProfiles();
+				$data = array(
+					'profile_id'  => $basicInfo->getCustomerProfileId(),
+					'merchant_id' => $basicInfo->getmerchantCustomerId(),
+					'description' => $basicInfo->getDescription(),
+					'email'       => $basicInfo->getEmail(),
 					'customer_profile_id'         => $paymentInfo[0]->getCustomerProfileId(),
 					'customer_payment_profile_id' => $paymentInfo[0]->getCustomerPaymentProfileId(),
 					'defaul_payment_profile'      => $paymentInfo[0]->getDefaultPaymentProfile(),
@@ -112,10 +97,8 @@ if(!class_exists('AuthAPI')){
 						'country'      => $paymentInfo[0]->getBillTo()->getCountry(),
 					),
 				);
-	
-				array_push($info['profile'], $info['payment_profile']);
 				
-				$response['info']   = $info['profile'];
+				$response['data']   = $data;
 				$response['status'] = $anetResponse->getMessages()->getResultCode();
 			} else {
 				$response['status'] = $anetResponse->getMessages()->getResultCode();
@@ -129,14 +112,14 @@ if(!class_exists('AuthAPI')){
 		{
 			$merchantAuthentication = $this->anet_authentication(self::AUTHORIZENET_API_LOGIN_ID, self::AUTHORIZENET_TRANSACTION_KEY);
 			$request = new AnetAPI\GetCustomerShippingAddressRequest();
-		  	$request->setMerchantAuthentication($merchantAuthentication);
-		  	$request->setCustomerProfileId($profile_id);
-		  	
-		  	$controller   = new AnetController\GetCustomerShippingAddressController($request);
-		  	$anetResponse = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+			$request->setMerchantAuthentication($merchantAuthentication);
+			$request->setCustomerProfileId($profile_id);
+			
+			$controller   = new AnetController\GetCustomerShippingAddressController($request);
+			$anetResponse = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
 
-		  	if ( ($anetResponse != null) && ($anetResponse->getMessages()->getResultCode() == "Ok") ) {
-		  		$response['shipping_info'] = array(
+			if ( ($anetResponse != null) && ($anetResponse->getMessages()->getResultCode() == "Ok") ) {
+				$response['shipping_info'] = array(
 					'first_name' 	      => $anetResponse->getAddress()->getFirstName(),
 					'last_name' 	      => $anetResponse->getAddress()->getLastName(),
 					'company' 	          => $anetResponse->getAddress()->getCompany(),
@@ -148,9 +131,9 @@ if(!class_exists('AuthAPI')){
 					'phone_number' 	      => $anetResponse->getAddress()->getPhoneNumber(),
 					'fax_number' 	      => $anetResponse->getAddress()->getFaxNumber(),
 					'customer_address_id' => $anetResponse->getAddress()->getCustomerAddressId(),
-		  		);
-		  		$response['status'] = $anetResponse->getMessages()->getResultCode();
-		  	} else {
+				);
+				$response['status'] = $anetResponse->getMessages()->getResultCode();
+			} else {
 				$response['status'] = $anetResponse->getMessages()->getResultCode();
 			}
 
