@@ -25,6 +25,7 @@ function wp_parse_user($username, $password, $email, $phone_number, $start_date)
 			// Added automatically to wocommerce subscriptions
 			wc_parse_subscription($email, 48, $start_date);
 		}
+		
 	} else {
 		$status = 'failed';
 	}
@@ -61,12 +62,41 @@ function wc_parse_subscription($user_email, $product_id, $start_date)
 	$subscription->calculate_totals();
 }
 
-// function wc_parse_subscription()
-// {
-// 	ini_set('max_execution_time', 0);
-// 	$users = get_users(array('role__not_in' => 'administrator'));
-// 	foreach($users as $user){
-// 		wc_parse_subscription($user->user_email, 48);
-// 	}
-// }
+/**
+ * --------------------------------
+ * Parse Users - from authorize.net
+ * --------------------------------
+ * Add users from authorize.net to wordpress users and woocommerce subscriptions
+ */
+function parse_user_subscriptions()
+{
+	ini_set('max_execution_time', 0);
+	global $wpdb;
 
+	$accounts = $wpdb->get_results("SELECT * FROM tbl_accounts WHERE status='Active'");
+	// $accounts = $wpdb->get_results('SELECT * FROM tbl_accounts  WHERE CHAR_LENGTH(phone_number) > 14');
+	foreach($accounts as $act) {
+
+		$p_username     = $act->email;
+		$p_password     = 'password123';
+		$p_email        = $act->email;
+		$p_phone_number = $act->phone_number;
+		$p_date         = $act->auth_sub_date_date;
+
+		if(!empty($p_date)){
+			$date = date('Y/m/d', strtotime($p_date));
+			$p_sub_date = date('Y-m-d H:i:s', strtotime($date));
+		} else {
+			$p_sub_date = date('Y-m-d H:i:s', strtotime('2017/06/01'));
+		}
+
+		$check[] = array(
+			'p_username'     => $act->email,
+			'p_password'     => 'password123',
+			'p_email'        => $act->email,
+			'p_phone_number' => str_replace(' ', '', $act->phone_number),
+			'p_date'         => $p_sub_date,
+		);
+		// wp_parse_user($p_username, $p_password, $p_email, $p_phone_number, $p_sub_date);
+	}
+}
