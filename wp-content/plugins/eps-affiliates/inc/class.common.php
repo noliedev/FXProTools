@@ -18,8 +18,8 @@ class Eps_affiliates_common {
 		private static $instance;
 
 		public function __construct(){
-			add_action( 'init', array($this,'_load_common_styles'));
-			add_action( 'init', array($this,'_load_common_scritps'));
+			add_action( 'admin_enqueue_scripts', array($this,'_load_common_styles'));
+			add_action( 'admin_enqueue_scripts', array($this,'_load_common_scritps'));
 		}
 	/*
  	 * ----------------------------------------------------------------
@@ -45,6 +45,9 @@ class Eps_affiliates_common {
 			wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
 			wp_enqueue_script( 'common-js' );
 
+			wp_register_script( 'widget-scripts',  EPSAFFILIATE_PLUGIN_ASSETS.'js/widget-scripts.js');
+			wp_enqueue_script( 'widget-scripts' );
+
 	    wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));        
 		} 
 	/*
@@ -56,7 +59,7 @@ class Eps_affiliates_common {
 			wp_enqueue_style( 'fontawsome-css', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/font-awesome-4.7.0/css/font-awesome.min.css');
 			wp_enqueue_style( 'bootstrap-css', EPSAFFILIATE_PLUGIN_ASSETS.'css/bootstrap/css/bootstrap.css');
 			wp_enqueue_style( 'jquery-ui', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/jquery-ui/jquery-ui.min.css');
-			wp_enqueue_style( 'developer', EPSAFFILIATE_PLUGIN_ASSETS.'css/developer.css');
+			
 		} 
 }
 
@@ -95,9 +98,36 @@ $common_include = new Eps_affiliates_common();
 			$html .= $prefix;
 
 		$html .= '<form action="' .$action. '"" method="'.$method.'" id="" accept-charset="UTF-8" class="'.$classes.'"> ';
+		$html .= '<div class="panel panel-default">';
+		$html .= '<div class="panel-body">';
+				
 			foreach ($elements as $key => $element) {
-				$html .= html_input_render($element,$key,$attributes);
+				
+				//check the array is a multi dimention array,means the contents
+				//comes under any fieldset or container
+				if (count($element) != count($element, COUNT_RECURSIVE)) {
+					//check the wrapper type
+					$wrapper = $elements[$key];
+					if (!empty($wrapper['#type']) && $wrapper['#type'] == 'fieldset') {
+						$html .= '<fieldset class="form-wrapper" id="'.str_replace("_","-",$key).'">';
+						if (!empty($wrapper['#title']))
+								$html .= '<legend><span class="fieldset-legend">'.$wrapper['#title'].'</span></legend>';
+						$html .= '<div class="fieldset-wrapper">';
+						foreach ($elements[$key] as $key => $field_element) {
+							$html .= html_input_render($field_element,$key,$attributes);
+						}
+					} else {
+							$html .= html_input_render($element,$key,$attributes);
+					}
+				} else {
+
+					$html .= html_input_render($element,$key,$attributes);
+				}
+
 			}
+		$html .= '</div>';
+		$html .= '</div>';
+
 			if ($suffix)
 				$html .= $suffix;
 		return $html;
@@ -206,51 +236,100 @@ $common_include = new Eps_affiliates_common();
 		switch ($element_type) {
 			case 'text':
 				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'" class="col-md-2 col-form-label">';
+				$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
 				$html .= isset($element['#title']) ? $element['#title'] : '';
+
+				if (!empty($element['#required']) && $element['#required'] == TRUE ){
+					$html .= '<span class="form-required" title="This field is required.">*</span>';
+				}
+
 				$html .= '</label>';
-				$html .= '<div class="col-md-10">';
+				
+				// $html .= '<div class="col-md-10">';
 				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';	
-				$html .= '</div>';
+
+				// $html .= '</div>';
 			break;
 			case 'password':
 				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'" class="col-md-2 col-form-label">';
+				$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
 				$html .= isset($element['#title']) ? $element['#title'] : '';
+
+				if (!empty($element['#required']) && $element['#required'] == TRUE){
+					$html .= '<span class="form-required" title="This field is required.">*</span>';
+				}
+
 				$html .= '</label>';
-				$html .= '<div class="col-md-10">';
+				// $html .= '<div class="col-md-10">';
 				$html .= '<input type = "password" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';	
-				$html .= '</div>';
+				// $html .= '</div>';
 			break;
 			case 'checkbox':
+
 				$checked = (!empty($element['#default_value']) && isset($element['#default_value'])) ? TRUE : FALSE ;
-				$html .= '<label for="'.str_replace('_','-',$key).'">';
-				$html .= isset($element['#title']) ? $element['#title'] : '';
-				$html .= '</label>';
+				
+				// if ($checked) {
+				// 	$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" checked="'.$checked.'" >';	
+				// }else {
+				// 	$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'">';	
+				// }
+				// $html .= '<label for="'.str_replace('_','-',$key).'">';
+				// $html .= isset($element['#title']) ? $element['#title'] : '';
+				// $html .= '</label>';
+
+				$html .= '<div class="form-item clearfix form-type-checkbox ">';
+				
+				$html .='<label class="i-checks">';
+
 				if ($checked) {
-					$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" checked="'.$checked.'" >';	
+					$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-checkbox checkbox form-control '.$class.'" checked="'.$checked.'" >';	
 				}else {
-					$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'">';	
+					$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-checkbox checkbox form-control '.$class.'">';	
 				}
+				$html .= '<i></i></label>';
+				$html .= '<label class="option" for="'.str_replace('_','-',$key).'">';
+				$html .= isset($element['#title']) ? $element['#title'] : '';
+
+				if (!empty($element['#required']) && $element['#required'] == TRUE ){
+					$html .= '<span class="form-required" title="This field is required.">*</span>';
+				}
+
+				$html .= '</label>';
+
+				$html .= '</div>';
+
+				
 			break;
 			case 'markup':
 				$html .= '<div class="'.$class.'">'.$element['#markup'].'</div>';	
 			break;
 			case 'submit':
-				$html .= '<input type="submit" class="'.$class.'" value="'.$element['#value'].'" name="submit">';	
+				$html .= '<input type="submit" class=" btn btn-primary '.$class.'" value="'.$element['#value'].'" name="submit">';	
 			break;
 			case 'label':
-				$html .= '<label class="'.$class.'">'.$element['#title'].'</label>';	
+				$html .= '<label class="label-style '.$class.'">'.$element['#title'].'</label>';	
 				$html .= '<br><small>'.$description.'</small>';
 			break;
 
 			case 'select';
+
+				$html .= '<label class="option" for="'.str_replace('_','-',$key).'">';
+				$html .= isset($element['#title']) ? $element['#title'] : '';
+
+				if (!empty($element['#required']) && $element['#required'] == TRUE ){
+					$html .= '<span class="form-required" title="This field is required.">*</span>';
+				}
+
+				$html .= '</label>';
 				$html .= '<select class="form-control '.$class.'" name="'.$key.'" >';
-				foreach ($element['#options'] as $data => $value) {
-						if($element['#default_value'] == $data)
-							$html .= '<option selected value='.$data .'>'.$value.'</option>';			
-						else
-					 		$html .= '<option value='.$data. '>'.$value.'</option>';	
+				if (!empty($element['#options'])) {
+					foreach ($element['#options'] as $data => $value) {
+
+							if(isset($element['#default_value']) && $element['#default_value'] == $data)
+								$html .= '<option selected value='.$data .'>'.$value.'</option>';			
+							else
+						 		$html .= '<option value='.$data. '>'.$value.'</option>';	
+					}
 				}
 				$html .= '</select>';
 			break;
@@ -264,12 +343,12 @@ $common_include = new Eps_affiliates_common();
 			case 'auto_complete':
 				$path  = isset($element['#auto_complete_path']) ? $element['#auto_complete_path'] : '#';
 				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'" class="col-md-2 col-form-label">';
+				$html .= '<label for="'.str_replace('_','-',$key).'" class="">';
 				$html .= isset($element['#title']) ? $element['#title'] : '';
 				$html .= '</label>';
-				$html .= '<div class="col-md-10">';
+				// $html .= '<div class="col-md-10">';
 				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control auto_complete '.$class.'" value="'.$deflt.'" data-path="'.$path.'" autocomplete="off" >';	
-				$html .= '</div>';
+				// $html .= '</div>';
 			break;
 		}
 
@@ -562,6 +641,7 @@ if(!function_exists('afl_get_levels')){
 		if ( is_array( $args ) && isset( $args ) ) :
 			extract( $args );
 		endif;
+		
 		$template_file = afl_locate_template( $template_name, $tempate_path, $default_path );
 		if ( ! file_exists( $template_file ) ) :
 			_doing_it_wrong( __FUNCTION__, sprintf( '<code>%s</code> does not exist.', $template_file ), '1.0.0' );
@@ -682,7 +762,7 @@ if(!function_exists('afl_get_periods')){
 	  $periods['Weekly'] = "Weekly";
     $periods['monthly'] = "Monthly";
     $periods['yearly'] = "Yearly";
-    $periods['unlimited'] = "Unlimited";
+    $periods['instant'] = "Instant";
 
 	  return $periods;
 	}
@@ -834,11 +914,12 @@ if(!function_exists('afl_get_rank_names')){
 				foreach ($rules as $rule) {
 					$value 						= $rule['value'];
 					$name 						= $rule['name'];
+					$field 						= !empty($rule['field']) ?$rule['field'] : '';
 					$validation_rules = $rule['rules'];
 					foreach ($validation_rules as  $rule_function) {
 						if (method_exists($rule_object, $rule_function)) {
 							//here calls the rule function
-							$response = $rule_object->$rule_function($name, $value);
+							$response = $rule_object->$rule_function($name, $value, $field);
 							
 							if (!empty($response)) {
 								if ($response['status'] != 1) {
@@ -905,7 +986,7 @@ if(!function_exists('afl_get_rank_names')){
 		);
 
 		$query['#where'] = array(
-			'`wp_afl_user_downlines`.`uid`=3'
+			'`wp_afl_user_downlines`.`uid`='.$uid.''
 		);
 
 		$query['#order_by'] = array(
@@ -944,7 +1025,10 @@ if(!function_exists('afl_get_rank_names')){
 		if (isset($data['#fields'])) {
 			foreach ($data['#fields'] as $key => $value) {
 				foreach ($value as $field) {
-					$fields .= ',`'.$key.'`.`'.$field.'`';
+					if (!empty($fields))
+						$fields .= ',`'.$key.'`.`'.$field.'`';
+					else
+						$fields .= '`'.$key.'`.`'.$field.'`';
 				}
 			}
 		}
@@ -1007,3 +1091,127 @@ if(!function_exists('afl_get_rank_names')){
 		// pr($sql);
 		return $wpdb->$fetch_mode($sql);
 	}
+/*
+ * -----------------------------------------------------------------------
+ * Genealogy Node details
+ * -----------------------------------------------------------------------
+*/
+	function afl_genealogy_node($uid = '') {
+		if (empty($uid))
+			$uid = get_current_user_id();
+
+		$query = array();
+   	$query['#select'] = 'wp_afl_user_genealogy';
+  	$query['#join']  = array(
+      'wp_users' => array(
+        '#condition' => '`wp_users`.`ID`=`wp_afl_user_genealogy`.`uid`'
+      )
+    );
+   	$query['#where'] = array(
+      '`wp_afl_user_genealogy`.`uid`='.$uid.''
+    );
+    $result = db_select($query, 'get_row');
+    return $result;
+	}
+ /* -----------------------------------------------------------------------
+ * convert to Commerce Amount 
+ * -----------------------------------------------------------------------
+*/
+function afl_commerce_amount($amount_paid){
+  return $amount_paid * 100;
+}
+/*
+ * -----------------------------------------------------------------------
+ * convert to Commerce Amount 
+ * -----------------------------------------------------------------------
+*/
+function afl_get_commerce_amount($amount_paid){
+  return $amount_paid / 100;
+}
+/*
+ * -----------------------------------------------------------------------
+ * convert to payment amount 
+ * -----------------------------------------------------------------------
+*/
+
+function afl_payment_amount($amount = 0){
+  return $amount * 1000;
+}
+/*
+ * -----------------------------------------------------------------------
+ * Convert from payment Amount 
+ * -----------------------------------------------------------------------
+*/
+function afl_get_payment_amount($amount = 0){
+  if($amount == 0){
+    return 0;
+  }
+  return $amount / 1000;
+  
+}
+/*
+ * -----------------------------------------------------------------------
+ * get upline users IDS
+ * -----------------------------------------------------------------------
+*/
+ function afl_get_upline_uids ($uid = '', $uids = array()) {
+ 	if (empty($uid))
+ 		$uid = get_current_user_id();
+ 	$node  = afl_genealogy_node($uid);
+ 	if ($node) {
+ 		if ($node->parent_uid) {
+ 			$uids[] =  $node->parent_uid;
+ 			return afl_get_upline_uids($node->parent_uid,$uids);
+ 		}
+ 	}
+ 	return $uids;
+ }
+/*
+ * -----------------------------------------------------------------------
+ * Truncate tables
+ * -----------------------------------------------------------------------
+*/
+if (!function_exists('afl_truncate')) {
+	function afl_truncate($table, $reset = FALSE){
+		global $wpdb;
+		$tbl_prefix = $wpdb->prefix;
+		$table 			= $tbl_prefix . $table;
+		if($wpdb->get_var("SHOW TABLES LIKE '$table'") == $table) {
+			$wpdb->query('TRUNCATE TABLE `'.$table.'`');
+	     if($reset === TRUE){
+	        $wpdb->query('ALTER TABLE `'.$table.'` AUTO_INCREMENT = 1');
+	     }
+
+	  }
+	}
+}
+/*
+ * -----------------------------------------------------------------------
+ * All the Page title design
+ * -----------------------------------------------------------------------
+*/
+ function afl_page_title() {
+ 	return '<h1>'.get_admin_page_title().'</h1>';
+ }
+/*
+ * -----------------------------------------------------------------------
+ * Dashboard Header template
+ * -----------------------------------------------------------------------
+*/
+ function afl_eps_page_header () {
+ 	return afl_get_template('dashboard/eps_dashboard_header.php');
+ }
+
+/*
+ * -----------------------------------------------------------------------
+ * Get all rank names
+ * -----------------------------------------------------------------------
+*/
+ function afl_get_ranks_names () {
+ 	$ranks = array();
+ 	$max_rank = afl_variable_get('number_of_ranks');
+ 	for ($i = 1; $i <= $max_rank; $i++) {
+ 		$ranks[$i] = afl_variable_get('rank_'.$i.'_name');
+ 	}
+ 	return $ranks;
+ }

@@ -23,6 +23,10 @@
 
 				add_action( 'admin_menu', array( $this , 'afl_system_settings') );
 
+				add_action( 'admin_menu', array( $this , 'eps_affiiliates_dashboard') );
+
+
+				
 
 
 
@@ -58,6 +62,15 @@
 					'#menu_slug' 			=> 'compensation-plan-configurations', 
 					'#page_callback' 	=> 'afl_admin_compensation_plan_configuration', 
 				);
+				//rank configuration
+				$menu['rank_configurations'] = array(
+					'#parent'					=> 'system-configurations',
+					'#page_title'			=> __( 'Rank Configurations', 'eps-affiliates' ),
+					'#menu_title' 		=> __( 'Rank Configurations', 'eps-affiliates' ),
+					'#access_callback'=> 'system_rank_configurations', 
+					'#menu_slug' 			=> 'rank-configurations', 
+					'#page_callback' 	=> 'afl_admin_rank_configuration', 
+				);
 				//role permission set
 				$menu['role_permissions'] = array(
 					'#parent'					=> 'system-configurations',
@@ -75,6 +88,42 @@
 					'#access_callback'=> 'business_system_members', 
 					'#menu_slug' 			=> 'business-system-members', 
 					'#page_callback' 	=> 'afl_add_edit_business_system_members', 
+				);
+				//genealogy configuration
+				$menu['genealogy_configuration'] = array(
+					'#parent'					=> 'system-configurations',
+					'#page_title'			=> __( 'Genealogy Configurations', 'Genealogy Configurations' ),
+					'#menu_title' 		=> __( 'Genealogy Configurations', 'Genealogy Configurations' ),
+					'#access_callback'=> 'system_settings', 
+					'#menu_slug' 			=> 'genealogy-configurations', 
+					'#page_callback' 	=> 'afl_system_genealogy_configurations', 
+				);
+				//payout configurations
+				$menu['payout_config'] = array(
+					'#parent'					=> 'system-configurations',
+					'#page_title'			=> __( 'Payout Configuration', 'eps-affiliates' ), 
+					'#menu_title' 		=> __( 'Payout Configurations', 'eps-affiliates' ), 
+					'#access_callback'=> 'system_settings', 
+					'#menu_slug' 			=> 'payout-configurations', 
+					'#page_callback' 	=> 'afl_admin_payout_configuration', 
+				);
+				//payment method configuration
+				$menu['payment_method_conf'] = array(
+					'#parent'					=> 'system-configurations',
+					'#page_title'			=> __( 'Payment Method Configuration', 'eps-affiliates' ), 
+					'#menu_title' 		=> __( 'Payment Method Configurations', 'eps-affiliates' ), 
+					'#access_callback'=> 'system_settings', 
+					'#menu_slug' 			=> 'payment-method-configurations', 
+					'#page_callback' 	=> 'afl_dev_payment_method_configuration', 
+				);
+				//payment method configuration
+				$menu['pool_bonus'] = array(
+					'#parent'					=> 'system-configurations',
+					'#page_title'			=> __( 'Pool Bonus Configuration', 'eps-affiliates' ), 
+					'#menu_title' 		=> __( 'Pool Bonus Configurations', 'eps-affiliates' ), 
+					'#access_callback'=> 'system_settings', 
+					'#menu_slug' 			=> 'pool-bonus-configurations', 
+					'#page_callback' 	=> 'afl_admin_pool_bonus_configuration', 
 				);
 				afl_system_admin_menu($menu);
 
@@ -287,7 +336,7 @@
 					'#access_callback'=> 'business_transactions', 
 					'#menu_slug' 			=> 'business', 
 					'#page_callback' 	=> 'afl_business_summary', 
-					'#weight'					=>	5.1
+					'#weight'					=> 6
 				);
 				$menu['b_summary'] = array(
 					'#parent'					=> 'business',
@@ -447,7 +496,18 @@
 					'#weight'					=>	6
 				);
 			}
-
+		/*
+		 * --------------------------------------------------------------------------
+		 * Eps affiliates dashboard 
+		 * --------------------------------------------------------------------------
+		*/
+			public function eps_affiiliates_dashboard () {
+				add_dashboard_page( 'EPS Dashboard', 'EPS Dashboard', 'read', 'eps-dashboard', array( $this,'eps_affiliates_dashboard_callback') );
+			}
+			public function eps_affiliates_dashboard_callback () {
+				afl_get_template('dashboard/eps_dashboard_template.php');
+			}
+		
 	}
 
 

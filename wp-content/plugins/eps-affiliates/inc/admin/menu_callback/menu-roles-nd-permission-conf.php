@@ -11,6 +11,8 @@
  *
 */
 	function afl_roles_config_settings(){
+		echo afl_eps_page_header();
+
 		if (isset($_POST['submit'])) {
 			afl_roles_config_settings_form_submit($_POST);
 		}
@@ -40,7 +42,7 @@
 	  $count_roles 					= count($roles['name']);
 	  $table 								= array();
 		$table['#name'] 			= '';
-		$table['#title'] 			= '<h2>Roles And Permission Configuration</h2>';
+		$table['#title'] 			= '';
 		$table['#prefix'] 		= '';
 		$table['#suffix'] 		= '';
 		$table['#attributes'] = array(

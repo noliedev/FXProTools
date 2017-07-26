@@ -5,10 +5,10 @@
  * ---------------------------------------------
 */
  function afl_add_new_member () {
-	 $obj = new Eps_affiliates_registration;
-	 $post = array('uid'=>13,'sponsor_uid'=>3);
-	 $obj->afl_join_member($post);
-
+ 	echo afl_eps_page_header();
+	 // $obj = new Eps_affiliates_registration;
+	 // $post = array('uid'=>50,'sponsor_uid'=>37);
+	 // $obj->afl_join_member($post);
  	$post = array();
  	if ( isset($_POST['submit'] ) ) {
         $rules = create_validation_rules($_POST);
@@ -25,7 +25,8 @@
 	        $first_name =   sanitize_text_field( $_POST['first_name'] );
 	        $sur_name  	=   sanitize_text_field( $_POST['sur_name'] );
 	        $sponsor   	=   sanitize_text_field( $_POST['sponsor'] );
-	 
+	        $enrollment_amount		=		sanitize_text_field( $_POST['enrollment_amount']);
+	 	
 	        // // call @function complete_registration to create the user
 	        // // only when no WP_error is found
 
@@ -39,16 +40,44 @@
 	        );
 	        $post_data = array();
 	        if ($user_uid) {
+
+	        	//add new role if he has this role
+	        	$theUser = new WP_User($user_uid);
+ 						$theUser->add_role( 'afl_member' );
+
+	        	$post_data['uid'] = $user_uid;
+	        	//extract sponsor uid
+	        	// preg_match_all('/\d+/', $sponsor, $matches);
+						preg_match('#\((.*?)\)#', $sponsor, $matches);
+
+    				$post_data['sponsor_uid'] = $matches[1];
+	        //user get the uid,if a uid get then insert to genealogy
+	        $reg_object = new Eps_affiliates_registration;
+	        $reg_object->afl_join_member($post_data);
+
 	        	$post_data['uid'] = $user_uid;
 	        	//extract sponsor uid
 	        	preg_match_all('/\d+/', $sponsor, $matches);
     				$post_data['sponsor_uid'] = $matches[0];
-	        }
-	        //user get the uid,if a uid get then insert to genealogy
-	        $reg_object = new Eps_affiliates_registration;
-	        $reg_object->afl_join_member($post_data);
-				}
-    }
+
+    			$business_transactions['associated_user_id'] = $user_uid;
+    			$business_transactions['uid'] = 7 /*Business admin uid or root user id*/;
+    			$business_transactions['credit_status'] = 1;
+	        $business_transactions['category'] = 'ENROLMENT FEE';
+    			$business_transactions['additional_notes'] = 'Enrolment joining Free';
+    			$business_transactions['amount_paid'] = $enrollment_amount;
+    			$business_transactions['notes'] = 'Enrolment Fee';
+    			$business_transactions['currency_code'] = 'USD';
+    			$business_transactions['order_id'] = 1;
+	       	
+	       	// $business_transaction = afl_business_transaction($business_transactions);
+    			$user_transaction = afl_member_transaction($business_transactions);
+	         //user get the uid,if a uid get then insert to genealogy
+
+
+	      }
+			}
+		}
  	afl_add_new_member_form($post);
  }
 /*
@@ -169,7 +198,29 @@
  		'#prefix'=>'<div class="form-group row">',
  		'#suffix' =>'</div>'
  	);
- 
+ $form['enrollment_amount'] = array(
+ 		'#title' => 'Enrollment Amount',
+ 		'#type' => 'text',
+ 		'#name' => 'Enrollment Amount',
+ 		'#attributes' => array(
+ 			'class' => array(
+
+ 			)
+ 		),
+ 		'#default_value' => isset($post['enrollment_amount']) ? $post['enrollment_amount'] : '100',
+ 		'#prefix'=>'<div class="form-group row"> ',
+ 		'#suffix' =>'</div>'
+ 	);
+/* 	$form['enrollment_amount'] = array(
+ 		'#title' => 'Enrollment Amount',
+		'#type' 					=> 'select',
+		'#options' 				=> array('1'=>100, '2'=>200),
+		'#default_value' 	=> afl_variable_get('enrollment_amount',1),
+		'#prefix'=>'<div class="form-group row"> ',
+ 		'#suffix' =>'</div>'
+ 	
+ 	);*/
+
  	$form['submit'] = array(
  		'#title' => 'Submit',
  		'#type' => 'submit',
@@ -182,6 +233,9 @@
  		'#prefix'=>'<div class="form-group row">',
  		'#suffix' =>'</div>'
  	);
+ 	
+
+
  	echo afl_render_form($form);
  	afl_content_wrapper_end();
  }
@@ -193,13 +247,10 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
         $userdata = array(
         'user_login'    	=>   $username,
         'user_email'    	=>   $email,
-        'user_pass'     	=>   md5($password),
+        'user_pass'     	=>   $password,
         'first_name'    	=>   $first_name,
         'last_name'     	=>   $sur_name,
-        // 'sponsor_id'  		=>   $sponsor,
-        // 'user_registered'	=>   afl_date(),
         );
-        // pr($userdata);
         $user = wp_insert_user( $userdata );
         return $user;
     }
@@ -251,45 +302,3 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
 			 	);
 		return $rules;
 	}
-
-// function registration_validation( $username, $password, $c_password, $email, $first_name, $sur_name, $sponsor)  {
-// 	global $reg_errors;
-// 	$reg_errors = new WP_Error;
-// 	//set required fields
-// 	if ( empty( $username ) || empty( $password ) || empty( $email ) || empty( $c_password ) ) {
-// 	    $reg_errors->add('field', 'Required form field is missing');
-// 	}
-// 	//check user name length
-// 	if ( 4 > strlen( $username ) ) {
-// 	    $reg_errors->add( 'username_length', 'Username too short. At least 4 characters is required' );
-// 	}
-// 	//check user name already exist or not
-// 	if ( username_exists( $username ) )
-// 	    $reg_errors->add('user_name', 'Sorry, that username already exists!');if ( ! validate_username( $username ) ) {
-// 	    $reg_errors->add( 'username_invalid', 'Sorry, the username you entered is not valid' );
-// 	}
-// 	//check the length of password
-// 	if ( 5 > strlen( $password ) ) {
-//         $reg_errors->add( 'password', 'Password length must be greater than 5' );
-//     }
-//   //validating email
-//   if ( !is_email( $email ) ) {
-// 	  $reg_errors->add( 'email_invalid', 'Email is not valid' );
-// 	}
-// 	//email already exist or not
-// 	if ( email_exists( $email ) ) {
-// 	    $reg_errors->add( 'email', 'Email Already in use' );
-// 	}
-// 	//passwords mismatch
-// 	if ( $password != $c_password ) {
-// 	    $reg_errors->add( 'confirm password', 'Entered passwords are mis match' );
-// 	}
-
-// 	if ( is_wp_error( $reg_errors ) ) {
-// 		$wp_error = '';
-//     foreach ( $reg_errors->get_error_messages() as $error ) {
-//     	$wp_error .= '<p>* '.$error.'</p>';
-//     }
-//    	echo wp_set_message($wp_error,'danger');
-// 	}
-// }

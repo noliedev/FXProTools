@@ -5,6 +5,7 @@
  * -------------------------------------------------------------------
 */
 function afl_admin_advanced_configuration() {
+	echo afl_eps_page_header();
 	afl_admin_advanced_config_();
 }
 /*
@@ -24,7 +25,7 @@ function afl_admin_advanced_config_(){
 
 	$table 								= array();
 	$table['#name'] 			= '';
-	$table['#title'] 			= '<h2>Advanced system configuration</h2>';
+	$table['#title'] 			= '';
 	$table['#prefix'] 		= '';
 	$table['#suffix'] 		= '';
 	$table['#attributes'] = array(

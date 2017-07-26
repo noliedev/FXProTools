@@ -1,7 +1,9 @@
 $(document).ready(function(){
 	$( ".date_time_picker" ).datepicker();
 });
+
 $(function () {
+  
     $('.navbar-toggle').click(function () {
         $('.navbar-nav').toggleClass('slide-in');
         $('.side-body').toggleClass('body-slide-in');
@@ -11,6 +13,7 @@ $(function () {
         //$('.absolute-wrapper').toggleClass('slide-in');
         
     });
+    
      $('.auto_complete').on('keyup click',function(){
   		var autoArray = [];
     	var path 			 = $(this).attr('data-path');
@@ -35,7 +38,7 @@ $(function () {
     });
 /*
  * -------------------------------------------
-* Data tables 
+* Data tables for user downlines
  * -------------------------------------------
 */
   if ($('.custom-data-tables').length) {
@@ -58,5 +61,103 @@ $(function () {
         }], 
       }); 
   }
+/*
+* -------------------------------------------
+* Data tables for ewallet summary
+* -------------------------------------------
+*/
+if ($('.custom-ewallet-summary-table').length) {
+      var table; 
+      table = $(".custom-ewallet-summary-table").DataTable({
+      "bFilter" : false, 
+      "bInfo": false,
+      "searching": false,
+      "paging": false,
+       "processing": true, 
+       "serverSide": true, 
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_user_ewallet_summary_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
 
+  /*
+* -------------------------------------------
+* Data tables for ewallet summary
+* -------------------------------------------
+*/
+if ($('.custom-ewallet-all-trans-table').length) {
+      var table; 
+      table = $(".custom-ewallet-all-trans-table").DataTable({
+       "processing": true, 
+       "serverSide": true, 
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_user_ewallet_all_transaction_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
 });
+
+/*
+ * -------------------------------------------------------------
+ * Expand genealogy tree on click
+ * -------------------------------------------------------------
+*/
+function expandTree(obj) {
+  $(obj).find('i').toggleClass('fa-times-circle fa-plus-circle');
+    var $uid = $(obj).attr('data-user-id');
+
+    if($(obj).find('i').hasClass('fa-plus-circle')){
+      $('.append-child-'+$uid).html('');
+      $(obj).parent().parent().removeClass('hv-item-parent');
+
+    } else{
+      $(obj).parent().parent().addClass('hv-item-parent');
+
+      if ($uid != undefined) {
+        $.ajax({
+          type :'POST',
+          data : {
+            action:'afl_user_expand_genealogy',
+            uid:$uid,
+          },
+          url:ajax_object.ajaxurl,
+          success: function(data){
+            if (data.length) {
+              $(data).hide().appendTo('.append-child-'+$uid).fadeIn(1000);
+              // $('.append-child-'+$uid).append(data).fadeIn('slow');
+            }
+          }
+        });
+      }
+    }
+}
+
+/*
+ * ----------------------------------------------------------------
+ * Add error class
+ * ----------------------------------------------------------------
+*/
+
+ function inform_error (id = '') {
+  $('#'+id).addClass('required error');
+  $('#'+id).parent('div').addClass('has-error');
+ }

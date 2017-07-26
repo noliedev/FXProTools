@@ -6,6 +6,8 @@
  * -------------------------------------------------------------------
 */
 function afl_admin_pool_bonus_configuration(){
+	echo afl_eps_page_header();
+	
 	if ( isset($_POST['submit']) ) {  
 	 $validation = afl_admin_pool_bonus_configuration_form_validation($_POST);
 	 	if (!empty($validation)) {
@@ -27,8 +29,7 @@ function afl_admin_pool_bonus_configuration(){
 										// 'table-bordered'
 									)
 					);
-	$table['#header'] 		= array('Global Pool Bonus');
-
+	
 	$rows[0]['label_0'] = array(
 			'#type' => 'label',
 			'#title'=> 'Rank Name',

@@ -1,5 +1,5 @@
 /*  ------------------- Main Wrapper -------------------------------------- */
-.wrapper-md {padding: 20px;}
+.wrapper-md {padding: 20px;background-color: #f0f3f4;}
 
 :focus {
   outline: none;
@@ -158,4 +158,35 @@
   #dropdown .panel-body .navbar-nav {
     margin: 0;
   }
+}
+
+
+.label-style {
+ font-weight: bold;
+}
+.bg-gray {
+ background-color: #ccc;
+}
+.region-title-extra > .block{display: inline-block;}
+/* ------------- Select box style ------------------ */
+.select-style {
+    border: 1px solid #ccc;
+    /* width: 120px; */
+    border-radius: 3px;
+    overflow: hidden;
+    background: #fafafa url("img/icon-select.png") no-repeat 90% 50%;
+}
+
+.select-style select {
+    padding: 5px 8px;
+    /* width: 130%; */
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+}
+
+.select-style select:focus {
+    outline: none;
 }

@@ -5,6 +5,7 @@
  * -------------------------------------------------------------------
 */
 function afl_admin_compensation_plan_configuration() {
+	echo afl_eps_page_header();
 	afl_admin_compensation_plan_config_();
 }
 
@@ -94,7 +95,7 @@ function afl_admin_compensation_plan_form_validation($POST){
 	global $reg_errors;
 	$reg_errors = new WP_Error;
 	$flag 			= 1;
-	$values = $POST['var'];
+	// $values = $POST['var'];
 	if ( is_wp_error( $reg_errors ) ) {
     foreach ( $reg_errors->get_error_messages() as $error ) {
 				$flag = 0;
