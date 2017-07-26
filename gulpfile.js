@@ -10,12 +10,10 @@ var gulp = require('gulp'),
 	cssreplace = require('gulp-replace'),
 	livereload = require('gulp-livereload');
 
-var theme_location = './wp-content/themes/storefront-child',
+var theme_location = './wp-content/themes/fxprotools-theme',
 	config = {
-		admin_sass: theme_location + '/assets/sass/style-admin.scss',
-		theme_sass: theme_location + '/assets/sass/style-theme.scss',
-		// vendor_css: theme_location + '/vendors/**/*.css',
-		// vendor_assets: theme_location + '/vendors/**/*.{png,jpg,gif,eot,ttf,woff,eof,svg}',
+		admin_sass: theme_location + '/assets/sass/admin/**/*.scss',
+		theme_sass: theme_location + '/assets/sass/theme/**/*.scss',
 		theme_js: [
 			// Include scripts here
 		],
@@ -52,25 +50,6 @@ gulp.task('theme-js', function(){
 });
 
 // ------------
-// VENDOR - CSS
-// ------------
-// gulp.task('vendor-css', function(){
-// 	gulp.src(config.vendor_css)
-// 		.pipe(concat('vendor.bundle.css'))
-// 		.pipe(cssnano())
-// 		.pipe(gulp.dest(config.output+'/dist'));
-// });
-
-// ---------------
-// VENDOR - ASSETS
-// ---------------
-// gulp.task('vendor-assets', function(){
-// 	gulp.src(config.vendor_assets)
-// 		.pipe(flatten())
-// 		.pipe(gulp.dest(config.output+'/dist'));
-// });
-
-// ------------
 // ADMIN - SASS
 // ------------
 gulp.task('admin-sass', function(){
@@ -84,12 +63,8 @@ gulp.task('admin-sass', function(){
 		.pipe(notify('SASS processed'));
 });
 
-
-gulp.task('default', ['theme-sass', 'theme-js'], function(){
+gulp.task('default', ['theme-sass', 'theme-js', 'admin-sass'], function(){
 	gulp.watch(config.theme_sass, ['theme-sass']);
 	gulp.watch(config.theme_js, ['theme-js']);
-});
-
-gulp.task('admin', ['admin-sass'], function(){
 	gulp.watch(config.admin_sass, ['admin-sass']);
 });
