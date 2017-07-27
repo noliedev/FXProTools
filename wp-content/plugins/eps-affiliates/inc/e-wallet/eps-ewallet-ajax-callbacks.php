@@ -47,11 +47,11 @@ $input_valu = $_POST;
   $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
   $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
 
-  $result_count = get_all_transaction_details($uid,array(),TRUE); 
-  $filter_count = get_all_transaction_details($uid,$filter,TRUE); 
+  $result_count = get_all_user_transaction_details($uid,array(),TRUE); 
+  $filter_count = get_all_user_transaction_details($uid,$filter,TRUE); 
 
 // 
-    $result = get_all_transaction_details($uid,$filter);
+    $result = get_all_user_transaction_details($uid,$filter);
 
   	$output = [
      "draw" 						=> $input_valu['draw'],
@@ -59,7 +59,7 @@ $input_valu = $_POST;
      "recordsFiltered" 	=> $filter_count,
      "data" 						=> [],
    ];
-    $result = get_all_transaction_details($uid,$filter);
+    $result = get_all_user_transaction_details($uid,$filter);
 		foreach ($result as $key => $value) { 
 			if($value->credit_status == 1 ){
 				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
@@ -80,7 +80,7 @@ $input_valu = $_POST;
 	die();
 }
 
-function get_all_transaction_details ($uid = '7', $filter = array(), $count = false){
+function get_all_user_transaction_details ($uid = '7', $filter = array(), $count = false, $credit_status = -1){
 		global $wpdb;
 
 	 $query = array();
@@ -93,6 +93,10 @@ function get_all_transaction_details ($uid = '7', $filter = array(), $count = fa
    $query['#where'] = array(
       '`wp_afl_user_transactions`.`uid`= '.$uid.''
     );
+   	
+  /* 	if(($credit_status != -1) ){
+	   	$query['#where'][] = '`wp_afl_business_transactions`.`credit_status`= '.$credit_status.'';
+   	}*/
 
    	$limit = '';
 		if (isset($filter['start']) && isset($filter['length'])) {
@@ -106,9 +110,6 @@ function get_all_transaction_details ($uid = '7', $filter = array(), $count = fa
 			$query['#like'] = array('`display_name`' => $filter['search_valu']);
 
 		}
-
-
-
    $query['#order_by'] = array(
       '`transaction_date`' => 'ASC'
     );
@@ -116,4 +117,51 @@ function get_all_transaction_details ($uid = '7', $filter = array(), $count = fa
 	 if ($count)
 			return count($result); 
 		return $result;
+}
+
+
+function afl_user_ewallet_income_data_table(){
+	global $wpdb;
+	$uid 						 = get_current_user_id();
+	$uid = 7;
+ 
+	$input_valu = $_POST;
+ 	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
+     $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
+  }
+  if(!empty($input_valu['search']['value'])) {
+     $filter['search_valu'] = $input_valu['search']['value'];
+  }
+ 
+  $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
+  $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
+
+  $result_count = get_all_user_transaction_details($uid,array(),TRUE,1); 
+  $filter_count = get_all_user_transaction_details($uid,$filter,TRUE,1);
+  $result 			= get_all_user_transaction_details($uid,$filter,FALSE,1);
+  	$output = [
+     "draw" 						=> $input_valu['draw'],
+     "recordsTotal" 		=> $result_count,
+     "recordsFiltered" 	=> $filter_count,
+     "data" 						=> [],
+   ];
+    $result = get_all_user_transaction_details($uid,$filter,FALSE,1);
+		foreach ($result as $key => $value) { pr($value,1);
+			if($value->credit_status == 1 ){
+				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
+			}
+			else{
+				$status =  "<button type='button' class='btn btn-danger'>Debit</button>";
+			}
+			$output['data'][] = [
+	   		$key+1,
+	     	ucfirst(strtolower($value->category)),
+	     	$value->display_name." (".$value->associated_user_id.")",
+	 			number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	     	$status,
+	     	$value->transaction_date  	
+   		];
+		}
+	echo json_encode($output);
+	die();
 }

@@ -291,6 +291,8 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-payout-conf.php';
 				//business memebers creation
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-business-system-members.php';
+				//manage members
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-manage-members.php';
 				
 
 				//common files callback
@@ -316,6 +318,7 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-genealogy-tree-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-downline-members-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-exporer-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-holding-tank-callback.php';
 				
 				/* ------ Here comes all the member menu callback : End  -------------------*/
 		
@@ -323,10 +326,18 @@
 				//dashboard widgets
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-dashboard-widgets.php';
 
-
 				// Menu Callback for ewallet transactions
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/eps-ewallet-ajax-callbacks.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/menu_callback/menu-ewallet-summary-callback.php';
+
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-db.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-datatable.php';
+				
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/b-wallet/eps-bwallet-ajax-callbacks.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/b-wallet/menu-callback/menu-bwallet-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-features-and-config-settings.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test.php';
+
 			}
 		/**
 		 * -------------------------------------------------------------------------

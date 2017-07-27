@@ -86,5 +86,10 @@
 			'#title' 				=> __('AFL system Plan configurations'),
 			'#description' 	=> 'affiliates system plan configurations '
 		);
+		//features and settings
+		$permissions['features_and_configuration'] = array(
+			'#title' 				=> __('AFL system Features and configurations'),
+			'#description' 	=> 'affiliates system features and configurations '
+		);
 		return $permissions;
 	}

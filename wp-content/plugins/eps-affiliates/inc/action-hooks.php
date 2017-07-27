@@ -107,8 +107,45 @@
  * E wallet all transaction datatable
  * ------------------------------------------------------------
 */
+ add_action('wp_ajax_afl_user_ewallet_income_data_table', 'afl_user_ewallet_income_data_table');
+ add_action('wp_ajax_nopriv_afl_user_ewallet_income_data_table', 'afl_user_ewallet_income_data_table');
+/*
+ * ------------------------------------------------------------
+ * E wallet all transaction datatable
+ * ------------------------------------------------------------
+*/
  add_action('wp_ajax_afl_user_ewallet_all_transaction_data_table', 'afl_user_ewallet_all_transaction_data_table');
  add_action('wp_ajax_nopriv_afl_user_ewallet_all_transaction_data_table', 'afl_user_ewallet_all_transaction_data_table');
+
+ /*
+ * ------------------------------------------------------------
+ * business wallet summary datatable
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_admin_business_summary_data_table', 'afl_admin_bwallet_summary_data_table_callback');
+ add_action('wp_ajax_nopriv_afl_admin_business_summary_data_table', 'afl_admin_bwallet_summary_data_table_callback');
+ /*
+ * ------------------------------------------------------------
+ * business all Transaction datatable
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_admin_business_all_transaction_data_table', 'afl_admin_business_trans_datatable_callback');
+ add_action('wp_ajax_nopriv_afl_admin_business_all_transaction_data_table', 'afl_admin_business_trans_datatable_callback');
+/*
+ * ------------------------------------------------------------
+ * business income report datatable
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_admin_business_income_history_data_table', 'afl_admin_business_income_datatable_callback');
+ add_action('wp_ajax_nopriv_afl_admin_business_income_history_data_table', 'afl_admin_business_income_datatable_callback');
+  add_action('wp_ajax_nopriv_afl_admin_business_all_transaction_data_table', 'afl_admin_business_trans_datatable_callback');
+/*
+ * ------------------------------------------------------------
+ * business expense report datatable
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_admin_business_expense_history_data_table', 'afl_admin_business_expense_datatable_callback');
+ add_action('wp_ajax_nopriv_afl_admin_business_expense_history_data_table', 'afl_admin_business_expense_datatable_callback');
 
 /*
  * ------------------------------------------------------------
@@ -123,30 +160,44 @@
  	if ($page) {
  		switch ($page) {
  			//dashboard
- 			case 'eps-dashboard':
+ 			case 'affiliate-eps-eps-dashboard':
  			//network
- 			case 'user-network':
- 			case 'downline-members':
- 			case 'genealogy-tree':
+ 			case 'affiliate-eps-user-network':
+ 			case 'affiliate-eps-downline-members':
+ 			case 'affiliate-eps-genealogy-tree':
+ 			case 'affiliate-eps-holding-tank':
  			//e-wallet
- 			case 'e-wallet-summary':
- 			case 'e-wallet':
- 			case 'ewallet-all-transactions':
- 			case 'ewallet-income-report':
- 			case 'ewallet-withdraw-report':
- 			case 'ewallet-withdraw-fund':
- 			case 'ewallet-pending-withdrawal':
+ 			case 'affiliate-eps-e-wallet-summary':
+ 			case 'affiliate-eps-e-wallet':
+ 			case 'affiliate-eps-ewallet-all-transactions':
+ 			case 'affiliate-eps-ewallet-income-report':
+ 			case 'affiliate-eps-ewallet-withdraw-report':
+ 			case 'affiliate-eps-ewallet-withdraw-fund':
+ 			case 'affiliate-eps-ewallet-pending-withdrawal':
 
  			//system configurations
- 			case 'business-system-members':
- 			case 'system-configurations':
- 			case 'compensation-plan-configurations':
- 			case 'rank-configurations':
- 			case 'role-config-settings':
- 			case 'genealogy-configurations':
- 			case 'payout-configurations':
- 			case 'pool-bonus-configurations':
- 			case 'payment-method-configurations':
+ 			case 'affiliate-eps-business-system-members':
+ 			case 'affiliate-eps-system-configurations':
+ 			case 'affiliate-eps-compensation-plan-configurations':
+ 			case 'affiliate-eps-rank-configurations':
+ 			case 'affiliate-eps-role-config-settings':
+ 			case 'affiliate-eps-genealogy-configurations':
+ 			case 'affiliate-eps-payout-configurations':
+ 			case 'affiliate-eps-pool-bonus-configurations':
+ 			case 'affiliate-eps-payment-method-configurations':
+
+ 			case 'affiliate-eps-features-and-configurations':
+
+ 			// Business transaction
+			case 'affiliate-eps-business': 			
+			case 'affiliate-eps-business-summary': 			
+			case 'affiliate-eps-business-income-history': 			
+			case 'affiliate-eps-business-expense-report': 			
+			case 'affiliate-eps-business-transaction': 			
+			case 'afl_add_edit_business_system_members': 			
+ 				
+ 			
+ 			case 'eps-test':
  				wp_enqueue_style( 'app', EPSAFFILIATE_PLUGIN_ASSETS.'css/app.css');
 				wp_enqueue_style( 'developer', EPSAFFILIATE_PLUGIN_ASSETS.'css/developer.css');
 			break;

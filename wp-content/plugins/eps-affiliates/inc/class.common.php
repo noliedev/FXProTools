@@ -350,6 +350,14 @@ $common_include = new Eps_affiliates_common();
 				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control auto_complete '.$class.'" value="'.$deflt.'" data-path="'.$path.'" autocomplete="off" >';	
 				// $html .= '</div>';
 			break;
+			case 'link':
+				$link = !empty($element['#link']) ? $element['#link'] : '#';
+				$html .= '<a href="'.$link.'">';	
+				if (!empty($element['#icon']) && $element['#icon'] == TRUE) {
+					$html .= '';
+				}
+				$html .= '</a>';	
+			break;
 		}
 
 		//append suffix
@@ -462,8 +470,9 @@ $common_include = new Eps_affiliates_common();
 		  $afl_testing_date = current_time('timestamp');
 		  $afl_enable_test_mode = afl_variable_get('afl_enable_test_mode', FALSE);
 		  $afl_enable_test_date = afl_variable_get('afl_enable_test_date', FALSE);
+		  
 		  if($afl_enable_test_mode && $afl_enable_test_date){
-		    $afl_testing_date = strtotime(afl_variable_get('afl_testing_date'));
+		    $afl_testing_date = strtotime(afl_variable_get('afl_testing_date_date'));
 		  }
 		  return $afl_testing_date;
 		}
@@ -573,8 +582,17 @@ if(!function_exists('afl_get_levels')){
 		}
 
 		$user = get_userdata($uid);
+		$wp_roles = new WP_Roles;
+    $names    = $wp_roles->get_names();
+    $out      = array ();
 
-		return $user->roles;
+    foreach ( $user->roles as $role )
+    {
+        if ( isset ( $names[ $role ] ) )
+            $out[ $role ] = $names[ $role ];
+    }
+
+    return $out;
 	}
 
 
@@ -865,6 +883,7 @@ if(!function_exists('afl_get_rank_names')){
 				$icon_url 			= isset($menu['#icon_url']) 			? $menu['#icon_url'] : '';
 				$parent 				= isset($menu['#parent']) 				? $menu['#parent'] : '';
 				$weight 				= isset($menu['#weight']) 				? $menu['#weight'] : null;
+
 
 				//Single menu page
 				if (empty($parent)) {
@@ -1215,3 +1234,80 @@ if (!function_exists('afl_truncate')) {
  	}
  	return $ranks;
  }
+
+/*
+ * -----------------------------------------------------------------------
+ * Get root user 
+ * -----------------------------------------------------------------------
+*/
+
+function afl_root_user() {
+ 	$root = afl_variable_get('root_user');
+ 	preg_match('#\((.*?)\)#', $root, $uid);
+	return $uid[1];
+}
+/*
+ * -----------------------------------------------------------------------
+ * echo the status 
+ * -----------------------------------------------------------------------
+*/
+ function afl_member_status_render ($status = 0) {
+ 	$status = afl_variable_get();
+ }
+/*
+ * -----------------------------------------------------------------------
+ * Extract the text area data 
+ * -----------------------------------------------------------------------
+*/
+ function list_extract_allowed_values($string, $field_type, $generate_keys) {
+  	$values = array();
+
+	  $list = explode("\n", $string);
+	  $list = array_map('trim', $list);
+	  $list = array_filter($list, 'strlen');
+
+	  $generated_keys = $explicit_keys = FALSE;
+	  foreach ($list as $position => $text) {
+	    $value = $key = FALSE;
+
+	    // Check for an explicit key.
+	    $matches = array();
+	    if (preg_match('/(.*)\|(.*)/', $text, $matches)) {
+	      $key = $matches[1];
+	      $value = $matches[2];
+	      $explicit_keys = TRUE;
+	    }
+	    // Otherwise see if we can use the value as the key. Detecting true integer
+	    // strings takes a little trick.
+	    elseif ($field_type == 'list_text'
+	     || ($field_type == 'list_float' && is_numeric($text))
+	       || ($field_type == 'list_integer' && is_numeric($text) && (float) $text == intval($text))) {
+	      $key = $value = $text;
+	      $explicit_keys = TRUE;
+	    }
+	    // Otherwise see if we can generate a key from the position.
+	    elseif ($generate_keys) {
+	      $key = (string) $position;
+	      $value = $text;
+	      $generated_keys = TRUE;
+	    }
+	    else {
+	      return;
+	    }
+
+	    // Float keys are represented as strings and need to be disambiguated
+	    // ('.5' is '0.5').
+	    if ($field_type == 'list_float' && is_numeric($key)) {
+	      $key = (string) (float) $key;
+	    }
+
+	    $values[$key] = $value;
+	  }
+
+	  // We generate keys only if the list contains no explicit key at all.
+	  if ($explicit_keys && $generated_keys) {
+	    return;
+	  }
+
+	  return $values;
+	}	
