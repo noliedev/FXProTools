@@ -1,0 +1,145 @@
+<?php 
+function afl_system_features_and_configurations () {
+	echo afl_eps_page_header();
+	echo afl_content_wrapper_begin();
+
+	$table = array();
+	$table['#name'] 			= '';
+	$table['#title'] 			= '';
+	$table['#prefix'] 		= '';
+	$table['#suffix'] 		= '';
+	$table['#attributes'] = array(
+					'class' => array(
+							'table',
+							'table-bordered',
+							'table-responsive'
+						)
+					);
+	$table['#header'] = array('Configuration', 'Link');
+
+	//advanced config
+	$rows[0]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Advanced Configuration',
+	);
+	$rows[0]['link_1'] = array(
+		'#type' => 'markup',
+		'#markup' => '<a href="?page=affiliate-eps-system-configurations"><span class="btn btn-rounded btn-sm btn-icon btn-default"><i class="fa fa-cog"></i></span></a>',
+	);
+
+	//compensation plan config
+	$rows[1]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Compensation Plan Configuration',
+	);
+	$rows[1]['link_1'] = array(
+		'#type' => 'markup',
+		'#markup' => '<a href="?page=affiliate-eps-compensation-plan-configurations">
+										<span class="btn btn-rounded btn-sm btn-icon btn-default">
+											<i class="fa fa-cog"></i>
+										</span>
+									</a>',
+	);
+
+	//rank conf
+	$rows[2]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Rank Configuration',
+	);
+	$rows[2]['link_1'] = array(
+		'#type' => 'markup',
+		'#markup' => '<a href="?page=affiliate-eps-rank-configurations">
+										<span class="btn btn-rounded btn-sm btn-icon btn-default">
+											<i class="fa fa-cog"></i>
+										</span>
+									</a>',
+	);
+
+	//roles and permissions config
+	$rows[3]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Roles and Permissions',
+	);
+	$rows[3]['link_1'] = array(
+		'#type' => 'markup',
+		'#markup' => '<a href="?page=affiliate-eps-role-config-settings">
+										<span class="btn btn-rounded btn-sm btn-icon btn-default">
+											<i class="fa fa-cog"></i>
+										</span>
+									</a>',
+	);
+
+	//payout config
+	$rows[4]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Payout Configurations',
+	);
+	$rows[4]['link_1'] = array(
+		'#type' => 'markup',
+		'#markup' => '<a href="?page=affiliate-eps-payout-configurations">
+										<span class="btn btn-rounded btn-sm btn-icon btn-default">
+											<i class="fa fa-cog"></i>
+										</span>
+									</a>',
+	);
+
+	//payment method conf
+	$rows[5]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Payment Method Configurations',
+	);
+	$rows[5]['link_1'] = array(
+		'#type' => 'markup',
+		'#markup' => '<a href="?page=affiliate-eps-payment-method-configurations">
+										<span class="btn btn-rounded btn-sm btn-icon btn-default">
+											<i class="fa fa-cog"></i>
+										</span>
+									</a>',
+	);
+
+	//pllo bonus config
+	$rows[6]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Pool Bonus Configurations',
+	);
+	$rows[6]['link_1'] = array(
+		'#type' => 'markup',
+		'#markup' => '<a href="?page=affiliate-eps-pool-bonus-configurations">
+										<span class="btn btn-rounded btn-sm btn-icon btn-default">
+											<i class="fa fa-cog"></i>
+										</span>
+									</a>',
+	);
+
+	//genealogy config
+	$rows[7]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Genealogy Configurations',
+	);
+	$rows[7]['link_1'] = array(
+		'#type' => 'markup',
+		'#markup' => '<a href="?page=affiliate-eps-genealogy-configurations">
+										<span class="btn btn-rounded btn-sm btn-icon btn-default">
+											<i class="fa fa-cog"></i>
+										</span>
+									</a>',
+	);
+	//variable configurations
+	//genealogy config
+	$rows[8]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Variable Configurations',
+	);
+	$rows[8]['link_1'] = array(
+		'#type' => 'markup',
+		'#markup' => '<a href="?page=affiliate-eps-variable-configurations">
+										<span class="btn btn-rounded btn-sm btn-icon btn-default">
+											<i class="fa fa-cog"></i>
+										</span>
+									</a>',
+	);
+	$table['#rows'] = $rows;
+	echo afl_content_wrapper_end();
+
+	echo afl_render_table($table);
+}
