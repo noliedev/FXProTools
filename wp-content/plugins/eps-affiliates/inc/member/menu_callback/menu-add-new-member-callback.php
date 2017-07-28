@@ -53,7 +53,8 @@
     				$post_data['sponsor_uid'] = $matches[1];
 	        //user get the uid,if a uid get then insert to genealogy
 	        $reg_object = new Eps_affiliates_registration;
-	        $reg_object->afl_join_member($post_data);
+	        //adds to the holding tank
+	        $reg_object->afl_add_to_holding_tank($post_data);
 
 	        	$post_data['uid'] = $user_uid;
 	        	//extract sponsor uid
@@ -61,7 +62,7 @@
     				$post_data['sponsor_uid'] = $matches[0];
 
     			$business_transactions['associated_user_id'] = $user_uid;
-    			$business_transactions['uid'] = 7 /*Business admin uid or root user id*/;
+    			$business_transactions['uid'] = afl_root_user(); /*Business admin uid or root user id*/;
     			$business_transactions['credit_status'] = 1;
 	        $business_transactions['category'] = 'ENROLMENT FEE';
     			$business_transactions['additional_notes'] = 'Enrolment joining Free';
@@ -71,7 +72,7 @@
     			$business_transactions['order_id'] = 1;
 	       	
 	       	// $business_transaction = afl_business_transaction($business_transactions);
-    			$user_transaction = afl_member_transaction($business_transactions);
+    			$user_transaction = afl_business_transaction($business_transactions, TRUE);
 	         //user get the uid,if a uid get then insert to genealogy
 
 
@@ -171,6 +172,14 @@
  		'#prefix'=>'<div class="form-group row">',
  		'#suffix' =>'</div>'
  	);
+
+ 	$default_value = '';
+ 	if (is_admin()) {
+ 		$default_value = afl_variable_get('root_user','');
+ 	} else {
+ 		$user = wp_get_current_user();
+ 		$default_value = $user->data->display_name.' ('.$user->ID.')';
+ 	}
  	$form['sponsor'] = array(
  		'#title' => 'Sponsor',
  		'#type' => 'auto_complete',
@@ -182,7 +191,7 @@
  		),
  		//for autocomplete call action action hook
  		'#auto_complete_path' => 'users_auto_complete',
- 		'#default_value' => isset($post['sponsor']) ? $post['sponsor'] : '',
+ 		'#default_value' => isset($post['sponsor']) ? $post['sponsor'] :$default_value ,
  		'#prefix'=>'<div class="form-group row">',
  		'#suffix' =>'</div>'
  	);

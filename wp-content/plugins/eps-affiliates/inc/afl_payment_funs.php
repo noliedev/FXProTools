@@ -3,8 +3,7 @@
 /*
  * -----------------------------------------------------------------------
  * Insert business transaction table 
- * credit status  1=> Cedit
- *                2=> Debit
+ * 
  * -----------------------------------------------------------------------
 */
 function afl_business_transaction ($business_transactions = array()) {
@@ -53,7 +52,7 @@ function afl_business_transaction ($business_transactions = array()) {
  *                2 => Debit
  * -----------------------------------------------------------------------
 */
-function afl_member_transaction($transaction = array(), $business = TRUE){
+function afl_member_transaction($transaction = array(), $business = FALSE){
   if(empty($transaction)){
     return FALSE;
   }
@@ -88,7 +87,7 @@ function afl_member_transaction($transaction = array(), $business = TRUE){
     $transaction['payout_id'] = 'Null';
      $business_trans_id = $wpdb->insert($transaction_table, $transaction);
       
-      if($business === TRUE){
+      if($business == TRUE){
         $business_transactions = array();
         $business_transactions['uid'] = $transaction['uid'];
         $business_transactions['associated_user_id'] = $transaction['associated_user_id'];

@@ -12,6 +12,12 @@ class Eps_affiliates_registration {
 		if (!empty($post_data)) {
 			//insert to the geanealogy 
 			if (!empty($post_data['uid'] && !empty($post_data['sponsor_uid']))) {
+				
+				//add the role afl_member to the user if he has no role
+				if (!has_role($post_data['uid'], 'afl_member')){
+					add_role($post_data['uid'], 'afl_member');
+				}
+
 				//first check the downlines count of sponsor and find out which level insert
 				global $wpdb;
 				$table_name = $wpdb->prefix . 'afl_user_genealogy';
@@ -249,40 +255,6 @@ class Eps_affiliates_registration {
 				 	
 				 	$ins_id = $wpdb->insert($table_name, $ins_data);
 				 	
-				 	//add the user to the parents first level
-
-				 	$downline_ins_data['uid'] 							= $parent;
-				 	$downline_ins_data['downline_user_id'] 	= $post_data['uid'];
-				 	$downline_ins_data['level'] 						= 1;
-				 	$downline_ins_data['status'] 						=	1;
-				 	$downline_ins_data['position'] 					=	1;
-				 	$downline_ins_data['relative_position']	=	$relative_position;
-				 	$downline_ins_data['created'] 					= afl_date();
-				 	$downline_ins_data['member_rank'] 			= 0;
-				 	$downline_ins_data['joined_day'] 				= $afl_date_splits['d'];
-				 	$downline_ins_data['joined_month'] 			= $afl_date_splits['m'];
-				 	$downline_ins_data['joined_year'] 			= $afl_date_splits['y'];
-				 	$downline_ins_data['joined_week'] 			= $afl_date_splits['w'];
-				 	$downline_ins_data['joined_date'] 			= afl_date_combined($afl_date_splits);
-				 	
-				 	$data_format = array(
-				 		'%d',
-				 		'%d',
-				 		'%d',
-				 		'%d',
-				 		'%d',
-				 		'%d',
-				 		'%d',
-				 		'%d',
-				 		'%d',
-				 		'%d',
-				 		'%d',
-				 		'%d',
-				 		'%s'
-				 	);
-
-				 	// $downline_ins_id = $wpdb->insert($downline_table, $downline_ins_data, $data_format);
-
 				}
 			}
 		}
@@ -325,6 +297,49 @@ class Eps_affiliates_registration {
 		}
 		
 	}
+	/*
+	 * -----------------------------------------------------------------
+	 * Add the user to the 7 day holding tank
+	 * -----------------------------------------------------------------
+	*/
+	 public function afl_add_to_holding_tank ($post_data = array()) {
+	 	global $wpdb;
+	 	if (!empty($post_data)) {
+	 		$uid 			= $post_data['uid'];
+	 		$sponsor 	= $post_data['sponsor_uid'];
+	 		$afl_date_splits = afl_date_splits(afl_date());
 
+
+	 		//create array to insert to the holding tank
+	 		$ins_data = array();
+	 		$ins_data['uid'] 								= $uid;
+		 	$ins_data['referrer_uid'] 			= $sponsor;
+		 	$ins_data['parent_uid'] 				= 0;
+		 	$ins_data['level'] 							= 0;
+		 	$ins_data['relative_position']	= 0;
+		 	$ins_data['status'] 						= 1;
+		 	
+		 	if (empty($post_data['created_date']))
+		 		$ins_data['created'] 						= afl_date();
+		 	if (empty($post_data['modified_date']))
+		 		$ins_data['modified'] 					= afl_date();
+
+		 	$ins_data['joined_day'] 				= $afl_date_splits['d'];
+		 	$ins_data['joined_month'] 			= $afl_date_splits['m'];
+		 	$ins_data['joined_year'] 				= $afl_date_splits['y'];
+		 	$ins_data['joined_week'] 				= $afl_date_splits['w'];
+		 	$ins_data['joined_date'] 				= afl_date_combined($afl_date_splits);
+		 	$ins_data['day_remains'] 				= afl_variable_get('holding_tank_holding_days',7);
+
+		 	$holding_tank = $wpdb->prefix . 'afl_user_holding_tank';
+			$downline_ins_id = $wpdb->insert($holding_tank, $ins_data);
+
+	 	}
+	 }
 
 }
+
+
+// if (!has_role($post_data['uid'], 'afl_member')){
+// 	add_role($post_data['uid'], 'afl_member');
+// 	}

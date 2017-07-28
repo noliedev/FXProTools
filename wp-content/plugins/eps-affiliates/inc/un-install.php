@@ -54,7 +54,8 @@ class Eps_affiliates_uninstall {
 	  		$tbl_prefix.'afl_user_transactions',
 	  		$tbl_prefix.'afl_business_transactions',
 	  		$tbl_prefix.'afl_business_funds',
-	  		$tbl_prefix.'afl_user_transactions_overview'
+	  		$tbl_prefix.'afl_user_transactions_overview',
+	  		$tbl_prefix.'afl_user_holding_tank'
 	  	);
 	  return $tables;
 	  }

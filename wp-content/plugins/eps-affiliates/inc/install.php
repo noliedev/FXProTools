@@ -5,15 +5,19 @@
  * ------------------------------------------------------------
 */
 function eps_affiliates_install() {
+	//install tables
+	$afl_tables = new Eps_affiliates_tables;
+
 	//create basic roles 
 	create_eps_roles();
+
+	//create business user
+	create_business_users();
 
 	// Create affiliate caps
 	$roles = new Eps_affiliates_Capabilities;
 	$roles->add_caps();
 
-	//install tables
-	$afl_tables = new Eps_affiliates_tables;
 
 
 	//create page 
@@ -66,3 +70,41 @@ function eps_affiliates_install() {
 	  					array('read' => true, 'level_0' => true,'level_1' => true,'eps_system_member'=>true) 
 	  );
 	}
+/*
+ * ------------------------------------------------------------
+ * Create business users
+ * ------------------------------------------------------------
+*/
+ function create_business_users(){
+ 	global $wpdb;
+ 	$userdata = array(
+    'user_login'    	=>   'business.admin',
+    'user_email'    	=>   'business.admin@eps.com',
+    'user_pass'     	=>   'business.admin',
+    'first_name'    	=>   'business.admin',
+    'last_name'     	=>   'business.admin',
+    );
+  $user = wp_insert_user( $userdata );
+  //add this user to genealogy
+  
+	  $afl_date_splits = afl_date_splits(afl_date());
+	 	$genealogy_table = $wpdb->prefix . 'afl_user_genealogy';
+	  $ins_data = array();
+	  $ins_data['uid']                = $user;
+	  $ins_data['referrer_uid']       = 0;
+	  $ins_data['parent_uid']         = 0;
+	  $ins_data['level']              = 1;
+	  $ins_data['relative_position']  = 0;
+	  $ins_data['status']             = 1;
+	  $ins_data['created']            = afl_date();
+	  $ins_data['modified']           = afl_date();
+	  $ins_data['joined_day']         = $afl_date_splits['d'];
+	  $ins_data['joined_month']       = $afl_date_splits['m'];
+	  $ins_data['joined_year']        = $afl_date_splits['y'];
+	  $ins_data['joined_week']        = $afl_date_splits['w'];
+	  $ins_data['joined_date']        = afl_date_combined($afl_date_splits);
+
+	  
+	  $ins_id = $wpdb->insert($genealogy_table, $ins_data);
+
+ }

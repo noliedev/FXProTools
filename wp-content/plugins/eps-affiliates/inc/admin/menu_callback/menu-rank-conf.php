@@ -56,7 +56,7 @@
 		  echo '<ul class="tabs--primary nav nav-tabs">';
 
 		  echo '<li class="'.(($active_tab == 'basic_configuration') ? 'active' : '').'">
-		            	<a href="?page=rank-configurations&tab=basic_configuration" >Basic configuration</a>  
+		            	<a href="?page=affiliate-eps-rank-configurations&tab=basic_configuration" >Basic configuration</a>  
 		          </li>';
 		 	for ($i = 1; $i <= $max_rank ; $i++) { 
 		 		$active = '';
@@ -65,7 +65,7 @@
 		 		}
 		 		//<a href="?page=rank-configurations&tab='.$i.'" >'.afl_variable_get('rank_'.$i.'_name','Rank '.$i.'').'</a>  
 		 		echo '<li class="'.$active.'">
-		            	<a href="?page=rank-configurations&tab='.$i.'" >Rank '.$i.'</a>  
+		            	<a href="?page=affiliate-eps-rank-configurations&tab='.$i.'" >Rank '.$i.'</a>  
 		          </li>';
 		 	}
 		  echo '</ul>';

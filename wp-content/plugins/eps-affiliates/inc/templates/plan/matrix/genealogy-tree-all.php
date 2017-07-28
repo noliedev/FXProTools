@@ -1,6 +1,9 @@
 <?php 
    /* get all the downlines of this user */
    $uid = get_current_user_id();
+   if ( is_admin() ){
+    $uid = afl_root_user();
+   }
    $query = array();
    $query['#select'] = 'wp_afl_user_downlines';
    $query['#join']  = array(

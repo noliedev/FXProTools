@@ -90,7 +90,7 @@ if ($('.custom-ewallet-summary-table').length) {
       }); 
   }
 
-  /*
+/*
 * -------------------------------------------
 * Data tables for ewallet summary
 * -------------------------------------------
@@ -114,11 +114,240 @@ if ($('.custom-ewallet-all-trans-table').length) {
         }], 
       }); 
   }
+/*
+* -------------------------------------------
+* Data tables for ewallet Income report 
+* -------------------------------------------
+*/
+if ($('.custom-ewallet-income-table').length) {
+      var table; 
+      table = $(".custom-ewallet-income-table").DataTable({
+       "processing": true, 
+       "serverSide": true, 
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_user_ewallet_income_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
+/*
+* -------------------------------------------
+* Data tables for ewallet Expense report 
+* -------------------------------------------
+*/
+if ($('.custom-ewallet-expense-table').length) {
+      var table; 
+      table = $(".custom-ewallet-expense-table").DataTable({
+       "processing": true, 
+       "serverSide": true, 
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_user_ewallet_expense_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
+/*
+* -------------------------------------------
+* Data tables for business transaction summary  
+* ------------------------------------------- 
+*/
+if ($('.custom-business-summary-table').length) {
+      var table; 
+      table = $(".custom-business-summary-table").DataTable({
+      "bFilter" : false, 
+      "bInfo": false,
+      "searching": false,
+      "paging": false,
+       "processing": true, 
+       "serverSide": true, 
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_admin_business_summary_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
+  /*
+* -------------------------------------------
+* Data tables for business All transaction
+* -------------------------------------------
+*/
+if ($('.custom-business-all-trans-table').length) {
+      var table; 
+      table = $(".custom-business-all-trans-table").DataTable({
+       "processing": true, 
+       "serverSide": true, 
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_admin_business_all_transaction_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2,3,4,5,6], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
+
+
+  /*
+* -------------------------------------------
+* Data tables for business income report
+* -------------------------------------------
+*/
+if ($('.custom-business-income-history-table').length) {
+      var table; 
+      table = $(".custom-business-income-history-table").DataTable({
+       "processing": true, 
+       "serverSide": true, 
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_admin_business_income_history_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2,3,4,5,6], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
+/*
+* -------------------------------------------
+* Data tables for business expense report
+* -------------------------------------------
+*/
+if ($('.custom-business-expense-history-table').length) {
+      var table; 
+      table = $(".custom-business-expense-history-table").DataTable({
+       "processing": true, 
+       "serverSide": true, 
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_admin_business_expense_history_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2,3,4,5,6], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
+/*
+  * -------------------------------------------
+  * On click Holding tank user
+  * -------------------------------------------
+*/
+   $('.holding-tank-profiles li').click(function(){
+    $('#seleted-user-id').val($(this).attr('data-user-id'));
+    $('.progress').css('width','0px');
+    $('#holding-tank-change-model').modal('show');
+   });
+
+   $('#place-user').click(function() {
+    if ($('#choose-parent').val() == '') {
+      $('.notification').html('please choose the parent');
+      $('.notification').css('color', 'red');
+    } else {
+      //load the availbale free spaces
+         var parent = $('#choose-parent').val();
+         var sponsor = $('#current-user-id').val();
+         var user_id = $('#seleted-user-id').val();
+
+         if (user_id != '' && sponsor!= '' && parent!='' ){
+          var position = $('input[name="free_space"]:checked').attr('id');
+          if (position) {
+            $.ajax({
+              type :'POST',
+              data : {
+                action:'afl_place_user_from_tank',
+                user_id:user_id,
+                sponsor:sponsor,
+                parent:parent,
+                position :position, 
+              },
+              url:ajax_object.ajaxurl,
+              beforeSend:function(){
+                  for(var i = 1; i <=100 ; i++){
+                    $('.progress').css('width',i+'%');
+                  }
+              },
+              complete:function(){
+                  $('.progress').css('width','100%');
+
+              },
+              success: function(data){
+                var data = JSON.parse(data);
+                $('.progress').css('width','100%');
+                if (data['status'] == 1) {
+                  $('.notification').html('Member Placed successfully');
+                   setTimeout(function() { window.location.reload(true); }, 500 );
+                }
+              }
+            });
+          } else {
+            $('.notification').html('Unable to select a position.You cannot place a member without the position.');
+            $('.notification').css('color', 'red');
+          }
+          
+         }
+    }
+   });
+
+  $('#choose-parent').change(function(){
+    if ($('#choose-parent').val() !=''){
+      $.ajax({
+        type :'POST',
+        data : {
+          action:'afl_get_available_free_space',
+          sponsor : $('#current-user-id').val(),
+          uid     : $('#seleted-user-id').val(),
+          parent  : $('#choose-parent').val(),
+        },
+        url:ajax_object.ajaxurl,
+        success: function(data){
+            $('#available-free-spaces').html(data);
+        }
+      });
+    }
+  });
+
 });
 
 /*
  * -------------------------------------------------------------
- * Expand genealogy tree on click
+ * Expand genealogy tree on click  expense
  * -------------------------------------------------------------
 */
 function expandTree(obj) {
