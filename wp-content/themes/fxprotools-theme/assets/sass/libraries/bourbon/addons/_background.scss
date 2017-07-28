@@ -1,7 +1,0 @@
-// BACKGROUND
-@mixin background-size($type) {
-  -webkit-background-size: $type;
-     -moz-background-size: $type;
-          background-size: $type;
-       -o-background-size: $type;
-}

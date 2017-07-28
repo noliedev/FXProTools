@@ -28,7 +28,7 @@ if(!class_exists('ThemeSettings')){
 				wp_deregister_script('jquery'); 
 				wp_deregister_script('wp-embed');
 			}
-			wp_enqueue_style('theme-style', get_template_directory_uri().'/style.css', $theme_version);
+			wp_enqueue_style('theme-style', get_template_directory_uri().'/assets/css/theme.css', $theme_version);
 		}
 
 	}

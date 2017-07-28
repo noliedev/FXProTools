@@ -19,20 +19,6 @@ foreach ($core_settings as $cs) {
 }
 
 /**
- * -----------
- * ANET - CISM
- * -----------
- * Authorize.net customer information and subscription manager
- */
-$anet_includes = [
-	'auth-api.php',
-	'auth-ajax.php',
-];
-foreach ($anet_includes as $a) {
-	require_once('inc/authorize-net/'.$a);
-}
-
-/**
  * ----------------
  * Custom Functions
  * ----------------
@@ -46,4 +32,18 @@ if($custom_functions){
 	foreach($custom_functions as $key => $cf){
 		require_once('inc/'.$cf);
 	}
+}
+
+/**
+ * -----------
+ * ANET - CISM
+ * -----------
+ * Authorize.net customer information and subscription manager
+ */
+$anet_includes = [
+	'auth-api.php',
+	'auth-ajax.php',
+];
+foreach ($anet_includes as $a) {
+	require_once('inc/authorize-net/'.$a);
 }
