@@ -1,6 +1,6 @@
 <?php
 
-// $anet = new AuthAPI();
-// $acc = $anet->get_user_info(1812467702);
+$anet = new AuthAPI();
+$accounts = $anet->get_all_users();
 
-// dd($acc['info']);
+dd($accounts);

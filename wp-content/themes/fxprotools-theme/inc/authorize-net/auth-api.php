@@ -17,36 +17,42 @@ if(!defined('ABSPATH')){
 if(!class_exists('AuthAPI')){
 
 	class AuthAPI {
-	
-		const AUTHORIZENET_API_LOGIN_ID = '6XP44snrs6q';
-		const AUTHORIZENET_TRANSACTION_KEY = '9r94EZzZq588bn4L';
+		
+		// Account 1 - volishon
+		const AUTHORIZENET_API_LOGIN_ID = '54g7ndfYHDA';
+		const AUTHORIZENET_TRANSACTION_KEY = '3qW3tc776AC4YzA3';
+
+		// Account 1 - volishon
+		// const AUTHORIZENET_API_LOGIN_ID = '2nnPd9yFA34';
+		// const AUTHORIZENET_TRANSACTION_KEY = '45BH9L8HgP6m3hyM';
 
 		// Get all users
 		public function get_all_users()
 		{
 			$merchantAuthentication = $this->anet_authentication(self::AUTHORIZENET_API_LOGIN_ID, self::AUTHORIZENET_TRANSACTION_KEY);
 
-			// Get all existing customer profile ID's
-			$request = new AnetAPI\GetCustomerProfileIdsRequest();
-			$request->setMerchantAuthentication($merchantAuthentication);
-			$controller = new AnetController\GetCustomerProfileIdsController($request);
-			$anetResponse = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
+			// // Get all existing customer profile ID's
+			// $request = new AnetAPI\GetCustomerProfileIdsRequest();
+			// $request->setMerchantAuthentication($merchantAuthentication);
+			// $controller = new AnetController\GetCustomerProfileIdsController($request);
+			// $anetResponse = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
 
-			if ( ($anetResponse != null) && ($anetResponse->getMessages()->getResultCode() == "Ok") ) {
-				// $response['data']   =
-				$profile_ids = $anetResponse->getIds();
-				$users = array();
-				foreach ($profile_ids as $key => $pid) {
-					$get     =  $this->get_user_info($pid);
-					$users[] = $get['data'];
-				}
-				$response['data'] = $users;
-				$response['status'] = $anetResponse->getMessages()->getResultCode();
-			} else {
-				$response['status'] = $anetResponse->getMessages()->getResultCode();
-			}
+			// if ( ($anetResponse != null) && ($anetResponse->getMessages()->getResultCode() == "Ok") ) {
+			// 	// $response['data']   =
+			// 	$profile_ids = $anetResponse->getIds();
+			// 	$users = array();
+			// 	foreach ($profile_ids as $key => $pid) {
+			// 		$get     =  $this->get_user_info($pid);
+			// 		$users[] = $get['data'];
+			// 	}
+			// 	$response['data'] = $users;
+			// 	$response['status'] = $anetResponse->getMessages()->getResultCode();
+			// } else {
+			// 	$response['status'] = $anetResponse->getMessages()->getResultCode();
+			// }
 
-			return $response;
+			return $merchantAuthentication;
+			// return $response;
 		}
 
 		// Get user information - profile and payment information
@@ -68,34 +74,34 @@ if(!class_exists('AuthAPI')){
 					'merchant_id' => $basicInfo->getmerchantCustomerId(),
 					'description' => $basicInfo->getDescription(),
 					'email'       => $basicInfo->getEmail(),
-					'customer_profile_id'         => $paymentInfo[0]->getCustomerProfileId(),
-					'customer_payment_profile_id' => $paymentInfo[0]->getCustomerPaymentProfileId(),
-					'defaul_payment_profile'      => $paymentInfo[0]->getDefaultPaymentProfile(),
-					'payment' => array(
-						'credit_card' => array(
-							'card_number'     => $paymentInfo[0]->getPayment()->getCreditCard()->getCardNumber(),
-							'expiration_date' => $paymentInfo[0]->getPayment()->getCreditCard()->getExpirationDate(),
-							'card_type'       => $paymentInfo[0]->getPayment()->getCreditCard()->getCardType(),
-							'card_art'        => $paymentInfo[0]->getPayment()->getCreditCard()->getCardArt()
-						),
-					),
-					'drivers_license'  => $paymentInfo[0]->getDriversLicense(),
-					'tax_id'           => $paymentInfo[0]->getTaxId(),
-					'subscription_ids' => '', // Leave it blank for a while
-					'customer_type'    => $paymentInfo[0]->getCustomerType(),
-					'billing_info'     => array(
-						'phone_number' => $paymentInfo[0]->getBillTo()->getPhoneNumber(),
-						'fax_number'   => $paymentInfo[0]->getBillTo()->getFaxNumber(),
-						'email'        => $paymentInfo[0]->getBillTo()->getEmail(),
-						'first_name'   => $paymentInfo[0]->getBillTo()->getFirstName(),
-						'last_name'    => $paymentInfo[0]->getBillTo()->getLastName(),
-						'company'      => $paymentInfo[0]->getBillTo()->getCompany(),
-						'address'      => $paymentInfo[0]->getBillTo()->getAddress(),
-						'city'         => $paymentInfo[0]->getBillTo()->getCity(),
-						'state'        => $paymentInfo[0]->getBillTo()->getState(),
-						'zip'          => $paymentInfo[0]->getBillTo()->getZip(),
-						'country'      => $paymentInfo[0]->getBillTo()->getCountry(),
-					),
+					// 'customer_profile_id'         => $paymentInfo[0]->getCustomerProfileId(),
+					// 'customer_payment_profile_id' => $paymentInfo[0]->getCustomerPaymentProfileId(),
+					// 'defaul_payment_profile'      => $paymentInfo[0]->getDefaultPaymentProfile(),
+					// 'payment' => array(
+					// 	'credit_card' => array(
+					// 		'card_number'     => $paymentInfo[0]->getPayment()->getCreditCard()->getCardNumber(),
+					// 		'expiration_date' => $paymentInfo[0]->getPayment()->getCreditCard()->getExpirationDate(),
+					// 		'card_type'       => $paymentInfo[0]->getPayment()->getCreditCard()->getCardType(),
+					// 		'card_art'        => $paymentInfo[0]->getPayment()->getCreditCard()->getCardArt()
+					// 	),
+					// ),
+					// 'drivers_license'  => $paymentInfo[0]->getDriversLicense(),
+					// 'tax_id'           => $paymentInfo[0]->getTaxId(),
+					// 'subscription_ids' => '', // Leave it blank for a while
+					// 'customer_type'    => $paymentInfo[0]->getCustomerType(),
+					// 'billing_info'     => array(
+					// 	'phone_number' => $paymentInfo[0]->getBillTo()->getPhoneNumber(),
+					// 	'fax_number'   => $paymentInfo[0]->getBillTo()->getFaxNumber(),
+					// 	'email'        => $paymentInfo[0]->getBillTo()->getEmail(),
+					// 	'first_name'   => $paymentInfo[0]->getBillTo()->getFirstName(),
+					// 	'last_name'    => $paymentInfo[0]->getBillTo()->getLastName(),
+					// 	'company'      => $paymentInfo[0]->getBillTo()->getCompany(),
+					// 	'address'      => $paymentInfo[0]->getBillTo()->getAddress(),
+					// 	'city'         => $paymentInfo[0]->getBillTo()->getCity(),
+					// 	'state'        => $paymentInfo[0]->getBillTo()->getState(),
+					// 	'zip'          => $paymentInfo[0]->getBillTo()->getZip(),
+					// 	'country'      => $paymentInfo[0]->getBillTo()->getCountry(),
+					// ),
 				);
 				
 				$response['data']   = $data;
