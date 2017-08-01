@@ -1,6 +1,9 @@
 <?php 
 /* --------- All the action hooks ------------------------*/
+add_action('init', 'test');
+function test(){
 
+}
 
 /*
  * ----------------------------------------------------------
@@ -27,18 +30,18 @@
 */
 add_action( 'admin_notices', 'eps_affiliates_admin_notices' );
 function eps_affiliates_admin_notices () {
-	if (!afl_variable_get('root_user')) {
-		$class = 'notice notice-error';
-		$message = __( 'Root user ! Currently you are not choose a root user.You need to select a root user for the system', 'sample-text-domain' );
-		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message )  ); 
+	// if (!afl_variable_get('root_user')) {
+	// 	$class = 'notice notice-error';
+	// 	$message = __( 'Root user ! Currently you are not choose a root user.You need to select a root user for the system', 'sample-text-domain' );
+	// 	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message )  ); 
 
-	}
-	//notification for set the permissions
-	if (!afl_variable_get('configure_role_and_permissions')) {
-		$class = 'notice notice-info';
-		$message = __( 'Roles and Permission : Please give the appropriate permission to each user based on their role', 'sample-text-domain' );
-		printf( '<div class="%1$s"><p>%2$s<a href="%3$s"> Goto settings</a></p></div>', esc_attr( $class ), esc_html( $message ) ,'?page=affiliate-eps-role-config-settings' );
-	}
+	// }
+	// //notification for set the permissions
+	// if (!afl_variable_get('configure_role_and_permissions')) {
+	// 	$class = 'notice notice-info';
+	// 	$message = __( 'Roles and Permission : Please give the appropriate permission to each user based on their role', 'sample-text-domain' );
+	// 	printf( '<div class="%1$s"><p>%2$s<a href="%3$s"> Goto settings</a></p></div>', esc_attr( $class ), esc_html( $message ) ,'?page=affiliate-eps-role-config-settings' );
+	// }
 }
 /*
  * ------------------------------------------------------------
@@ -190,6 +193,20 @@ function eps_affiliates_admin_notices () {
 	 add_action('wp_ajax_nopriv_afl_place_user_from_tank', 'afl_place_user_from_tank_callback');
 /*
  * ------------------------------------------------------------
+ * Hook after purchase complete save details to eps backend
+ * ------------------------------------------------------------
+*/
+	 add_filter('eps_commerce_purchase_complete', 'eps_commerce_purchase_complete', 10, 1);
+	
+/*
+ * ------------------------------------------------------------
+ * Hook calculate the rank of a user
+ * ------------------------------------------------------------
+*/
+	add_action('eps_affiliates_calculate_affiliate_rank', 'eps_affiliates_calculate_affiliate_rank', 10, 1);
+
+/*
+ * ------------------------------------------------------------
  * 
  * ------------------------------------------------------------
 */
@@ -238,8 +255,12 @@ function eps_affiliates_admin_notices () {
 			case 'affiliate-eps-business-transaction': 			
 			case 'afl_add_edit_business_system_members': 			
  				
- 			
+ 			//reports
+			case 'affiliate-eps-reports': 			
+
  			case 'eps-test':
+ 			case 'affiliate-eps-purchases':
+ 				wp_enqueue_style( 'simple-line-icons', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/simple-line-icons/css/simple-line-icons.css');
  				wp_enqueue_style( 'app', EPSAFFILIATE_PLUGIN_ASSETS.'css/app.css');
 				wp_enqueue_style( 'developer', EPSAFFILIATE_PLUGIN_ASSETS.'css/developer.css');
 			break;
@@ -247,3 +268,4 @@ function eps_affiliates_admin_notices () {
  		}
  	}
  }
+

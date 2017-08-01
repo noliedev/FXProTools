@@ -19,11 +19,17 @@ function afl_admin_variable_configurations (){
 		  echo '<li class="'.(($active_tab == 'system_variables') ? 'active' : '').'">
 		            	<a href="?page=affiliate-eps-variable-configurations&tab=system_variables" >System Variables</a>  
 		          </li>';
+		           echo '<li class="'.(($active_tab == 'payment_methods') ? 'active' : '').'">
+		            	<a href="?page=affiliate-eps-variable-configurations&tab=payment_methods" >Payment Methods</a>  
+		          </li>';
 		  echo '</ul>';
 
 		  switch ($active_tab) {
 		  	case 'system_variables':
 		  		afl_system_variables_form();
+	  		break;
+	  		case 'payment_methods':
+	  			afl_payment_methods_form();
 	  		break;
 		  }
  }
@@ -62,6 +68,63 @@ function afl_admin_variable_configurations (){
 
 function afl_system_variables_form_submit ($form_state) {
 	foreach ($form_state as $key => $value) {
+		afl_variable_set($key, maybe_serialize($value));
+	}
+	echo wp_set_message('Configuration has been saved successfully', 'success');
+}
+/*
+ * ------------------------------------------------------------
+ * Payment methods  variable form
+ * ------------------------------------------------------------
+*/
+function afl_payment_methods_form(){
+	if (isset($_POST['submit'])) {
+ 			$variables = $_POST;
+ 			unset($variables['submit']);
+ 			afl_payment_methods_form_submit($variables);
+ 		}
+
+ 		$form = array();
+ 		$form['#method'] = 'post';
+		$form['#action'] = $_SERVER['REQUEST_URI'];
+		$form['#prefix'] ='<div class="form-group row">';
+	 	$form['#suffix'] ='</div>';
+
+	 	$form['payment_methods'] = array(
+	 		'#type' 					=> 'text-area',
+	 		'#title' 					=> 'Payment Methods',
+	 		'#description' 		=> 'Format : &lt;value&gt;|&lt;name&gt;  Example : 1|Highest',
+	 		'#default_value' 	=> afl_variable_get('payment_methods', ''),
+	 		'#prefix'					=> '<div class="form-group row">',
+	 		'#suffix' 				=> '</div>'
+	 	);
+
+	 	$form['payout_methods'] = array(
+	 		'#type' 					=> 'text-area',
+	 		'#title' 					=> 'Payout Methods',
+	 		'#description' 		=> 'Format : &lt;value&gt;|&lt;name&gt;  Example : 1|Highest',
+	 		'#default_value' 	=> afl_variable_get('payout_methods', ''),
+	 		'#prefix'					=> '<div class="form-group row">',
+	 		'#suffix' 				=> '</div>'
+	 	);
+	 	$form['payout_status'] = array(
+	 		'#type' 					=> 'text-area',
+	 		'#title' 					=> 'Payout Status',
+	 		'#description' 		=> 'Format : &lt;value&gt;|&lt;name&gt;  Example : 1|Highest',
+	 		'#default_value' 	=> afl_variable_get('payout_status', ''),
+	 		'#prefix'					=> '<div class="form-group row">',
+	 		'#suffix' 				=> '</div>'
+	 	);
+
+	 	$form['submit'] = array(
+	 		'#type' => 'submit',
+	 		'#value' =>'Save configuration'
+	 	);
+	 	echo afl_render_form($form);
+}
+
+function afl_payment_methods_form_submit($form_state){
+foreach ($form_state as $key => $value) {
 		afl_variable_set($key, maybe_serialize($value));
 	}
 	echo wp_set_message('Configuration has been saved successfully', 'success');

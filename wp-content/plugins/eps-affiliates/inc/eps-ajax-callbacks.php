@@ -28,7 +28,7 @@ function users_auto_complete_callback($search_key = '') {
 */
  function afl_user_downlines_data_table_callback () {
   $uid 					 = get_current_user_id();
-  if (is_admin()) {
+  if (eps_is_admin()) {
     $uid = afl_root_user();
   }
  	$input_valu = $_POST;

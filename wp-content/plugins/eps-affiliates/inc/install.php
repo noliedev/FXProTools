@@ -57,7 +57,7 @@ function eps_affiliates_install() {
  * ------------------------------------------------------------
 */
  	function create_eps_roles() {
-	  add_role( 'afl_member', 
+	   add_role( 'afl_member', 
 	  					'AFL Member', 
 	  					array( 'read' => true, 'level_0' => true,'level_1' => true,'eps_system_member'=>true) 
 	  );
@@ -77,16 +77,21 @@ function eps_affiliates_install() {
 */
  function create_business_users(){
  	global $wpdb;
- 	$userdata = array(
-    'user_login'    	=>   'business.admin',
-    'user_email'    	=>   'business.admin@eps.com',
-    'user_pass'     	=>   'business.admin',
-    'first_name'    	=>   'business.admin',
-    'last_name'     	=>   'business.admin',
-    );
-  $user = wp_insert_user( $userdata );
-  //add this user to genealogy
-  
+ 	if (!username_exists('business.admin')) {
+	 	$userdata = array(
+	    'user_login'    	=>   'business.admin',
+	    'user_email'    	=>   'business.admin@eps.com',
+	    'user_pass'     	=>   'business.admin',
+	    'first_name'    	=>   'business.admin',
+	    'last_name'     	=>   'business.admin',
+	    );
+	  $user = wp_insert_user( $userdata );
+ 	} else {
+ 		$user = get_user_by( 'email', 'business.admin@eps.com' );
+ 	}
+
+	if ($user) {
+		//add this user to genealogy
 	  $afl_date_splits = afl_date_splits(afl_date());
 	 	$genealogy_table = $wpdb->prefix . 'afl_user_genealogy';
 	  $ins_data = array();
@@ -106,5 +111,7 @@ function eps_affiliates_install() {
 
 	  
 	  $ins_id = $wpdb->insert($genealogy_table, $ins_data);
+	}
 
  }
+ 

@@ -167,7 +167,7 @@ $common_include = new Eps_affiliates_common();
 		//table responsive 
 
 		$table_html 	.= '<div class="table-responsive">';
-		$table_html 	.= '<table class="table table-striped table-bordered dt-responsive nowrap '.$classes.'">';
+		$table_html 	.= '<table class="table-striped '.$classes.'">';
 
 		/* -----------table head :  Begin	----------*/
 		$table_html 	.= '<thead>';
@@ -236,14 +236,15 @@ $common_include = new Eps_affiliates_common();
 		switch ($element_type) {
 			case 'text':
 				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
-				$html .= isset($element['#title']) ? $element['#title'] : '';
+				if (isset($element['#title']) && !empty($element['#title'])) : 
+					$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
+					$html .= isset($element['#title']) ? $element['#title'] : '';
 
-				if (!empty($element['#required']) && $element['#required'] == TRUE ){
-					$html .= '<span class="form-required" title="This field is required.">*</span>';
-				}
-
-				$html .= '</label>';
+					if (!empty($element['#required']) && $element['#required'] == TRUE ){
+						$html .= '<span class="form-required" title="This field is required.">*</span>';
+					}
+					$html .= '</label>';
+				endif;
 				
 				// $html .= '<div class="col-md-10">';
 				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';	
@@ -360,24 +361,46 @@ $common_include = new Eps_affiliates_common();
 			break;
 
 			case 'text-area':
-			$html .= '<label for="'.str_replace('_','-',$key).'">';
-			$html .= isset($element['#title']) ? $element['#title'] : '';
+				$html .= '<label for="'.str_replace('_','-',$key).'">';
+				$html .= isset($element['#title']) ? $element['#title'] : '';
 
-			if (!empty($element['#required']) && $element['#required'] == TRUE ){
-				$html .= '<span class="form-required" title="This field is required.">*</span>';
-			}
-			$html .= '</label>';
-			$html .= '<div class="form-textarea-wrapper resizable textarea-processed resizable-textarea">';
-			$cols = isset($element['#cols']) ? $element['#cols'] : 10;
-			$rows = isset($element['#rows']) ? $element['#rows'] : 5;
+				if (!empty($element['#required']) && $element['#required'] == TRUE ){
+					$html .= '<span class="form-required" title="This field is required.">*</span>';
+				}
+				$html .= '</label>';
+				$html .= '<div class="form-textarea-wrapper resizable textarea-processed resizable-textarea">';
+				$cols = isset($element['#cols']) ? $element['#cols'] : 10;
+				$rows = isset($element['#rows']) ? $element['#rows'] : 5;
 
-			$html .= '<textarea id="'.str_replace('_','-',$key).'" name="'.$key.'" cols="'.$cols.'" rows="'.$rows.'" class="form-textarea form-control '.$class.'">';
-			if ( isset($element['#default_value']))
-				$html .= $element['#default_value'];
+				$html .= '<textarea id="'.str_replace('_','-',$key).'" name="'.$key.'" cols="'.$cols.'" rows="'.$rows.'" class="form-textarea form-control '.$class.'">';
+				if ( isset($element['#default_value']))
+					$html .= $element['#default_value'];
 
-			$html .= '</textarea>';
-			$html .= '</div>';
+				$html .= '</textarea>';
+				$html .= '</div>';
 			break;
+			case 'radio':
+
+			$checked = (!empty($element['#default_value']) && isset($element['#default_value'])) ? TRUE : FALSE ;
+				
+
+				$html .= isset($element['#title']) ? $element['#title'] : '';
+				if (!empty($element['#required']) && $element['#required'] == TRUE ){
+					$html .= '<span class="form-required" title="This field is required.">*</span>';
+				}
+				$html .= '<div class="form-item clearfix form-type-radio radio">';
+				foreach ($element['#options'] as $data => $value) {
+					$html .= '<label class="i-checks">';
+					if(isset($element['#default_value']) && $element['#default_value'] == $data){
+							$html .= '<input type ="radio" checked id = "" name ='.$element['#name'].' value ='.$data.' class ="form-radio radio ">';			
+					}else{
+							$html .= '<input type ="radio" id = "" name ='.$element['#name'].' value ='.$data.' class ="form-radio radio ">';
+					}
+					$html .= '<i></i></label>'.$value;
+				}
+				$html .= '</div>';	
+			break;
+
 		}
 
 		//append suffix
@@ -580,6 +603,8 @@ if(!function_exists('afl_get_levels')){
  *
 */
 	function afl_user_data($uid = ''){
+		require_once ABSPATH . 'wp-includes/pluggable.php';
+
 		if ($uid == '') {
 			$uid = get_current_user_id();
 		}
@@ -588,7 +613,21 @@ if(!function_exists('afl_get_levels')){
 
 		return $user->data;
 	}
+/**
+ * -----------------------------------------------------------
+ * Get current user id
+ * -----------------------------------------------------------
+ * 
+ *
+*/
+	function afl_current_uid(){
 
+		require_once ABSPATH . 'wp-includes/pluggable.php';
+
+		$uid = get_current_user_id();
+
+		return $uid;
+	}
 /**
  * -----------------------------------------------------------
  * Get user roles
@@ -597,6 +636,9 @@ if(!function_exists('afl_get_levels')){
  *
 */
 	function afl_user_roles($uid = ''){
+
+		require_once ABSPATH . 'wp-includes/pluggable.php';
+
 		if ($uid == '') {
 			$uid = get_current_user_id();
 		}
@@ -1052,6 +1094,97 @@ if(!function_exists('afl_get_rank_names')){
 		return $result;
 	}
 /*
+ * -----------------------------------------------------------------------------
+ * get the downlines uid details of uid
+ * -----------------------------------------------------------------------------
+*/
+	function afl_get_user_downlines_uid ($uid = '3', $filter = array(), $count = false){
+		global $wpdb;
+
+		$query = array();
+		$query['#select'] = 'wp_afl_user_downlines';
+
+		$query['#join'] 	= array(
+			'wp_users' => array(
+				'#condition' => '`wp_users`.`ID`=`wp_afl_user_downlines`.`downline_user_id`'
+			)
+		);
+		$query['#fields'] = array(
+			'wp_afl_user_downlines' => array('uid')
+		);
+		$query['#where'] = array(
+			'`wp_afl_user_downlines`.`uid`='.$uid.''
+		);
+
+		$query['#order_by'] = array(
+			'`level`' => 'ASC'
+		);
+
+		$limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+	
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+
+		if (!empty($filter['search_valu'])) {
+			$query['#like'] = array('`display_name`' => $filter['search_valu']);
+		}
+		$result = db_select($query, 'get_results');
+
+		// pr($result = db_select($query, 'get_results'),1);
+		if ($count)
+			return count($result); 
+		return $result;
+	}
+/*
+ * -----------------------------------------------------------------------------
+ * get the downlines details of uid
+ * -----------------------------------------------------------------------------
+*/
+	function afl_get_direct_user_downlines ($uid = '3', $filter = array(), $count = false){
+		global $wpdb;
+
+		$query = array();
+		$query['#select'] = 'wp_afl_user_downlines';
+
+		$query['#join'] 	= array(
+			'wp_users' => array(
+				'#condition' => '`wp_users`.`ID`=`wp_afl_user_downlines`.`downline_user_id`'
+			)
+		);
+
+		$query['#where'] = array(
+			'`wp_afl_user_downlines`.`uid`='.$uid.'',
+			'`wp_afl_user_downlines`.`level`=1',
+		);
+
+		$query['#order_by'] = array(
+			'`level`' => 'ASC'
+		);
+
+		$limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+	
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+
+		if (!empty($filter['search_valu'])) {
+			$query['#like'] = array('`display_name`' => $filter['search_valu']);
+		}
+		$result = db_select($query, 'get_results');
+
+		// pr($result = db_select($query, 'get_results'),1);
+		if ($count)
+			return count($result); 
+		return $result;
+	}
+/*
  * -----------------------------------------------------------------------
  * Database select query 
  * -----------------------------------------------------------------------
@@ -1072,6 +1205,16 @@ if(!function_exists('afl_get_rank_names')){
 			}
 		}
 		$fields = !empty($fields) ? $fields : '*';
+
+		//expressions
+		$expression = '';
+		if (isset($data['#expression'])) {
+			foreach ($data['#expression'] as $value) {
+				$expression = empty($expression) ? $value : ','.$value; 
+			}
+		}
+
+		$fields = (!empty($expression)) ? $fields.','.$expression : $fields;
 
 		//select from
 		if ($data['#select'] && empty($alias)){
@@ -1103,6 +1246,28 @@ if(!function_exists('afl_get_rank_names')){
 				}
 			}
 		}
+
+		//where in
+		$where_in = '';
+		if (isset($data['#where_in'])) {
+			foreach ($data['#where_in'] as $key => $value) {
+		 		$val = implode(',', $value);
+		 		if (empty($val) ) {
+		 			return array();
+		 		}
+		 		$where_in .='`'.$key.'` IN ('.$val.')';
+		 	}
+		}
+
+		if (!empty($where_in) ){
+			if (!$where_flag) {
+				$sql .= 'WHERE '.$where_in;
+				$where_flag = 1;
+			} else {
+				$sql .= 'AND '.$where_in;
+			}
+		}
+
 		//like 
 		if(isset($data['#like'])){
 
@@ -1129,6 +1294,25 @@ if(!function_exists('afl_get_rank_names')){
 		}
 		
 		return $wpdb->$fetch_mode($sql);
+	}
+/*
+ * -----------------------------------------------------------------------
+ * Database update query 
+ * -----------------------------------------------------------------------
+*/
+	function db_update($data = array()) {
+		$sql = '';
+		if ( !empty( $data ) ) {
+			if (isset($data['#table'])) {
+				$sql .= 'UPDATE '.$data['#table'];
+			}
+
+			if ( isset( $data['#set'] ) ){
+				foreach ($data['#set'] as $key => $value) {
+					
+				}
+			}
+		}
 	}
 /*
  * -----------------------------------------------------------------------
@@ -1174,7 +1358,7 @@ function afl_get_commerce_amount($amount_paid){
 */
 
 function afl_payment_amount($amount = 0){
-  return $amount * 1000;
+  return $amount * 100;
 }
 /*
  * -----------------------------------------------------------------------
@@ -1185,8 +1369,26 @@ function afl_get_payment_amount($amount = 0){
   if($amount == 0){
     return 0;
   }
-  return $amount / 1000;
+  return $amount / 100;
   
+}
+
+/*
+ * -----------------------------------------------------------------------
+ * Convert the amount to number format 
+ * -----------------------------------------------------------------------
+*/
+ function afl_format_payment_amount($amount, $number_format = TRUE){
+  // $amount = afl_get_payment_amount($amount);
+  $amount = ($amount/100);
+  if($number_format){
+    return number_format($amount, 2, '.', ',');
+  }
+  else{
+    return $amount;
+  }
+
+
 }
 /*
  * -----------------------------------------------------------------------
@@ -1349,8 +1551,8 @@ function afl_root_user() {
  * check the user is admin 
  * -----------------------------------------------------------------------
 */
- if (!function_exists('is_admin')){
- 	function is_admin(){
+ if (!function_exists('eps_is_admin')){
+ 	function eps_is_admin(){
  		if (current_user_can('administrator')) {
  			return TRUE;
     } else {
@@ -1384,3 +1586,52 @@ function afl_root_user() {
 			$theUser->add_role( 'afl_member' );
   	}
   }
+/*
+ * ----------------------------------------------------------------------
+ * Afl product purchase details enter to db
+ * ----------------------------------------------------------------------
+*/
+ if (!function_exists('afl_purchase')) {
+ 	function afl_purchase ($arguments = array()) {
+ 		global $wpdb;
+	  if( !empty($arguments)){
+	  	$table = $wpdb->prefix.'afl_purchases';
+	  	$afl_date_split = afl_date_splits(afl_date());
+
+	  	$purchase_data = array();
+	  	$purchase_data['uid']				 	   = $arguments['uid'];
+	  	$purchase_data['category'] 		   = 'product purchase';
+	  	$purchase_data['member_rank']    = 1;
+	  	$purchase_data['amount_paid'] 	 = afl_commerce_amount($arguments['amount_paid']);
+	  	$purchase_data['afl_points'] 	   = afl_commerce_amount($arguments['afl_point']);;
+	  	$purchase_data['order_id'] 		   = $arguments['order_id'];
+	  	$purchase_data['created'] 			 = afl_date();
+	  	$purchase_data['processed_date'] = afl_date();
+	  	$purchase_data['processed_date'] = afl_date();
+	  	$purchase_data['purchase_day'] 	 = $afl_date_split['d'];
+	  	$purchase_data['purchase_month'] = $afl_date_split['m'];
+	  	$purchase_data['purchase_year']  = $afl_date_split['y'];
+	  	$purchase_data['purchase_week']  = $afl_date_split['w'];
+	  	$purchase_data['purchase_date']  = afl_date_combined($afl_date_split);
+
+	  	$id = $wpdb->insert($table, $purchase_data);
+	  	if ($id)
+	  		return true;
+	  	else
+	  		return false;
+	  }
+	  
+ 	}
+ }
+/*
+ * ----------------------------------------------------------------------
+ * Get table name
+ * ----------------------------------------------------------------------
+*/
+ if ( !function_exists( 'eps_table_name' ) ){
+ 	function  eps_table_name ($table_name = '') {
+ 		global $wpdb;
+ 		$table_prefix = $wpdb->prefix;
+ 		return $table_prefix.$table_name;
+ 	}
+ }

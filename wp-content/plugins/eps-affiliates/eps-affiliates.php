@@ -295,6 +295,8 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-manage-members.php';
 				//variable configurations
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-variable-configuration.php';
+				//rank performance overview
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-rank-performance-overview.php';
 				
 
 				//common files callback
@@ -331,6 +333,8 @@
 				// Menu Callback for ewallet transactions
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/eps-ewallet-ajax-callbacks.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/menu_callback/menu-ewallet-summary-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/menu_callback/menu-ewallet-withdraw-fund.php';
+
 
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-db.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-datatable.php';
@@ -339,6 +343,10 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/b-wallet/menu-callback/menu-bwallet-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-features-and-config-settings.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
+
+				//integrations
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/integrations/class-woocommerce.php';
 
 			}
 		/**

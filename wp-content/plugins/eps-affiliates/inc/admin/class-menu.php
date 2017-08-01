@@ -29,7 +29,9 @@
 				
 				add_action( 'admin_menu', array( $this , 'eps_admin_test_menus') );
 
+				add_action( 'admin_menu', array( $this , 'eps_admin_purchase') );
 
+				add_action( 'admin_menu', array( $this , 'afl_reports') );
 
 				
 
@@ -580,6 +582,48 @@
 					'#access_callback'=> 'features_and_configuration', 
 					'#menu_slug' 			=> 'eps-test', 
 					'#page_callback' 	=> 'afl_generate_users', 
+				);
+				
+				afl_system_admin_menu($menu);
+		 }
+		/*
+		 * --------------------------------------------------------------------------
+		 * Purchase
+		 * --------------------------------------------------------------------------
+		*/
+		 function eps_admin_purchase () {
+		 	$menu['purchase'] = array(
+					'#page_title'			=> __( 'Purchase', 'Purchase' ),
+					'#menu_title' 		=> __( 'Purchase', 'Purchase' ),
+					'#access_callback'=> 'afl_purchase', 
+					'#menu_slug' 			=> 'affiliate-eps-purchases', 
+					'#page_callback' 	=> 'afl_test_purchases',
+					'#weight' 				=> 8, 
+				);
+				afl_system_admin_menu($menu);
+		 }
+		/*
+		 * --------------------------------------------------------------------------
+		 * Reports
+		 * --------------------------------------------------------------------------
+		*/
+		 function afl_reports () {
+		 		$menu['reports'] = array(
+					'#page_title'			=> __( 'Reports', 'Reports' ),
+					'#menu_title' 		=> __( 'Reports', 'Reports' ),
+					'#access_callback'=> 'afl_rank_performance_overview', 
+					'#menu_slug' 			=> 'affiliate-eps-reports', 
+					'#page_callback' 	=> 'afl_rank_performance_overview',
+					'#weight' 				=> 8, 
+				);
+				$menu['rank_performance'] = array(
+					'#parent' 				=> 'affiliate-eps-reports',
+					'#page_title'			=> __( 'Rank Performance Overview', 'Rank Performance Overview' ),
+					'#menu_title' 		=> __( 'Rank Performance Overview', 'Rank Performance Overview' ),
+					'#access_callback'=> 'afl_rank_performance_overview', 
+					'#menu_slug' 			=> 'affiliate-eps-reports', 
+					'#page_callback' 	=> 'afl_rank_performance_overview',
+					'#weight' 				=> 8, 
 				);
 				afl_system_admin_menu($menu);
 		 }

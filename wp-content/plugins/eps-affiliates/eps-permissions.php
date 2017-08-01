@@ -91,5 +91,15 @@
 			'#title' 				=> __('AFL system Features and configurations'),
 			'#description' 	=> 'affiliates system features and configurations '
 		);
+			//features and settings
+		$permissions['afl_purchase'] = array(
+			'#title' 				=> __('AFL Purchase'),
+			'#description' 	=> 'affiliates system purchases '
+		);
+			//features and settings
+		$permissions['afl_rank_performance_overview'] = array(
+			'#title' 				=> __('AFL Rank performance Overview'),
+			'#description' 	=> 'affiliates rank performance overview '
+		);
 		return $permissions;
 	}

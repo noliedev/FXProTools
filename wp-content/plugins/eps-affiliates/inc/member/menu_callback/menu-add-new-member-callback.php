@@ -5,6 +5,7 @@
  * ---------------------------------------------
 */
  function afl_add_new_member () {
+
  	echo afl_eps_page_header();
 	 // $obj = new Eps_affiliates_registration;
 	 // $post = array('uid'=>50,'sponsor_uid'=>37);
@@ -174,7 +175,8 @@
  	);
 
  	$default_value = '';
- 	if (is_admin()) {
+ 	
+ 	if (eps_is_admin()) {
  		$default_value = afl_variable_get('root_user','');
  	} else {
  		$user = wp_get_current_user();

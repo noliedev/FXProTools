@@ -343,6 +343,14 @@ if ($('.custom-business-expense-history-table').length) {
     }
   });
 
+  $('div.pricingTable').on('click', function(){
+    $(this).parent().parent().find('div.pricingTable').removeClass('selected');
+    $(this).addClass('selected');
+    $(this).find('input[type="radio"]').prop("checked", true);
+    
+  });
+  
+//document ends here
 });
 
 /*

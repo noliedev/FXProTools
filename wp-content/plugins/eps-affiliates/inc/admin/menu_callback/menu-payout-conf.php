@@ -24,6 +24,8 @@ function afl_admin_payout_configuration(){
 */
 function afl_payout_configuration_form($post){
 
+$payout_methods = list_extract_allowed_values(afl_variable_get('payout_methods'),'list_text',FALSE);
+
 	$form = array();
 	$form['#action'] = $_SERVER['REQUEST_URI'];
  	$form['#method'] = 'post';
@@ -51,14 +53,17 @@ function afl_payout_configuration_form($post){
 		'#prefix'=>'<div class="form-group row">',
  		'#suffix' =>'</div>'
 	);
-	$form['field']['payout_charges_method_bank'] = array(
+	foreach ($payout_methods as $key => $value) {
+		$form['field']['payout_charges_'.$key] = array(
 		'#type' 				=> 'text',
-		'#title'				=> 'Payout charges - Bank Account *',
-		'#default_value' 	=> isset($post['payout_charges_method_bank']) ? $post['payout_charges_method_bank'] : (!empty(afl_variable_get('payout_charges_method_bank')) ? afl_variable_get('payout_charges_method_bank') : '') ,
+		'#title'				=> 'Payout charges - '.$value,
+		'#default_value' 	=> isset($post['payout_charges_'.$key]) ? $post['payout_charges_'.$key] : (!empty(afl_variable_get('payout_charges_'.$key)) ? afl_variable_get('payout_charges_'.$key) : '') ,
 		'#prefix'=>'<div class="form-group row">',
 		'#prefix'=>'<div class="form-group row">',
  		'#suffix' =>'</div>'
 	);
+	}
+	
 	$form['field']['payout_conf'] = array(
    '#type' => 'markup',
    '#markup' => '<hr style="border:2px solid '.$color_hr.'; color:'.$color_hr.'; margin:60px 0px 60px 0px">',

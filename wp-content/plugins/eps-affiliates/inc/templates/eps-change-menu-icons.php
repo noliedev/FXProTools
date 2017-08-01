@@ -79,12 +79,23 @@
   display: none;
 }
 #adminmenu #toplevel_page_affiliate-eps-system-configurations div.wp-menu-image:before {
-    content: "\f108";
+    content: "\f07a";
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;
     text-decoration: inherit;
 }
 
+/*  ------------ Purchase ------------ */
+#adminmenu #toplevel_page_affiliate-eps-purchases div.wp-menu-image img {
+  display: none;
+}
+#adminmenu #toplevel_page_affiliate-eps-purchases div.wp-menu-image:before {
+    content: "\f07a";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+}
 
 </style>

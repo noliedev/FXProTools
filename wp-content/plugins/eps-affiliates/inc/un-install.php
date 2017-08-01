@@ -70,3 +70,5 @@ class Eps_affiliates_uninstall {
 
 			$obj = new Eps_affiliates_uninstall();
 		}
+
+
