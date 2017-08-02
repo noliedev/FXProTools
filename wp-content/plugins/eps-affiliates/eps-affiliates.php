@@ -1,4 +1,4 @@
-<?php 
+<?php
 	/**
 	 * Plugin Name: EPS-Affiliates
 	 * Plugin URI: https://epixelmlmsoftware.com
@@ -9,7 +9,7 @@
 	 * Text Domain: eps-affiliates
 	 * Domain Path: languages
 	 *
-	 * EPS-Affiliates is contains over all functionalities of the site which uses the 
+	 * EPS-Affiliates is contains over all functionalities of the site which uses the
 	 * matrix plan.
 	 *
 	 * @package EPS-Affiliates
@@ -91,7 +91,7 @@
 		 *
 	 	*/
 			public $db_version = '1.0';
-			
+
 		/**
 		 * -------------------------------------------------------------------------
 		 * 	Main Eps_affiliates Instance
@@ -225,7 +225,7 @@
 					define( 'CAL_GREGORIAN', 1 );
 				}
 			}
-		
+
 		/**
 		 * -------------------------------------------------------------------------
 		 * Include required files for eps-affiliates plans
@@ -237,15 +237,16 @@
 		 *
 	 	*/
 			private function includes() {
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
 				//common functions callback
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.common.php';
 
-				//system permissions 
+				//system permissions
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'eps-permissions.php';
-				
+
 				//all the hooks
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-hooks.php';
-				
+
 				//query variables
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-query.php';
 
@@ -253,23 +254,23 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/install.php';
 
 				//required conditions when un-install
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/un-install.php';
-				
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/un_install.php';
+
 				//common Payment functios
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/afl_payment_funs.php';
 
 				//route
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-route-url.php';
-				
+
 				// save details to table @ user registers
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-user-register.php';
 
 				//afl dashboard menus registration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-dashboard-menus.php';
-				
+
 				//permissions
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-capabilities.php';
-				
+
 				//admin menus
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/class-menu.php';
 
@@ -280,10 +281,10 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-compensation-plan-conf.php';
 				// Menu callback for roles and permission settings
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-roles-nd-permission-conf.php';
-				
-				// Menu callback for rank configuration 
+
+				// Menu callback for rank configuration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-rank-conf.php';
-				// Menu callback for Pool Bonus configuration 
+				// Menu callback for Pool Bonus configuration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-pool-bonus-conf.php';
 				//genealogy configurations
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-genealogy-configurations.php';
@@ -297,7 +298,7 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-variable-configuration.php';
 				//rank performance overview
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-rank-performance-overview.php';
-				
+
 
 				//common files callback
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.common.php';
@@ -310,22 +311,22 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-template-hooks.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-template-functions.php';
 
-				//page function 
+				//page function
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-page-functions.php';
 				//ajax callbacks
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-ajax-callbacks.php';
 				//member registration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-registration.php';
-					
+
 				/* ------ Here comes all the member menu callback : Begin  -----------------*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-add-new-member-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-genealogy-tree-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-downline-members-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-exporer-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-holding-tank-callback.php';
-				
+
 				/* ------ Here comes all the member menu callback : End  -------------------*/
-		
+
 
 				//dashboard widgets
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-dashboard-widgets.php';
@@ -338,12 +339,14 @@
 
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-db.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-datatable.php';
-				
+
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/b-wallet/eps-bwallet-ajax-callbacks.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/b-wallet/menu-callback/menu-bwallet-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-features-and-config-settings.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test.php';
+
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-payment-methods-callback.php';
 
 				//integrations
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/integrations/class-woocommerce.php';
@@ -410,4 +413,6 @@ function eps_affiliate() {
 		}
 	}
 eps_affiliate();
+
+
 ?>

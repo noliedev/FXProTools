@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
  * -----------------------------------------------------
@@ -171,7 +171,7 @@
 		  	'member_status'	=> __( 'Member Status', 'affiliate-eps' ),
 		  	'Rank'					=> __( 'Rank', 'affiliate-eps' ),
 		  	'registered_on'	=> __( 'Registered On', 'affiliate-eps' ),
-		  	'edit_link'			=> __( 'Edit Link', 'affiliate-eps' ),
+		  	// 'edit_link'			=> __( 'Edit Link', 'affiliate-eps' ),
 		  );
 		  return apply_filters('affiliate_eps_member_data_table_colums',$columns);
 		}
@@ -187,7 +187,7 @@
 	 */
 
 		function column_default( $item, $column_name ) {
-		  switch( $column_name ) { 
+		  switch( $column_name ) {
 		    case 'booktitle':
 		    case 'author':
 		    case 'isbn':
@@ -247,9 +247,9 @@
 	 * @return string
 	*/
 	  public function column_parent($item) {
-			 
-			  $node  = afl_genealogy_node($item->parent_uid); 
-			  
+
+			  $node  = afl_genealogy_node($item->parent_uid);
+
 				if (!empty($node) && !empty($node->display_name)) {
 					$value = $node->display_name;
 				} else {
@@ -272,8 +272,8 @@
 	*/
 	  public function column_sponsor($item) {
 
-			  $node  = afl_genealogy_node($item->referrer_uid); 
-			  
+			  $node  = afl_genealogy_node($item->referrer_uid);
+
 				if (!empty($node) && !empty($node->display_name)) {
 					$value = $node->display_name;
 				} else {
@@ -315,8 +315,8 @@
 	 * @return string
 	*/
 	  public function column_member_status($item) {
-				
-			  $value = afl_member_status_render($item->status);
+				$statuses = list_extract_allowed_values(afl_variable_get('member_status'), 'list_text', '');
+			  $value = $statuses[$item->status];
 			  /**
 				 * Filters the parent column data for the affiliates list table.
 				 *
@@ -333,15 +333,15 @@
 	 * @return string
 	*/
 	  public function column_rank($item) {
-				
-			  $value = afl_member_status_render($item->status);
+
+			  $value = render_rank($item->member_rank);
 			  /**
 				 * Filters the parent column data for the affiliates list table.
 				 *
 				 * @param string           $value     Data shown in the Username column.
 				 * @param \AffWP\Affiliate $affiliate The current affiliate object.
 				 */
-				return apply_filters( 'eps_affiliate_member_table_member_status', $value, $item );
+				return $value;
 		}
 	/**
 	 * column Registered on
@@ -351,8 +351,7 @@
 	 * @return string
 	*/
 	  public function column_registered_on($item) {
-			
-			  $value = $item->display_name;
+			  $value = date('Y-md-d', $item->created);
 			  /**
 				 * Filters the parent column data for the affiliates list table.
 				 *
@@ -368,17 +367,17 @@
 	 * @since 1.0
 	 * @return string
 	*/
-	  public function column_edit_link($item) {
-			
-			  $value = $item->display_name;
-			  /**
-				 * Filters the parent column data for the affiliates list table.
-				 *
-				 * @param string           $value     Data shown in the Username column.
-				 * @param \AffWP\Affiliate $affiliate The current affiliate object.
-				 */
-				return apply_filters( 'eps_affiliate_member_table_member_edit_link', $value, $item );
-		}
+	  // public function column_edit_link($item) {
+    //
+		// 	  $value = $item->display_name;
+		// 	  /**
+		// 		 * Filters the parent column data for the affiliates list table.
+		// 		 *
+		// 		 * @param string           $value     Data shown in the Username column.
+		// 		 * @param \AffWP\Affiliate $affiliate The current affiliate object.
+		// 		 */
+		// 		return apply_filters( 'eps_affiliate_member_table_member_edit_link', $value, $item );
+		// }
 	/**
 	 * Retrieve the bulk actions
 	 *
@@ -406,7 +405,7 @@
 		function column_cb($item) {
         return sprintf(
             '<input type="checkbox" name="book[]" value="%s" />', 1
-        );    
+        );
     }
 
 
@@ -451,7 +450,7 @@
 			}
 
 			foreach ( $ids as $id ) {
-				
+
 				if ( 'accept' === $this->current_action() ) {
 					// affwp_set_affiliate_status( $id, 'active' );
 				}
@@ -491,7 +490,7 @@
 
 		function prepare_items() {
 			$per_page = 5;
-		  
+
 		  $columns = $this->get_columns();
 
 		  $hidden = array();

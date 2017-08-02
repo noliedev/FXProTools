@@ -1,5 +1,8 @@
 $(document).ready(function(){
 	$( ".date_time_picker" ).datepicker();
+
+  $('[data-toggle="tooltip"]').tooltip();   
+  
 });
 
 $(function () {

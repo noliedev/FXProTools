@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * ----------------------------------------------------------------
  * Include common functionalities
@@ -48,8 +48,8 @@ class Eps_affiliates_common {
 			wp_register_script( 'widget-scripts',  EPSAFFILIATE_PLUGIN_ASSETS.'js/widget-scripts.js');
 			wp_enqueue_script( 'widget-scripts' );
 
-	    wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));        
-		} 
+	    wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+		}
 	/*
  	 * ----------------------------------------------------------------
 	 * Load Common styles for plugin
@@ -59,8 +59,8 @@ class Eps_affiliates_common {
 			wp_enqueue_style( 'fontawsome-css', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/font-awesome-4.7.0/css/font-awesome.min.css');
 			wp_enqueue_style( 'bootstrap-css', EPSAFFILIATE_PLUGIN_ASSETS.'css/bootstrap/css/bootstrap.css');
 			wp_enqueue_style( 'jquery-ui', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/jquery-ui/jquery-ui.min.css');
-			
-		} 
+
+		}
 }
 
 $common_include = new Eps_affiliates_common();
@@ -79,8 +79,8 @@ $common_include = new Eps_affiliates_common();
 		$prefix 		= isset($elements['#prefix']) ? $elements['#prefix'] : '' ;
 		$suffix 		= isset($elements['#suffix']) ? $elements['#suffix'] : '' ;
 		$attributes = isset($elements['#attributes']) ? $elements['#attributes'] : array() ;
-		$classes 		=	''; 
-		
+		$classes 		=	'';
+
 		if (isset($attributes['class'])) {
 			foreach ($attributes['class'] as $attr_class) {
 				$classes .= $attr_class;
@@ -100,9 +100,9 @@ $common_include = new Eps_affiliates_common();
 		$html .= '<form action="' .$action. '"" method="'.$method.'" id="" accept-charset="UTF-8" class="'.$classes.'"> ';
 		$html .= '<div class="panel panel-default">';
 		$html .= '<div class="panel-body">';
-				
+
 			foreach ($elements as $key => $element) {
-				
+
 				//check the array is a multi dimention array,means the contents
 				//comes under any fieldset or container
 				if (count($element) != count($element, COUNT_RECURSIVE)) {
@@ -148,7 +148,7 @@ $common_include = new Eps_affiliates_common();
 		$attributes = isset($table_data['#attributes']) ? $table_data['#attributes'] : array() ;
 		$header 		= isset($table_data['#header']) 		? $table_data['#header'] : array() ;
 		$rows 			= isset($table_data['#rows']) 			? $table_data['#rows'] : array() ;
-		$classes 		=	''; 
+		$classes 		=	'';
 
 
 		//add class if exist
@@ -157,24 +157,24 @@ $common_include = new Eps_affiliates_common();
 				$classes .= ' '.$attr_class;
 			}
 		}
-		//add prefix 
+		//add prefix
 		if (!empty($prefix))
 			$table_html .= $prefix;
 		//add title
-		if ($title) 
+		if ($title)
 			$table_html .= $title;
 		//table starts here
-		//table responsive 
+		//table responsive
 
 		$table_html 	.= '<div class="table-responsive">';
 		$table_html 	.= '<table class="table-striped '.$classes.'">';
 
 		/* -----------table head :  Begin	----------*/
 		$table_html 	.= '<thead>';
-			if (!empty($header)) {	
+			if (!empty($header)) {
 				$table_html .= '<tr>';
 				foreach ($header as $head) {
-					$table_html .= '<th>'.$head.'</th>';				
+					$table_html .= '<th>'.$head.'</th>';
 				}
 				$table_html .= '<tr>';
 			}
@@ -208,7 +208,7 @@ $common_include = new Eps_affiliates_common();
 	}
 /*
  * -------------------------------------------------------------------
- * Render input elements 
+ * Render input elements
  * -------------------------------------------------------------------
 */
 	function html_input_render($element, $key, $attributes = array()) {
@@ -220,7 +220,7 @@ $common_include = new Eps_affiliates_common();
 				$class .= ' '.$attr_class;
 			}
 		}
-		
+
 		$html 	= '';
 		if (is_array($element)) {
 			if (isset($element['#type'])) {
@@ -233,175 +233,178 @@ $common_include = new Eps_affiliates_common();
 		}
 		$description = isset($element['#description']) ? $element['#description'] : '';
 
-		switch ($element_type) {
-			case 'text':
-				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				if (isset($element['#title']) && !empty($element['#title'])) : 
+		if ( !empty($element_type) ) :
+
+			$html .= '<div class="form-group row" data-toggle="tooltip" data-placement="top" title="'.$description.'">';
+
+			switch ($element_type) {
+				case 'text':
+					$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
+					if (isset($element['#title']) && !empty($element['#title'])) :
+						$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
+						$html .= isset($element['#title']) ? $element['#title'] : '';
+
+						if (!empty($element['#required']) && $element['#required'] == TRUE ){
+							$html .= '<span class="form-required" title="This field is required.">*</span>';
+						}
+						$html .= '</label>';
+					endif;
+
+					$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';
+
+				break;
+
+				case 'password':
+					$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
 					$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
+					$html .= isset($element['#title']) ? $element['#title'] : '';
+
+					if (!empty($element['#required']) && $element['#required'] == TRUE){
+						$html .= '<span class="form-required" title="This field is required.">*</span>';
+					}
+
+					$html .= '</label>';
+					// $html .= '<div class="col-md-10">';
+					$html .= '<input type = "password" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';
+					// $html .= '</div>';
+				break;
+				case 'checkbox':
+
+					$checked = (!empty($element['#default_value']) && isset($element['#default_value'])) ? TRUE : FALSE ;
+
+					// if ($checked) {
+					// 	$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" checked="'.$checked.'" >';
+					// }else {
+					// 	$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'">';
+					// }
+					// $html .= '<label for="'.str_replace('_','-',$key).'">';
+					// $html .= isset($element['#title']) ? $element['#title'] : '';
+					// $html .= '</label>';
+
+					$html .= '<div class="form-item clearfix form-type-checkbox ">';
+
+					$html .='<label class="i-checks">';
+
+					if ($checked) {
+						$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-checkbox checkbox form-control '.$class.'" checked="'.$checked.'" >';
+					}else {
+						$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-checkbox checkbox form-control '.$class.'">';
+					}
+					$html .= '<i></i></label>';
+					$html .= '<label class="option" for="'.str_replace('_','-',$key).'">';
+					$html .= isset($element['#title']) ? $element['#title'] : '';
+
+					if (!empty($element['#required']) && $element['#required'] == TRUE ){
+						$html .= '<span class="form-required" title="This field is required.">*</span>';
+					}
+
+					$html .= '</label>';
+
+					$html .= '</div>';
+
+
+				break;
+				case 'markup':
+					$html .= '<div class="'.$class.'">'.$element['#markup'].'</div>';
+				break;
+				case 'submit':
+					$html .= '<input type="submit" class=" btn btn-primary '.$class.'" value="'.$element['#value'].'" name="submit">';
+				break;
+				case 'label':
+					$html .= '<label class="label-style '.$class.'">'.$element['#title'].'</label>';
+					$html .= '<br><small>'.$description.'</small>';
+				break;
+
+				case 'select';
+
+					$html .= '<label class="option" for="'.str_replace('_','-',$key).'">';
+					$html .= isset($element['#title']) ? $element['#title'] : '';
+
+					if (!empty($element['#required']) && $element['#required'] == TRUE ){
+						$html .= '<span class="form-required" title="This field is required.">*</span>';
+					}
+
+					$html .= '</label>';
+					$html .= '<select class="form-control '.$class.'" name="'.$key.'" >';
+					if (!empty($element['#options'])) {
+						foreach ($element['#options'] as $data => $value) {
+
+								if(isset($element['#default_value']) && $element['#default_value'] == $data)
+									$html .= '<option selected value='.$data .'>'.$value.'</option>';
+								else
+							 		$html .= '<option value='.$data. '>'.$value.'</option>';
+						}
+					}
+					$html .= '</select>';
+				break;
+				case 'date_time':
+					$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
+					$html .= '<label for="'.str_replace('_','-',$key).'">';
+					$html .= isset($element['#title']) ? $element['#title'] : '';
+					$html .= '</label>';
+					$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class=" date_time_picker '.$class.'" value="'.$deflt.'">';
+				break;
+				case 'auto_complete':
+					$path  = isset($element['#auto_complete_path']) ? $element['#auto_complete_path'] : '#';
+					$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
+					$html .= '<label for="'.str_replace('_','-',$key).'" class="">';
+					$html .= isset($element['#title']) ? $element['#title'] : '';
+					$html .= '</label>';
+					// $html .= '<div class="col-md-10">';
+					$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control auto_complete '.$class.'" value="'.$deflt.'" data-path="'.$path.'" autocomplete="off" >';
+					// $html .= '</div>';
+				break;
+				case 'link':
+					$link = !empty($element['#link']) ? $element['#link'] : '#';
+					$html .= '<a href="'.$link.'">';
+					if (!empty($element['#icon']) && $element['#icon'] == TRUE) {
+						$html .= '';
+					}
+					$html .= '</a>';
+				break;
+
+				case 'text-area':
+					$html .= '<label for="'.str_replace('_','-',$key).'">';
 					$html .= isset($element['#title']) ? $element['#title'] : '';
 
 					if (!empty($element['#required']) && $element['#required'] == TRUE ){
 						$html .= '<span class="form-required" title="This field is required.">*</span>';
 					}
 					$html .= '</label>';
-				endif;
-				
-				// $html .= '<div class="col-md-10">';
-				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';	
+					$html .= '<div class="form-textarea-wrapper resizable textarea-processed resizable-textarea">';
+					$cols = isset($element['#cols']) ? $element['#cols'] : 10;
+					$rows = isset($element['#rows']) ? $element['#rows'] : 5;
 
-				// $html .= '</div>';
-			break;
-			case 'password':
-				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
-				$html .= isset($element['#title']) ? $element['#title'] : '';
+					$html .= '<textarea id="'.str_replace('_','-',$key).'" name="'.$key.'" cols="'.$cols.'" rows="'.$rows.'" class="form-textarea form-control '.$class.'">';
+					if ( isset($element['#default_value']))
+						$html .= $element['#default_value'];
 
-				if (!empty($element['#required']) && $element['#required'] == TRUE){
-					$html .= '<span class="form-required" title="This field is required.">*</span>';
-				}
-
-				$html .= '</label>';
-				// $html .= '<div class="col-md-10">';
-				$html .= '<input type = "password" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';	
-				// $html .= '</div>';
-			break;
-			case 'checkbox':
-
-				$checked = (!empty($element['#default_value']) && isset($element['#default_value'])) ? TRUE : FALSE ;
-				
-				// if ($checked) {
-				// 	$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" checked="'.$checked.'" >';	
-				// }else {
-				// 	$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'">';	
-				// }
-				// $html .= '<label for="'.str_replace('_','-',$key).'">';
-				// $html .= isset($element['#title']) ? $element['#title'] : '';
-				// $html .= '</label>';
-
-				$html .= '<div class="form-item clearfix form-type-checkbox ">';
-				
-				$html .='<label class="i-checks">';
-
-				if ($checked) {
-					$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-checkbox checkbox form-control '.$class.'" checked="'.$checked.'" >';	
-				}else {
-					$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-checkbox checkbox form-control '.$class.'">';	
-				}
-				$html .= '<i></i></label>';
-				$html .= '<label class="option" for="'.str_replace('_','-',$key).'">';
-				$html .= isset($element['#title']) ? $element['#title'] : '';
-
-				if (!empty($element['#required']) && $element['#required'] == TRUE ){
-					$html .= '<span class="form-required" title="This field is required.">*</span>';
-				}
-
-				$html .= '</label>';
-
-				$html .= '</div>';
-
-				
-			break;
-			case 'markup':
-				$html .= '<div class="'.$class.'">'.$element['#markup'].'</div>';	
-			break;
-			case 'submit':
-				$html .= '<input type="submit" class=" btn btn-primary '.$class.'" value="'.$element['#value'].'" name="submit">';	
-			break;
-			case 'label':
-				$html .= '<label class="label-style '.$class.'">'.$element['#title'].'</label>';	
-				$html .= '<br><small>'.$description.'</small>';
-			break;
-
-			case 'select';
-
-				$html .= '<label class="option" for="'.str_replace('_','-',$key).'">';
-				$html .= isset($element['#title']) ? $element['#title'] : '';
-
-				if (!empty($element['#required']) && $element['#required'] == TRUE ){
-					$html .= '<span class="form-required" title="This field is required.">*</span>';
-				}
-
-				$html .= '</label>';
-				$html .= '<select class="form-control '.$class.'" name="'.$key.'" >';
-				if (!empty($element['#options'])) {
+					$html .= '</textarea>';
+					$html .= '</div>';
+				break;
+				case 'radio':
+					$checked = (!empty($element['#default_value']) && isset($element['#default_value'])) ? TRUE : FALSE ;
+					$html .= isset($element['#title']) ? $element['#title'] : '';
+					if (!empty($element['#required']) && $element['#required'] == TRUE ){
+						$html .= '<span class="form-required" title="This field is required.">*</span>';
+					}
+					$html .= '<div class="form-item clearfix form-type-radio radio">';
 					foreach ($element['#options'] as $data => $value) {
-
-							if(isset($element['#default_value']) && $element['#default_value'] == $data)
-								$html .= '<option selected value='.$data .'>'.$value.'</option>';			
-							else
-						 		$html .= '<option value='.$data. '>'.$value.'</option>';	
-					}
-				}
-				$html .= '</select>';
-			break;
-			case 'date_time':
-				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'">';
-				$html .= isset($element['#title']) ? $element['#title'] : '';
-				$html .= '</label>';
-				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class=" date_time_picker '.$class.'" value="'.$deflt.'">';	
-			break;
-			case 'auto_complete':
-				$path  = isset($element['#auto_complete_path']) ? $element['#auto_complete_path'] : '#';
-				$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
-				$html .= '<label for="'.str_replace('_','-',$key).'" class="">';
-				$html .= isset($element['#title']) ? $element['#title'] : '';
-				$html .= '</label>';
-				// $html .= '<div class="col-md-10">';
-				$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control auto_complete '.$class.'" value="'.$deflt.'" data-path="'.$path.'" autocomplete="off" >';	
-				// $html .= '</div>';
-			break;
-			case 'link':
-				$link = !empty($element['#link']) ? $element['#link'] : '#';
-				$html .= '<a href="'.$link.'">';	
-				if (!empty($element['#icon']) && $element['#icon'] == TRUE) {
-					$html .= '';
-				}
-				$html .= '</a>';	
-			break;
-
-			case 'text-area':
-				$html .= '<label for="'.str_replace('_','-',$key).'">';
-				$html .= isset($element['#title']) ? $element['#title'] : '';
-
-				if (!empty($element['#required']) && $element['#required'] == TRUE ){
-					$html .= '<span class="form-required" title="This field is required.">*</span>';
-				}
-				$html .= '</label>';
-				$html .= '<div class="form-textarea-wrapper resizable textarea-processed resizable-textarea">';
-				$cols = isset($element['#cols']) ? $element['#cols'] : 10;
-				$rows = isset($element['#rows']) ? $element['#rows'] : 5;
-
-				$html .= '<textarea id="'.str_replace('_','-',$key).'" name="'.$key.'" cols="'.$cols.'" rows="'.$rows.'" class="form-textarea form-control '.$class.'">';
-				if ( isset($element['#default_value']))
-					$html .= $element['#default_value'];
-
-				$html .= '</textarea>';
-				$html .= '</div>';
-			break;
-			case 'radio':
-
-			$checked = (!empty($element['#default_value']) && isset($element['#default_value'])) ? TRUE : FALSE ;
-				
-
-				$html .= isset($element['#title']) ? $element['#title'] : '';
-				if (!empty($element['#required']) && $element['#required'] == TRUE ){
-					$html .= '<span class="form-required" title="This field is required.">*</span>';
-				}
-				$html .= '<div class="form-item clearfix form-type-radio radio">';
-				foreach ($element['#options'] as $data => $value) {
-					$html .= '<label class="i-checks">';
-					if(isset($element['#default_value']) && $element['#default_value'] == $data){
-							$html .= '<input type ="radio" checked id = "" name ='.$element['#name'].' value ='.$data.' class ="form-radio radio ">';			
-					}else{
+						$html .= '<label class="i-checks">';
+						if(isset($element['#default_value']) && $element['#default_value'] == $data){
+							$html .= '<input type ="radio" checked id = "" name ='.$element['#name'].' value ='.$data.' class ="form-radio radio ">';
+						}else{
 							$html .= '<input type ="radio" id = "" name ='.$element['#name'].' value ='.$data.' class ="form-radio radio ">';
-					}
+						}
 					$html .= '<i></i></label>'.$value;
-				}
-				$html .= '</div>';	
-			break;
+					}
+					$html .= '</div>';
+					break;
+			}
 
-		}
+			$html .= '</div>';
+
+		endif;
 
 		//append suffix
 		if (isset($element['#suffix'])) {
@@ -413,7 +416,7 @@ $common_include = new Eps_affiliates_common();
 /*
  * ----------------------------------------------------------------------------------
  * Open a form tag
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
 */
 	function afl_form_open($action = '',$method='GET', $attributes = array()){
 		$html_tag_form = '';
@@ -427,7 +430,7 @@ $common_include = new Eps_affiliates_common();
 /*
  * ----------------------------------------------------------------------------------
  * Close a form tag
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
 */
 	function afl_form_close(){
 		return '</form>';
@@ -435,7 +438,7 @@ $common_include = new Eps_affiliates_common();
 /*
  * ----------------------------------------------------------------------------------
  * Create submit button
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
 */
 	function afl_input_button($type = '',$value = 'Submit',$name = 'submit',$attributes = array()){
 		$html_tag_button = '';
@@ -444,7 +447,7 @@ $common_include = new Eps_affiliates_common();
 
 		$html_tag_button = '<button type="'.$type.'" class="'.$cls.'" id="'.$id.'">'.$value.'</button>';
 		if ($type= 'submit') {
-			$html_tag_button = '<input type="submit" class="'.$cls.'" name="submit" value="'.$value.'" id="'.$id.'"/>';	
+			$html_tag_button = '<input type="submit" class="'.$cls.'" name="submit" value="'.$value.'" id="'.$id.'"/>';
 		}
 
 		return $html_tag_button;
@@ -453,48 +456,48 @@ $common_include = new Eps_affiliates_common();
 /*
  * ----------------------------------------------------------------------------------
  * AFL variable set
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
 */
 	if(!function_exists('afl_variable_set')){
 		function afl_variable_set($name = '', $value = '',$afl_merchant_id ='', $afl_project_name = '' ) {
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'afl_variable';
 		  $query 		= 'SELECT * FROM '.$table_name.' WHERE name = %s';
-		  $row 			= $wpdb->get_row( 
-	                    $wpdb->prepare($query,$name) 
+		  $row 			= $wpdb->get_row(
+	                    $wpdb->prepare($query,$name)
 	                 );
 		  //if name already exist update, else insert
 			if (!empty($row)){
-				$wpdb->update( 
-						$table_name, 
-						array( 
-							'value' => maybe_serialize($value) 
+				$wpdb->update(
+						$table_name,
+						array(
+							'value' => maybe_serialize($value)
 						),
-						array('name' => $name)				
-					);	
+						array('name' => $name)
+					);
 			} else {
-				$wpdb->insert( 
-						$table_name, 
-						array( 
-							'name'	=> $name, 
-							'value' => maybe_serialize($value) 
-						)					
-					);	
+				$wpdb->insert(
+						$table_name,
+						array(
+							'name'	=> $name,
+							'value' => maybe_serialize($value)
+						)
+					);
 			}
 	  }
 	}
 /*
  * ----------------------------------------------------------------------------------
  * AFL variable get
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
 */
 	if(!function_exists('afl_variable_get')){
 		function afl_variable_get($name = '', $default = '',$afl_merchant_id ='', $afl_project_name = '') {
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'afl_variable';
 		  $query 		= 'SELECT * FROM '.$table_name.' WHERE name = %s';
-		  $row 			= $wpdb->get_row( 
-	                    $wpdb->prepare($query,$name) 
+		  $row 			= $wpdb->get_row(
+	                    $wpdb->prepare($query,$name)
 	                 );
 			if (!empty($row))
 				return maybe_unserialize($row->value);
@@ -504,9 +507,9 @@ $common_include = new Eps_affiliates_common();
 	}
 
 /*
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
  * AFL date
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
 */
 	if(!function_exists('afl_date')){
 		function afl_date(){
@@ -521,9 +524,9 @@ $common_include = new Eps_affiliates_common();
 		}
 	}
 /*
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
  * AFL date splits
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
 */
 	if(!function_exists('afl_date_splits')){
 		function afl_date_splits($rdate, $duration = ''){
@@ -550,9 +553,9 @@ $common_include = new Eps_affiliates_common();
 		}
 	}
 /*
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
  * AFL Combine dates
- * ---------------------------------------------------------------------------------- 
+ * ----------------------------------------------------------------------------------
 */
 	if(!function_exists('afl_date_combined')){
 		function afl_date_combined($date_splits){
@@ -562,8 +565,8 @@ $common_include = new Eps_affiliates_common();
 
 /*
  * ----------------------------------------------------------------------------------
- * AFL get level 
- * ---------------------------------------------------------------------------------- 
+ * AFL get level
+ * ----------------------------------------------------------------------------------
 */
 
 if(!function_exists('afl_get_levels')){
@@ -582,7 +585,7 @@ if(!function_exists('afl_get_levels')){
 }
 /*
  * -----------------------------------------------------------
- * Wordpress set messages 
+ * Wordpress set messages
  * -----------------------------------------------------------
 */
 	function wp_set_message($msg = '', $action = 'success'){
@@ -617,7 +620,7 @@ if(!function_exists('afl_get_levels')){
  * -----------------------------------------------------------
  * Get current user id
  * -----------------------------------------------------------
- * 
+ *
  *
 */
 	function afl_current_uid(){
@@ -721,7 +724,7 @@ if(!function_exists('afl_get_levels')){
 		if ( is_array( $args ) && isset( $args ) ) :
 			extract( $args );
 		endif;
-		
+
 		$template_file = afl_locate_template( $template_name, $tempate_path, $default_path );
 		if ( ! file_exists( $template_file ) ) :
 			_doing_it_wrong( __FUNCTION__, sprintf( '<code>%s</code> does not exist.', $template_file ), '1.0.0' );
@@ -731,7 +734,7 @@ if(!function_exists('afl_get_levels')){
 	}
 /**
  * ------------------------------------------------------------------------------
- * Render the admin dashboard 
+ * Render the admin dashboard
  * ------------------------------------------------------------------------------
 */
 	function afl_eps_afiliate_dashboard_shortcode(){
@@ -767,7 +770,7 @@ if(!function_exists('afl_get_levels')){
 				$class .= ' '.$attr_class;
 			}
 		}
-		
+
 		unset($menu['#prefix']);
 		unset($menu['#suffix']);
 
@@ -787,8 +790,8 @@ if(!function_exists('afl_get_levels')){
 					$html_tag .= '<div id="dropdown-lvl1" class="panel-collapse collapse">';
 					$html_tag .= '<div class="panel-body">';
 					$html_tag .= '<ul class="nav navbar-nav">';
-					
-					foreach ($element['#childrens'] as $submenu_key => $submenu) : 
+
+					foreach ($element['#childrens'] as $submenu_key => $submenu) :
 						$subattributes	= isset($submenu['#attributes']) ? $submenu['#attributes'] : '';
 						$submenu_cls 		= '';
 						if (!empty($subattributes['class'])) {
@@ -837,7 +840,7 @@ if(!function_exists('afl_get_levels')){
  * ------------------------------------------------------------------------------
 */
 if(!function_exists('afl_get_periods')){
-	function afl_get_periods(){  
+	function afl_get_periods(){
 	  $periods['dialy'] = "Dialy";
 	  $periods['Weekly'] = "Weekly";
     $periods['monthly'] = "Monthly";
@@ -855,18 +858,18 @@ if(!function_exists('afl_get_periods')){
  * ------------------------------------------------------------------------------
 */
 if(!function_exists('afl_get_rank_names')){
-	function afl_get_rank_names($count=0,$limit=TRUE){  
+	function afl_get_rank_names($count=0,$limit=TRUE){
 		if($limit != TRUE){
 			return afl_variable_get('rank_'.$count.'_name');
 		}
-		if($count==0){ 
+		if($count==0){
 		$count = afl_variable_get('number_of_ranks');}
 			$rank_name = array();
-			for ($i=1; $i <= $count ; $i++) { 
+			for ($i=1; $i <= $count ; $i++) {
 				$rank_name['rank_'.$i.'_name'] = afl_variable_get('rank_'.$i.'_name');
 			}
 			return $rank_name;
-		} 
+		}
 
 }
 
@@ -949,9 +952,9 @@ if(!function_exists('afl_get_rank_names')){
 
 				//Single menu page
 				if (empty($parent)) {
-					add_menu_page( 
-						$page_title, 
-						$menu_title, 
+					add_menu_page(
+						$page_title,
+						$menu_title,
 						$capability,
 						$menu_slug,
 						$page_callback,
@@ -960,10 +963,10 @@ if(!function_exists('afl_get_rank_names')){
 						);
 				//submenu
 				} else {
-					add_submenu_page( 
+					add_submenu_page(
 						$parent,
-						$page_title, 
-						$menu_title, 
+						$page_title,
+						$menu_title,
 						$capability,
 						$menu_slug,
 						$page_callback,
@@ -978,7 +981,7 @@ if(!function_exists('afl_get_rank_names')){
  * ------------------------------------------------------------------------------
  * Forms field validations
  * ------------------------------------------------------------------------------
- * 
+ *
  * Here gets an array and the $rule array contains
  *  1 - value
  *  2 - array(validation rules)
@@ -1001,7 +1004,7 @@ if(!function_exists('afl_get_rank_names')){
 						if (method_exists($rule_object, $rule_function)) {
 							//here calls the rule function
 							$response = $rule_object->$rule_function($name, $value, $field);
-							
+
 							if (!empty($response)) {
 								if ($response['status'] != 1) {
 									$reg_errors->add($name, $response['message']);
@@ -1017,7 +1020,7 @@ if(!function_exists('afl_get_rank_names')){
 	    foreach ( $reg_errors->get_error_messages() as $error ) {
 	    	$wp_error .= '<p>* '.$error.'</p>';
 	    }
-	    if (!empty($wp_error)) 
+	    if (!empty($wp_error))
 	   		return wp_set_message($wp_error,'danger');
 		}
  }
@@ -1058,27 +1061,30 @@ if(!function_exists('afl_get_rank_names')){
 		global $wpdb;
 
 		$query = array();
-		$query['#select'] = 'wp_afl_user_downlines';
+		$query['#select'] = _table_name('afl_user_downlines');
 
 		$query['#join'] 	= array(
-			'wp_users' => array(
-				'#condition' => '`wp_users`.`ID`=`wp_afl_user_downlines`.`downline_user_id`'
+			_table_name('users') => array(
+				'#condition' => '`'._table_name('users').'`.`ID`=`'._table_name('afl_user_downlines').'`.`downline_user_id`'
+			),
+			_table_name('afl_user_genealogy') => array(
+				'#condition' => '`'._table_name('afl_user_genealogy').'`.`uid`=`'._table_name('afl_user_downlines').'`.`downline_user_id`'
 			)
 		);
 
 		$query['#where'] = array(
-			'`wp_afl_user_downlines`.`uid`='.$uid.''
+			'`'._table_name('afl_user_downlines').'`.`uid`='.$uid.''
 		);
 
 		$query['#order_by'] = array(
-			'`level`' => 'ASC'
+			'`'._table_name('afl_user_downlines').'`.`level`' => 'ASC'
 		);
 
 		$limit = '';
 		if (isset($filter['start']) && isset($filter['length'])) {
 			$limit .= $filter['start'].','.$filter['length'];
 		}
-	
+
 		if (!empty($limit)) {
 			$query['#limit'] = $limit;
 		}
@@ -1086,11 +1092,12 @@ if(!function_exists('afl_get_rank_names')){
 		if (!empty($filter['search_valu'])) {
 			$query['#like'] = array('`display_name`' => $filter['search_valu']);
 		}
+
 		$result = db_select($query, 'get_results');
 
 		// pr($result = db_select($query, 'get_results'),1);
 		if ($count)
-			return count($result); 
+			return count($result);
 		return $result;
 	}
 /*
@@ -1110,7 +1117,7 @@ if(!function_exists('afl_get_rank_names')){
 			)
 		);
 		$query['#fields'] = array(
-			'wp_afl_user_downlines' => array('uid')
+			'wp_afl_user_downlines' => array('downline_user_id')
 		);
 		$query['#where'] = array(
 			'`wp_afl_user_downlines`.`uid`='.$uid.''
@@ -1124,7 +1131,7 @@ if(!function_exists('afl_get_rank_names')){
 		if (isset($filter['start']) && isset($filter['length'])) {
 			$limit .= $filter['start'].','.$filter['length'];
 		}
-	
+
 		if (!empty($limit)) {
 			$query['#limit'] = $limit;
 		}
@@ -1136,9 +1143,37 @@ if(!function_exists('afl_get_rank_names')){
 
 		// pr($result = db_select($query, 'get_results'),1);
 		if ($count)
-			return count($result); 
+			return count($result);
 		return $result;
 	}
+	/*
+	 * -----------------------------------------------------------------------------
+	 * get the downlines uid details of sponsor
+	 * -----------------------------------------------------------------------------
+	*/
+		function afl_get_sponsor_downlines_uid ($sponsor_uid = '', $filter = array(), $count = false){
+			global $wpdb;
+
+			$query = array();
+			$query['#select'] = _table_name('afl_user_genealogy');
+
+			$query['#fields'] = array(
+				_table_name('afl_user_genealogy') => array('uid')
+			);
+			$query['#where'] = array(
+				'`'._table_name('afl_user_genealogy').'`.`referrer_uid`='.$sponsor_uid.''
+			);
+
+			$query['#order_by'] = array(
+				'`level`' => 'ASC'
+			);
+			$result = db_select($query, 'get_results');
+
+			// pr($result = db_select($query, 'get_results'),1);
+			if ($count)
+				return count($result);
+			return $result;
+		}
 /*
  * -----------------------------------------------------------------------------
  * get the downlines details of uid
@@ -1169,7 +1204,7 @@ if(!function_exists('afl_get_rank_names')){
 		if (isset($filter['start']) && isset($filter['length'])) {
 			$limit .= $filter['start'].','.$filter['length'];
 		}
-	
+
 		if (!empty($limit)) {
 			$query['#limit'] = $limit;
 		}
@@ -1181,12 +1216,12 @@ if(!function_exists('afl_get_rank_names')){
 
 		// pr($result = db_select($query, 'get_results'),1);
 		if ($count)
-			return count($result); 
+			return count($result);
 		return $result;
 	}
 /*
  * -----------------------------------------------------------------------
- * Database select query 
+ * Database select query
  * -----------------------------------------------------------------------
 */
 	function db_select($data = array(), $fetch_mode = '') {
@@ -1210,7 +1245,7 @@ if(!function_exists('afl_get_rank_names')){
 		$expression = '';
 		if (isset($data['#expression'])) {
 			foreach ($data['#expression'] as $value) {
-				$expression = empty($expression) ? $value : ','.$value; 
+				$expression = empty($expression) ? $value : ','.$value;
 			}
 		}
 
@@ -1268,18 +1303,23 @@ if(!function_exists('afl_get_rank_names')){
 			}
 		}
 
-		//like 
+		//like
 		if(isset($data['#like'])){
 
 			if (!$where_flag) {
 				$sql .= 'WHERE ';
 			}
-			foreach ($data['#like'] as $key => $value) {
-				$sql .= 'AND '.$key.' LIKE "%'.$value.'%"'.' ';	
+			//check multiple like cluase exists
+			$count = count($data['#like']);
+			if ( $count == 1) {
+				foreach ($data['#like'] as $key => $value) {
+					$sql .= $key.' LIKE "%'.$value.'%"'.' ';
+				}
 			}
 		}
 
-		
+
+
 
 		//order by
 		if (isset($data['#order_by'])) {
@@ -1292,12 +1332,12 @@ if(!function_exists('afl_get_rank_names')){
 		if (isset($data['#limit'])) {
 				$sql .= 'LIMIT '.$data['#limit'].' ';
 		}
-		
+
 		return $wpdb->$fetch_mode($sql);
 	}
 /*
  * -----------------------------------------------------------------------
- * Database update query 
+ * Database update query
  * -----------------------------------------------------------------------
 */
 	function db_update($data = array()) {
@@ -1309,7 +1349,7 @@ if(!function_exists('afl_get_rank_names')){
 
 			if ( isset( $data['#set'] ) ){
 				foreach ($data['#set'] as $key => $value) {
-					
+
 				}
 			}
 		}
@@ -1337,7 +1377,7 @@ if(!function_exists('afl_get_rank_names')){
     return $result;
 	}
  /* -----------------------------------------------------------------------
- * convert to Commerce Amount 
+ * convert to Commerce Amount
  * -----------------------------------------------------------------------
 */
 function afl_commerce_amount($amount_paid){
@@ -1345,7 +1385,7 @@ function afl_commerce_amount($amount_paid){
 }
 /*
  * -----------------------------------------------------------------------
- * convert to Commerce Amount 
+ * convert to Commerce Amount
  * -----------------------------------------------------------------------
 */
 function afl_get_commerce_amount($amount_paid){
@@ -1353,7 +1393,7 @@ function afl_get_commerce_amount($amount_paid){
 }
 /*
  * -----------------------------------------------------------------------
- * convert to payment amount 
+ * convert to payment amount
  * -----------------------------------------------------------------------
 */
 
@@ -1362,7 +1402,7 @@ function afl_payment_amount($amount = 0){
 }
 /*
  * -----------------------------------------------------------------------
- * Convert from payment Amount 
+ * Convert from payment Amount
  * -----------------------------------------------------------------------
 */
 function afl_get_payment_amount($amount = 0){
@@ -1370,12 +1410,12 @@ function afl_get_payment_amount($amount = 0){
     return 0;
   }
   return $amount / 100;
-  
+
 }
 
 /*
  * -----------------------------------------------------------------------
- * Convert the amount to number format 
+ * Convert the amount to number format
  * -----------------------------------------------------------------------
 */
  function afl_format_payment_amount($amount, $number_format = TRUE){
@@ -1408,6 +1448,24 @@ function afl_get_payment_amount($amount = 0){
  	}
  	return $uids;
  }
+ /*
+  * -----------------------------------------------------------------------
+  * get upline users IDS
+  * -----------------------------------------------------------------------
+ */
+  function afl_get_referrer_upline_uids ($uid = '', $uids = array()) {
+  	if (empty($uid))
+  		$uid = get_current_user_id();
+
+  	$node  = afl_genealogy_node($uid);
+  	if ($node) {
+  		if ($node->referrer_uid) {
+  			$uids[] =  $node->referrer_uid;
+  			return afl_get_upline_uids($node->referrer_uid,$uids);
+  		}
+  	}
+  	return $uids;
+  }
 /*
  * -----------------------------------------------------------------------
  * Truncate tables
@@ -1460,7 +1518,7 @@ if (!function_exists('afl_truncate')) {
 
 /*
  * -----------------------------------------------------------------------
- * Get root user 
+ * Get root user
  * -----------------------------------------------------------------------
 */
 
@@ -1471,7 +1529,7 @@ function afl_root_user() {
 }
 /*
  * -----------------------------------------------------------------------
- * echo the status 
+ * echo the status
  * -----------------------------------------------------------------------
 */
  function afl_member_status_render ($status = 0) {
@@ -1479,7 +1537,7 @@ function afl_root_user() {
  }
 /*
  * -----------------------------------------------------------------------
- * Extract the text area data 
+ * Extract the text area data
  * -----------------------------------------------------------------------
 */
  function list_extract_allowed_values($string, $field_type, $generate_keys) {
@@ -1533,7 +1591,7 @@ function afl_root_user() {
 	  }
 
 	  return $values;
-	}	
+	}
 /*
  * -----------------------------------------------------------------------
  * Extract the sponsor id from the string
@@ -1545,10 +1603,10 @@ function afl_root_user() {
 	    $sponsor = $matches[1];
 	    return $sponsor;
 		}
-	}			
+	}
 /*
  * -----------------------------------------------------------------------
- * check the user is admin 
+ * check the user is admin
  * -----------------------------------------------------------------------
 */
  if (!function_exists('eps_is_admin')){
@@ -1567,7 +1625,7 @@ function afl_root_user() {
  */
   if (!function_exists('has_role') ){
   	function has_role($uid = '', $role = '') {
-  		if (user_can($role, $uid)) {
+  		if (user_can($uid, $role)) {
   			return TRUE;
   		} else{
   			return FALSE;
@@ -1620,7 +1678,7 @@ function afl_root_user() {
 	  	else
 	  		return false;
 	  }
-	  
+
  	}
  }
 /*
@@ -1628,10 +1686,43 @@ function afl_root_user() {
  * Get table name
  * ----------------------------------------------------------------------
 */
- if ( !function_exists( 'eps_table_name' ) ){
- 	function  eps_table_name ($table_name = '') {
+ if ( !function_exists( '_table_name' ) ){
+ 	function  _table_name ($table_name = '') {
  		global $wpdb;
  		$table_prefix = $wpdb->prefix;
  		return $table_prefix.$table_name;
  	}
+ }
+/*
+ * ----------------------------------------------------------------------
+ * Check the roles exist or not
+ * ----------------------------------------------------------------------
+*/
+function role_exists( $role ) {
+
+  if( ! empty( $role ) ) {
+    return WP_Roles()->is_role( $role );
+  }
+
+  return false;
+}
+if ( !function_exists('get_user_by') ){
+	require_once ABSPATH . 'wp-includes/pluggable.php';
+}
+/*
+* ----------------------------------------------------------------------
+* Render rank in the html format
+* ----------------------------------------------------------------------
+*/
+ function render_rank ($rank = '') {
+		if ( empty( $rank ) ) {
+			$rank_name = 'Active';
+		} else {
+			$rank_name = afl_variable_get('rank_'.$rank.'_name');
+		}
+
+		$rank_color = afl_variable_get('rank_'.$rank.'_color','#eea236');
+
+ 	  return '<span style="display: inline; padding: .2em .6em .3em; font-size: 100%;font-weight: 700;line-height: 1; color: #fff;
+        text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em;background-color:'.$rank_color.';">'.$rank_name.' </span>';
  }

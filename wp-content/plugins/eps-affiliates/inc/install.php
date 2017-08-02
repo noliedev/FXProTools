@@ -5,6 +5,7 @@
  * ------------------------------------------------------------
 */
 function eps_affiliates_install() {
+
 	//install tables
 	$afl_tables = new Eps_affiliates_tables;
 
@@ -34,7 +35,7 @@ function eps_affiliates_install() {
 		);
 	}
 	//set the variable for install
-	update_option( 'eps_afl_is_installed', '1' );
+	update_option( 'eps_afl_is_installed', 1 );
 	//set the variable for page id
 	update_option( 'eps_affiliate_page', $affiliate_area );
 
@@ -47,28 +48,38 @@ function eps_affiliates_install() {
 */
 	function eps_affiliate_check_if_installed() {
 		// this is mainly for network activated installs
-		if( ! get_option( 'eps_afl_is_installed' ) ) {
+		if( !get_option( 'eps_afl_is_installed' ) ) {
 			eps_affiliates_install();
 		}
 	}
+
 /*
  * ------------------------------------------------------------
  * Create basic eps roles
  * ------------------------------------------------------------
 */
  	function create_eps_roles() {
-	   add_role( 'afl_member', 
+ 		if (!role_exists('afl_member')) {
+		   	add_role( 'afl_member', 
 	  					'AFL Member', 
 	  					array( 'read' => true, 'level_0' => true,'level_1' => true,'eps_system_member'=>true) 
-	  );
-	  add_role( 'business_admin', 
+	  		);	
+ 		}
+
+ 		if ( !role_exists('business_admin') ){
+ 			add_role( 'business_admin', 
 	  					'Business Admin', 
 	  					array( 'read' => true, 'level_0' => true,'level_1' => true,'eps_system_member'=>true) 
-	  );
-	  add_role( 'business_director', 
+	  	);
+ 		}
+	  
+	  if ( !role_exists('business_director')) {
+	  	add_role( 'business_director', 
 	  					'Business Director', 
 	  					array('read' => true, 'level_0' => true,'level_1' => true,'eps_system_member'=>true) 
-	  );
+	  	);
+	  }
+	  
 	}
 /*
  * ------------------------------------------------------------
@@ -87,6 +98,11 @@ function eps_affiliates_install() {
 	    );
 	  $user = wp_insert_user( $userdata );
  	} else {
+ 		
+ 		if ( !function_exists('get_user_by') ){
+			require_once ABSPATH . 'wp-includes/pluggable.php';
+		}
+ 		
  		$user = get_user_by( 'email', 'business.admin@eps.com' );
  	}
 
@@ -95,7 +111,7 @@ function eps_affiliates_install() {
 	  $afl_date_splits = afl_date_splits(afl_date());
 	 	$genealogy_table = $wpdb->prefix . 'afl_user_genealogy';
 	  $ins_data = array();
-	  $ins_data['uid']                = $user;
+	  $ins_data['uid']                = $user->ID;
 	  $ins_data['referrer_uid']       = 0;
 	  $ins_data['parent_uid']         = 0;
 	  $ins_data['level']              = 1;
@@ -113,5 +129,9 @@ function eps_affiliates_install() {
 	  $ins_id = $wpdb->insert($genealogy_table, $ins_data);
 	}
 
+		//set role to user
+		$u = new WP_User( $user->ID );
+		// Add role
+		$u->add_role( 'business_admin' );
  }
  

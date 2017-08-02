@@ -279,6 +279,14 @@
 					'#menu_slug' 			=> 'affiliate-eps-ewallet-pending-withdrawal', 
 					'#page_callback' 	=> 'afl_ewallet_pending_withdrawals', 
 				);
+				$menu['user_payment_method'] = array(
+					'#parent'					=> 'affiliate-eps-e-wallet', 
+					'#page_title'			=> __( 'Select Payment method', 'Select Payment method' ),    
+					'#menu_title' 		=> __( 'Select Payment method', 'Select Payment method' ),    
+					'#access_callback'=> 'ewallet', 
+					'#menu_slug' 			=> 'affiliate-eps-payment_method', 
+					'#page_callback' 	=> 'afl_user_payment_methods', 
+				);
 
 				afl_system_admin_menu($menu);
 			}
@@ -583,7 +591,14 @@
 					'#menu_slug' 			=> 'eps-test', 
 					'#page_callback' 	=> 'afl_generate_users', 
 				);
-				
+				$menu['generate_purchase'] = array(
+					'#parent'					=> 'eps-test',
+					'#page_title'			=> __( 'Generate Purchase', 'Generate Purchase' ),
+					'#menu_title' 		=> __( 'Generate Purchase', 'Generate Purchase' ),
+					'#access_callback'=> 'features_and_configuration', 
+					'#menu_slug' 			=> 'eps-generate-purchase', 
+					'#page_callback' 	=> 'afl_generate_purchase', 
+				);
 				afl_system_admin_menu($menu);
 		 }
 		/*

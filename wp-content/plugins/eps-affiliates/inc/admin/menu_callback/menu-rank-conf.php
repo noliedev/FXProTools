@@ -8,7 +8,7 @@
 		echo afl_eps_page_header();
 		
 		echo afl_content_wrapper_begin();
-			afl_rank_configuration_form_tabs();
+		afl_rank_configuration_form_tabs();
 		echo afl_content_wrapper_end();
 		
 	} 
@@ -147,6 +147,14 @@
 			'#type' 				=> 'text',
 			'#title'				=> 'Incentives',
 			'#default_value' 	=> isset($form_state['rank_'.$rank.'_incentives']) ? $form_state['rank_'.$rank.'_incentives']:afl_variable_get('rank_'.$rank.'_incentives'),
+			'#prefix'=>'<div class="form-group row">',
+	 		'#suffix' =>'</div>'
+		);
+
+		$form['field_'.$rank]['rank_'.$rank.'_color'] = array(
+			'#type' 				=> 'text',
+			'#title'				=> 'Rank Color',
+			'#default_value' 	=> isset($form_state['rank_'.$rank.'_color']) ? $form_state['rank_'.$rank.'_color']:afl_variable_get('rank_'.$rank.'_color'),
 			'#prefix'=>'<div class="form-group row">',
 	 		'#suffix' =>'</div>'
 		);
@@ -347,16 +355,14 @@
 		'#title'				=> 'Rank Expiry',
 		'#options'			=>afl_get_periods(),	
 		'#default_value' 	=> afl_variable_get('rank_expiry'),
-		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+		
 	);
 	$form['field']['rank_updation_period'] = array(
 		'#type' 				=> 'select',
 		'#title'				=> 'Rank Updation period',
 		'#options'			=>afl_get_periods(),	
 		'#default_value' 	=> afl_variable_get('rank_updation_period'),
-		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+		
 	);
 	$form['submit'] = array(
 		'#type' 				=> 'submit',

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * ------------------------------------------------
  * get users name and id
@@ -42,8 +42,8 @@ function users_auto_complete_callback($search_key = '') {
   $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
   $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
 
-  $result_count = afl_get_user_downlines($uid,array(),TRUE); 
-  $filter_count = afl_get_user_downlines($uid,$filter,TRUE); 
+  $result_count = afl_get_user_downlines($uid,array(),TRUE);
+  $filter_count = afl_get_user_downlines($uid,$filter,TRUE);
   // pr($result_count);
   // pr($filter_count);
  	$output = [
@@ -61,6 +61,7 @@ function users_auto_complete_callback($search_key = '') {
       $value->display_name,
    		$value->relative_position,
    		$value->level,
+   		render_rank($value->member_rank),
    		date('Y-m-d',$value->created)
    	];
    }
@@ -92,7 +93,7 @@ function users_auto_complete_callback($search_key = '') {
         $tree_width = afl_variable_get('matrix_plan_width',3);
         $positions  = array();
 
-        for ($i = 1; $i <= $tree_width  ; $i++) { 
+        for ($i = 1; $i <= $tree_width  ; $i++) {
           $positions[] = $i;
         }
         //get the filled positions of the selected parent
@@ -100,7 +101,7 @@ function users_auto_complete_callback($search_key = '') {
         $query['#select'] = 'wp_afl_user_downlines';
         $query['#where']  = array(
           '`wp_afl_user_downlines`.`uid`='.$parent
-        ); 
+        );
         $query['#fields'] = array(
           'wp_afl_user_downlines'=>  array(
                   'relative_position'
@@ -136,7 +137,7 @@ function users_auto_complete_callback($search_key = '') {
         } else {
          echo $extra.$html;
         }
-         die(); 
+         die();
       } else {
         echo 'Invalid parent choosen';
         die();
@@ -183,9 +184,9 @@ function users_auto_complete_callback($search_key = '') {
       $ins_data['joined_week']        = $afl_date_splits['w'];
       $ins_data['joined_date']        = afl_date_combined($afl_date_splits);
 
-      
+
       $ins_id = $wpdb->insert($genealogy_table, $ins_data);
-      
+
       //insert the user to the downlines
 
       $downline_table = $wpdb->prefix . 'afl_user_downlines';
@@ -202,7 +203,7 @@ function users_auto_complete_callback($search_key = '') {
       $downline_ins_data['joined_year']       = $afl_date_splits['y'];
       $downline_ins_data['joined_week']       = $afl_date_splits['w'];
       $downline_ins_data['joined_date']       = afl_date_combined($afl_date_splits);
-      
+
       $data_format = array(
         '%d',
         '%d',
@@ -218,7 +219,7 @@ function users_auto_complete_callback($search_key = '') {
         '%d',
         '%s'
       );
-      
+
       $downline_ins_id = $wpdb->insert($downline_table, $downline_ins_data, $data_format);
       //insert as the downlines of the uplines
       $uplines  = afl_get_upline_uids($parent);
@@ -258,7 +259,7 @@ function users_auto_complete_callback($search_key = '') {
         $downline_ins_id = $wpdb->insert($downline_table, $downline_ins_data, $data_format);
 
       }
-      
+
       //remove user from tank
       $wpdb->delete('wp_afl_user_holding_tank', array('uid'=>$uid));
 

@@ -79,7 +79,7 @@
   display: none;
 }
 #adminmenu #toplevel_page_affiliate-eps-system-configurations div.wp-menu-image:before {
-    content: "\f07a";
+    content: "\f108";
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;
@@ -98,4 +98,15 @@
     text-decoration: inherit;
 }
 
+/* ------------ Reports ------------- */
+#adminmenu #toplevel_page_affiliate-eps-reports div.wp-menu-image img {
+  display: none;
+}
+#adminmenu #toplevel_page_affiliate-eps-reports div.wp-menu-image:before {
+    content: "\f15b";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+}
 </style>

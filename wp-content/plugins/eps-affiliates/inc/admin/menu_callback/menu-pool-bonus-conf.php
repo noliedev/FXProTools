@@ -7,7 +7,7 @@
 */
 function afl_admin_pool_bonus_configuration(){
 	echo afl_eps_page_header();
-	
+	echo afl_content_wrapper_begin();
 	if ( isset($_POST['submit']) ) {  
 	 $validation = afl_admin_pool_bonus_configuration_form_validation($_POST);
 	 	if (!empty($validation)) {
@@ -29,19 +29,10 @@ function afl_admin_pool_bonus_configuration(){
 										// 'table-bordered'
 									)
 					);
+	$table['#header'] = array(
+		'Rank Name', 'Percentage (%)', 'Maximum Monthly Earning ($)'
+	);
 	
-	$rows[0]['label_0'] = array(
-			'#type' => 'label',
-			'#title'=> 'Rank Name',
-		);
-		$rows[0]['label_1'] = array(
-			'#type' => 'label',
-			'#title'=> 'Percentage (%)',
-		);
-		$rows[0]['label_2'] = array(
-			'#type' => 'label',
-			'#title'=> 'Maximum Monthly Earning ($)',
-		);
 	for ($i=1; $i <=$max_rank; $i++) { 
 		$rows[$i]['label_'.$i] = array(
 			'#type' => 'label',
@@ -63,6 +54,9 @@ function afl_admin_pool_bonus_configuration(){
 	$render_table .= afl_input_button('submit', 'Save configuration', '',array('class'=>'btn btn-default btn-primary'));
 	$render_table .= afl_form_close();
 	echo $render_table;
+
+	echo afl_content_wrapper_end();
+
 }
 
 function afl_admin_pool_bonus_configuration_form_validation($POST){
