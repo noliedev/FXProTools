@@ -34,6 +34,7 @@ function afl_downline_members() {
                 <th>User name</th>
                 <th>Relative Position</th>
                 <th>Level</th>
+                <th>Rank</th>
                 <th>Created on</th>
             </tr>
         </thead>

@@ -1,11 +1,11 @@
-<?php 
+<?php
 /*
  * ------------------------------------------------------
  * After the completion of checkout
  * ------------------------------------------------------
 */
 	function eps_commerce_checkout_complete( $order_id ){
-		afl_purchase($order_id);	
+		afl_purchase($order_id);
 	}
 
 
@@ -77,6 +77,14 @@ function eps_commerce_purchase_complete($args = array()){
 	 	//details enter to the purchase table
 	 	$ins = afl_purchase($args);
 
+	 	//calculate rank
+	 	do_action('eps_affiliates_calculate_affiliate_rank', $args['uid']);
+
+		//calculte the rank of uplines
+		$refers_uids = afl_get_referrer_upline_uids($args['uid']);
+		foreach ($refers_uids as $uid) {
+			do_action('eps_affiliates_calculate_affiliate_rank', $uid);
+		}
 
 	 	if (!$ins) {
 	 		$response['status'] 	= 0;
@@ -90,20 +98,26 @@ function eps_commerce_purchase_complete($args = array()){
  * Calculate the affiliates rank
  * ------------------------------------------------------
 */
- function eps_affiliates_calculate_affiliate_rank ($uid = '') {
+ function eps_affiliates_calculate_affiliate_rank_callback ($uid = '') {
  	global $wpdb;
  	$table_prefix = $wpdb->prefix;
  	if (!empty($uid)) {
  		$max_rank = afl_variable_get('number_of_ranks');
  		$i = $max_rank;
  		for ( $i = $max_rank; $i > 0; $i--) {
- 		
+
 	 		/*
 	 		 * ---------------------------------------------------------
 	 		 * check the condition meets
 	 		 * ---------------------------------------------------------
 	 		*/
 	 			//check pv
+				// pr ('------------------------------------------------') ;
+				// pr ('Rank '. $i) ;
+				// pr ('PV : '._check_required_pv_meets( $uid, $i )) ;
+				// pr ('GV : '._check_required_gv_meets( $uid, $i )) ;
+				// pr ('DI : '._check_required_distributors_meets( $uid, $i )) ;
+				// pr ('------------------------------------------------') ;
 	 			if (!_check_required_pv_meets( $uid, $i ) ){
 	 				continue;
 	 			}
@@ -112,7 +126,12 @@ function eps_commerce_purchase_complete($args = array()){
 	 				continue;
 	 			}
 	 			//check no of distributors
-	 			if (!_check_required_distributors_meets($uid)) {
+	 			if (!_check_required_distributors_meets($uid, $i)) {
+	 				continue;
+	 			}
+
+				//check the required other ranks
+				if (!_check_required_qualifications_meets($uid, $i)) {
 	 				continue;
 	 			}
 
@@ -122,35 +141,35 @@ function eps_commerce_purchase_complete($args = array()){
 	 		 * ---------------------------------------------------------
 	 		*/
 	 			/*------- Update the genealogy rank --------------------*/
-	 			
-	 			$update_id = $wpdb->update( 
-											$table_prefix.'afl_user_genealogy', 
-											array( 
-												'member_rank' => $i 
-											),
-											array('uid' => $uid)				
-										);
 
+	 			$update_id = $wpdb->update(
+											$table_prefix.'afl_user_genealogy',
+											array(
+												'member_rank' => $i
+											),
+											array('uid' => $uid)
+										);
+				// pr ($i) ;
 	 			$date_splits 	= afl_date_splits(afl_date());
 
 	 			if ( $update_id ) {
 				/*
 		 		 * ---------------------------------------------------------
 		 		 * Rank table update /  Insert
-		 		 * 
+		 		 *
 		 		 * Check the uid already exist then update
 		 		 * else insert
 		 		 * ---------------------------------------------------------
 		 		*/
-	 				$rank_table = eps_table_name('afl_ranks');
+	 				$rank_table = _table_name('afl_ranks');
 			  	$query 			= 'SELECT * FROM '.$rank_table.' WHERE uid = %d';
-	 				$row 				= $wpdb->get_row( 
-	                    		$wpdb->prepare($query,$uid) 
+	 				$row 				= $wpdb->get_row(
+	                    		$wpdb->prepare($query,$uid)
 		                 		);
 	 				if ( empty($row) ){
-	 					
+
 	 					$rank_data 		= array();
-	 					
+
 	 					$rank_data['uid'] 				= $uid;
 	 					$rank_data['member_rank'] = $i;
 	 					$rank_data['updated'] 		= afl_date();
@@ -163,23 +182,23 @@ function eps_commerce_purchase_complete($args = array()){
 	 					$wpdb->insert($rank_table, $rank_data);
 
 	 				} else {
-	 					$update_id = $wpdb->update( 
-											$rank_table, 
-											array( 
+	 					$update_id = $wpdb->update(
+											$rank_table,
+											array(
 												'member_rank' => $i,
-												'updated' 		=> afl_date() 
+												'updated' 		=> afl_date()
 											),
-											array('uid' => $uid)				
-										);	
+											array('uid' => $uid)
+										);
 	 				}
 				/*
 		 		 * ---------------------------------------------------------
 		 		 * Rank history table Insert
 		 		 * ---------------------------------------------------------
 		 		*/
-		 			$rank_history_table  = eps_table_name('afl_rank_history');
+		 			$rank_history_table  = _table_name('afl_rank_history');
 	 				$rank_history_data 		= array();
-	 					
+
 					$rank_history_data['uid'] 				= $uid;
 					$rank_history_data['member_rank'] = $i;
 					$rank_history_data['updated'] 		= afl_date();
@@ -204,7 +223,8 @@ function eps_commerce_purchase_complete($args = array()){
  		$user_pv = _get_user_pv($uid);
  		//check conidition meets
  		$required_pv = afl_variable_get('rank_'.$rank.'_pv',0);
- 		if ($required_pv >= $user_pv  ){
+
+ 		if ($required_pv <= $user_pv  ){
  			return true;
  		} else {
  			return false;
@@ -219,7 +239,7 @@ function eps_commerce_purchase_complete($args = array()){
  		$user_gv = _get_user_gv($uid);
  		//check conidition meets
  		$required_gv = afl_variable_get('rank_'.$rank.'_gv',0);
- 		if ($required_gv >= $user_gv  ){
+ 		if ($required_gv <= $user_gv  ){
  			return true;
  		} else {
  			return false;
@@ -234,12 +254,24 @@ function eps_commerce_purchase_complete($args = array()){
  		$user_distrib = _get_user_distributor_count($uid);
  		//check conidition meets
  		$required_distrib = afl_variable_get('rank_'.$rank.'no_of_distributors',0);
- 		if ($required_distrib >= $user_distrib  ){
+ 		if ($required_distrib <= $user_distrib  ){
  			return true;
  		} else {
  			return false;
  		}
  }
+ /*
+ * ----------------------------------------------------
+ * check required qualifications
+ * ----------------------------------------------------
+ */
+  function _check_required_qualifications_meets ($uid = '', $rank = '') {
+		$below_rank = $rank - 1 ;
+		if ( $below_rank > 0 ){
+
+		}
+		return true;
+	}
 /*
  * ---------------------------------------------------
  * get user pv
@@ -247,7 +279,7 @@ function eps_commerce_purchase_complete($args = array()){
 */
  function _get_user_pv ($uid = '') {
  	global $wpdb;
- 	if (empty($uid)) 
+ 	if (empty($uid))
  		$uid = afl_current_uid();
 
  	$table_prefix = $wpdb->prefix ? $wpdb->prefix : 'wp_';
@@ -276,17 +308,17 @@ function eps_commerce_purchase_complete($args = array()){
 */
  function _get_user_gv ($uid = '') {
  	global $wpdb;
- 	if (empty($uid)) 
+ 	if (empty($uid))
  		$uid = afl_current_uid();
 
  	$table_prefix = $wpdb->prefix ? $wpdb->prefix : 'wp_';
  	$table 				= $table_prefix.'afl_purchases';
- 	
+
  	//direct downlines
- 	$downlines    = afl_get_user_downlines_uid($uid); 
+ 	$downlines    = afl_get_user_downlines_uid($uid);
  	$downlines_uid = array();
  	foreach ($downlines as $key =>$down_uid) {
- 		$downlines_uid[] = $down_uid->uid;
+ 		$downlines_uid[] = $down_uid->downline_user_id;
  	}
 
  	$query = array();
@@ -312,9 +344,10 @@ function eps_commerce_purchase_complete($args = array()){
  * -------------------------------------------------
 */
  function _get_user_distributor_count ($uid) {
- 	$downlines    = afl_get_direct_user_downlines($uid, array(), TRUE); 
+ 	$downlines    = afl_get_sponsor_downlines_uid($uid, array(), TRUE);
+	// pr($downlines);
  	if ($downlines) {
  		return $downlines;
- 	} else 
+ 	} else
  		return 0;
  }

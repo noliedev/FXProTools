@@ -171,8 +171,29 @@
  	add_action('wp_ajax_nopriv_afl_member_rank', 'afl_member_rank_callback');
 
 	function afl_member_rank_callback () {
+		//get the member rank 
+		$uid = afl_current_uid();
+		$query = array();
 
-	  echo '<span style="display: inline; padding: .2em .6em .3em; font-size: 100%;font-weight: 700;line-height: 1; color: #fff;
-        text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em;background-color:#eea236;">Active </span>';
+		$query['#select'] = _table_name('afl_user_genealogy');
+		$query['#where'] 	= array(
+			'`'._table_name('afl_user_genealogy').'`.`uid` ='.$uid
+		); 
+
+		$query['#fields'] = array(
+			_table_name('afl_user_genealogy') => array('member_rank')
+		);
+		$rank = db_select($query,'get_var');
+
+		if ( empty( $rank ) ) {
+			$rank_name = 'Active';
+		} else {
+			$rank_name = afl_variable_get('rank_'.$rank.'_name');
+		}
+
+		$rank_color = afl_variable_get('rank_'.$rank.'_color','#eea236');
+
+ 	  echo '<span style="display: inline; padding: .2em .6em .3em; font-size: 100%;font-weight: 700;line-height: 1; color: #fff;
+        text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em;background-color:'.$rank_color.';">'.$rank_name.' </span>';
 	  die();
 	}

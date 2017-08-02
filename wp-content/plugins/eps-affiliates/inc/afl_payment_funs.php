@@ -113,3 +113,8 @@ function afl_member_transaction($transaction = array(), $business = FALSE){
   }
   return TRUE;
 }
+
+function afl_currency(){
+  return 'USD';
+
+}

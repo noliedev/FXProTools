@@ -38,8 +38,7 @@ $payout_methods = list_extract_allowed_values(afl_variable_get('payout_methods')
  		'#type'  	=> 'select',
  		'#options' => afl_get_periods(),
  		'#default_value' => isset($post['afl_system_payout_frequency']) ? $post['afl_system_payout_frequency'] : (!empty(afl_variable_get('afl_system_payout_frequency')) ? afl_variable_get('afl_system_payout_frequency') : '') ,
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
  	$form['field'] = array(
  		'#type' => 'fieldset',
@@ -50,8 +49,7 @@ $payout_methods = list_extract_allowed_values(afl_variable_get('payout_methods')
 		'#addon'				=>	'$',
 		'#title'				=> 'Minimum payout amount *',
 		'#default_value' 	=>  isset($post['payout_min_value']) ? $post['payout_min_value'] : (!empty(afl_variable_get('payout_min_value')) ? afl_variable_get('payout_min_value') : '-1') ,
-		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+		
 	);
 	foreach ($payout_methods as $key => $value) {
 		$form['field']['payout_charges_'.$key] = array(
@@ -59,8 +57,7 @@ $payout_methods = list_extract_allowed_values(afl_variable_get('payout_methods')
 		'#title'				=> 'Payout charges - '.$value,
 		'#default_value' 	=> isset($post['payout_charges_'.$key]) ? $post['payout_charges_'.$key] : (!empty(afl_variable_get('payout_charges_'.$key)) ? afl_variable_get('payout_charges_'.$key) : '') ,
 		'#prefix'=>'<div class="form-group row">',
-		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+		
 	);
 	}
 	
@@ -77,15 +74,13 @@ $payout_methods = list_extract_allowed_values(afl_variable_get('payout_methods')
 		'#type' 				=> 'text',
 		'#title'				=> 'Minimum withdrawal amount *',
 		'#default_value' 	=> isset($post['withdrawal_min_value']) ? $post['withdrawal_min_value'] : (!empty(afl_variable_get('withdrawal_min_value')) ? afl_variable_get('withdrawal_min_value') : '') ,
-		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+		
 	);
 	$form['field_1']['withdrawal_max_value'] = array(
 		'#type' 				=> 'text',
 		'#title'				=> 'Maximum withdrawal amount *',
 		'#default_value' 	=> isset($post['withdrawal_max_value']) ? $post['withdrawal_max_value'] : (!empty(afl_variable_get('withdrawal_max_value')) ? afl_variable_get('withdrawal_max_value') : '') ,
-		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+		
 	);
 	$form['field_1']['withdrawal_conf'] = array(
    '#type' => 'markup',
@@ -100,22 +95,19 @@ $payout_methods = list_extract_allowed_values(afl_variable_get('payout_methods')
 		'#type' 				=> 'text',
 		'#title'				=> ' Minimum amount to initiate e-wallet transfer *',
 		'#default_value' 	=> isset($post['etransfer_min_value']) ? $post['etransfer_min_value'] : (!empty(afl_variable_get('etransfer_min_value')) ? afl_variable_get('etransfer_min_value') : '') ,
-		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+		
 	);
 	$form['field_2']['etransfer_max_value'] = array(
 		'#type' 				=> 'text',
 		'#title'				=> 'Maximum amount can be transferred from e-wallet *',
 		'#default_value' 	=>isset($post['etransfer_max_value']) ? $post['etransfer_max_value'] : (!empty(afl_variable_get('etransfer_max_value')) ? afl_variable_get('etransfer_max_value') : '') ,
-		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+		
 	);
 	$form['field_2']['etransfer_charges'] = array(
 		'#type' 				=> 'text',
 		'#title'				=> 'E-wallet Transfer charges *',
 		'#default_value' 	=> isset($post['etransfer_charges']) ? $post['etransfer_charges'] : (!empty(afl_variable_get('etransfer_charges')) ? afl_variable_get('etransfer_charges') : '') ,
-		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+		
 	);
 	$form['field_2']['withdrawal_conf'] = array(
    '#type' => 'markup',
@@ -130,8 +122,7 @@ $payout_methods = list_extract_allowed_values(afl_variable_get('payout_methods')
  				'btn','btn-primary'
  			)
  		),
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
 
 	echo afl_render_form($form);

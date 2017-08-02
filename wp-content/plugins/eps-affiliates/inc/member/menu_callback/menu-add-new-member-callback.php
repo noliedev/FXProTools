@@ -67,13 +67,13 @@
     			$business_transactions['credit_status'] = 1;
 	        $business_transactions['category'] = 'ENROLMENT FEE';
     			$business_transactions['additional_notes'] = 'Enrolment joining Free';
-    			$business_transactions['amount_paid'] = $enrollment_amount;
+    			$business_transactions['amount_paid'] = afl_commerce_amount($enrollment_amount);
     			$business_transactions['notes'] = 'Enrolment Fee';
     			$business_transactions['currency_code'] = 'USD';
     			$business_transactions['order_id'] = 1;
 	       	
 	       	// $business_transaction = afl_business_transaction($business_transactions);
-    			$user_transaction = afl_business_transaction($business_transactions, TRUE);
+    			$user_transaction 		= afl_member_transaction($business_transactions, TRUE);
 	         //user get the uid,if a uid get then insert to genealogy
 
 
@@ -107,8 +107,7 @@
  			)
  		),
  		'#default_value' => isset($post['first_name']) ? $post['first_name'] : '',
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
 	$form['sur_name'] = array(
  		'#title' => 'Sur Name',
@@ -120,8 +119,7 @@
  			)
  		),
  		'#default_value' => isset($post['sur_name']) ? $post['sur_name'] : '',
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
  	$form['user_name'] = array(
  		'#title' => 'User Name',
@@ -133,8 +131,7 @@
  			)
  		),
  		'#default_value' => isset($post['user_name']) ? $post['user_name'] : '',
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
  	$form['email'] = array(
  		'#title' => 'Email address',
@@ -146,8 +143,7 @@
  			)
  		),
  		'#default_value' => isset($post['email']) ? $post['email'] : '',
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
  	$form['password'] = array(
  		'#title' => 'Password',
@@ -158,8 +154,7 @@
 
  			)
  		),
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
  	$form['confirm_password'] = array(
  		'#title' => 'Confirm Password',
@@ -170,8 +165,7 @@
 
  			)
  		),
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
 
  	$default_value = '';
@@ -194,8 +188,7 @@
  		//for autocomplete call action action hook
  		'#auto_complete_path' => 'users_auto_complete',
  		'#default_value' => isset($post['sponsor']) ? $post['sponsor'] :$default_value ,
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
  	$form['mobile'] = array(
  		'#title' => 'Mobile number',
@@ -206,8 +199,7 @@
 
  			)
  		),
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
  $form['enrollment_amount'] = array(
  		'#title' => 'Enrollment Amount',
@@ -241,8 +233,7 @@
  				'btn','btn-primary'
  			)
  		),
- 		'#prefix'=>'<div class="form-group row">',
- 		'#suffix' =>'</div>'
+ 		
  	);
  	
 
