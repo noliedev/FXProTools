@@ -85,7 +85,7 @@ function afl_member_transaction($transaction = array(), $business = FALSE){
     $transaction['merchant_id'] = $afl_merchant_id;
     $transaction['project_name'] = $afl_project_name;
     $transaction['payout_id'] = 'Null';
-     $business_trans_id = $wpdb->insert($transaction_table, $transaction);
+    $business_trans_id = $wpdb->insert($transaction_table, $transaction);
       
       if($business == TRUE){
         $business_transactions = array();

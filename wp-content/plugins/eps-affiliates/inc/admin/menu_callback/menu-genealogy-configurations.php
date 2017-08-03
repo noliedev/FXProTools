@@ -111,7 +111,7 @@ function afl_genealogy_configuration_form_submit ($form_state){
 */
 function afl_system_reset ($remove_user = '') {
 	global $wpdb;
-	$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_genealogy')."` WHERE `uid` !=".afl_root_user()." ");
+	$wpdb->query("DELETE FROM `"._table_name('afl_user_genealogy')."` WHERE `uid` != ".afl_root_user()." ");
 	
 	$wpdb->query("TRUNCATE TABLE `"._table_name('afl_business_funds')."`");
 	
@@ -136,8 +136,6 @@ function afl_system_reset ($remove_user = '') {
 	$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_downlines')."`");
 	
 	$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_fund')."`");
-	
-	$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_genealogy')."`");
 	
 	$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_holding_tank')."`");
 	

@@ -27,8 +27,8 @@ class Eps_affiliates_common {
  	 * ----------------------------------------------------------------
 	*/
 		public function _load_common_scritps() {
-			wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
-			wp_enqueue_script( 'jquery-js' );
+			// wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
+			// wp_enqueue_script( 'jquery-js' );
 
 			wp_register_script( 'bootstrap-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap.min.js');
 			wp_enqueue_script( 'bootstrap-js' );
@@ -42,13 +42,13 @@ class Eps_affiliates_common {
 			wp_register_script( 'bootstrap-typehead-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap-typeahead.js');
 			wp_enqueue_script( 'bootstrap-typehead-ui' );
 
-			wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
-			wp_enqueue_script( 'common-js' );
+			// wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
+			// wp_enqueue_script( 'common-js' );
 
 			wp_register_script( 'widget-scripts',  EPSAFFILIATE_PLUGIN_ASSETS.'js/widget-scripts.js');
 			wp_enqueue_script( 'widget-scripts' );
 
-	    wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+	    // wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 		}
 	/*
  	 * ----------------------------------------------------------------
@@ -1080,6 +1080,16 @@ if(!function_exists('afl_get_rank_names')){
 			'`'._table_name('afl_user_downlines').'`.`level`' => 'ASC'
 		);
 
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`wp_afl_user_downlines`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`wp_afl_user_downlines`.`member_rank`= '.$filter['member_rank'];
+		}
+
 		$limit = '';
 		if (isset($filter['start']) && isset($filter['length'])) {
 			$limit .= $filter['start'].','.$filter['length'];
@@ -1105,7 +1115,7 @@ if(!function_exists('afl_get_rank_names')){
  * get the downlines uid details of uid
  * -----------------------------------------------------------------------------
 */
-	function afl_get_user_downlines_uid ($uid = '3', $filter = array(), $count = false){
+	function afl_get_user_downlines_uid ($uid = '', $filter = array(), $count = false){
 		global $wpdb;
 
 		$query = array();
@@ -1122,6 +1132,16 @@ if(!function_exists('afl_get_rank_names')){
 		$query['#where'] = array(
 			'`wp_afl_user_downlines`.`uid`='.$uid.''
 		);
+
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`wp_afl_user_downlines`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`wp_afl_user_downlines`.`member_rank`= '.$filter['member_rank'];
+		}
 
 		$query['#order_by'] = array(
 			'`level`' => 'ASC'
@@ -1313,11 +1333,13 @@ if(!function_exists('afl_get_rank_names')){
 			$count = count($data['#like']);
 			if ( $count == 1) {
 				foreach ($data['#like'] as $key => $value) {
-					$sql .= $key.' LIKE "%'.$value.'%"'.' ';
+					if ( !$where_flag )
+						$sql .= $key.' LIKE "%'.$value.'%"'.' ';
+					else
+					$sql .= ' AND '.$key.' LIKE "%'.$value.'%"'.' ';
 				}
 			}
 		}
-
 
 
 
@@ -1726,3 +1748,22 @@ if ( !function_exists('get_user_by') ){
  	  return '<span style="display: inline; padding: .2em .6em .3em; font-size: 100%;font-weight: 700;line-height: 1; color: #fff;
         text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em;background-color:'.$rank_color.';">'.$rank_name.' </span>';
  }
+ /*
+ * ----------------------------------------------------------------------
+ * Get relative position from a user
+ * ----------------------------------------------------------------------
+ */
+  function get_relative_position_from ($from = '', $uid = '') {
+		$query = array();
+		$query['#select'] = _table_name('afl_user_downlines');
+		$query['#where'] = array(
+			'`'._table_name('afl_user_downlines').'`.`uid`='.$from,
+			'`'._table_name('afl_user_downlines').'`.`downline_user_id`='.$uid
+		);
+		$query['#fields'] = array(
+			_table_name('afl_user_downlines') => array('relative_position')
+		);
+
+		$res = db_select($query, 'get_var');
+		return $res;
+	}

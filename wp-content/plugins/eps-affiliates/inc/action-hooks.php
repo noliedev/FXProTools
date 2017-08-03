@@ -1,7 +1,41 @@
 <?php
 /* --------- All the action hooks ------------------------*/
-add_action('init', 'test');
-function test(){
+add_action('init', 'common_scripts_load');
+function common_scripts_load(){
+			wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
+			wp_enqueue_script( 'jquery-js' );
+
+			wp_register_script( 'bootstrap-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap.min.js');
+			wp_enqueue_script( 'bootstrap-js' );
+
+			wp_register_script( 'jquery-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/jquery-ui/jquery-ui.min.js');
+			wp_enqueue_script( 'jquery-ui' );
+
+			wp_register_script( 'autocomplete-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.autocomplete.min.js');
+			wp_enqueue_script( 'autocomplete-ui' );
+
+			wp_register_script( 'bootstrap-typehead-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap-typeahead.js');
+			wp_enqueue_script( 'bootstrap-typehead-ui' );
+
+			wp_register_script( 'widget-scripts',  EPSAFFILIATE_PLUGIN_ASSETS.'js/widget-scripts.js');
+			wp_enqueue_script( 'widget-scripts' );
+
+
+			wp_register_script( 'jquery-data-table-init',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
+	wp_enqueue_script( 'jquery-data-table-init' );
+
+	wp_register_script( 'jquery-data-bootstrap-table-init',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/dataTables.bootstrap.min.js');
+	wp_enqueue_script( 'jquery-data-bootstrap-table-init' );
+
+	wp_enqueue_style( 'plan-develoepr-init', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/css/dataTables.bootstrap.min.css');
+
+			wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
+			wp_enqueue_script( 'common-js' );
+
+	    wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+
+
+			
 
 }
 
@@ -272,6 +306,7 @@ function eps_create_system_user_callback() {
  			case 'affiliate-eps-ewallet-withdraw-fund':
  			case 'affiliate-eps-ewallet-pending-withdrawal':
  			case 'affiliate-eps-payment_method';
+ 			case 'user-payment-configuration';
 
  			//system configurations
  			case 'affiliate-eps-business-system-members':
@@ -301,6 +336,7 @@ function eps_create_system_user_callback() {
  			case 'eps-test':
  			case 'affiliate-eps-purchases':
  			case 'eps-generate-purchase':
+ 			case 'eps-test-codes':
  				wp_enqueue_style( 'simple-line-icons', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/simple-line-icons/css/simple-line-icons.css');
  				wp_enqueue_style( 'app', EPSAFFILIATE_PLUGIN_ASSETS.'css/app.css');
 				wp_enqueue_style( 'developer', EPSAFFILIATE_PLUGIN_ASSETS.'css/developer.css');
@@ -334,3 +370,8 @@ function prefix_add_user() {
     // Add role
     $user->add_role( 'administrator' );
 }
+
+// for ($i = 229; $i <=244; $i++) {
+// 	// remove_role($i);
+// }
+// pr(WP_Roles(),1);

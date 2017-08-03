@@ -343,7 +343,6 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/b-wallet/eps-bwallet-ajax-callbacks.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/b-wallet/menu-callback/menu-bwallet-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-features-and-config-settings.php';
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test.php';
 
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-payment-methods-callback.php';
@@ -351,6 +350,13 @@
 				//integrations
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/integrations/class-woocommerce.php';
 
+
+				//the functionality shortcodes
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-shortcodes.php';
+
+				
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test-codes.php';
 			}
 		/**
 		 * -------------------------------------------------------------------------

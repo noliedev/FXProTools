@@ -40,7 +40,7 @@ function users_auto_complete_callback($search_key = '') {
   }
   // pr($filter['search_valu']);
   $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
-  $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
+  $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 50;
 
   $result_count = afl_get_user_downlines($uid,array(),TRUE);
   $filter_count = afl_get_user_downlines($uid,$filter,TRUE);
@@ -49,7 +49,7 @@ function users_auto_complete_callback($search_key = '') {
  	$output = [
      "draw" 						=> $input_valu['draw'],
      "recordsTotal" 		=> $result_count,
-     "recordsFiltered" 	=> $filter_count,
+     "recordsFiltered" 	=> $result_count,
      "data" 						=> [],
    ];
 
@@ -59,8 +59,8 @@ function users_auto_complete_callback($search_key = '') {
    	$output['data'][] = [
    		$value->ID,
       $value->display_name,
-   		$value->relative_position,
    		$value->level,
+      $value->relative_position,
    		render_rank($value->member_rank),
    		date('Y-m-d',$value->created)
    	];
@@ -161,7 +161,8 @@ function users_auto_complete_callback($search_key = '') {
 
       //add the role afl_member to the user if he has no role
       if (!has_role($uid, 'afl_member')){
-        add_role($uid, 'afl_member');
+        $theUser = new WP_User($uid);
+        $theUser->add_role( 'afl_member' );
       }
 
 

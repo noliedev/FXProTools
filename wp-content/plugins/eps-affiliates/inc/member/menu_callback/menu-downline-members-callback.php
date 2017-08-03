@@ -2,6 +2,13 @@
 function afl_downline_members() { 
 	echo afl_eps_page_header();
 	
+	afl_downline_members_callback();
+
+
+afl_content_wrapper_end();
+}
+
+function afl_downline_members_callback(){
 	$uid = get_current_user_id();
 
 	if (isset($_GET['uid'])) {
@@ -21,24 +28,24 @@ function afl_downline_members() {
 
 	wp_enqueue_style( 'plan-develoepr', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/css/dataTables.bootstrap.min.css');
 
+	
 	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/dataTables.bootstrap.min.js');
 	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.dataTables.min.js');
 
-?>
-<div class="data-filters"></div>
+	?>
+	<div class="data-filters"></div>
 
-<table id="example" class="table table-striped table-bordered dt-responsive nowrap custom-data-tables" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Userid</th>
-                <th>User name</th>
-                <th>Relative Position</th>
-                <th>Level</th>
-                <th>Rank</th>
-                <th>Created on</th>
-            </tr>
-        </thead>
-    </table>
-<?php 
-afl_content_wrapper_end();
+	<table id="example" class="table table-striped table-bordered dt-responsive nowrap custom-data-tables" cellspacing="0" width="100%">
+	        <thead>
+	            <tr>
+	                <th>Userid</th>
+	                <th>User name</th>
+	                <th>Level</th>
+	                <th>Relative Position</th>
+	                <th>Rank</th>
+	                <th>Created on</th>
+	            </tr>
+	        </thead>
+	    </table>
+	<?php 
 }

@@ -15,22 +15,23 @@ class Eps_affiliates_registration {
 				
 				//add the role afl_member to the user if he has no role
 				if (!has_role($post_data['uid'], 'afl_member')){
-					add_role($post_data['uid'], 'afl_member');
+					$theUser = new WP_User($uid);
+					$theUser->add_role( 'afl_member' );
 				}
 
 				//first check the downlines count of sponsor and find out which level insert
 				global $wpdb;
-				$table_name = $wpdb->prefix . 'afl_user_genealogy';
+				$table_name = _table_name('afl_user_genealogy');
 				$sponsor = $post_data['sponsor_uid'];
 				// if tables exists
 				if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
 					//First insert to downlines table
 				 	// get user id counts in each level of the sponsor
 					// also the count of the uids must lessthan or equals maximum of level users
-					$query 			= 'SELECT count(`downline_user_id`) as count, `level` FROM `wp_afl_user_downlines` WHERE `uid`= %d GROUP BY `level` HAVING count(`downline_user_id`) < POWER(3,`level`)';
+					$query 			= 'SELECT count(`downline_user_id`) as count, `level` FROM `'._table_name('afl_user_downlines').'` WHERE `uid`= %d GROUP BY `level` HAVING count(`downline_user_id`) < POWER(3,`level`)';
 				  $row 				= $wpdb->get_row($wpdb->prepare($query,$sponsor));
 				  
-				  $max_query 	= 'SELECT MAX(`level`) FROM `wp_afl_user_downlines` WHERE `uid`= %d';
+				  $max_query 	= 'SELECT MAX(`level`) FROM `'._table_name('afl_user_downlines').'` WHERE `uid`= %d';
 				  $max_level	= $wpdb->get_var($wpdb->prepare($max_query,$sponsor));
 				  
 				  
@@ -122,7 +123,7 @@ class Eps_affiliates_registration {
 				  	}
 				  	sort($positions_array);
 				  	
-
+				  	// pr($positions_array);
 				  	if(count($positions_array)%2 === 0){
 						    $var = (count($positions_array)-1)/2;
 
@@ -134,15 +135,20 @@ class Eps_affiliates_registration {
 								$middle_relative_position = $positions_array[$var];
 								$next_relative_position 	= pow($plan_width, $level) - ($middle_relative_position - 1 );
 						}
-
+						// pr($next_relative_position);
 				  	
 				  	$relative_position = $next_relative_position;
 				  	
 
 				 	}
 				 	$afl_date_splits = afl_date_splits(afl_date());
+				 	// pr("POS : ".$relative_position);
+				 	// pr("Level : ".$level);
+				 	// pr("SPONSOR :".$sponsor);
 
 					$parent = $this->afl_get_relative_parent($relative_position,$level,$sponsor);
+				 	
+					
 					//relative position is found based on the sponsor and the parent based relative position found here
 
 					$parent_raltive_position = 0 ;
@@ -195,16 +201,32 @@ class Eps_affiliates_registration {
 				 		 * -----------------------------------------------------------------
 				 		*/
 				 		$uplines 	= afl_get_upline_uids($parent);
+				 		// pr("Parent : ".$parent);
+				 		// pr($uplines);
 				 		$sp_level = 1;
 
 				 		foreach ($uplines as $upline_uid) {
 				 			$sp_level = $sp_level + 1;
+
+				 			//get parent relative position from $upline uid
+				 			$upline_reltive_pos = get_relative_position_from($upline_uid, $parent);
+				 			//findout the relative position number
+				 			/*
+				 			 * ----------------------------------------------------
+				 			 * (relative position from the upline user - 1) * plan width 
+				 			         + relative position added to the parent
+				 			 *
+				 			 * ----------------------------------------------------
+				 			*/
+				 			$upline_relation 		= ($upline_reltive_pos - 1) * $plan_width + $parent_raltive_position;
+
+
 				 			$downline_ins_data['uid'] 							= $upline_uid;
 						 	$downline_ins_data['downline_user_id'] 	= $post_data['uid'];
 						 	$downline_ins_data['level'] 						= $sp_level;
 						 	$downline_ins_data['status'] 						=	1;
 						 	$downline_ins_data['position'] 					=	1;
-						 	$downline_ins_data['relative_position']	=	$relative_position;
+						 	$downline_ins_data['relative_position']	=	$upline_relation;
 						 	$downline_ins_data['created'] 					= afl_date();
 						 	$downline_ins_data['member_rank'] 			= 0;
 						 	$downline_ins_data['joined_day'] 				= $afl_date_splits['d'];
@@ -279,13 +301,18 @@ class Eps_affiliates_registration {
 				} else
 				 $parent_position  =  $parent_relative_pos;
 			}
-			
+			// pr($parent_position);
 
 			if (!empty($parent_position)) {
 				//get the sposnors's `$parent_position` positions th user id
-				$parent_query = 'SELECT `uid` FROM `wp_afl_user_genealogy` WHERE `referrer_uid`= %d AND `level`= %d AND `relative_position` = %d' ;
+				// $parent_query = 'SELECT `uid` FROM `wp_afl_user_genealogy` WHERE `referrer_uid`= %d AND `level`= %d AND `relative_position` = %d' ;
+				$parent_query = 'SELECT `downline_user_id` FROM `'._table_name('afl_user_downlines').'` WHERE `uid`= %d AND `level`= %d AND `relative_position` = %d' ;
 				
+				// pr($sponsor);
+				// pr($level - 1);
+				// pr($parent_position);
 				$parent_uid		= $wpdb->get_var($wpdb->prepare($parent_query,$sponsor,($level - 1),$parent_position));
+				// pr($parent_query);
 				if ($parent_uid) {
 					return $parent_uid;
 				} else {
@@ -297,6 +324,7 @@ class Eps_affiliates_registration {
 		}
 		
 	}
+
 	/*
 	 * -----------------------------------------------------------------
 	 * Add the user to the 7 day holding tank
@@ -338,8 +366,7 @@ class Eps_affiliates_registration {
 	 }
 
 }
-
-
-// if (!has_role($post_data['uid'], 'afl_member')){
-// 	add_role($post_data['uid'], 'afl_member');
-// 	}
+// for($i= 257; $i<=598;$i++){
+// 	remove_role($i);
+// }
+// pr(WP_Roles(),1);
