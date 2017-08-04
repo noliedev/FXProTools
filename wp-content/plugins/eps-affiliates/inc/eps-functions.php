@@ -7,11 +7,43 @@
 	function eps_commerce_checkout_complete( $order_id ){
 		afl_purchase($order_id);
 	}
+/*
+ * -------------------------------------------------------
+ * Place a user under a sponsor 
+ * -------------------------------------------------------
+*/
+	function eps_affiliates_place_user_under_sponsor_callback ($uid = '', $sponsor = '') {
+		$reg_obj = new Eps_affiliates_registration;
+		$reg_obj->afl_join_member(
+									array(
+										'sponsor_uid' => $sponsor,
+										'uid'					=> $uid
+									)
+							);
+	}
+/*
+ * ------------------------------------------------------
+ * Place user under a sponsor if the tank validity expires
+ * ------------------------------------------------------
+*/
+ function eps_affiliates_force_place_after_holding_expired_callback ($uid = '', $sponsor = '') {
+ 		global $wpdb;
+ 		$reg_obj = new Eps_affiliates_registration;
+		$reg_obj->afl_join_member(
+									array(
+										'sponsor_uid' => $sponsor,
+										'uid'					=> $uid
+									)
+							);
+		$wpdb->delete(_table_name('afl_user_holding_tank'), array('uid'=>$uid));
+ }
+/*
+ * ---------------------------------------------------------
+ * Commerce purchase complete
+ * ---------------------------------------------------------
+*/
 
-
-
-
-function eps_commerce_purchase_complete($args = array()){
+	function eps_commerce_purchase_complete($args = array()){
 	 	//need to save the details to purchases
 	 	$response = array();
 
@@ -92,7 +124,7 @@ function eps_commerce_purchase_complete($args = array()){
 	 		$response['error'][] 	= 'Un-expected error occured. Unable to insert to the purchase details.';
 	 	}
 	 		return $response;
-	 }
+	}
 /*
  * ------------------------------------------------------
  * Calculate the affiliates rank
@@ -380,7 +412,9 @@ function eps_commerce_purchase_complete($args = array()){
 	        $meets_flag = 1;
 	      }
 	    }
-	  }
+	  } else {
+			$meets_flag = 1;
+		}
 
 		return $meets_flag;
 	}

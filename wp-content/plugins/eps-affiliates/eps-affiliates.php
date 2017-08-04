@@ -353,6 +353,7 @@
 
 				//the functionality shortcodes
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-shortcodes.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-cron-jobs.php';
 
 				
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test.php';

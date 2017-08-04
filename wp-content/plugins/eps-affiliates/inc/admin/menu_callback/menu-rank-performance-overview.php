@@ -4,16 +4,17 @@ function afl_rank_performance_overview () {
 	echo afl_eps_page_header();
 	
 	echo afl_content_wrapper_begin();
-		afl_renk_performance_overview_template();
+		afl_rank_occured_details();
+		afl_rank_performance_overview_template();
 	echo afl_content_wrapper_end();
 }
 
-function afl_renk_performance_overview_template () {
+function afl_rank_performance_overview_template () {
 	$uid = afl_current_uid();
 
 	$table = array();
 	$table['#name'] 			= '';
-	$table['#title'] 			= '';
+	$table['#title'] 			= 'Rank Advancement Overview';
 	$table['#prefix'] 		= '';
 	$table['#suffix'] 		= '';
 	$table['#attributes'] = array(
@@ -30,7 +31,8 @@ function afl_renk_performance_overview_template () {
 		__('PV','affiliates-eps'), 
 		__('GV','affiliates-eps'), 
 		__('Distributors','affiliates-eps'),
-		__('Qualifications','affiliates-eps')
+		__('Qualifications','affiliates-eps'),
+		
 	);
 	$rows = array();
 	
@@ -122,7 +124,7 @@ function afl_renk_performance_overview_template () {
 		  			}
 		  		}
 		  		if ($required) 
-		  			$markup .= $required .' '.  afl_variable_get('rank_'.$j.'_name', 'Rank '.$j).' '.$in_each_t;
+		  			$markup .= $required .' '.  afl_variable_get('rank_'.$j.'_name', 'Rank '.$j).' '.$in_each_t.'<br>';
 		  	}
 		  }
 		 $rows[$i]['markup_4'] = array(
@@ -134,4 +136,126 @@ function afl_renk_performance_overview_template () {
  	}
 	$table['#rows'] = $rows;
 	echo afl_render_table($table);
+}
+
+function afl_rank_occured_details () {
+	$uid = afl_current_uid();
+
+	$table = array();
+	$table['#name'] 			= '';
+	$table['#title'] 			= 'Downlines Rank Occured Overview';
+	$table['#prefix'] 		= '';
+	$table['#suffix'] 		= '';
+	$table['#attributes'] = array(
+					'class' => array(
+							'table',
+							'table-bordered',
+							'my-table-center',
+
+						)
+					);
+
+	$table['#header'] = array(
+		__('Rank Name','affiliates-eps')
+	);
+
+	$max_ranks = afl_variable_get('number_of_ranks',0);
+	for ($i = 1; $i <= $max_ranks; $i++) {
+		$table['#header'][] = afl_variable_get('rank_'.$i.'_name', 'Rank '.$i);
+	}
+
+	$rows = array();
+
+	$rows[0]['markup_0'] = array(
+		'#type' =>'markup',
+		'#markup'=>'Direct Legs'
+	);
+	$rows[1]['markup_1'] = array(
+		'#type' =>'markup',
+		'#markup'=>'Legs Downlines'
+	);
+/* -------------------------- Get first level users occured ranks count -------------------------------*/
+
+	//get the direct downlines ranks occured count
+	$downline_uids = afl_get_user_downlines($uid, array('level'=>1), false);
+
+	$downlines  = array();
+  foreach ($downline_uids as $key => $value) {
+    $downlines[] = $value->downline_user_id;
+  }
+  
+  $implodes = implode(',', $downlines);
+  //check the ranks under this users
+  $query = array();
+  $query['#select'] = _table_name('afl_user_genealogy');
+  $query['#fields'] = array(
+  	_table_name('afl_user_genealogy') => array('member_rank')
+  );
+  $query['#expression'] = array(
+  	'COUNT(`'._table_name('afl_user_genealogy').'`.`member_rank`) as count'
+  );
+
+  $query['#where'] = array(
+    '`'._table_name('afl_user_genealogy').'`.`uid` IN ('.$implodes.')'
+  );
+  $query['#group_by'] = array(
+  	'member_rank'
+  );
+
+  $result = array();
+  if (!empty($downlines)) 
+  	$result = db_select($query, 'get_results');
+
+  // here get the first level users ranks
+  $ranks_count = array();
+  foreach ($result as $key => $value) {
+  	$ranks_count[$value->member_rank] = $value->count;
+  }
+
+  //print the rank count
+  for ($i = 1; $i <= $max_ranks; $i++) {
+		$rows[0]['markup_0'.$i] = array(
+			'#type' => 'markup',
+			'#markup' => !empty($ranks_count[$i]) ? $ranks_count[$i] : '-'
+		);
+	}
+/* -------------------------- Get first level users occured ranks count -------------------------------*/
+
+
+/*---------------- Find the ranks occured under the downlines of first legs ---------------------------*/
+ //get all doenlines under this users
+	$query = array();
+	$query['#select'] = _table_name('afl_user_downlines');
+	$query['#fields'] = array(
+	 	_table_name('afl_user_downlines') => array('member_rank')
+	);
+	$query['#expression'] = array(
+	 	'COUNT(`'._table_name('afl_user_downlines').'`.`member_rank`) as count'
+	);
+	$query['#where'] = array(
+	   '`'._table_name('afl_user_downlines').'`.`uid` IN ('.$implodes.')'
+	);
+	$query['#group_by'] = array(
+	 	'member_rank'
+	);
+  $result = array();
+  if (!empty($downlines)) 
+  	$result = db_select($query, 'get_results');
+ 	
+ 	// here get the first level users ranks
+  $ranks_count = array();
+  foreach ($result as $key => $value) {
+  	$ranks_count[$value->member_rank] = $value->count;
+  }
+   //print the rank count
+  for ($i = 1; $i <= $max_ranks; $i++) {
+		$rows[1]['markup_1'.$i] = array(
+			'#type' => 'markup',
+			'#markup' => !empty($ranks_count[$i]) ? $ranks_count[$i] : '-'
+		);
+	}
+/*---------------- Find the ranks occured under the downlines of first legs ---------------------------*/
+	$table['#rows'] = $rows;
+	echo afl_render_table($table);
+
 }

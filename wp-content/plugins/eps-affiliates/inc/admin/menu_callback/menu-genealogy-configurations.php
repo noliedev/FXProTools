@@ -146,6 +146,8 @@ function afl_system_reset ($remove_user = '') {
 	$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_transactions_overview')."`");
 	
 	$wpdb->query("TRUNCATE TABLE `"._table_name('afl_purchases')."`");
+	
+	$wpdb->query("TRUNCATE TABLE `"._table_name('afl_tree_last_insertion_positions')."`");
 }
 
 function afl_remove_users () {

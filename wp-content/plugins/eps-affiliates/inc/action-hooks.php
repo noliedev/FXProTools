@@ -238,46 +238,30 @@ function eps_affiliates_admin_notices () {
  * ------------------------------------------------------------
 */
  add_action('eps_affiliates_calculate_affiliate_rank', 'eps_affiliates_calculate_affiliate_rank_callback', 10, 1);
-// do_action('eps_affiliates_calculate_affiliate_rank', 189);
-// pr('com', 1) ;
 /*
  * ------------------------------------------------------------
- * Redirect after successful login
+ * Place user under a sponsor
  * ------------------------------------------------------------
 */
- // add_filter( 'login_redirect', 'dashboard_redirect' );
-	// function dashboard_redirect( $url ) {
-	//     if ( has_role(afl_current_uid(),'afl_member' ) ) {
-	//          $url = esc_url( admin_url( 'index.php' ) );
-	//     }
+ add_action('eps_affiliates_place_user_under_sponsor', 'eps_affiliates_place_user_under_sponsor_callback', 10, 2);
 
-	//     return $url;
-	// }
-add_action('init', 'eps_create_system_user_callback');
+ /*
+ * ------------------------------------------------------------
+ * Place user under a sponsor from the holding tank validity expired
+ * ------------------------------------------------------------
+*/
+ add_action('eps_affiliates_force_place_after_holding_expired', 'eps_affiliates_force_place_after_holding_expired_callback', 10, 2);
 
-function eps_create_system_user_callback() {
+/*
+ * -------------------------------------------------------------
+ * hook that function into our scheduled event: 
+ * check the user expired from the holding tank, if yes auto place
+ * user under sponsor
+ * -------------------------------------------------------------
+*/
+	add_action ('holding_tank_user_expiry_scheduler', 'holding_tank_user_expiry_cron_job_callback');
 
-	$username = 'username123';
-	$password = 'pasword123';
-	$email = 'drew@example.com';
-	$user = get_user_by( 'email', $email );
-	if( ! $user ) {
-	    // Create the new user
-	    $user_id = wp_create_user( $username, $password, $email );
-	    if( is_wp_error( $user_id ) ) {
-	        // examine the error message
-	        echo( "Error: " . $user_id->get_error_message() );
-	        exit;
-	    }
-	    // Get current user object
-	    $user = get_user_by( 'id', $user_id );
-	}
-	// Remove role
-	$user->remove_role( 'subscriber' );
-	// Add role
-	$user->add_role( 'administrator' );
-}
-// pr(apply_filters('eps_create_system_user', array()));
+
 /*
  * ------------------------------------------------------------
  *
@@ -370,8 +354,3 @@ function prefix_add_user() {
     // Add role
     $user->add_role( 'administrator' );
 }
-
-// for ($i = 229; $i <=244; $i++) {
-// 	// remove_role($i);
-// }
-// pr(WP_Roles(),1);

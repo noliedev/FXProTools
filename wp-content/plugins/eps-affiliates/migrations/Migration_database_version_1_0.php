@@ -40,6 +40,8 @@
 	 		$this->afl_purchases();
 	 		$this->afl_ranks();
 	 		$this->afl_ranks_history();
+	 		
+	 		$this->afl_tree_last_insertion_positions();
 
 
 
@@ -334,9 +336,6 @@
 					  `referrer_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Referrer user',
 					  `parent_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Parent user',
 					  `level` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Level',
-					  `left_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Left Child',
-					  `middle_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Middle Child',
-					  `right_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Right Child',
 					  `status` tinyint(4) NOT NULL COMMENT 'Status',
 					  `created` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Created',
 					  `modified` int(10) unsigned DEFAULT '0' COMMENT 'Modified',
@@ -347,20 +346,13 @@
 					  `amount_paid` int(10) unsigned NOT NULL DEFAULT '0',
 					  `order_id` int(10) unsigned NOT NULL DEFAULT '0',
 					  `expiry_date` int(10) unsigned DEFAULT '0',
-					  `expiry_date_2` int(10) unsigned NOT NULL DEFAULT '0',
-					  `enrolment_package_id` int(10) unsigned NOT NULL DEFAULT '0',
 					  `joined_day` int(10) unsigned DEFAULT '0',
 					  `joined_month` int(10) unsigned DEFAULT '0',
 					  `joined_year` int(10) unsigned DEFAULT '0',
 					  `joined_week` int(10) unsigned DEFAULT '0',
 					  `joined_date` varchar(100) DEFAULT NULL COMMENT 'Joined Date',
-					  `currency_code` varchar(100) DEFAULT NULL COMMENT 'Currency Code',
-					  `extra_info` varchar(300) DEFAULT NULL COMMENT 'Extra Info',
-					  `deleted` int(10) unsigned DEFAULT '0' COMMENT 'Deleted Status',
-					  `merchant_id` varchar(250) DEFAULT 'default' COMMENT 'Merchant Id',
-					  `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
-					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name',
-					  `day_remains` int(10) unsigned DEFAULT '0' COMMENT 'Day remains'
+					  `day_remains` int(10) unsigned DEFAULT '0' COMMENT 'Day remains',
+					  `last_updated` int(10) unsigned DEFAULT '0' COMMENT 'Last updated date'
 					) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='Stores the user genealogy information';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
@@ -862,5 +854,29 @@
     $wpdb->query( 'ALTER TABLE `'.$table_name.'`
                   MODIFY `afl_referal_downline_id` int(11) NOT NULL AUTO_INCREMENT;' );
   }
+/*
+ * -----------------------------------------------------------------------------------------------------------
+ *  user last tree insertion position details
+ * -----------------------------------------------------------------------------------------------------------
+*/
+ private function afl_tree_last_insertion_positions () {
+ 	$table_name = $this->tbl_prefix . 'afl_tree_last_insertion_positions';
+    $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+					  `ins_id` int(11) NOT NULL,
+					  `uid` int(11) NOT NULL,
+					  `level` int(11) NOT NULL,
+					  `position` varchar(250) NOT NULL
+					) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+    global $wpdb;
+  //indexes
+    $wpdb->query( 'ALTER TABLE `'.$table_name.'`
+                  ADD PRIMARY KEY (`ins_id`);' );
+    //AUTO increment
+    $wpdb->query( 'ALTER TABLE `'.$table_name.'`
+                  MODIFY `ins_id` int(11) NOT NULL AUTO_INCREMENT;' );
+ }
 
 } //here closing the class

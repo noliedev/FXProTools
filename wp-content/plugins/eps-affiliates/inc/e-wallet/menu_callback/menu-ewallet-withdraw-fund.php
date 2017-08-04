@@ -80,17 +80,17 @@ function afl_ewallet_withdraw_fund_form(){
 	    '#prefix'					=> '<div class="form-group row">',
 		 	'#suffix' 				=> '</div>'
   	);
-		$path="//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']; 
+		/*$path="//".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']; 
   	$form['forgot_password'] = array(
       '#type' 				=> 'markup',
       '#markup' 			=> '<div class ="forget-transaction-password"><a href ="'.$path.'" class="btn btn-primary"> Forgot Password</a></div>',
       '#prefix'			=> '<div class="form-group row">',
 	 		'#suffix' 				=> '</div>'
-    );
+    );*/
 
   	$form['submit'] = array(
 	 		'#type' => 'submit',
-	 		'#value' =>'Save configuration'
+	 		'#value' =>'Submit'
 	 	);
 	 	echo afl_render_form($form);
 		  
@@ -205,7 +205,7 @@ function afl_ewallet_withdraw_fund_form_validation($form_state){
 	if($form_state['password'] && $form_state['withdrwal_amount']){
 			$table = $wpdb->prefix. 'afl_transaction_authorization';
 			$current = $wpdb->get_row("SELECT * FROM $table WHERE (uid = '$uid' )");
-		/*	if($current){
+			if($current){
 				$existing_password = $current->password;
 				$password = md5($form_state['password']);
 			 	if($password != $existing_password){
@@ -215,7 +215,7 @@ function afl_ewallet_withdraw_fund_form_validation($form_state){
 		  }else{
 		    echo wp_set_message(__('Please create a transaction password before proceeding.'), 'danger');
 		    return false;
-		  }*/
+		  }
 
 		  $table = $wpdb->prefix. 'afl_payout_requests';
 		  $afl_payout_id = $wpdb->get_row("SELECT afl_payout_id FROM $table WHERE (uid = '$uid' AND deleted = 0  AND request_status = 1 AND category = 'WITHDRAWAL')"); 

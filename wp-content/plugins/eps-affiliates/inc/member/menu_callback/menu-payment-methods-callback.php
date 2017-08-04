@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 * ------------------------------------------------------------
 * User payment method select call back
@@ -25,15 +25,18 @@ function afl_user_payment_method_conf_form(){
 	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'payment_method';
 	echo '<ul class="tabs--primary nav nav-tabs">';
 		  echo '<li class="'.(($active_tab == 'payment_method') ? 'active' : '').'">
-		            	<a href="?page=affiliate-eps-payment_method&tab=payment_method" >Payment Methods</a>  
+		            	<a href="?page=affiliate-eps-payment_method&tab=payment_method" >Payment Methods</a>
 		          </li>';
 		          foreach ($payment_methods as $key => $value) {
 		          	if($key == $default_method){
 		          	echo '<li class="'.(($active_tab == $key) ? 'active' : '').'">
-		            	<a href="?page=affiliate-eps-payment_method&tab='.$key.'" >'.$value.'</a>  
+		            	<a href="?page=affiliate-eps-payment_method&tab='.$key.'" >'.$value.'</a>
 		          	</li>';
-		          } 
-		         }       
+		          }
+		         }
+						 echo '<li class="'.(($active_tab == 'autherization') ? 'active' : '').'">
+			 		            	<a href="?page=affiliate-eps-payment_method&tab=autherization" >Payment Autherization</a>
+			 		          </li>';
 		  echo '</ul>';
 		switch ($active_tab) {
 	  	case 'payment_method':
@@ -45,6 +48,9 @@ function afl_user_payment_method_conf_form(){
   		case 'method_paypal' :
   			afl_user_payment_conf_method_paypal_form();
   		break;
+			case  'autherization' :
+				afl_user_payment_autherization_form();
+			break;
   		default :
   			afl_user_payment_conf_error_form();
   		break;
@@ -84,7 +90,7 @@ function afl_user_payment_method_form(){
 							)
 						);
 		$i = 0;
-		foreach ($payment_methods as $key => $value) { 
+		foreach ($payment_methods as $key => $value) {
 			if($default_method == $key)
 				$flag = TRUE;
 			else
@@ -98,7 +104,8 @@ function afl_user_payment_method_form(){
 				'#default_value' 	=> $flag,
 				'#attributes' 		=> array('switch' => 'switch', 'class'=> array('single-switch-checkbox') ),
 			);
-			$link = '?page=user-payment-conf-'.$key;
+			// $link = '?page=user-payment-conf-'.$key;
+			$link = '?page=affiliate-eps-payment_method&tab='.$key;
 			$rows[$i]['conf_'.$key] = array(
 			'#type' => 'markup',
 			'#markup' => '<a href="'.$link.'" ><span class="btn btn-rounded btn-sm btn-icon btn-default"><i class="fa fa-cog"></i></span></a>',
@@ -108,7 +115,7 @@ function afl_user_payment_method_form(){
 
 		$table['#rows'] = $rows;
 		$table['#header'] 		= array('Payment Methods','Status','Configuration');
-		
+
 		$render_table  = '';
 		$render_table .= afl_form_open($_SERVER['REQUEST_URI'],'POST', array('id'=>'form-afl-ewallet-withdraw-fund'));
 		$render_table .= afl_render_table($table);
@@ -140,7 +147,7 @@ function afl_user_payment_method_form_validation($form_state){
   }
   else{
   	return true;
-  }  
+  }
 }
 /*
 * ----------------------------------- -------------------------
@@ -168,14 +175,14 @@ function afl_user_payment_method_form_submit($form_state){
   }
 
   $table = $wpdb->prefix .'afl_user_payment_methods';
-  
+
   $wpdb->update($table, array('status'=>0), array('uid'=>$uid));
   $check = $wpdb->get_results("SELECT  `method` FROM `$table` WHERE `uid` = $uid AND `method` = '$payment_method'");
-  
-  if($check){ 
-  	$q = $wpdb->update($table, array('status'=>1), array('uid'=>$uid,'method' => $payment_method ));	
+
+  if($check){
+  	$q = $wpdb->update($table, array('status'=>1), array('uid'=>$uid,'method' => $payment_method ));
   }
-  else{ 
+  else{
    		$insert['uid'] 			= $uid;
    		$insert['method']  	=	$payment_method;
    		$insert['completed']= 0;
@@ -205,7 +212,7 @@ function afl_user_payment_conf_method_bank_form(){
 	global $wpdb;
 	$uid 					 = get_current_user_id();
 	$table = $wpdb->prefix .'afl_user_payment_methods';
-  $check = $wpdb->get_row("SELECT  * FROM `$table` WHERE `uid` = $uid AND `method` = 'method_bank'");
+  $check = $wpdb->get_row("SELECT  * FROM `$table` WHERE `uid` = $uid AND `method` = 'method_bank' AND `status` = 1 ");
   if(! $check){
    	wp_redirect('?page=affiliate-eps-payment_method');
   }
@@ -301,16 +308,14 @@ function afl_user_payment_conf_method_bank_form_validation($form_state){
 	 		'rules' => array(
 	 			'rule_required',
 	 		)
-	 	); 	
+	 	);
 		$resp  = set_form_validation_rule($rules);
 		if (!empty($resp)) {
 			echo $resp;
 			return false;
 		}
-		else 
-			return true;	 	
-
-
+		else
+			return true;
 }
 
 /*
@@ -332,7 +337,7 @@ function afl_user_payment_conf_method_bank_form_submit($form_state){
 
 /*
 * ------------------------------------------------------------
-* User paypal payment method configuration form 
+* User paypal payment method configuration form
 * ------------------------------------------------------------
 */
 function afl_user_payment_conf_method_paypal_form(){
@@ -345,7 +350,7 @@ function afl_user_payment_conf_method_paypal_form(){
 	global $wpdb;
 	$uid 					 = get_current_user_id();
 	$table = $wpdb->prefix .'afl_user_payment_methods';
-  $check = $wpdb->get_row("SELECT  * FROM `$table` WHERE `uid` = $uid AND `method` = 'method_paypal'");
+  $check = $wpdb->get_row("SELECT  * FROM `$table` WHERE `uid` = $uid AND `method` = 'method_paypal' AND `status` = 1 ");
 
   if(! $check){
    	wp_redirect('?page=affiliate-eps-payment_method');
@@ -443,10 +448,8 @@ function afl_user_payment_conf_method_paypal_form_validate($form_state){
 			echo $resp;
 			return false;
 		}
-		else 
-			return true;	 	
-
-
+		else
+			return true;
 }
 
 /*
@@ -465,11 +468,100 @@ function afl_user_payment_conf_method_paypal_form_submit($form_state){
   	  echo wp_set_message(__('Your Paypal  account details saved successfully'), 'success');
   }
 }
+/*
+* ------------------------------------------------------------
+* user payment autherization form
+* ------------------------------------------------------------
+*/
+function  afl_user_payment_autherization_form(){
+	if ( isset($_POST['submit']) ) {
+		$validation = afl_user_payment_autherization_form_validation($_POST);
+		if (!empty($validation)) {
+			afl_user_payment_autherization_form_submit($_POST);
+		}
+	 }
+	global $wpdb;
+	$uid 					 = get_current_user_id();
+	$table = $wpdb->prefix .'afl_user_payment_methods';
+	$check = $wpdb->get_row("SELECT  * FROM `$table` WHERE `uid` = $uid ");
 
+	if(! $check){
+		wp_redirect('?page=affiliate-eps-payment_method');
+	}
+	$form = array();
+	 $form['#method'] = 'post';
+	 $form['#action'] = $_SERVER['REQUEST_URI'];
+	 $form['#prefix'] ='<div class="form-group row">';
+	 $form['#suffix'] ='</div>';
+
+	 $table = $table = $wpdb->prefix .'afl_transaction_authorization';
+	 $exist = $wpdb->get_row("SELECT  * FROM `$table` WHERE `uid` = $uid ");
+	 if($exist){
+		//  Change Password fields
+    }
+		$form['password'] = array(
+	 		'#title' => 'Password',
+	 		'#type' => 'password',
+	 		'#name' => 'Password',
+	 	);
+	 	$form['confirm_password'] = array(
+	 		'#title' => 'Confirm Password',
+	 		'#type' => 'password',
+	 		'#name' => 'Confirm Password',
+	 	);
+		$form['submit'] = array(
+			'#type' => 'submit',
+			'#value' =>'Save Password'
+		);
+		echo afl_render_form($form);
+
+}
+/*
+* ------------------------------------------------------------
+* user payment autherization form validate
+* ------------------------------------------------------------
+*/
+function afl_user_payment_autherization_form_validation($form_state){
+	if( empty($form_state['password']) ||  empty($form_state['confirm_password']) ){
+		echo wp_set_message(__('Password and Confirm Password fields are reuired'), 'danger');
+		return FALSE;
+	}
+	elseif($form_state['password'] != $form_state['confirm_password']){
+		echo wp_set_message(__('Please check the password and confirm pasword you entered'), 'danger');
+		return FALSE;
+	}else{
+		return true;
+	}
+}
 
 /*
 * ------------------------------------------------------------
-* User error payment configuration form 
+* user payment autherization form submit
+* ------------------------------------------------------------
+*/
+function afl_user_payment_autherization_form_submit($form_state){
+	global $wpdb;
+	$uid 					 = get_current_user_id();
+	$password = md5($form_state['password']);
+	$table = $wpdb->prefix .'afl_transaction_authorization';
+	$exist = $wpdb->get_row("SELECT  * FROM `$table` WHERE `uid` = $uid ");
+	if($exist){
+				$wpdb->update($table, array('password	'=>$password), array('uid'=>$uid));
+				echo wp_set_message(__('Your password changed successfully..'), 'success');
+	}elseif(!$exist){
+	   	$insert['uid'] 			= $uid;
+	   	$insert['password']  	=	$password;
+	   	$q = $wpdb->insert($table, $insert);
+			echo wp_set_message(__('Your Autherization Password Saved successfully..'), 'success');
+	}
+	else{
+			echo wp_set_message(__('Some error occured. Please try again later..'), 'success');
+	}
+}
+
+/*
+* ------------------------------------------------------------
+* User error payment configuration form
 * ------------------------------------------------------------
 */
 function afl_user_payment_conf_error_form(){
