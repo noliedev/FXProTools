@@ -2,26 +2,26 @@
 /* --------- All the action hooks ------------------------*/
 add_action('init', 'common_scripts_load');
 function common_scripts_load(){
-			wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
-			wp_enqueue_script( 'jquery-js' );
+	wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
+	wp_enqueue_script( 'jquery-js' );
 
-			wp_register_script( 'bootstrap-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap.min.js');
-			wp_enqueue_script( 'bootstrap-js' );
+	wp_register_script( 'bootstrap-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap.min.js');
+	wp_enqueue_script( 'bootstrap-js' );
 
-			wp_register_script( 'jquery-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/jquery-ui/jquery-ui.min.js');
-			wp_enqueue_script( 'jquery-ui' );
+	wp_register_script( 'jquery-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/jquery-ui/jquery-ui.min.js');
+	wp_enqueue_script( 'jquery-ui' );
 
-			wp_register_script( 'autocomplete-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.autocomplete.min.js');
-			wp_enqueue_script( 'autocomplete-ui' );
+	wp_register_script( 'autocomplete-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.autocomplete.min.js');
+	wp_enqueue_script( 'autocomplete-ui' );
 
-			wp_register_script( 'bootstrap-typehead-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap-typeahead.js');
-			wp_enqueue_script( 'bootstrap-typehead-ui' );
+	wp_register_script( 'bootstrap-typehead-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap-typeahead.js');
+	wp_enqueue_script( 'bootstrap-typehead-ui' );
 
-			wp_register_script( 'widget-scripts',  EPSAFFILIATE_PLUGIN_ASSETS.'js/widget-scripts.js');
-			wp_enqueue_script( 'widget-scripts' );
+	wp_register_script( 'widget-scripts',  EPSAFFILIATE_PLUGIN_ASSETS.'js/widget-scripts.js');
+	wp_enqueue_script( 'widget-scripts' );
 
 
-			wp_register_script( 'jquery-data-table-init',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
+	wp_register_script( 'jquery-data-table-init',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
 	wp_enqueue_script( 'jquery-data-table-init' );
 
 	wp_register_script( 'jquery-data-bootstrap-table-init',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/dataTables.bootstrap.min.js');
@@ -29,10 +29,20 @@ function common_scripts_load(){
 
 	wp_enqueue_style( 'plan-develoepr-init', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/css/dataTables.bootstrap.min.css');
 
-			wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
-			wp_enqueue_script( 'common-js' );
+	//toaster
+	wp_register_script( 'toaster-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/toastr.js');
+	wp_enqueue_script( 'toaster-js' );
+	wp_register_style( 'toaster-cs',  EPSAFFILIATE_PLUGIN_ASSETS.'css/toastr.css');
+	wp_enqueue_style( 'toaster-cs' );
+	
 
-	    wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+
+
+
+	wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
+	wp_enqueue_script( 'common-js' );
+
+  wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 
 
 			
@@ -181,6 +191,13 @@ function eps_affiliates_admin_notices () {
 */
  add_action('wp_ajax_afl_user_ewallet_expense_data_table', 'afl_user_ewallet_expense_report_data_table');
  add_action('wp_ajax_nopriv_afl_user_ewallet_expense_data_table', 'afl_user_ewallet_expense_report_data_table');
+/*
+ * ------------------------------------------------------------
+ * E wallet  expense report datatable
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_user_my_withdraw_request_active', 'afl_user_my_withdraw_request_active_data_table');
+ add_action('wp_ajax_nopriv_afl_user_my_withdraw_request_active', 'afl_user_my_withdraw_request_active_data_table');
 
  /*
  * ------------------------------------------------------------
@@ -252,14 +269,7 @@ function eps_affiliates_admin_notices () {
 */
  add_action('eps_affiliates_force_place_after_holding_expired', 'eps_affiliates_force_place_after_holding_expired_callback', 10, 2);
 
-/*
- * -------------------------------------------------------------
- * hook that function into our scheduled event: 
- * check the user expired from the holding tank, if yes auto place
- * user under sponsor
- * -------------------------------------------------------------
-*/
-	add_action ('holding_tank_user_expiry_scheduler', 'holding_tank_user_expiry_cron_job_callback');
+
 
 
 /*
@@ -288,7 +298,7 @@ function eps_affiliates_admin_notices () {
  			case 'affiliate-eps-ewallet-income-report':
  			case 'affiliate-eps-ewallet-withdraw-report':
  			case 'affiliate-eps-ewallet-withdraw-fund':
- 			case 'affiliate-eps-ewallet-pending-withdrawal':
+ 			case 'affiliate-eps-ewallet-my-withdrawal':
  			case 'affiliate-eps-payment_method';
  			case 'user-payment-configuration';
 

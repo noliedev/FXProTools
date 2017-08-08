@@ -45,7 +45,7 @@ function afl_admin_advanced_config_(){
 	);
 	$rows[0]['var[afl_enable_test_mode]'] = array(
 		'#type' 					=> 'checkbox',
-		'#attributes'			=> array('form-checkbox','checkbox'),
+		'#attributes'			=> array('switch'=>'switch'),
 		'#default_value' 	=> isset($_POST['var']['afl_enable_test_mode']) ? TRUE : afl_variable_get('afl_enable_test_mode',''),
  	);
 	$rows[1]['label_2'] = array(
@@ -54,7 +54,7 @@ function afl_admin_advanced_config_(){
  	);
 	$rows[1]['var[afl_enable_test_date]'] = array(
 		'#type' 					=> 'checkbox',
-		'#attributes'			=> array('form-checkbox','checkbox'),
+		'#attributes'			=> array('switch'=>'switch'),
 		'#default_value' 	=> isset($_POST['var']['afl_enable_test_date']) ? TRUE : afl_variable_get('afl_enable_test_date',''),
  	);
 	$rows[2]['label_3'] = array(
@@ -79,7 +79,7 @@ function afl_admin_advanced_config_(){
  	);
 	$rows[3]['var[afl_enable_demo_mode]'] = array(
 		'#type' 			=> 'checkbox',
-		'#attributes'	=>array('form-checkbox','checkbox'),
+		'#attributes'			=> array('switch'=>'switch'),
 		'#default_value' 	=> isset($_POST['var']['afl_enable_demo_mode']) ? TRUE : afl_variable_get('afl_enable_demo_mode',''),
  	);
 	$rows[4]['label_4'] = array(
@@ -88,7 +88,7 @@ function afl_admin_advanced_config_(){
  	);
 	$rows[4]['var[afl_enable_live_mode]'] = array(
 		'#type' 			=> 'checkbox',
-		'#attributes'	=> array('form-checkbox','checkbox'),
+		'#attributes'			=> array('switch'=>'switch'),
 		'#default_value' 	=> isset($_POST['var']['afl_enable_demo_mode']) ? TRUE : afl_variable_get('afl_enable_live_mode',''),
  	);
 	

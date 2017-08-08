@@ -59,6 +59,14 @@ function afl_admin_variable_configurations (){
 	 		'#suffix' 				=> '</div>'
 	 	);
 
+	 	//compensation periods
+	 	$form['periods'] = array(
+	 		'#type' 					=> 'text-area',
+	 		'#title' 					=> 'Periods',
+	 		'#default_value' 	=> afl_variable_get('periods', ''),
+	 		'#prefix'					=> '<div class="form-group row">',
+	 		'#suffix' 				=> '</div>'
+	 	);
 	 	$form['submit'] = array(
 	 		'#type' => 'submit',
 	 		'#value' =>'Save configuration'
@@ -92,6 +100,7 @@ function afl_payment_methods_form(){
 
 	 	$form['payment_methods'] = array(
 	 		'#type' 					=> 'text-area',
+	 		'#required'				=> TRUE,
 	 		'#title' 					=> 'Payment Methods',
 	 		'#description' 		=> 'Format : &lt;value&gt;|&lt;name&gt;  Example : 1|Highest',
 	 		'#default_value' 	=> afl_variable_get('payment_methods', ''),
@@ -102,6 +111,7 @@ function afl_payment_methods_form(){
 	 	$form['payout_methods'] = array(
 	 		'#type' 					=> 'text-area',
 	 		'#title' 					=> 'Payout Methods',
+	 		'#required'				=> TRUE,
 	 		'#description' 		=> 'Format : &lt;value&gt;|&lt;name&gt;  Example : 1|Highest',
 	 		'#default_value' 	=> afl_variable_get('payout_methods', ''),
 	 		'#prefix'					=> '<div class="form-group row">',
@@ -109,13 +119,40 @@ function afl_payment_methods_form(){
 	 	);
 	 	$form['payout_status'] = array(
 	 		'#type' 					=> 'text-area',
-	 		'#title' 					=> 'Payout Status',
+	 		'#required'				=> TRUE,
+	 		'#title' 					=> 'Payout/Request Status',
 	 		'#description' 		=> 'Format : &lt;value&gt;|&lt;name&gt;  Example : 1|Highest',
 	 		'#default_value' 	=> afl_variable_get('payout_status', ''),
 	 		'#prefix'					=> '<div class="form-group row">',
 	 		'#suffix' 				=> '</div>'
 	 	);
-
+	 	$form['paid_status'] = array(
+	 		'#type' 					=> 'text-area',
+	 		'#title' 					=> 'Paid Status',
+	 		'#required'				=> TRUE,
+	 		'#description' 		=> 'Format : &lt;value&gt;|&lt;name&gt;  Example : 1|Highest',
+	 		'#default_value' 	=> afl_variable_get('paid_status', ''),
+	 		'#prefix'					=> '<div class="form-group row">',
+	 		'#suffix' 				=> '</div>'
+	 	);
+	 	$form['payout_type'] = array(
+	 		'#type' 					=> 'text-area',
+	 		'#title' 					=> 'Payout Type',
+	 		'#required'				=> TRUE,
+	 		'#description' 		=> 'Format : &lt;value&gt;|&lt;name&gt;  Example : 1|Highest',
+	 		'#default_value' 	=> afl_variable_get('payout_type', ''),
+	 		'#prefix'					=> '<div class="form-group row">',
+	 		'#suffix' 				=> '</div>'
+	 	);
+	 	$form['payout_categories'] = array(
+	 		'#type' 					=> 'text-area',
+	 		'#title' 					=> 'Payout Categories',
+	 		'#required'				=> TRUE,
+	 		'#description' 		=> 'Format : &lt;value&gt;|&lt;name&gt;  Example : 1|Highest',
+	 		'#default_value' 	=> afl_variable_get('payout_categories', ''),
+	 		'#prefix'					=> '<div class="form-group row">',
+	 		'#suffix' 				=> '</div>'
+	 	);
 	 	$form['submit'] = array(
 	 		'#type' => 'submit',
 	 		'#value' =>'Save configuration'

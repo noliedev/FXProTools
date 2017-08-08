@@ -7,6 +7,26 @@ function afl_admin_test_codes(){
 }
 
 function afl_test_codes_callback () {
+  $query = array();
+  $query['#select'] = _table_name('afl_user_downlines');
+  $query['#join']   = array(
+    _table_name('afl_user_genealogy') => array(
+      '#condition' => '`'._table_name('afl_user_downlines').'`.`downline_user_id` = `'._table_name('afl_user_genealogy').'`.`uid`'
+    )
+  );
+  $query['#where']  = array(
+    '`'._table_name('afl_user_genealogy').'`.`status` = 1',
+    '`'._table_name('afl_user_downlines').'`.`uid` = 162'
+  );
+  $query['#expression'] = array(
+    'COUNT(`'._table_name('afl_user_genealogy').'`.`uid`) as count'
+  );
+
+  $respo = db_select($query, 'get_row');
+        $count = !empty($respo->count) ? $respo->count : 0;
+  pr($count);
+}
+function insertuser () {
   $uid  = 162;
   for ($rank = 13; $rank >0; $rank--)  :
   $below_rank = $rank - 1;

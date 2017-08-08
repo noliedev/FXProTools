@@ -221,3 +221,69 @@ function afl_user_ewallet_expense_report_data_table(){
 	echo json_encode($output);
 	die();
 }
+
+function afl_user_my_withdraw_request_active_data_table(){
+
+	global $wpdb;
+	$uid 						 = get_current_user_id();
+	$uid = 162;
+
+
+	$input_valu = $_POST;
+ 	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
+     $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
+  }
+  if(!empty($input_valu['search']['value'])) {
+     $filter['search_valu'] = $input_valu['search']['value'];
+  }
+  $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
+  $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
+
+	 $query = array();
+   $query['#select'] = 'wp_afl_payout_requests';
+   $query['#join']  = array(
+      'wp_users' => array(
+        '#condition' => '`wp_users`.`ID`=`wp_afl_payout_requests`.`uid`'
+      )
+    );
+   $query['#where'] = array(
+      '`wp_afl_payout_requests`.`uid`= '.$uid.''
+    );
+   $limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+	
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+	 $result = db_select($query, 'get_results');
+	 $output = [
+     "draw" 						=> $input_valu['draw'],
+     "recordsTotal" 		=> count($result),
+     "recordsFiltered" 	=> $filter_count,
+     "data" 						=> [],
+   ];
+   
+   	$payout_methods = list_extract_allowed_values(afl_variable_get('payout_methods'),'list_text',FALSE);
+   	$paid_status = list_extract_allowed_values(afl_variable_get('paid_status'),'list_text',FALSE);
+   	// pr($payment_methods);
+		foreach ($result as $key => $value) { 	
+			$output['data'][] = [
+	   		$key+1,
+	     	$value->display_name." (".$value->uid.")",
+	 			afl_get_commerce_amount($value->amount_requested) .$value->currency_code,
+	 			afl_get_commerce_amount($value->charges) .$value->currency_code,
+	     	afl_date_combined(afl_date_splits($value->created)),
+	     	ucfirst(strtolower($value->notes)),
+	     	$payout_methods[$value->payout_method],
+	     	afl_get_commerce_amount($value->amount_paid) .$value->currency_code,
+	     	NULL,
+	     	$paid_status[$value->paid_status]
+   		];
+		}
+	echo json_encode($output);
+	die();
+}
+
+

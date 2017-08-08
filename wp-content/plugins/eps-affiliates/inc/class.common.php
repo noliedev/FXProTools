@@ -275,7 +275,12 @@ $common_include = new Eps_affiliates_common();
 				case 'checkbox':
 
 					$checked = (!empty($element['#default_value']) && isset($element['#default_value'])) ? TRUE : FALSE ;
+					$switch  = !empty($element['#attributes']['switch']) ? $element['#attributes']['switch'] : '';
 
+					$i_calss = 'i-checks';
+					if ( !empty($switch)) {
+						$i_calss = 'i-switch';
+					}
 					// if ($checked) {
 					// 	$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" checked="'.$checked.'" >';
 					// }else {
@@ -287,7 +292,7 @@ $common_include = new Eps_affiliates_common();
 
 					$html .= '<div class="form-item clearfix form-type-checkbox ">';
 
-					$html .='<label class="i-checks">';
+					$html .='<label class="'.$i_calss.'">';
 
 					if ($checked) {
 						$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-checkbox checkbox form-control '.$class.'" checked="'.$checked.'" >';
@@ -593,13 +598,16 @@ if(!function_exists('afl_get_levels')){
  * -----------------------------------------------------------
 */
 	function wp_set_message($msg = '', $action = 'success'){
-		if ($action == 'error')
-			$action = 'danger';
+		if ($action == 'danger')
+			$action = 'error';
+
 		$alert = '';
 		$alert .= '<div class="alert alert-'.$action.'" role="alert">';
 	  $alert .= $msg;
 		$alert .='</div>';
 
+		$alert = '';
+		$alert = '<script>$(function(){toastr["'.$action.'"]("'.$msg.'");});</script>';
 		return $alert;
 	}
 /**
@@ -1062,7 +1070,7 @@ if(!function_exists('afl_get_rank_names')){
  * -----------------------------------------------------------------------------
 */
 	function afl_get_user_downlines ($uid = '', $filter = array(), $count = false){
-		
+
 		global $wpdb;
 
 		$query = array();
@@ -1275,7 +1283,7 @@ if(!function_exists('afl_get_rank_names')){
 		$expression = '';
 		if (isset($data['#expression'])) {
 			foreach ($data['#expression'] as $value) {
-				$expression = empty($expression) ? $value : ','.$value;
+				$expression .= empty($expression) ? $value : ','.$value;
 			}
 		}
 
@@ -1426,7 +1434,10 @@ function afl_commerce_amount($amount_paid){
  * -----------------------------------------------------------------------
 */
 function afl_get_commerce_amount($amount_paid){
-  return $amount_paid / 100;
+	
+  
+  $amount_paid = $amount_paid / 100;
+  return number_format($amount_paid, 2, '.', ',');
 }
 /*
  * -----------------------------------------------------------------------

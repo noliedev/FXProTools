@@ -275,11 +275,11 @@
 				);
 				$menu['e_wallet_pending_withdrawal'] = array(
 					'#parent'					=> 'affiliate-eps-e-wallet', 
-					'#page_title'			=> __( 'Pending Withdrawal Request', 'Pending Withdrawal Request' ),    
-					'#menu_title' 		=> __( 'Pending Withdrawal Request', 'Pending Withdrawal Request' ),    
+					'#page_title'			=> __( 'My Withdrawal Request', 'My Withdrawal Request' ),    
+					'#menu_title' 		=> __( 'My Withdrawal Request', 'My Withdrawal Request' ),    
 					'#access_callback'=> 'ewallet', 
-					'#menu_slug' 			=> 'affiliate-eps-ewallet-pending-withdrawal', 
-					'#page_callback' 	=> 'afl_ewallet_pending_withdrawals', 
+					'#menu_slug' 			=> 'affiliate-eps-ewallet-my-withdrawal', 
+					'#page_callback' 	=> 'afl_ewallet_my_withdraw_requests', 
 				);
 				$menu['user_payment_method'] = array(
 					'#parent'					=> 'affiliate-eps-e-wallet', 

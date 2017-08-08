@@ -19,7 +19,7 @@ function afl_user_payment_method_conf_form(){
 	global $wpdb;
 	$uid 					 = get_current_user_id();
 	$table = $wpdb->prefix. 'afl_user_payment_methods';
-	$payment_methods = list_extract_allowed_values(afl_variable_get('payment_methods'),'list_text',FALSE);
+	$payment_methods = list_extract_allowed_values(afl_variable_get('payout_methods'),'list_text',FALSE);
 	$default_method = $wpdb->get_var("SELECT method FROM $table WHERE (uid = '$uid' AND status= '". 1 ."')");
  // pr($default_method);
 	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'payment_method';
@@ -76,7 +76,7 @@ function afl_user_payment_method_form(){
 		$uid 					 = get_current_user_id();
 		$table = $wpdb->prefix. 'afl_user_payment_methods';
 
-		$payment_methods = list_extract_allowed_values(afl_variable_get('payment_methods'),'list_text',FALSE);
+		$payment_methods = list_extract_allowed_values(afl_variable_get('payout_methods'),'list_text',FALSE);
 		$default_method = $wpdb->get_var("SELECT method FROM $table WHERE (uid = '$uid' AND status= '". 1 ."')");
 		$table 								= array();
 		$table['#name'] 			= '';

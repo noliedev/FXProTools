@@ -143,7 +143,6 @@
 					  `amount_paid` int(10) unsigned NOT NULL DEFAULT '0',
 					  `order_id` int(10) unsigned NOT NULL DEFAULT '0',
 					  `expiry_date` int(10) unsigned DEFAULT '0',
-					  `expiry_date_2` int(10) unsigned NOT NULL DEFAULT '0',
 					  `enrolment_package_id` int(10) unsigned NOT NULL DEFAULT '0',
 					  `joined_day` int(10) unsigned DEFAULT '0',
 					  `joined_month` int(10) unsigned DEFAULT '0',
@@ -155,7 +154,8 @@
 					  `deleted` int(10) unsigned DEFAULT '0' COMMENT 'Deleted Status',
 					  `merchant_id` varchar(250) DEFAULT 'default' COMMENT 'Merchant Id',
 					  `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
-					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name'
+					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name',
+					  `actived_on` varchar(250) DEFAULT 'default' COMMENT 'Actived on'
 					) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='Stores the user genealogy information';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );

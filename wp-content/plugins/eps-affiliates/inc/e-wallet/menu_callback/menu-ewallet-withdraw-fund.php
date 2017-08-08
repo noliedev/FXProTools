@@ -217,13 +217,13 @@ function afl_ewallet_withdraw_fund_form_validation($form_state){
 		    return false;
 		  }
 
-		  $table = $wpdb->prefix. 'afl_payout_requests';
+		  /*$table = $wpdb->prefix. 'afl_payout_requests';
 		  $afl_payout_id = $wpdb->get_row("SELECT afl_payout_id FROM $table WHERE (uid = '$uid' AND deleted = 0  AND request_status = 1 AND category = 'WITHDRAWAL')"); 
   		if($afl_payout_id){
       echo wp_set_message(__('You have already one active withdrawal request. Users can not place multiple active withdrawal requests.'), 'danger');
       return false;
 
-  		}
+  		}*/
 		 	$table = $wpdb->prefix. 'afl_user_transactions';
 		 	$balance = $wpdb->get_var("SELECT  SUM(`$table`.`balance`) as balance FROM `$table` WHERE `uid` = $uid AND `deleted` = 0 AND `int_payout` = 0 AND `int_return` = 0");	
 	  	$balance = (!empty($balance) ? $balance  : 0);
@@ -280,8 +280,8 @@ if($form_state['password'] && $form_state['withdrwal_amount']){
 	$afl_date = afl_date();
 	$afl_date_splits = afl_date_splits($afl_date);
 	$amount_entered = $form_state['withdrwal_amount'];
-	$requested_amount = afl_commerce_amount($amount_entered) ;
-	$processing_charge = afl_variable_get('payout_charges_'.$form_state['payment_method'], -100);
+	$requested_amount = ($amount_entered) ;
+	$processing_charge =  (afl_variable_get('payout_charges_'.$form_state['payment_method'], -100));
 	$payout_table = $wpdb->prefix . 'afl_payout_requests';
 	$payout_his_table = $wpdb->prefix . 'afl_payout_history';
 
@@ -292,12 +292,12 @@ if($form_state['password'] && $form_state['withdrwal_amount']){
   $records['request_status'] = 1;
   $records['paid_status'] = 0;
   $records['payout_type'] = '';
-  $records['amount_requested'] = $requested_amount;
-  $records['charges'] = $processing_charge;
+  $records['amount_requested'] = afl_commerce_amount($requested_amount);
+  $records['charges'] =afl_commerce_amount($processing_charge);
   $records['currency_code'] = afl_currency();
-  $records['amount_paid'] = ($requested_amount - $processing_charge);
+  $records['amount_paid'] = afl_commerce_amount ( ($requested_amount - $processing_charge) );
   $records['category'] = 'WITHDRAWAL';
-  $records['notes'] = t('Submitted withdrawal request');
+  $records['notes'] = 'Submitted withdrawal request';
   $records['created'] = $afl_date;
   $records['modified'] = $afl_date;
   $records['deleted'] = 0;
@@ -328,7 +328,7 @@ if($form_state['password'] && $form_state['withdrwal_amount']){
 
 
     $business_transactions['category'] = 'WITHDRAWAL CHARGES';
-    $business_transactions['additional_notes'] = t('Withdrawal Charges');
+    $business_transactions['additional_notes'] = 'Withdrawal Charges';
     $business_transactions['uid'] = $uid;
     $business_transactions['associated_user_id'] = $uid;
     $business_transactions['credit_status'] = 1;

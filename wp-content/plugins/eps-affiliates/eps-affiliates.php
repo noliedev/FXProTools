@@ -335,6 +335,7 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/eps-ewallet-ajax-callbacks.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/menu_callback/menu-ewallet-summary-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/menu_callback/menu-ewallet-withdraw-fund.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/menu_callback/menu-ewallet-my-withdraw-requests.php';
 
 
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-db.php';
@@ -353,7 +354,7 @@
 
 				//the functionality shortcodes
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-shortcodes.php';
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-cron-jobs.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-schedulers.php';
 
 				
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test.php';
