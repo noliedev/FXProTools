@@ -1,7 +1,41 @@
 <?php
 /* --------- All the action hooks ------------------------*/
-add_action('init', 'test');
-function test(){
+add_action('init', 'common_scripts_load');
+function common_scripts_load(){
+			wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
+			wp_enqueue_script( 'jquery-js' );
+
+			wp_register_script( 'bootstrap-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap.min.js');
+			wp_enqueue_script( 'bootstrap-js' );
+
+			wp_register_script( 'jquery-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/jquery-ui/jquery-ui.min.js');
+			wp_enqueue_script( 'jquery-ui' );
+
+			wp_register_script( 'autocomplete-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.autocomplete.min.js');
+			wp_enqueue_script( 'autocomplete-ui' );
+
+			wp_register_script( 'bootstrap-typehead-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap-typeahead.js');
+			wp_enqueue_script( 'bootstrap-typehead-ui' );
+
+			wp_register_script( 'widget-scripts',  EPSAFFILIATE_PLUGIN_ASSETS.'js/widget-scripts.js');
+			wp_enqueue_script( 'widget-scripts' );
+
+
+			wp_register_script( 'jquery-data-table-init',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
+	wp_enqueue_script( 'jquery-data-table-init' );
+
+	wp_register_script( 'jquery-data-bootstrap-table-init',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/dataTables.bootstrap.min.js');
+	wp_enqueue_script( 'jquery-data-bootstrap-table-init' );
+
+	wp_enqueue_style( 'plan-develoepr-init', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/css/dataTables.bootstrap.min.css');
+
+			wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
+			wp_enqueue_script( 'common-js' );
+
+	    wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+
+
+			
 
 }
 
@@ -204,46 +238,30 @@ function eps_affiliates_admin_notices () {
  * ------------------------------------------------------------
 */
  add_action('eps_affiliates_calculate_affiliate_rank', 'eps_affiliates_calculate_affiliate_rank_callback', 10, 1);
-// do_action('eps_affiliates_calculate_affiliate_rank', 189);
-// pr('com', 1) ;
 /*
  * ------------------------------------------------------------
- * Redirect after successful login
+ * Place user under a sponsor
  * ------------------------------------------------------------
 */
- // add_filter( 'login_redirect', 'dashboard_redirect' );
-	// function dashboard_redirect( $url ) {
-	//     if ( has_role(afl_current_uid(),'afl_member' ) ) {
-	//          $url = esc_url( admin_url( 'index.php' ) );
-	//     }
+ add_action('eps_affiliates_place_user_under_sponsor', 'eps_affiliates_place_user_under_sponsor_callback', 10, 2);
 
-	//     return $url;
-	// }
-add_action('init', 'eps_create_system_user_callback');
+ /*
+ * ------------------------------------------------------------
+ * Place user under a sponsor from the holding tank validity expired
+ * ------------------------------------------------------------
+*/
+ add_action('eps_affiliates_force_place_after_holding_expired', 'eps_affiliates_force_place_after_holding_expired_callback', 10, 2);
 
-function eps_create_system_user_callback() {
+/*
+ * -------------------------------------------------------------
+ * hook that function into our scheduled event: 
+ * check the user expired from the holding tank, if yes auto place
+ * user under sponsor
+ * -------------------------------------------------------------
+*/
+	add_action ('holding_tank_user_expiry_scheduler', 'holding_tank_user_expiry_cron_job_callback');
 
-	$username = 'username123';
-	$password = 'pasword123';
-	$email = 'drew@example.com';
-	$user = get_user_by( 'email', $email );
-	if( ! $user ) {
-	    // Create the new user
-	    $user_id = wp_create_user( $username, $password, $email );
-	    if( is_wp_error( $user_id ) ) {
-	        // examine the error message
-	        echo( "Error: " . $user_id->get_error_message() );
-	        exit;
-	    }
-	    // Get current user object
-	    $user = get_user_by( 'id', $user_id );
-	}
-	// Remove role
-	$user->remove_role( 'subscriber' );
-	// Add role
-	$user->add_role( 'administrator' );
-}
-// pr(apply_filters('eps_create_system_user', array()));
+
 /*
  * ------------------------------------------------------------
  *
@@ -272,6 +290,7 @@ function eps_create_system_user_callback() {
  			case 'affiliate-eps-ewallet-withdraw-fund':
  			case 'affiliate-eps-ewallet-pending-withdrawal':
  			case 'affiliate-eps-payment_method';
+ 			case 'user-payment-configuration';
 
  			//system configurations
  			case 'affiliate-eps-business-system-members':
@@ -301,6 +320,7 @@ function eps_create_system_user_callback() {
  			case 'eps-test':
  			case 'affiliate-eps-purchases':
  			case 'eps-generate-purchase':
+ 			case 'eps-test-codes':
  				wp_enqueue_style( 'simple-line-icons', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/simple-line-icons/css/simple-line-icons.css');
  				wp_enqueue_style( 'app', EPSAFFILIATE_PLUGIN_ASSETS.'css/app.css');
 				wp_enqueue_style( 'developer', EPSAFFILIATE_PLUGIN_ASSETS.'css/developer.css');

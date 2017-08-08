@@ -1,97 +1,100 @@
+/* Base */
+*, *:after, *::before { -moz-box-sizing: border-box; box-sizing: border-box; }
+
+*, body, html { -webkit-font-smoothing: antialiased; }
+
+html.is-loading { overflow: hidden; }
+
+html, body { height: 100%; }
+
+html { font-size: 100%; }
+
+/* Wrapper */
+.fx-wrapper { position: relative; padding-bottom: 50px; }
+
 /* Main Navigation */
-.fx-navbar-main {
-	position: relative;
-	border-bottom: 1px solid #DDD;
-}
+.fx-navbar-main { position: relative; border-bottom: 1px solid #DDD; }
 
-.fx-navbar-header .navbar-brand {
-	height: auto;
-}
+.fx-navbar-main .fx-nav-options { list-style: none; padding: 0; margin: 0; }
 
-.fx-navbar-main .fx-nav-options {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
+.fx-navbar-main .fx-nav-options li { float: left; margin-right: 10px; }
 
-.fx-navbar-main .fx-nav-options li {
-	float: left;
-	margin-right: 10px;
-}
+.fx-navbar-main .fx-nav-options li:last-child { margin-right: 0; }
 
-.fx-navbar-main .fx-nav-options li:last-child {
-	margin-right: 0;
-}
+.fx-navbar-main .fx-nav-options li a { font-size: 20px; display: block; padding: 25px 10px; line-height: 30px; text-align: center; }
 
-.fx-navbar-main .fx-nav-options li a {
-	font-size: 20px;
-    display: block;
-    padding: 25px 10px;
-    line-height: 30px;
-    text-align: center;
-}
+.fx-navbar-main .fx-nav-options li a:hover, .fx-navbar-main .fx-nav-options li a:active, .fx-navbar-main .fx-nav-options li a:focus { text-decoration: none; }
 
-.fx-navbar-main .fx-nav-options li a:hover,
-.fx-navbar-main .fx-nav-options li a:active,
-.fx-navbar-main .fx-nav-options li a:focus {
-	text-decoration: none;
-}
+.fx-navbar-main .fx-nav-options li.account { padding-top: 15px; }
 
-.fx-navbar-main .fx-nav-options li.account {
-	padding-top: 15px;
-}
+.fx-navbar-main .fx-nav-options li.account a { border: 1px solid #DDD; line-height: 5px; padding: 20px 25px; font-size: 13px; }
 
-.fx-navbar-main .fx-nav-options li.account a {
-	border: 1px solid #DDD;
-    line-height: 5px;
-    padding: 20px 25px;
-    font-size: 13px;
-}
-
+.fx-navbar-main .fx-navbar-header .navbar-brand { height: auto; }
 
 /* Sub Navigation */
-.fx-navbar-sub {
-	position: relative;
-    min-height: inherit;
-}
+.fx-navbar-sub { position: relative; min-height: inherit; }
 
-.fx-navbar-sub .fx-nav-options {
-	margin: 0;
-    padding: 0;
-    list-style: none;
-}
+.fx-navbar-sub .fx-nav-options { margin: 0; padding: 10px; list-style: none; border: 1px solid #DDD; }
 
-.fx-navbar-sub .fx-nav-options li {
-	float: left;
-	margin-right: 10px;
-}
+.fx-navbar-sub .fx-nav-options li { display: inline-block; margin-right: 10px; }
 
-.fx-navbar-sub .fx-nav-options li:last-child {
-	margin-right: 0;
-}
+.fx-navbar-sub .fx-nav-options li:last-child { margin-right: 0; }
 
-.fx-navbar-sub .fx-nav-options li a {
-	display: inline-block;
-	padding: 10px 15px;
-	width: 200px;
-	border: 1px solid #DDD;
-}
+.fx-navbar-sub .fx-nav-options li a { display: inline-block; padding: 10px 15px; width: 200px; border: 1px solid #DDD; }
 
-.fx-navbar-sub .fx-nav-options li a:hover,
-.fx-navbar-sub .fx-nav-options li a:focus,
-.fx-navbar-sub .fx-nav-options li a:active {
-	text-decoration: none;
-}
+.fx-navbar-sub .fx-nav-options li a:hover, .fx-navbar-sub .fx-nav-options li a:focus, .fx-navbar-sub .fx-nav-options li a:active { text-decoration: none; }
 
-.fx-navbar-sub .fx-nav-options li.dashboard a {
-	width: 45px;
-}
+.fx-navbar-sub .fx-nav-options li.dashboard a { width: 45px; }
 
+.fx-navbar-sub .fx-nav-options li.locked a { background-color: #DDD; color: #FFF; cursor: not-allowed; }
 
-.fx-navbar-sub .fx-nav-options li.locked a {
-	background-color: #DDD;
-	color: #FFF;
-	cursor: not-allowed;
-}
+/* Dashboard, Referral Program */
+.fx-header-title { text-align: center; margin: 15px 0 40px 0; }
 
-/** TARUN'S EDITS **/
+.fx-header-title h1 { font-size: 25px; margin-top: 0; }
+
+.fx-video-container { height: 445px; background: #000; }
+
+.fx-board.checklist { position: relative; border: 1px solid #DDD; }
+
+.fx-board.checklist .fx-board-title { padding: 15px; }
+
+.fx-board.checklist .fx-board-title span { font-weight: bold; text-align: center; display: block; }
+
+.fx-board.checklist .fx-board-title.w-text { position: relative; }
+
+.fx-board.checklist .fx-board-title.w-text span { margin-bottom: 5px; }
+
+.fx-board.checklist .fx-board-title.w-text p { margin-bottom: 0; }
+
+.fx-board.checklist .fx-board-list { list-style: none; padding: 0; margin: 0; }
+
+.fx-board.checklist .fx-board-list li { border-bottom: 1px solid #DDD; padding: 10px; }
+
+.fx-board.checklist .fx-board-list li:first-child { border-top: 1px solid #DDD; }
+
+.fx-board.checklist .fx-board-list li:last-child { border-bottom: none; }
+
+.fx-board.checklist .fx-board-list li .fx-checkbox { border: 1px solid #DDD; height: 25px; width: 25px; display: inline-block; vertical-align: middle; margin-right: 5px; border-radius: 50%; position: relative; overflow: hidden; }
+
+.fx-board.checklist .fx-board-list li .fx-checkbox.checked { border: none; }
+
+.fx-board.checklist .fx-board-list li .fx-checkbox.checked:before { content: "\f00c"; color: #FFF; background: #1abc9c; font-family: FontAwesome; position: absolute; top: 0; bottom: 0; left: 0; right: 0; text-align: center; padding-top: 2px; }
+
+.fx-board.checklist .fx-board-list li a.start { background: #e74c3c; display: block; color: #FFF; text-align: center; padding: 15px; }
+
+.fx-lg-links { margin-top: 30px; }
+
+.fx-lg-links .fx-lg-link { text-align: center; border: 1px solid #DDD; padding: 30px 20px; width: 100%; display: block; }
+
+.fx-ref-links { margin-top: 30px; border: 1px solid #DDD; padding: 15px 30px 30px 30px; }
+
+.fx-ref-links .fx-ref-title { text-align: center; }
+
+.fx-ref-links .fx-ref-title h3 { font-weight: bold; margin-bottom: 5px; }
+
+.fx-ref-links .box { border: 1px solid #DDD; padding: 15px; margin-top: 20px; }
+
+.fx-ref-links .box .link { margin-top: 10px; border: 1px solid #DDD; padding: 15px; position: relative; }
+
+.fx-ref-links .box .link-btn { margin-top: 10px; padding: 15px; display: block; background: #e74c3c; color: #FFF; text-align: center; }

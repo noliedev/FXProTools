@@ -32,6 +32,8 @@
 				add_action( 'admin_menu', array( $this , 'eps_admin_purchase') );
 
 				add_action( 'admin_menu', array( $this , 'afl_reports') );
+				
+				add_action( 'admin_menu', array( $this , 'afl_no_parent_pages') );
 
 				
 
@@ -283,7 +285,7 @@
 					'#parent'					=> 'affiliate-eps-e-wallet', 
 					'#page_title'			=> __( 'Select Payment method', 'Select Payment method' ),    
 					'#menu_title' 		=> __( 'Select Payment method', 'Select Payment method' ),    
-					'#access_callback'=> 'ewallet', 
+					'#access_callback'=> 'user_payment_method_conf', 
 					'#menu_slug' 			=> 'affiliate-eps-payment_method', 
 					'#page_callback' 	=> 'afl_user_payment_methods', 
 				);
@@ -599,6 +601,15 @@
 					'#menu_slug' 			=> 'eps-generate-purchase', 
 					'#page_callback' 	=> 'afl_generate_purchase', 
 				);
+
+				$menu['test_codes'] = array(
+					'#parent'					=> 'eps-test',
+					'#page_title'			=> __( 'Test codes', 'Test codes' ),
+					'#menu_title' 		=> __( 'Test codes', 'Test codes' ),
+					'#access_callback'=> 'features_and_configuration', 
+					'#menu_slug' 			=> 'eps-test-codes', 
+					'#page_callback' 	=> 'afl_admin_test_codes', 
+				);
 				afl_system_admin_menu($menu);
 		 }
 		/*
@@ -643,8 +654,21 @@
 				afl_system_admin_menu($menu);
 		 }
 
+		 function afl_no_parent_pages(){
+		 	$payment_methods= list_extract_allowed_values(afl_variable_get('payment_methods'),'list_text',FALSE);
+		 	foreach ($payment_methods as $key => $value) {
+		 		$menu['payout_method_conf_'.$key] = array(
+		 			'#parent'					=>'no-parent',
+					'#page_title'			=> __( $value, $value ),
+					'#menu_title' 		=> __( $value, $value ),
+					'#access_callback'=> 'user_payment_method_conf', 
+					'#menu_slug' 			=> 'user-payment-configuration', 
+					'#page_callback' 	=> 'afl_user_payment_configuration',
+				);
+		 	}
+		 		afl_system_admin_menu($menu);		
+		 }
+
 	}
-
-
 $eps_afl_admin_menu = new Eps_Affiliates_Admin_Menu;
 

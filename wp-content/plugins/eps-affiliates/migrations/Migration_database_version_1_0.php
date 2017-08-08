@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
  * --------------------------------------------------------------------
@@ -18,6 +18,7 @@
 	 	public function migration_upgrade() {
 	 		$this->afl_variables();
 	 		$this->afl_user_downlines();
+	 		$this->afl_referal_downlines();
 	 		$this->afl_user_genealogy();
 	 		$this->afl_user_holding_tank();
 	 		$this->afl_user_transactions();
@@ -39,6 +40,8 @@
 	 		$this->afl_purchases();
 	 		$this->afl_ranks();
 	 		$this->afl_ranks_history();
+	 		
+	 		$this->afl_tree_last_insertion_positions();
 
 
 
@@ -47,8 +50,8 @@
 	 	public function migration_downgrade() {
 	 		// echo 'down';
 	 	}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 * Variables Table
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -66,8 +69,8 @@
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
 		}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 * User downlines
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -114,8 +117,8 @@
   							MODIFY `afl_user_downline_id` int(11) NOT NULL AUTO_INCREMENT;' );
 
 		}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 * user Genealogy
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -156,7 +159,7 @@
 					) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='Stores the user genealogy information';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
-			
+
 			global $wpdb;
 
 			//indexes
@@ -167,8 +170,8 @@
 			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
   							MODIFY `afl_user_genealogy_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 * User Transactions
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -206,18 +209,18 @@
 					) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='Stores the user transactions';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
-			
+
 			global $wpdb;
 			//indexes
 			$wpdb->query('ALTER TABLE `'.$table_name.'`
   							ADD PRIMARY KEY (`afl_user_transactions_id`);');
-			
+
 			//AUTO_INCREMENT
 			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
   							MODIFY `afl_user_transactions_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 * Afl business transactions
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -251,7 +254,7 @@
 
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
-			
+
 			global $wpdb;
 
 			//indexes
@@ -262,9 +265,9 @@
   							MODIFY `afl_business_transactions_id` int(11) NOT NULL AUTO_INCREMENT' );
 
 		}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
-	 * Business Funds 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
+	 * Business Funds
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
 		private function afl_business_funds () {
@@ -280,7 +283,7 @@
 					) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='Stores the user transactions overview';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
-			
+
 			global $wpdb;
 			//indexes
 			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
@@ -289,9 +292,9 @@
 			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
   							MODIFY `afl_business_fund_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
-	 * User transactions Overview 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
+	 * User transactions Overview
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
 		private function afl_user_transactions_overview () {
@@ -311,7 +314,7 @@
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stores the user transactions overview';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
-			
+
 			global $wpdb;
 			//indexes
 			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
@@ -320,8 +323,8 @@
 			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
   							MODIFY `afl_user_transactions_overview_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 * user Holding tank
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -333,9 +336,6 @@
 					  `referrer_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Referrer user',
 					  `parent_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Parent user',
 					  `level` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Level',
-					  `left_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Left Child',
-					  `middle_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Middle Child',
-					  `right_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Right Child',
 					  `status` tinyint(4) NOT NULL COMMENT 'Status',
 					  `created` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Created',
 					  `modified` int(10) unsigned DEFAULT '0' COMMENT 'Modified',
@@ -346,24 +346,17 @@
 					  `amount_paid` int(10) unsigned NOT NULL DEFAULT '0',
 					  `order_id` int(10) unsigned NOT NULL DEFAULT '0',
 					  `expiry_date` int(10) unsigned DEFAULT '0',
-					  `expiry_date_2` int(10) unsigned NOT NULL DEFAULT '0',
-					  `enrolment_package_id` int(10) unsigned NOT NULL DEFAULT '0',
 					  `joined_day` int(10) unsigned DEFAULT '0',
 					  `joined_month` int(10) unsigned DEFAULT '0',
 					  `joined_year` int(10) unsigned DEFAULT '0',
 					  `joined_week` int(10) unsigned DEFAULT '0',
 					  `joined_date` varchar(100) DEFAULT NULL COMMENT 'Joined Date',
-					  `currency_code` varchar(100) DEFAULT NULL COMMENT 'Currency Code',
-					  `extra_info` varchar(300) DEFAULT NULL COMMENT 'Extra Info',
-					  `deleted` int(10) unsigned DEFAULT '0' COMMENT 'Deleted Status',
-					  `merchant_id` varchar(250) DEFAULT 'default' COMMENT 'Merchant Id',
-					  `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
-					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name',
-					  `day_remains` int(10) unsigned DEFAULT '0' COMMENT 'Day remains'
+					  `day_remains` int(10) unsigned DEFAULT '0' COMMENT 'Day remains',
+					  `last_updated` int(10) unsigned DEFAULT '0' COMMENT 'Last updated date'
 					) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='Stores the user genealogy information';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
-			
+
 			global $wpdb;
 
 			//indexes
@@ -374,9 +367,9 @@
 			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
   							MODIFY `afl_user_holding_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
- /* 
-	 * ----------------------------------------------------------------------------------------------------------- 
-	 * User transactions Overview 
+ /*
+	 * -----------------------------------------------------------------------------------------------------------
+	 * User transactions Overview
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
 		private function afl_business_transactions_overview () {
@@ -396,7 +389,7 @@
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stores the business transactions overview';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
-			
+
 			global $wpdb;
 			//indexes
 			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
@@ -406,9 +399,9 @@
   							MODIFY `afl_business_transactions_overview_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
 
-	/* 
-	* ----------------------------------------------------------------------------------------------------------- 
-	* User Fund 
+	/*
+	* -----------------------------------------------------------------------------------------------------------
+	* User Fund
 	* -----------------------------------------------------------------------------------------------------------
 	*/
 		private function afl_user_fund () {
@@ -425,7 +418,7 @@
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stores the user funds';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
-			
+
 			global $wpdb;
 			//indexes
 			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
@@ -434,9 +427,9 @@
 			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
   							MODIFY `afl_user_fund_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
-	 * User Purchases 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
+	 * User Purchases
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
 		private function afl_purchases() {
@@ -477,8 +470,8 @@
 				$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 	  							MODIFY `afl_purchases_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 * User transaction Errors
 	 * Transaction errors
 	 * -----------------------------------------------------------------------------------------------------------
@@ -517,7 +510,7 @@
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 				dbDelta( $sql );
 					global $wpdb;
-			
+
 					//indexes
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 		  							ADD PRIMARY KEY (`afl_transactions_error_id`);' );
@@ -525,10 +518,10 @@
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 		  							MODIFY `afl_transactions_error_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
-	 * transaction details 
-	 * 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
+	 * transaction details
+	 *
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
 		private function afl_transactions(){
@@ -572,7 +565,7 @@
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 				dbDelta( $sql );
 					global $wpdb;
-			
+
 					//indexes
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 		  							ADD PRIMARY KEY (`afl_transactions_id`);' );
@@ -581,11 +574,11 @@
 		  							MODIFY `afl_transactions_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
 
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 * Payout Requests
-   * 
-	 * ----------------------------------------------------------------------------------------------------------- 	 
+   *
+	 * -----------------------------------------------------------------------------------------------------------
 	*/
 		private function afl_payout_requests(){
 			$table_name = $this->tbl_prefix . 'afl_payout_requests';
@@ -621,17 +614,17 @@
 				require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 					dbDelta( $sql );
 						global $wpdb;
-			
+
 					//indexes
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 		  							ADD PRIMARY KEY (`afl_payout_id`);' );
 					//AUTO increment
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
-		  							MODIFY `afl_payout_id` int(11) NOT NULL AUTO_INCREMENT;' );	
+		  							MODIFY `afl_payout_id` int(11) NOT NULL AUTO_INCREMENT;' );
 		}
 
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 * Payout History
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -671,18 +664,18 @@
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 					dbDelta( $sql );
 						global $wpdb;
-			
+
 					//indexes
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 		  							ADD PRIMARY KEY (`afl_payout_hist_id`);' );
 					//AUTO increment
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 		  							MODIFY `afl_payout_hist_id` int(11) NOT NULL AUTO_INCREMENT;' );
-	 	
+
 	 	}
 
- 	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+ 	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 *User payment methods
    * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -701,17 +694,17 @@
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 					dbDelta( $sql );
 						global $wpdb;
-			
+
 					//indexes
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 		  							ADD PRIMARY KEY (`afl_user_payment_method_id`);' );
 					//AUTO increment
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 		  							MODIFY `afl_user_payment_method_id` int(11) NOT NULL AUTO_INCREMENT;' );
-			
+
 		}
-  /* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+  /*
+	 * -----------------------------------------------------------------------------------------------------------
 	 * transaction authorizations
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -724,22 +717,22 @@
 			  `password` varchar(255) NOT NULL COMMENT 'transaction password',
 			  `recovery_pin` int(11) DEFAULT NULL COMMENT 'transaction password recovery pin'
 			) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='The base table for ewallet transaction authorization.';";
-			
+
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 					dbDelta( $sql );
 						global $wpdb;
-			
+
 					//indexes
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 		  							ADD PRIMARY KEY (`transaction_user_id`);' );
 					//AUTO increment
 					$wpdb->query( 'ALTER TABLE `'.$table_name.'`
 		  							MODIFY `transaction_user_id` int(11) NOT NULL AUTO_INCREMENT;' );
-			
+
 		}
-	
-	/* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
 	 *  Afl ranks
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -776,8 +769,8 @@
 		  							MODIFY `afl_rank_id` int(11) NOT NULL AUTO_INCREMENT;' );
 
     }
-  /* 
-	 * ----------------------------------------------------------------------------------------------------------- 
+  /*
+	 * -----------------------------------------------------------------------------------------------------------
 	 *  Afl ranks history
 	 * -----------------------------------------------------------------------------------------------------------
 	*/
@@ -813,8 +806,77 @@
 
     }
 
+/*
+ * -----------------------------------------------------------------------------------------------------------
+ *  Referal downlines
+ * -----------------------------------------------------------------------------------------------------------
+*/
+  private function afl_referal_downlines () {
+    $table_name = $this->tbl_prefix . 'afl_referal_downlines';
+    $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+            `afl_referal_downline_id` int(11) NOT NULL,
+            `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Registered user',
+            `downline_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Down-line user',
+            `level` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Level of down-line user',
+            `created` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Created date',
+            `status` tinyint(4) NOT NULL COMMENT 'Status',
+            `position` varchar(100) DEFAULT NULL COMMENT 'Genealogy position',
+            `relative_position` varchar(100) DEFAULT NULL COMMENT 'Genealogy position',
+            `member_rank` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Rank',
+            `rejoined_phase` int(10) unsigned DEFAULT '0' COMMENT 'Rejoined Phase',
+            `sponsor_rejoined_phase` int(10) unsigned DEFAULT '0' COMMENT 'Sponsor Rejoined Phase',
+            `parent_rejoined_phase` int(10) unsigned DEFAULT '0' COMMENT 'Parent Rejoined Phase',
+            `amount_paid` int(10) unsigned NOT NULL DEFAULT '0',
+            `order_id` int(10) unsigned NOT NULL DEFAULT '0',
+            `enrolment_package_id` int(10) unsigned NOT NULL DEFAULT '0',
+            `joined_day` int(10) unsigned NOT NULL DEFAULT '0',
+            `joined_month` int(10) unsigned NOT NULL DEFAULT '0',
+            `joined_year` int(10) unsigned NOT NULL DEFAULT '0',
+            `joined_week` int(10) unsigned NOT NULL DEFAULT '0',
+            `joined_date` varchar(100) DEFAULT NULL COMMENT 'Joined Date in format',
+            `currency_code` varchar(100) DEFAULT NULL COMMENT 'Currency Code',
+            `deleted` int(10) unsigned DEFAULT '0' COMMENT 'Deleted Status',
+            `ini_payment` int(10) unsigned DEFAULT '0' COMMENT 'Initial Payments',
+            `merchant_id` varchar(250) DEFAULT 'default' COMMENT 'Merchant Id',
+            `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
+            `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name'
+          ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='Stores the user down-line information';
+          ";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+    global $wpdb;
+
+    //indexes
+    $wpdb->query( 'ALTER TABLE `'.$table_name.'`
+                  ADD PRIMARY KEY (`afl_referal_downline_id`);' );
+    //AUTO increment
+    $wpdb->query( 'ALTER TABLE `'.$table_name.'`
+                  MODIFY `afl_referal_downline_id` int(11) NOT NULL AUTO_INCREMENT;' );
+  }
+/*
+ * -----------------------------------------------------------------------------------------------------------
+ *  user last tree insertion position details
+ * -----------------------------------------------------------------------------------------------------------
+*/
+ private function afl_tree_last_insertion_positions () {
+ 	$table_name = $this->tbl_prefix . 'afl_tree_last_insertion_positions';
+    $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+					  `ins_id` int(11) NOT NULL,
+					  `uid` int(11) NOT NULL,
+					  `level` int(11) NOT NULL,
+					  `position` varchar(250) NOT NULL
+					) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+    global $wpdb;
+  //indexes
+    $wpdb->query( 'ALTER TABLE `'.$table_name.'`
+                  ADD PRIMARY KEY (`ins_id`);' );
+    //AUTO increment
+    $wpdb->query( 'ALTER TABLE `'.$table_name.'`
+                  MODIFY `ins_id` int(11) NOT NULL AUTO_INCREMENT;' );
+ }
+
 } //here closing the class
- 
-
-
-		

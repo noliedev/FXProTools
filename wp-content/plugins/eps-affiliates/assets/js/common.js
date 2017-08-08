@@ -50,6 +50,7 @@ $(function () {
       table = $(".custom-data-tables").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,

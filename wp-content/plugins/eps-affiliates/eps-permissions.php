@@ -101,5 +101,10 @@
 			'#title' 				=> __('AFL Rank performance Overview'),
 			'#description' 	=> 'affiliates rank performance overview '
 		);
+		//user payment method configuration
+		$permissions['user_payment_method_conf'] = array(
+			'#title' 				=> __('AFL User payment method configuration'),
+			'#description' 	=> 'user paymnet method configuration '
+		);
 		return $permissions;
 	}

@@ -7,11 +7,43 @@
 	function eps_commerce_checkout_complete( $order_id ){
 		afl_purchase($order_id);
 	}
+/*
+ * -------------------------------------------------------
+ * Place a user under a sponsor 
+ * -------------------------------------------------------
+*/
+	function eps_affiliates_place_user_under_sponsor_callback ($uid = '', $sponsor = '') {
+		$reg_obj = new Eps_affiliates_registration;
+		$reg_obj->afl_join_member(
+									array(
+										'sponsor_uid' => $sponsor,
+										'uid'					=> $uid
+									)
+							);
+	}
+/*
+ * ------------------------------------------------------
+ * Place user under a sponsor if the tank validity expires
+ * ------------------------------------------------------
+*/
+ function eps_affiliates_force_place_after_holding_expired_callback ($uid = '', $sponsor = '') {
+ 		global $wpdb;
+ 		$reg_obj = new Eps_affiliates_registration;
+		$reg_obj->afl_join_member(
+									array(
+										'sponsor_uid' => $sponsor,
+										'uid'					=> $uid
+									)
+							);
+		$wpdb->delete(_table_name('afl_user_holding_tank'), array('uid'=>$uid));
+ }
+/*
+ * ---------------------------------------------------------
+ * Commerce purchase complete
+ * ---------------------------------------------------------
+*/
 
-
-
-
-function eps_commerce_purchase_complete($args = array()){
+	function eps_commerce_purchase_complete($args = array()){
 	 	//need to save the details to purchases
 	 	$response = array();
 
@@ -92,7 +124,7 @@ function eps_commerce_purchase_complete($args = array()){
 	 		$response['error'][] 	= 'Un-expected error occured. Unable to insert to the purchase details.';
 	 	}
 	 		return $response;
-	 }
+	}
 /*
  * ------------------------------------------------------
  * Calculate the affiliates rank
@@ -153,6 +185,14 @@ function eps_commerce_purchase_complete($args = array()){
 	 			$date_splits 	= afl_date_splits(afl_date());
 
 	 			if ( $update_id ) {
+					//update rank in user downlines
+					$update_id = $wpdb->update(
+							_table_name('afl_user_downlines'),
+							array(
+								'member_rank' => $i
+							),
+							array('downline_user_id' => $uid)
+						);
 				/*
 		 		 * ---------------------------------------------------------
 		 		 * Rank table update /  Insert
@@ -266,11 +306,117 @@ function eps_commerce_purchase_complete($args = array()){
  * ----------------------------------------------------
  */
   function _check_required_qualifications_meets ($uid = '', $rank = '') {
-		$below_rank = $rank - 1 ;
-		if ( $below_rank > 0 ){
+		$below_rank = $rank - 1;
+	  $meets_flag = 0;
 
+	  if ( $below_rank > 0 ){
+	    //loop through the below ranks qualifications exists or not
+	    for ( $i = $below_rank; $i > 0; $i-- ) {
+	      /*
+	       * --------------------------------------------------------------
+	       * get the required rank holders neede in one leg
+	       * --------------------------------------------------------------
+	      */
+	        $required_in_one_count = afl_variable_get('rank_'.$rank.'_rank_'.$i.'_required_count', 0);
+
+	      if ( $required_in_one_count ) {
+	        /*
+	         * --------------------------------------------------------------
+	         * get the required count in how many legs
+	         * --------------------------------------------------------------
+	        */
+	          $required_in_legs_count    = afl_variable_get('rank_'.$rank.'_rank_'.$i.'_required_in_legs ', 0);
+
+	        //if in legs count specified
+	        if ( $required_in_legs_count ) {
+	          /*
+	           * ---------------------------------------------------------------
+	           * get the first level downlines of this user
+	           * get count of the first level users having the rank
+	           * if the rank users exists set the status as 1
+	           * else unset status as 0
+	           * this status adds to the condition_statuses array
+	           *
+	           * count the occurence of 0 and 1 in this array
+	           *
+	           * if the occurence of status is greater than or equals the count of
+	           *  required in howmany legs count set the meets flag
+	           * else unset
+	           * ---------------------------------------------------------------
+	          */
+
+
+	          $downlines = afl_get_user_downlines_uid($uid, array('level'=>1), false);
+
+	          $condition_statuses  = array();
+	          //find the ranks ($i) of this downlines
+	          foreach ($downlines as $key => $value) {
+	              //get the downlines users downlines count having the rank $i
+	              $down_downlines_count = afl_get_user_downlines_uid($value->downline_user_id, array('member_rank'=>$i), true);
+	              if ( $down_downlines_count )
+	                $status = 1;
+	              else
+	                $status = 0;
+	              $condition_statuses[] = $status;
+	          }
+	          //count the occurence of 1 and 0
+	          $occurence = array_count_values($condition_statuses);
+
+	          //if the occurence of 1 is greater than or equals the count of legs needed it returns true
+	          if ( isset($occurence[1])  && $occurence[1] >= $required_in_legs_count ){
+	            $meets_flag = 1;
+	          } else {
+	            $meets_flag = 0;
+	            break;
+	          }
+
+	        } else {
+	          /*
+	           * ---------------------------------------------------------------
+	           * get the first level downlines of this user
+	           * get count of the first level users downlines having the rank
+	           * if the count meets required_count_in_leg set meets_flag
+	           * else unset
+	           * ---------------------------------------------------------------
+	          */
+	            $downlines = array();
+	            $result = afl_get_user_downlines_uid($uid, array('level'=>1), false);
+	            foreach ($result as $key => $value) {
+	              $downlines[] = $value->downline_user_id;
+	            }
+
+	            $implodes = implode(',', $downlines);
+	            //check the ranks under this users
+	            $query = array();
+
+	            $query['#select'] = _table_name('afl_user_downlines');
+	            $query['#where'] = array(
+	              '`'._table_name('afl_user_downlines').'`.`member_rank`='.$i,
+	              '`'._table_name('afl_user_downlines').'`.`uid` IN ('.$implodes.')'
+	            );
+	            $query['#expression'] = array(
+	              'COUNT(`'._table_name('afl_user_downlines').'`.`member_rank`) as count'
+	            );
+	            $result = db_select($query, 'get_row');
+	            $rank_existed_count = $result->count;
+
+
+              if ( $rank_existed_count >= $required_in_one_count ){
+                $meets_flag = 1;
+              } else {
+                $meets_flag = 0;
+                break;
+              }
+	        }
+	      } else {
+	        $meets_flag = 1;
+	      }
+	    }
+	  } else {
+			$meets_flag = 1;
 		}
-		return true;
+
+		return $meets_flag;
 	}
 /*
  * ---------------------------------------------------

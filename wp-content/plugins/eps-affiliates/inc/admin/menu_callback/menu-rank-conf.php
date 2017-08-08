@@ -170,13 +170,21 @@
 	   *  Rank Qualification 
 	   *----------------------------------------------------------------------------
 	   */
-		 
+		 	
 		  $below_rank = $rank - 1;
 		  if ($below_rank > 0 ) {
-		  	 $form['rank_qualification'] = array(
+	  	  $form['rank_qualification'] = array(
 			 		'#type' => 'fieldset',
 			 		'#title'=>'Rank Qualifications',
 			 	);
+
+			 	$form['rank_qualification']['markup'] = array(
+			 		'#type' => 'markup',
+			 		'#markup'=>'<div class="alert alert-info" role="alert"><strong>Info : </strong>If you specify the required count and leave the required in legs blank.The rank user counted from all the legs.</div>',
+			 		'#prefix'=>'<div class="form-group row ">',
+			 		'#suffix' =>'</div>',
+			 	);
+
 
 	  	  $form['rank_qualification']['rank_label_header'] = array(
 			 		'#type' => 'label',
@@ -186,20 +194,20 @@
 			 	);
 	  	  $form['rank_qualification']['rank_label_required_header'] = array(
 			 		'#type' => 'label',
-			 		'#title'=>'Required Count',
-			 		'#prefix'=>'<div class="form-group row col-md-4 col-sm-4">',
+			 		'#title'=>'Required Count (In 1 Leg)',
+			 		'#prefix'=>'<div class="form-group row col-md-5 col-sm-5">',
 			 		'#suffix' =>'</div>',
 			 	);
-			 	$form['rank_qualification']['rank_label_required_in_each_leg_header'] = array(
-			 		'#type' => 'label',
-			 		'#title'=>'Required In each leg',
-			 		'#prefix'=>'<div class="form-group row col-md-4 col-sm-4">',
-			 		'#suffix' =>'</div>',
-			 	);
+			 	// $form['rank_qualification']['rank_label_required_in_each_leg_header'] = array(
+			 	// 	'#type' => 'label',
+			 	// 	'#title'=>'Required In each leg',
+			 	// 	'#prefix'=>'<div class="form-group row col-md-4 col-sm-4">',
+			 	// 	'#suffix' =>'</div>',
+			 	// );
 			 	$form['rank_qualification']['rank_label_required_within_legs_header'] = array(
 			 		'#type' => 'label',
-			 		'#title'=>'Required In legs',
-			 		'#prefix'=>'<div class="form-group row col-md-2 col-sm-2">',
+			 		'#title'=>'Required in howmany legs',
+			 		'#prefix'=>'<div class="form-group row col-md-5 col-sm-5">',
 			 		'#suffix' =>'</div>',
 			 	);
 
@@ -214,25 +222,25 @@
 				 		'#type' => 'text',
 				 		'#title'=>	'',
 				 		'#default_value' => isset($form_state['rank_'.$rank.'_rank_'.$i.'_required_count']) ? $form_state['rank_'.$rank.'_rank_'.$i.'_required_count']: afl_variable_get('rank_'.$rank.'_rank_'.$i.'_required_count'),
-				 		'#prefix'=>'<div class="form-group row col-md-4 col-sm-4">',
+				 		'#prefix'=>'<div class="form-group row col-md-5 col-sm-5">',
 				 		'#suffix' =>'</div>',
 				 	);
 
 				 	//require in each leg
-				 	$form['rank_qualification']['rank_'.$rank.'_rank_'.$i.'_required_each_leg'] = array(
-				 		'#type' => 'checkbox',
-				 		'#title'=>	'',
-				 		'#default_value' => isset($form_state['rank_'.$rank.'_rank_'.$i.'_required_each_leg']) ? $form_state['rank_'.$rank.'_rank_'.$i.'_required_each_leg']: afl_variable_get('rank_'.$rank.'_rank_'.$i.'_required_each_leg'),
-				 		'#prefix'=>'<div class="form-group row col-md-2 col-sm-2 text-center">',
-				 		'#suffix' =>'</div>',
-				 	);
+				 	// $form['rank_qualification']['rank_'.$rank.'_rank_'.$i.'_required_each_leg'] = array(
+				 	// 	'#type' => 'checkbox',
+				 	// 	'#title'=>	'',
+				 	// 	'#default_value' => isset($form_state['rank_'.$rank.'_rank_'.$i.'_required_each_leg']) ? $form_state['rank_'.$rank.'_rank_'.$i.'_required_each_leg']: afl_variable_get('rank_'.$rank.'_rank_'.$i.'_required_each_leg'),
+				 	// 	'#prefix'=>'<div class="form-group row col-md-2 col-sm-2 text-center">',
+				 	// 	'#suffix' =>'</div>',
+				 	// );
 
 				 	//required in legs
 				 	$form['rank_qualification']['rank_'.$rank.'_rank_'.$i.'_required_in_legs'] = array(
 				 		'#type' => 'text',
 				 		'#title'=>	'',
 				 		'#default_value' => isset($form_state['rank_'.$rank.'_rank_'.$i.'_required_in_legs']) ? $form_state['rank_'.$rank.'_rank_'.$i.'_required_in_legs']: afl_variable_get('rank_'.$rank.'_rank_'.$i.'_required_in_legs'),
-				 		'#prefix'=>'<div class="form-group row col-md-4 col-sm-4">',
+				 		'#prefix'=>'<div class="form-group row col-md-5 col-sm-5">',
 				 		'#suffix' =>'</div>',
 				 	);
 		  	}

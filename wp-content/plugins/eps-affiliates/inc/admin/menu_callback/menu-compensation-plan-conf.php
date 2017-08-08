@@ -70,6 +70,16 @@ function afl_admin_compensation_plan_config_(){
 		'#default_value' 	=> afl_variable_get('number_of_ranks',1),
  	);
 
+	/*---- Holding tank exoiry days*/
+ 	$rows[3]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Holding tank holding days',
+	);
+	$rows[3]['holding_tank_holding_days'] = array(
+		'#type' 					=> 'text',
+		'#default_value' 	=> afl_variable_get('holding_tank_holding_days',7),
+ 	);
+
 
  	$table['#rows'] = $rows;
 

@@ -1,4 +1,4 @@
-</div><!-- /main-wrapper -->
+</div><!-- /fx-wrapper -->
 <?php wp_footer(); ?>
 
 </body>
