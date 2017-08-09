@@ -26,8 +26,6 @@ function afl_ewallet_withdraw_fund_form(){
 	 		afl_ewallet_withdraw_fund_form_submit($_POST);
 	 	}
 	 }
-	
-
 	$table = $wpdb->prefix. 'afl_user_payment_methods';
 	$payment_method = $wpdb->get_row("SELECT * FROM $table WHERE (uid = '$uid' AND status= '". 1 ."')");
 	if(!$payment_method || !$payment_method->completed){
@@ -105,8 +103,6 @@ function afl_ewallet_withdraw_fund_form(){
   	$withdrawal_min_value = /*afl_commerce_amount*/( afl_variable_get('withdrawal_min_value',-100) );
 
   	$eligible_amount = afl_get_max_withrawal_amount($processing_charge ,$withdrawal_max_value, $withdrawal_min_value, $balance);
-
-
 
 		$table 								= array();
 		$table['#name'] 			= '';

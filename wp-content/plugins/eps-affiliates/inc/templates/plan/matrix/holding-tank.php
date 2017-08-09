@@ -61,7 +61,7 @@ if ( $tank_users ) : ?>
 
   			<div class="form-group row">
   				<label for="choose-parent" class="form-label">Choose Parent</label>
-  				<input name="choose_parent" id="choose-parent" data-path="users_auto_complete" class="auto_complete form-control " value="" type="text">
+  				<input name="choose_parent" id="choose-parent" data-path="member_users_autocomplete" class="auto_complete form-control " value="" type="text">
   			</div>
         
         <div class="form-group row" id="available-free-spaces">
@@ -76,6 +76,7 @@ if ( $tank_users ) : ?>
         </div>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-primary pull-left" id="auto-place-user">Auto place</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="place-user">Place user</button>
       </div>

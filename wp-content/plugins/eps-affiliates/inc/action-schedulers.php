@@ -120,12 +120,14 @@
  * give count * actived month count amount
  * ------------------------------------------------------------
 */
+// monthly_matrix_compensation_payout_cron_job_callback();
  function monthly_matrix_compensation_payout_cron_job_callback () {
  	$matrix_given_date 	= afl_variable_get('matrix_compensation_given_day', 1);
  	$current_date				= afl_date();
  	$afl_date_splits 		= afl_date_splits(afl_date());
 
  	if ( $afl_date_splits['d'] == $matrix_given_date) {
+
  		$query = array();
  		$query['#select'] = _table_name('afl_user_genealogy');
  		$query['#where']  = array(
@@ -134,13 +136,23 @@
  		);
 		$query['#limit'] 		 = 100;
  		$users  = db_select($query, 'get_results');
-
+ 		// pr($users,1);
  		foreach ($users as $key => $user) {
  			//get actived on
+ 		/*
+ 		 * -----------------------------------------------------
+ 		 * IF a user status is 1 then check the months he actived 
+ 		 * 
+ 		 * If user status is 0, check howmany months he has been,
+ 		 * actived then give the commission only once
+ 		 * -----------------------------------------------------
+ 		*/
+
  			$actived_on  		= $user->actived_on;
- 			$datediff				= $current_date - $actived_on;
+ 			$diff						= $current_date - $actived_on;
  			$years 					= floor($diff / (365*60*60*24));
  			$months_actived = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+ 			$months_actived = $months_actived + 1;
  			$maximum_period = afl_variable_get('matrix_compensation_period_maximum', 3);
 
  			if (!empty($months_actived)) {
@@ -159,29 +171,66 @@
 		 		);
 		 		$query['#where']  = array(
 		 			'`'._table_name('afl_user_genealogy').'`.`status` = 1',
-		 			'`'._table_name('afl_user_downlines').'`.`uid` = '.$user->ID
+		 			'`'._table_name('afl_user_downlines').'`.`uid` = '.$user->uid
 		 		);
 		 		$query['#expression'] = array(
 		 			'COUNT(`'._table_name('afl_user_genealogy').'`.`uid`) as count'
 		 		);
 
 		 		$respo = db_select($query, 'get_row');
-		 		$count = !empty($respo['count']) ? $respo['count'] : 0;
-
+		 		$count = !empty($respo->count) ? $respo->count : 0;
+		 		
 		 		//get the bonus for the $months_actived 
 		 		$amount_for_actived_month = afl_variable_get('month_'.$months_actived.'_matrix_compensation', 0);
 		 		$user_amount = $amount_for_actived_month * $count;
 
 		 		if ( $user_amount > 0) {
-		 			
+		 			 $transaction = array();
+				   $transaction['uid'] 								= $user->uid;
+				   $transaction['associated_user_id'] = $user->uid;
+				   $transaction['payout_id'] 					= 0;
+				   $transaction['level']							= 0;
+				   $transaction['currency_code'] 			= afl_currency();
+				   $transaction['order_id'] 					= 1;
+				   $transaction['int_payout'] 				= 0;
+				   $transaction['hidden_transaction'] = 0;
+				   $transaction['credit_status'] 			= 1;
+				   $transaction['amount_paid'] 				= afl_commerce_amount($user_amount);
+				   $transaction['category'] 					= 'MATRIX COMPENSATION';
+				   $transaction['notes'] 							= 'Matrix compensation for '.$months_actived.' actived months';
+
+				   //check already paid
+				   $query = array();
+				   $afl_date_splits = afl_date_splits(afl_date());
+				   $query['#select'] = _table_name('afl_user_transactions');
+				   $query['#where'] = array(
+				   	'`uid`='.$user->uid,
+				   	'`category` = "MATRIX COMPENSATION"',
+				   	'`transaction_month` = '.$afl_date_splits['m'],
+				   	'`transaction_year` = '.$afl_date_splits['y'],
+				   );
+				   $check = db_select($query, 'get_row');
+				   
+				   if ( empty($check) ){
+				   	 afl_member_transaction($transaction, FALSE, FALSE);
+
+					   $b_transactions['category'] 						= 'MATRIX COMPENSATION';
+					   $b_transactions['additional_notes']		= 'Matrix compensation';
+					   $b_transactions['uid'] 								= $user->uid;
+					   $b_transactions['associated_user_id'] 	= $user->uid;
+					   $b_transactions['credit_status'] 			= 0;
+					   $b_transactions['amount_paid'] 				= afl_commerce_amount($user_amount);
+					   $b_transactions['notes'] 							= 'Matrix compensation for '.$months_actived.' actived months';
+					   $b_transactions['currency_code'] 			= afl_currency();
+					   $b_transactions['order_id'] 						= 1;
+					   afl_business_transaction($b_transactions);
+				   }
 		 		}
  			}
  			
  		}
  	}
  }
-
-
 
 
 

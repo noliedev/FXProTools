@@ -126,7 +126,7 @@ function afl_admin_advanced_configuration_form_validation($POST){
 	if ( is_wp_error( $reg_errors ) ) {
     foreach ( $reg_errors->get_error_messages() as $error ) {
 				$flag = 0;
-    		echo wp_set_message($error, 'danger');
+    		wp_set_message($error, 'danger');
     }
 	}
 	return $flag;
@@ -153,5 +153,5 @@ function afl_admin_advanced_configuration_form_submit($POST){
 				afl_variable_set($var,'');
 			}
 		}
-	echo wp_set_message(__('Configuration has been saved successfully.'), 'success');
+	wp_set_message(__('Configuration has been saved successfully.'), 'success');
 }

@@ -7,7 +7,8 @@
 class Eps_affiliates_registration {
 
 	public function afl_join_member ($post_data = array()) {
-	
+		$response = array();
+
 		$plan_width = afl_variable_get('matrix_plan_width',3);
 		if (!empty($post_data)) {
 			//insert to the geanealogy 
@@ -126,7 +127,7 @@ class Eps_affiliates_registration {
 				 			$level = $row->level;
 				 		}
 
-				  	$relative_positions_q = 'SELECT `relative_position` FROM `wp_afl_user_downlines` WHERE `uid`= %d AND `level`= %d' ;
+				  	$relative_positions_q = 'SELECT `relative_position` FROM `'._table_name('afl_user_downlines').'` WHERE `uid`= %d AND `level`= %d' ;
 				  	$relative_positions 	= $wpdb->get_results($wpdb->prepare($relative_positions_q,$sponsor,$level));
 
 				  	$positions_array = array();
@@ -329,13 +330,14 @@ class Eps_affiliates_registration {
 				 	$ins_data['joined_year'] 				= $afl_date_splits['y'];
 				 	$ins_data['joined_week'] 				= $afl_date_splits['w'];
 				 	$ins_data['joined_date'] 				= afl_date_combined($afl_date_splits);
+				 	$ins_data['actived_on'] 				= afl_date();
 				 	
 				 	$ins_id = $wpdb->insert($table_name, $ins_data);
 
 
 				 	//insert the position details to tree last insertion position
 				 	_update_inserted_positon($post_data['sponsor_uid'], $level, $newly_added_pos);
-				 	
+
 				}
 			}
 		}

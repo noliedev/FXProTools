@@ -1,8 +1,7 @@
 <?php 
-
-	function afl_members_manage () { 
-		echo afl_eps_page_header();
-		$affiliates_table = new Eps_data_table();
+function afl_payout_withdrawal_requests(){
+	echo afl_eps_page_header();
+	$affiliates_table = new Eps_withdraw_request_data_table();
 	?>
 		 
 		
@@ -25,7 +24,7 @@
 				<form id="eps-affiliates-filter" method="get" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 					<?php $affiliates_table->search_box( __( 'Search', 'eps-affiliates' ), 'eps-affiliates' ); ?>
 
-					<input type="hidden" name="page" value="affiliate-eps-manage-members" />
+					<input type="hidden" name="page" value="affiliate-eps-payout" />
 
 					<?php //$affiliates_table->views() ?>
 					<?php $affiliates_table->prepare_items() ?>

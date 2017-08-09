@@ -72,10 +72,11 @@
     			$business_transactions['currency_code'] = 'USD';
     			$business_transactions['order_id'] = 1;
 	       	
-	       	// $business_transaction = afl_business_transaction($business_transactions);
-    			$user_transaction 		= afl_member_transaction($business_transactions, TRUE);
+	       	$business_transaction = afl_business_transaction($business_transactions);
+    			// $user_transaction 		= afl_member_transaction($business_transactions, TRUE);
 	         //user get the uid,if a uid get then insert to genealogy
-
+				 	echo wp_set_message('Member has been created successfully', 'success');
+    			
 
 	      }
 			}

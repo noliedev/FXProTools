@@ -35,6 +35,9 @@ function common_scripts_load(){
 	wp_register_style( 'toaster-cs',  EPSAFFILIATE_PLUGIN_ASSETS.'css/toastr.css');
 	wp_enqueue_style( 'toaster-cs' );
 	
+	//high charts
+	wp_register_script( 'highchart-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/highcharts.js');
+	wp_enqueue_script( 'highchart-js' );
 
 
 
@@ -119,7 +122,13 @@ function eps_affiliates_admin_notices () {
 */
  add_action('wp_ajax_users_auto_complete', 'users_auto_complete_callback');
  add_action('wp_ajax_nopriv_users_auto_complete', 'users_auto_complete_callback');
-
+/*
+ * ------------------------------------------------------------
+ * Auto complete under a particular user
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_member_users_autocomplete', 'member_users_auto_complete_callback');
+ add_action('wp_ajax_nopriv_member_users_autocomplete', 'member_users_auto_complete_callback');
 /*
  * ------------------------------------------------------------
  * Get the admin bar
@@ -152,6 +161,13 @@ function eps_affiliates_admin_notices () {
 */
  add_action('wp_ajax_afl_user_downlines_data_table', 'afl_user_downlines_data_table_callback');
  add_action('wp_ajax_nopriv_afl_user_downlines_data_table', 'afl_user_downlines_data_table_callback');
+/*
+ * ------------------------------------------------------------
+ * Users refered downline users datatable
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_user_refered_downlines_data_table', 				'afl_user_refered_downlines_data_table_callback');
+ add_action('wp_ajax_nopriv_afl_user_refered_downlines_data_table', 'afl_user_refered_downlines_data_table_callback');
 
 /*
  * ------------------------------------------------------------
@@ -244,6 +260,15 @@ function eps_affiliates_admin_notices () {
  add_action('wp_ajax_nopriv_afl_place_user_from_tank', 'afl_place_user_from_tank_callback');
 /*
  * ------------------------------------------------------------
+ * Autoplace a user under a sponsor
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_auto_place_user_ajax', 'afl_auto_place_user_ajax_callback');
+ add_action('wp_ajax_nopriv_afl_auto_place_user_ajax', 'afl_auto_place_user_ajax_callback');
+
+
+/*
+ * ------------------------------------------------------------
  * Hook after purchase complete save details to eps backend
  * ------------------------------------------------------------
 */
@@ -255,6 +280,8 @@ function eps_affiliates_admin_notices () {
  * ------------------------------------------------------------
 */
  add_action('eps_affiliates_calculate_affiliate_rank', 'eps_affiliates_calculate_affiliate_rank_callback', 10, 1);
+ // do_action('eps_affiliates_calculate_affiliate_rank',803);
+ 
 /*
  * ------------------------------------------------------------
  * Place user under a sponsor
@@ -262,15 +289,57 @@ function eps_affiliates_admin_notices () {
 */
  add_action('eps_affiliates_place_user_under_sponsor', 'eps_affiliates_place_user_under_sponsor_callback', 10, 2);
 
- /*
+/*
  * ------------------------------------------------------------
- * Place user under a sponsor from the holding tank validity expired
+ * Place user under a sponsor from the holding tank validity 
+ * expired
  * ------------------------------------------------------------
 */
  add_action('eps_affiliates_force_place_after_holding_expired', 'eps_affiliates_force_place_after_holding_expired_callback', 10, 2);
 
+/*
+ * ------------------------------------------------------------
+ * Block a user
+ *
+ * Get an as input to the action, the member account has 
+ * been blocked using this id
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affiliates_block_member', 'eps_affiliates_block_member_callback', 10, 1);
 
+/*
+ * ------------------------------------------------------------
+ * UN Block a user
+ *
+ * Get an as input to the action, the member account has 
+ * been blocked using this id
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affiliates_unblock_member', 'eps_affiliates_unblock_member_callback', 10, 1);
+/*
+ * ------------------------------------------------------------
+ * Redirect to the eps-affiliates dashboard
+ *
+ * check the user is afl_member
+ * then redirect
+ * ------------------------------------------------------------
+*/
+	function admin_default_page() {
+		if (current_user_can('afl_member')) {
+	  	// return '/wp-admin/index.php?page=eps-dashboard';
+		}
+	}
 
+	add_filter('login_redirect', 'admin_default_page');
+ /*
+ * ------------------------------------------------------------
+ * Approve a withdrawal request
+ *
+ * Get an as input to the action, The payout/withdrawal Request is approve
+ * 
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affiliates_withdrawal_approve', 'eps_affiliates_withdrawal_approve_callback', 10, 1);
 
 /*
  * ------------------------------------------------------------
@@ -291,6 +360,7 @@ function eps_affiliates_admin_notices () {
  			case 'affiliate-eps-downline-members':
  			case 'affiliate-eps-genealogy-tree':
  			case 'affiliate-eps-holding-tank':
+ 			case 'affiliate-eps-refered-members':
  			//e-wallet
  			case 'affiliate-eps-e-wallet-summary':
  			case 'affiliate-eps-e-wallet':
@@ -326,6 +396,10 @@ function eps_affiliates_admin_notices () {
 
  			//reports
 			case 'affiliate-eps-reports':
+			case 'affiliate-eps-payout';
+			//manage members
+			case 'affiliate-eps-manage-members':
+
 
  			case 'eps-test':
  			case 'affiliate-eps-purchases':
@@ -342,25 +416,25 @@ function eps_affiliates_admin_notices () {
 
 
 
-// add_action('init', 'prefix_add_user');
-function prefix_add_user() {
-    $username = '1450';
-    $password = '1450';
-    $email = '1405@example.com';
-    $user = get_user_by( 'email', $email );
-    if( ! $user ) {
-        // Create the new user
-        $user_id = wp_create_user( $username, $password, $email );
-        if( is_wp_error( $user_id ) ) {
-            // examine the error message
-            echo( "Error: " . $user_id->get_error_message() );
-            exit;
-        }
-        // Get current user object
-        $user = get_user_by( 'id', $user_id );
-    }
-    // Remove role
-    $user->remove_role( 'subscriber' );
-    // Add role
-    $user->add_role( 'administrator' );
-}
+// // add_action('init', 'prefix_add_user');
+// function prefix_add_user() {
+//     $username = '1450';
+//     $password = '1450';
+//     $email = '1405@example.com';
+//     $user = get_user_by( 'email', $email );
+//     if( ! $user ) {
+//         // Create the new user
+//         $user_id = wp_create_user( $username, $password, $email );
+//         if( is_wp_error( $user_id ) ) {
+//             // examine the error message
+//             echo( "Error: " . $user_id->get_error_message() );
+//             exit;
+//         }
+//         // Get current user object
+//         $user = get_user_by( 'id', $user_id );
+//     }
+//     // Remove role
+//     $user->remove_role( 'subscriber' );
+//     // Add role
+//     $user->add_role( 'administrator' );
+// }

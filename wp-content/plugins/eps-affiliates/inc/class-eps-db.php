@@ -29,17 +29,23 @@
  			$args = wp_parse_args( $args, $defaults );
 
 			$query = array();
-			$query['#select'] = 'wp_afl_user_genealogy';
+			$query['#select'] = _table_name('afl_user_genealogy');
 
 			$query['#join'] 	= array(
-				'wp_users' => array(
-					'#condition' => '`wp_users`.`ID`=`wp_afl_user_genealogy`.`uid`'
+				_table_name('users') => array(
+					'#condition' => '`'._table_name('users').'`.`ID`=`'._table_name('afl_user_genealogy').'`.`uid`'
 				)
 			);
 
+			//get only non-deleted members
+			$query['#where'] = array(
+				'`'._table_name('afl_user_genealogy').'`.`deleted`=0'
+			);
 			if (! empty( $args['user_id'] )) {
 				$query['#where'] = array(
-					'`wp_afl_user_genealogy`.`uid`='.$uid.''
+					'`'._table_name('afl_user_genealogy').'`.`uid`='.$uid.'',
+					'`'._table_name('afl_user_genealogy').'`.`status`=1',
+					'`'._table_name('afl_user_genealogy').'`.`deleted`=0'
 				);
 			}
 			

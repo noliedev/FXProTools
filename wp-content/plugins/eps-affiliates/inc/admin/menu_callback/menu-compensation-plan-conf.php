@@ -181,6 +181,8 @@ function afl_admin_compensation_plan_form_submit($POST){
  			afl_admin_matrix_compensation_config_submit($_POST);
  		}
  	}
+ 	$color_hr = afl_variable_get('mlm_hr_color', '#7266ba');
+
  	$form = array();
 	$form['#action'] = $_SERVER['REQUEST_URI'];
  	$form['#method'] = 'post';
@@ -194,20 +196,40 @@ function afl_admin_compensation_plan_form_submit($POST){
 
  	$form['fieldset_1']['matrix_compensation_period_maximum'] = array(
  		'#title' 	=> 'Compensation Period',
- 		'#type'  	=> 'text',
+ 		'#type'  	=> 'select',
  		'#name'		=> 'matrix-compensation-period-maximum',
+ 		'#options' => array(1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9),
  		'#required' => TRUE,
  		'#default_value'=> afl_variable_get('matrix_compensation_period_maximum',''),
 
  	);
+ 	$options = array();
+ 	for ( $i = 1; $i <= 31; $i++) {
+ 		$options[$i] =  $i;
+ 	}
 
  	$form['fieldset_1']['matrix_compensation_given_day'] = array(
  		'#title' 	=> 'Compensation Given Day',
- 		'#type'  	=> 'text',
+ 		'#type'  	=> 'select',
  		'#name'		=> 'matrix-compensation-given-day',
  		'#required' => TRUE,
  		'#default_value'=> afl_variable_get('matrix_compensation_given_day',''),
+ 		'#options' => $options
+ 	);
 
+ 	$form['fieldset_1']['matrix_compensation_max_level'] = array(
+ 		'#title' 	=> 'Compensation Maximum Level',
+ 		'#type'  	=> 'select',
+ 		'#name'		=> 'matrix-compensation-max-level',
+ 		'#required' => TRUE,
+ 		'#options' => array(1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9),
+ 		'#default_value'=> afl_variable_get('matrix_compensation_max_level',''),
+
+ 	);
+
+ 	$form['fieldset_1']['markup'] = array(
+   '#type' => 'markup',
+   '#markup' => '<hr style="border:2px solid '.$color_hr.'; color:'.$color_hr.'; margin:60px 0px 60px 0px">',
  	);
 
  	$form['fieldset_2'] = array(
@@ -236,6 +258,11 @@ function afl_admin_compensation_plan_form_submit($POST){
  		'#required' => TRUE,
 
   );
+
+  $form['fieldset_2']['markup'] = array(
+   '#type' => 'markup',
+   '#markup' => '<hr style="border:2px solid '.$color_hr.'; color:'.$color_hr.'; margin:60px 0px 60px 0px">',
+ 	);
 
  	$form['submit'] = array(
  		'#type' => 'submit',

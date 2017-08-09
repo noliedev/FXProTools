@@ -188,6 +188,15 @@
 					'#menu_slug' 			=> 'affiliate-eps-downline-members', 
 					'#page_callback' 	=> 'afl_downline_members', 
 				);
+				$menu['referal_downlines'] = array(
+					'#parent'					=> 'affiliate-eps-user-network',
+					'#page_title'			=> __( 'Refered-members', 'Refered-members' ),    
+					'#menu_title' 		=> __( 'Refered-members', 'Refered-members' ),    
+					'#access_callback'=> 'afl_network_view', 
+					'#menu_slug' 			=> 'affiliate-eps-refered-members', 
+					'#page_callback' 	=> 'afl_refered_members', 
+				);
+
 				$menu['network_genealogy'] = array(
 					'#parent'					=> 'affiliate-eps-user-network',
 					'#page_title'			=> __( 'Genealogy-tree', 'Genealogy-tree' ),    
@@ -222,23 +231,23 @@
 					'#menu_title' 		=> __( 'E-wallet', 'e_wallet' ), 
 					'#access_callback'=> 'ewallet', 
 					'#menu_slug' 			=> 'affiliate-eps-e-wallet', 
-					'#page_callback' 	=> 'afl_ewallet_transactions', 
+					'#page_callback' 	=> 'afl_ewallet_summary', 
 					'#weight'					=> 3
 				);
-				$menu['e_wallet_sub'] = array(
-					'#parent'					=> 'affiliate-eps-e-wallet', 
-					'#page_title'			=> __( 'E-wallet', 'e_wallet' ), 
-					'#menu_title' 		=> __( 'E-wallet', 'e_wallet' ), 
-					'#access_callback'=> 'ewallet', 
-					'#menu_slug' 			=> 'affiliate-eps-e-wallet', 
-					'#page_callback' 	=> 'afl_ewallet_transactions', 
-				);
+				// $menu['e_wallet_sub'] = array(
+				// 	'#parent'					=> 'affiliate-eps-e-wallet', 
+				// 	'#page_title'			=> __( 'E-wallet', 'e_wallet' ), 
+				// 	'#menu_title' 		=> __( 'E-wallet', 'e_wallet' ), 
+				// 	'#access_callback'=> 'ewallet', 
+				// 	'#menu_slug' 			=> 'affiliate-eps-e-wallet', 
+				// 	'#page_callback' 	=> 'afl_ewallet_transactions', 
+				// );
 				$menu['e_wallet_summary'] = array(
 					'#parent'					=> 'affiliate-eps-e-wallet', 
 					'#page_title'			=> __( 'E-wallet Summary', 'E-wallet Summary' ),    
 					'#menu_title' 		=> __( 'E-wallet Summary', 'E-wallet Summary' ),    
 					'#access_callback'=> 'ewallet', 
-					'#menu_slug' 			=> 'affiliate-eps-e-wallet-summary', 
+					'#menu_slug' 			=> 'affiliate-eps-e-wallet', 
 					'#page_callback' 	=> 'afl_ewallet_summary', 
 				);
 				$menu['e_wallet_all_trans'] = array(
@@ -496,16 +505,16 @@
 					'#menu_title' 		=> __( 'Payout', 'Payout' ),
 					'#access_callback'=> 'payout', 
 					'#menu_slug' 			=> 'affiliate-eps-payout', 
-					'#page_callback' 	=> 'afl_payout_processing', 
+					// '#page_callback' 	=> 'afl_payout_processing', 
 					'#weight'					=>	6
 				);
 				$menu['payout_processing'] = array(
 					'#parent'					=> 'affiliate-eps-payout',
-					'#page_title'			=> __( 'Withdrawal request processing', 'Withdrawal request processing' ),
-					'#menu_title' 		=> __( 'Withdrawal request processing', 'Withdrawal request processing' ),
+					'#page_title'			=> __( 'Withdrawal requests', 'Withdrawal requests' ),
+					'#menu_title' 		=> __( 'Withdrawal requests', 'Withdrawal requests' ),
 					'#access_callback'=> 'payout', 
 					'#menu_slug' 			=> 'affiliate-eps-payout', 
-					'#page_callback' 	=> 'afl_payout_processing', 
+					'#page_callback' 	=> 'afl_payout_withdrawal_requests', 
 				);
 				$menu['payout_reports'] = array(
 					'#parent'					=> 'affiliate-eps-payout',

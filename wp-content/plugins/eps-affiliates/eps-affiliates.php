@@ -262,9 +262,6 @@
 				//route
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-route-url.php';
 
-				// save details to table @ user registers
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-user-register.php';
-
 				//afl dashboard menus registration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-dashboard-menus.php';
 
@@ -324,6 +321,7 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-downline-members-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-exporer-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-holding-tank-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-refered-members-callback.php';
 
 				/* ------ Here comes all the member menu callback : End  -------------------*/
 
@@ -359,6 +357,10 @@
 				
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test-codes.php';
+				// Menu callback for payout 
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/payout/menu-callback/menu-payout-withdrawal-requests.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/payout/withdraw-request-datatable.php';
+				
 			}
 		/**
 		 * -------------------------------------------------------------------------

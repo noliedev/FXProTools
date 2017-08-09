@@ -33,9 +33,8 @@ function afl_user_ewallet_summary_data_table_callback(){
 */
 function afl_user_ewallet_all_transaction_data_table(){
 	global $wpdb;
-	// $uid 						 = get_current_user_id();
-	$uid = 7;
-// 
+	$uid 						 = afl_current_uid();
+	
 $input_valu = $_POST;
  	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
      $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
@@ -71,7 +70,8 @@ $input_valu = $_POST;
 	   		$key+1,
 	     	ucfirst(strtolower($value->category)),
 	     	$value->display_name." (".$value->associated_user_id.")",
-	 			number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			// number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			afl_format_payment_amount($value->amount_paid).$value->currency_code,
 	     	$status,
 	     	$value->transaction_date  	
    		];
@@ -133,7 +133,7 @@ function get_all_user_transaction_details ($uid = '7', $filter = array(), $count
 function afl_user_ewallet_income_data_table(){
 	global $wpdb;
 	$uid 						 = get_current_user_id();
-	$uid = 7;
+	// $uid = 7;
  
 	$input_valu = $_POST;
  	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
@@ -156,7 +156,7 @@ function afl_user_ewallet_income_data_table(){
      "data" 						=> [],
    ];
     $result = get_all_user_transaction_details($uid,$filter,FALSE,1);
-		foreach ($result as $key => $value) { pr($value,1);
+		foreach ($result as $key => $value) { 
 			if($value->credit_status == 1 ){
 				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
 			}
@@ -167,7 +167,7 @@ function afl_user_ewallet_income_data_table(){
 	   		$key+1,
 	     	ucfirst(strtolower($value->category)),
 	     	$value->display_name." (".$value->associated_user_id.")",
-	 			number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			afl_format_payment_amount($value->amount_paid).$value->currency_code,
 	     	$status,
 	     	$value->transaction_date  	
    		];
@@ -226,7 +226,7 @@ function afl_user_my_withdraw_request_active_data_table(){
 
 	global $wpdb;
 	$uid 						 = get_current_user_id();
-	$uid = 162;
+	// $uid = 162;
 
 
 	$input_valu = $_POST;
@@ -261,7 +261,7 @@ function afl_user_my_withdraw_request_active_data_table(){
 	 $output = [
      "draw" 						=> $input_valu['draw'],
      "recordsTotal" 		=> count($result),
-     "recordsFiltered" 	=> $filter_count,
+     "recordsFiltered" 	=> count($result),
      "data" 						=> [],
    ];
    

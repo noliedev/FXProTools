@@ -608,7 +608,7 @@ if(!function_exists('afl_get_levels')){
 
 		$alert = '';
 		$alert = '<script>$(function(){toastr["'.$action.'"]("'.$msg.'");});</script>';
-		return $alert;
+		echo $alert;
 	}
 /**
  * -----------------------------------------------------------
@@ -736,12 +736,12 @@ if(!function_exists('afl_get_levels')){
 		if ( is_array( $args ) && isset( $args ) ) :
 			extract( $args );
 		endif;
-
 		$template_file = afl_locate_template( $template_name, $tempate_path, $default_path );
 		if ( ! file_exists( $template_file ) ) :
 			_doing_it_wrong( __FUNCTION__, sprintf( '<code>%s</code> does not exist.', $template_file ), '1.0.0' );
 			return;
 		endif;
+		global $args;
 		include $template_file;
 	}
 /**
@@ -1184,6 +1184,130 @@ if(!function_exists('afl_get_rank_names')){
 			return count($result);
 		return $result;
 	}
+/*
+	* -----------------------------------------------------------------------------
+  * User refered downlines
+	* -----------------------------------------------------------------------------
+*/
+	function afl_get_user_refered_downlines ($uid = '',$filter = array(), $count = false) {
+		global $wpdb;
+
+		$query = array();
+		$query['#select'] = _table_name('afl_user_genealogy');
+
+		$query['#join'] 	= array(
+			_table_name('users') => array(
+				'#condition' => '`wp_users`.`ID`=`'._table_name('afl_user_genealogy').'`.`uid`'
+			)
+		);
+		// $query['#fields'] = array(
+		// 	_table_name('afl_user_genealogy') => array('uid')
+		// );
+		$query['#where'] = array(
+			'`'._table_name('afl_user_genealogy').'`.`referrer_uid`='.$uid.''
+		);
+		$query['#order_by'] = array(
+			'`'._table_name('afl_user_genealogy').'`.`level`' => 'ASC'
+		);
+
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`member_rank`= '.$filter['member_rank'];
+		}
+		//if filter fields
+		if (isset($filter['fields'])) {
+			$query['fields'] = empty($query['fields']) ? array() : $query['fields'];
+			$fields = array_merge($query['fields'],$filter['fields']);
+			$query['#fields'] = $fields;
+		}
+		$limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+
+		if (!empty($filter['search_valu'])) {
+			$query['#like'] = array('`display_name`' => $filter['search_valu']);
+		}
+
+		$result = db_select($query, 'get_results');
+
+		// pr($result = db_select($query, 'get_results'),1);
+		if ($count)
+			return count($result);
+		return $result;
+
+	}
+/*
+	* -----------------------------------------------------------------------------
+  * User refered downlines uids
+	* -----------------------------------------------------------------------------
+*/
+	function afl_get_user_refered_downlines_uid ($uid = '',$filter = array(), $count = false) {
+		global $wpdb;
+
+		$query = array();
+		$query['#select'] = _table_name('afl_user_genealogy');
+
+		$query['#join'] 	= array(
+			_table_name('users') => array(
+				'#condition' => '`wp_users`.`ID`=`'._table_name('afl_user_genealogy').'`.`uid`'
+			)
+		);
+		$query['#fields'] = array(
+			_table_name('afl_user_genealogy') => array('uid')
+		);
+		$query['#where'] = array(
+			'`'._table_name('afl_user_genealogy').'`.`referrer_uid`='.$uid.''
+		);
+		$query['#order_by'] = array(
+			'`'._table_name('afl_user_genealogy').'`.`level`' => 'ASC'
+		);
+
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`member_rank`= '.$filter['member_rank'];
+		}
+		//if filter fields
+		if (isset($filter['fields'])) {
+			$query['fields'] = empty($query['fields']) ? array() : $query['fields'];
+			$fields = array_merge($query['fields'],$filter['fields']);
+			$query['#fields'] = $fields;
+		}
+		$limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+
+		if (!empty($filter['search_valu'])) {
+			$query['#like'] = array('`display_name`' => $filter['search_valu']);
+		}
+
+		$result = db_select($query, 'get_results');
+
+		// pr($result = db_select($query, 'get_results'),1);
+		if ($count)
+			return count($result);
+		return $result;
+
+	}
 	/*
 	 * -----------------------------------------------------------------------------
 	 * get the downlines uid details of sponsor
@@ -1298,7 +1422,7 @@ if(!function_exists('afl_get_rank_names')){
 		//join
 		if (isset($data['#join']) ){
 			foreach ($data['#join'] as $table => $value) {
-					$sql .= 'JOIN `'.$table.'`'.'ON '.$value['#condition'].' ';
+					$sql .= ' JOIN `'.$table.'`'.'ON '.$value['#condition'].' ';
 			}
 		}
 		//where condition
@@ -1315,7 +1439,7 @@ if(!function_exists('afl_get_rank_names')){
 				}
 			} else {
 				foreach ($data['#where'] as $condition) {
-					$sql .= 'WHERE '.$condition.' ';
+					$sql .= ' WHERE '.$condition.' ';
 				}
 			}
 		}
@@ -1361,16 +1485,26 @@ if(!function_exists('afl_get_rank_names')){
 
 
 
-		//order by
-		if (isset($data['#order_by'])) {
-			foreach ($data['#order_by'] as $key => $order) {
-				$sql .= 'ORDER BY '.$key.' '.$order.' ';
-			}
-		}
+
 		//group by
 		if (isset($data['#group_by'])) {
-			foreach ($data['#group_by'] as $by) {
-				$sql .= 'GROUP BY '.$by;
+			$sql .= ' GROUP BY ';
+			foreach ($data['#group_by'] as $by => $value) {
+				if ($by !=0)
+				$sql .= ',';
+				$sql .= $value;
+			}
+		}
+
+		//order by
+		if (isset($data['#order_by'])) {
+			$sql .= ' ORDER BY ';
+			$i = 1;
+			foreach ($data['#order_by'] as $key => $order) {
+				if ($i != 1)
+					$sql .= ',';
+				$sql .= $key.' '.$order.' ';
+				$i++;
 			}
 		}
 		//limit
@@ -1434,8 +1568,8 @@ function afl_commerce_amount($amount_paid){
  * -----------------------------------------------------------------------
 */
 function afl_get_commerce_amount($amount_paid){
-	
-  
+
+
   $amount_paid = $amount_paid / 100;
   return number_format($amount_paid, 2, '.', ',');
 }
@@ -1659,7 +1793,7 @@ function afl_root_user() {
 */
  if (!function_exists('eps_is_admin')){
  	function eps_is_admin(){
- 		if (current_user_can('administrator')) {
+ 		if (current_user_can('administrator') || current_user_can('business_admin')) {
  			return TRUE;
     } else {
     	return FALSE;
@@ -1853,10 +1987,43 @@ if ( !function_exists('get_user_by') ){
 				);
 		}
 	}
+	/*
+	 * ----------------------------------------------------------------------
+	 * get the uid, if the user is admin return the root user set
+	 * ----------------------------------------------------------------------
+	*/
+	 function get_uid () {
+		 $uid = afl_current_uid();
+		 if ( eps_is_admin()) {
+			 $uid = afl_root_user();
+		 }
 
-// $filter['fields'] = array(
-//   _table_name('afl_user_downlines') => array('level'),
-//   _table_name('afl_user_genealogy') => array('member_rank', 'relative_position','created'),
-//   _table_name('users') => array('display_name', 'ID')
-//  );
-// pr(afl_get_user_downlines(172,$filter, false),1);
+		 return $uid;
+	 }
+
+ /*
+  * ----------------------------------------------------------------------
+  * get Day list
+	* ----------------------------------------------------------------------
+*/
+	 function getDays($date_count = 0 , $date_type = 'day', $date_format = 'd-M-Y', $date_before = TRUE){
+	   $datas = array();
+	   if(!empty($date_count)){
+	     $array_count = 0;
+	     $current_date = afl_date();
+	     $current_date = strtotime('+1 '.$date_type, $current_date);
+	     for($count = $date_count; $count >= 0; $count--){
+
+	         if($date_before == TRUE){
+	           $data = date($date_format ,strtotime('-'.$count.' '.$date_type,$current_date));
+	         }else{
+	           $data = date($date_format ,strtotime('+'.$count.' '.$date_type,$current_date));
+	         }
+
+	         $datas[$data] = $array_count;
+	         //$datas['tag'][] = array($array_count++,$data);
+	     }
+
+	   }
+	   return $datas;
+	 }

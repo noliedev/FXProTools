@@ -311,8 +311,8 @@ function afl_user_payment_conf_method_bank_form_validation($form_state){
 	 	);
 		$resp  = set_form_validation_rule($rules);
 		if (!empty($resp)) {
-			echo $resp;
-			return false;
+			return  $resp;
+			
 		}
 		else
 			return true;
@@ -445,7 +445,7 @@ function afl_user_payment_conf_method_paypal_form_validate($form_state){
 	 	);
 		$resp  = set_form_validation_rule($rules);
 		if (!empty($resp)) {
-			echo $resp;
+		return $resp;
 			return false;
 		}
 		else
@@ -527,7 +527,8 @@ function afl_user_payment_autherization_form_validation($form_state){
 		return FALSE;
 	}
 	elseif($form_state['password'] != $form_state['confirm_password']){
-		echo wp_set_message(__('Please check the password and confirm pasword you entered'), 'danger');
+		$resp =  wp_set_message(__('Please check the password and confirm pasword you entered'), 'danger');
+		return $resp;
 		return FALSE;
 	}else{
 		return true;

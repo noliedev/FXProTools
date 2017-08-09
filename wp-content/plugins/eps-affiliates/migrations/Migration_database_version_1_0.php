@@ -155,7 +155,8 @@
 					  `merchant_id` varchar(250) DEFAULT 'default' COMMENT 'Merchant Id',
 					  `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
 					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name',
-					  `actived_on` varchar(250) DEFAULT 'default' COMMENT 'Actived on'
+					  `actived_on` varchar(250) DEFAULT 'default' COMMENT 'Actived on',
+					  `deactived_on` varchar(250) DEFAULT 'default' COMMENT 'Deactived on'
 					) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='Stores the user genealogy information';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );

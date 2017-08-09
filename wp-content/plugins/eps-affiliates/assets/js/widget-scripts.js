@@ -101,6 +101,52 @@ $(document).ready(function() {
 	 		'afl_member_rank'
 	 	);
 	 }
+
+	/*
+ 	 * --------------------------------------------------
+	 * E-wallet transactions chart
+ 	 * --------------------------------------------------
+	*/
+		if ($('#afl-widgets-afl-e-wallet-transaction-chart').length) {
+	 	eps_high_charts(
+	 		'#afl-widgets-afl-e-wallet-transaction-chart',
+	 		'afl_e_wallet_transaction_chart'
+	 	);
+	 }
+	/*
+ 	 * --------------------------------------------------
+	 * E-wallet summary
+ 	 * --------------------------------------------------
+	*/
+		if ($('#afl-widgets-afl-e-wallet-summary').length) {
+	 	eps_render_template(
+	 		'#afl-widgets-afl-e-wallet-summary',
+	 		'afl_e_wallet_summary'
+	 	);
+	 }
+
+	/*
+ 	 * --------------------------------------------------
+	 * B-wallet transactions chart
+ 	 * --------------------------------------------------
+	*/
+		if ($('#afl-widgets-afl-b-wallet-transaction-chart').length) {
+	 	eps_high_charts(
+	 		'#afl-widgets-afl-b-wallet-transaction-chart',
+	 		'afl_b_wallet_transactions_chart'
+	 	);
+	 }
+	/*
+ 	 * --------------------------------------------------
+	 * 
+ 	 * --------------------------------------------------
+	*/
+		if ($('#afl-widgets-afl-b-wallet-report').length) {
+	 	eps_high_charts(
+	 		'#afl-widgets-afl-b-wallet-report',
+	 		'afl_b_wallet_report_chart'
+	 	);
+	 }
 });
 
 
@@ -218,6 +264,36 @@ $(document).ready(function() {
 	    }
 	  });
 	}
+/*
+ * --------------------------------------------------
+ * High charts
+ * --------------------------------------------------
+*/
+	function eps_high_charts (obj,ajax_url) {
+		var html_tag = '';
+		$.ajax({
+	   	type :'POST',
+	   	data : {
+	   		action:ajax_url,
+	   	},
+	   	url:ajax_object.ajaxurl,
+	   	success: function(jsonDatas){
+	   		if (jsonDatas) {
+	   			jsonDatas = JSON.parse(jsonDatas);
+	   			var html_tag = theme_high_charts(jsonDatas);
+					$(obj).html(html_tag);
+					$(obj).children('.afl-widget-chart').children('.chart').highcharts(jsonDatas.text);
+	   		} else {
+	   			var html_tag = theme_panel_error();
+					$(obj).html(html_tag);
+	   		}
+	   	},
+	   	error: function(xhr, textStatus, errorThrown){
+	       var html_tag = theme_panel_error();
+				$(obj).html(html_tag);
+	    }
+	  });
+	}
 
 
 /*
@@ -298,4 +374,36 @@ $(document).ready(function() {
  	html_tag +='</div>';
 
  	return html_tag;
+ }
+/*
+ * -----------------------------------------------
+ * High charts
+ * -----------------------------------------------
+*/
+ function theme_high_charts (jsonData, v_type = 'y') {
+
+ 	 var html_tag = '<div class="panel wrapper afl-widget-chart">';
+    html_tag += '<div class="clearfix">';
+    html_tag += '<h4 class="font-thin m-t-none m-b '+jsonData.title_color+' pull-left">'
+    html_tag += jsonData.title;
+    html_tag += '</h4>';
+    html_tag += '<div class="pull-left dropdown">';
+    html_tag += '<i class="fa fa-gear m-l-sm m-r-sm '+jsonData.icon_color+' dropdown-toggle" data-toggle="dropdown"></i>';
+    html_tag += '<ul class="dropdown-menu">';
+    if(jsonData.show_chart=='pie'){
+      html_tag += '<li><a href="#" type="y" '+((v_type=='y')?'class="active"':'')+'>'+('This Year')+'</a></li>';
+      html_tag += '<li><a href="#" type="m" '+((v_type=='m')?'class="active"':'')+'>'+('This Month')+'</a></li>';
+      html_tag += '<li><a href="#" type="d" '+((v_type=='d')?'class="active"':'')+'>'+('Today')+'</a></li>';
+      html_tag += '<li><a href="#" type="t" '+((v_type=='t')?'class="active"':'')+'>'+('Overall')+'</a></li>';
+    }else{
+      html_tag += '<li><a href="#" type="y" '+((v_type=='y')?'class="active"':'')+'>'+('Yearly')+'</a></li>';
+      html_tag += '<li><a href="#" type="m" '+((v_type=='m')?'class="active"':'')+'>'+('Monthly')+'</a></li>';
+      html_tag += '<li><a href="#" type="d" '+((v_type=='d' || v_type=='t')?'class="active"':'')+'>'+('Day')+'</a></li>';
+    }
+    html_tag += '</ul>';
+    html_tag += '</div>';
+    html_tag += '</div>';
+    html_tag += '<div  ui-refresh="'+jsonData.show_chart+'" style="'+jsonData.chart_style+'" class="chart"></div>';
+    html_tag += '</div>';
+    return html_tag;
  }

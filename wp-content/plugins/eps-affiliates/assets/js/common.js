@@ -86,6 +86,32 @@ $(function () {
       }); 
   }
 /*
+ * -------------------------------------------
+* Data tables for user refred members
+ * -------------------------------------------
+*/
+  if ($('.refered-members').length) {
+
+      var table; 
+      table = $(".refered-members").DataTable({
+       "processing": true, 
+       "serverSide": true, 
+       "pageLength": 50,
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_user_refered_downlines_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2,3], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
+/*
 * -------------------------------------------
 * Data tables for ewallet summary
 * -------------------------------------------
@@ -97,6 +123,7 @@ if ($('.custom-ewallet-summary-table').length) {
       "bInfo": false,
       "searching": false,
       "paging": false,
+      "pageLength": 50,
        "processing": true, 
        "serverSide": true, 
        "order": [], 
@@ -124,6 +151,7 @@ if ($('.custom-ewallet-all-trans-table').length) {
       table = $(".custom-ewallet-all-trans-table").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -148,6 +176,7 @@ if ($('.custom-ewallet-income-table').length) {
       table = $(".custom-ewallet-income-table").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -171,7 +200,8 @@ if ($('.custom-ewallet-expense-table').length) {
       var table; 
       table = $(".custom-ewallet-expense-table").DataTable({
        "processing": true, 
-       "serverSide": true, 
+       "serverSide": true,
+       "pageLength": 50, 
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -224,6 +254,7 @@ if ($('.custom-business-summary-table').length) {
       "bInfo": false,
       "searching": false,
       "paging": false,
+      "pageLength": 50,
        "processing": true, 
        "serverSide": true, 
        "order": [], 
@@ -250,6 +281,7 @@ if ($('.custom-business-all-trans-table').length) {
       table = $(".custom-business-all-trans-table").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -276,6 +308,7 @@ if ($('.custom-business-income-history-table').length) {
       table = $(".custom-business-income-history-table").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -300,6 +333,7 @@ if ($('.custom-business-expense-history-table').length) {
       table = $(".custom-business-expense-history-table").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -399,7 +433,32 @@ if ($('.custom-business-expense-history-table').length) {
     $(this).find('input[type="radio"]').prop("checked", true);
     
   });
-  
+/*
+ * -------------------------------------------------------------
+ * On clicking the auto placement button
+ * get the uid
+ * user automatically place under a user
+ * -------------------------------------------------------------
+*/  
+ $('#auto-place-user').click(function (){
+    var sponsor = $('#current-user-id').val();
+    var uid     = $('#seleted-user-id').val();
+    $.ajax({
+      type :'POST',
+      data : {
+        action:'afl_auto_place_user_ajax',
+        sponsor : $('#current-user-id').val(),
+        uid     : $('#seleted-user-id').val(),
+      },
+      url:ajax_object.ajaxurl,
+      success: function(data){
+          setTimeout(function() { window.location.reload(true); }, 500 );
+      }
+    });
+
+ });
+
+
 //document ends here
 });
 

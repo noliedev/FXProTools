@@ -6,7 +6,7 @@
     <div class="col-sm-6 text-right hidden-xs">
       <div class="region region-title-extra">
         
-        <?php if( current_user_can('administrator')): ?>
+        <?php if( eps_is_admin()): ?>
 
         <div id="block-afl-widgets-afl-bwallet-income" class="block block-afl-widgets contextual-links-region clearfix">
         </div> 

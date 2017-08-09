@@ -116,5 +116,7 @@ function afl_member_transaction($transaction = array(), $business = FALSE){
 
 function afl_currency(){
   return 'USD';
-
+}
+function afl_currency_symbol(){
+  return '$';
 }

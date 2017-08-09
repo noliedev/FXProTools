@@ -11,6 +11,9 @@ function afl_rank_performance_overview () {
 
 function afl_rank_performance_overview_template () {
 	$uid = afl_current_uid();
+	if (isset($_GET['uid'])) {
+		$uid = $_GET['uid'];
+	}
 
 	$table = array();
 	$table['#name'] 			= '';
@@ -54,11 +57,11 @@ function afl_rank_performance_overview_template () {
 
 			$markup = '';
 			$markup .= '<label class="label text-info m-l-xs">Required : '.$required.'</label><br>';
-			$markup .= '<label class="label text-info m-l-xs">Earned : '.$earned.'</label><br>';
+			$markup .= '<label class="label text-info m-l-xs">Earned : '.number_format($earned, 2, '.', ',').'</label><br>';
 			if ($required <= $earned) {
-				$condition = '<span class="text-center"><i class="text-center fa fa-thumbs-up text-success m-b-xs"></i></span>';
+				$condition = '<span class="text-center"><i class="text-center fa fa-lg fa-thumbs-o-up -up text-success m-b-xs"></i></span>';
 			} else {
-				$condition = '<span class="text-center"><i class="text-center fa fa-thumbs-down text-danger m-b-xs"></i></span>';
+				$condition = '<span class="text-center"><i class="text-center fa fa-lg fa-thumbs-o-up -down text-danger m-b-xs"></i></span>';
 			}
 
 			$rows[$i]['markup_1'] = array(
@@ -72,14 +75,15 @@ function afl_rank_performance_overview_template () {
  		/* ------ User GV ----------------------------------------------------------------------*/
 			$required = afl_variable_get('rank_'.$i.'_gv',0);
 			$earned 	= _get_user_gv($uid); 
+			// pr($earned);
 
 			$markup = '';
 			$markup .= '<label class="label text-info m-l-xs">Required : '.$required.'</label><br>';
-			$markup .= '<label class="label text-info m-l-xs">Earned : '.$earned.'</label><br>';
+			$markup .= '<label class="label text-info m-l-xs">Earned : '.number_format($earned, 2, '.', ',').'</label><br>';
 			if ($required <= $earned) {
-				$condition = '<span class="text-center"><i class="text-center fa fa-thumbs-up text-success m-b-xs"></i></span>';
+				$condition = '<span class="text-center"><i class="text-center fa fa-lg fa-thumbs-o-up -up text-success m-b-xs"></i></span>';
 			} else {
-				$condition = '<span class="text-center"><i class="text-center fa fa-thumbs-down text-danger m-b-xs"></i></span>';
+				$condition = '<span class="text-center"><i class="text-center fa fa-lg fa-thumbs-o-up -down text-danger m-b-xs"></i></span>';
 			}
 
 			$rows[$i]['markup_2'] = array(
@@ -96,9 +100,9 @@ function afl_rank_performance_overview_template () {
 			$markup .= '<label class="label text-info m-l-xs">Required : '.$required.'</label><br>';
 			$markup .= '<label class="label text-info m-l-xs">Earned : '.$earned.'</label><br>';
 			if ($required <= $earned) {
-				$condition = '<span class="text-center"><i class="text-center fa fa-thumbs-up text-success m-b-xs"></i></span>';
+				$condition = '<span class="text-center"><i class="text-center fa fa-lg fa-thumbs-o-up -o-up text-success m-b-xs"></i></span>';
 			} else {
-				$condition = '<span class="text-center"><i class="text-center fa fa-thumbs-down text-danger m-b-xs"></i></span>';
+				$condition = '<span class="text-center"><i class="text-center fa fa-lg fa-thumbs-o-up -o-down text-danger m-b-xs"></i></span>';
 			}
 
 			$rows[$i]['markup_3'] = array(
@@ -113,18 +117,34 @@ function afl_rank_performance_overview_template () {
 		  if ($below_rank > 0 ) {
 		  	for ($j = 1; $j <= $below_rank ; $j++) { 
 		  		$required = afl_variable_get('rank_'.$i.'_rank_'.$j.'_required_count',0);
-		  		$in_each 	= afl_variable_get('rank_'.$i.'_rank_'.$j.'_required_each_leg',0);
-		  		$in_each_t= '';
-		  		if ( $in_each ){
-		  			$in_each_t = '- in each leg';
-		  		} else {
-		  			$in_leg_count = afl_variable_get('rank_'.$i.'_rank_'.$j.'_required_in_legs');
-		  			if ( $in_leg_count ) {
-		  				$in_each_t = '- in '.$in_leg_count.' leg';
-		  			}
+		  		// $in_each 	= afl_variable_get('rank_'.$i.'_rank_'.$j.'_required_each_leg',0);
+		  		$in_leg_count = afl_variable_get('rank_'.$i.'_rank_'.$j.'_required_in_legs');
+
+		  		if ($required && $in_leg_count) {
+		  			$in_each_t = ($in_leg_count * $required).' '.afl_variable_get('rank_'.$j.'_name', 'Rank '.$j).'- from '.( $in_leg_count ).' legs';
 		  		}
+
+		  		if (empty($in_leg_count) && $required) {
+		  			$in_each_t = ($required).' '.afl_variable_get('rank_'.$j.'_name', 'Rank '.$j).'- from any legs';
+		  		}
+
+		  		if ( _check_required_qualifications_meets($uid, $i)) {
+						$condition = '<br><span class="text-center"><i class="text-center fa fa-lg fa-lg fa-thumbs-o-up -o-up text-success m-b-xs"></i></span>';
+		  		} else {
+						$condition = '<br><span class="text-center"><i class="text-center fa fa-lg fa-lg fa-thumbs-o-up -o-down text-danger m-b-xs"></i></span>';
+		  		}
+
+		  		// $in_each_t = '';
+		  		// if ( $in_each ){
+		  		// 	$in_each_t = '- in each leg';
+		  		// } else {
+		  		// 	$in_leg_count = afl_variable_get('rank_'.$i.'_rank_'.$j.'_required_in_legs');
+		  		// 	if ( $in_leg_count ) {
+		  		// 		$in_each_t = '- in '.$in_leg_count.' leg';
+		  		// 	}
+		  		// }
 		  		if ($required) 
-		  			$markup .= $required .' '.  afl_variable_get('rank_'.$j.'_name', 'Rank '.$j).' '.$in_each_t.'<br>';
+		  			$markup .= $in_each_t.$condition.'<br>';
 		  	}
 		  }
 		 $rows[$i]['markup_4'] = array(

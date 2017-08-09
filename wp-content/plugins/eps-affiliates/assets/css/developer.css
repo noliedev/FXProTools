@@ -234,6 +234,17 @@
 .no-bg:hover {background: none !important;}
 /*  ------------------ Tree user details tootip ------------------------------------ */
 
+/*  ------------------ e-wallet summary Over view ----------------------------------- */
+.overview ul.overview-inner{padding: 0px;}
+.overview ul.overview-inner li{list-style: none;padding: 7px 10px;border-bottom: 1px solid #EEE;}
+.overview ul.overview-inner li h4{float: left;width: 70%;color: #323a45; font-size: 13px;margin: 0;}
+.overview ul.overview-inner li .overview-btn{float: right;width: 30%;text-align: right;}
+.overview-bg-icon {border-radius: 3px;display: inline-block;font-size: 12px;height: 17px;line-height: 17px;margin-right: 10px;text-align: center;width: 17px;}
+
+.sidebar-overview ul.overview-inner li h4{width: 100%;}
+.sidebar-overview ul.overview-inner li .overview-btn{width: 100%;padding: 0 0 0 27px;text-align: left;float: left;}
+
+/*  ------------------ e-wallet summary Over view ----------------------------------- */
 
   /* small screen */
 @media (max-width: 768px) {

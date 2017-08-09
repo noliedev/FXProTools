@@ -166,6 +166,7 @@
 				if (!_check_required_qualifications_meets($uid, $i)) {
 	 				continue;
 	 			}
+				// pr ('Rank '. $i) ;
 
 	 		/*
 	 		 * ---------------------------------------------------------
@@ -173,14 +174,22 @@
 	 		 * ---------------------------------------------------------
 	 		*/
 	 			/*------- Update the genealogy rank --------------------*/
+	 			$node = afl_genealogy_node($uid);
+	 			$member_rank = $node->member_rank;
+	 			$update_id = '';
 
-	 			$update_id = $wpdb->update(
-											$table_prefix.'afl_user_genealogy',
-											array(
-												'member_rank' => $i
-											),
-											array('uid' => $uid)
-										);
+	 			if ( $member_rank <= $i) : 
+		 			$update_id = $wpdb->update(
+												$table_prefix.'afl_user_genealogy',
+												array(
+													'member_rank' => $i
+												),
+												array(
+													'uid' => $uid
+												)
+											);
+		 		endif;
+
 				// pr ($i) ;
 	 			$date_splits 	= afl_date_splits(afl_date());
 
@@ -293,7 +302,10 @@
  function _check_required_distributors_meets ($uid = '', $rank = '') {
  		$user_distrib = _get_user_distributor_count($uid);
  		//check conidition meets
- 		$required_distrib = afl_variable_get('rank_'.$rank.'no_of_distributors',0);
+ 		$required_distrib = afl_variable_get('rank_'.$rank.'_no_of_distributors',0);
+ 		// pr($rank);
+ 		// pr($required_distrib);
+ 		
  		if ($required_distrib <= $user_distrib  ){
  			return true;
  		} else {
@@ -442,7 +454,7 @@
  	$result = db_select($query, 'get_row');
  	$result = (array)$result;
  	if (isset($result['sum'])) {
- 		return afl_get_commerce_amount($result['sum']);
+ 		return afl_get_payment_amount($result['sum']);
  	} else {
  		return 0;
  	}
@@ -479,7 +491,7 @@
  	$result = db_select($query, 'get_row');
 	$result = (array)$result;
 	 	if (isset($result['sum'])) {
-	 		return afl_get_commerce_amount($result['sum']);
+	 		return afl_get_payment_amount($result['sum']);
 	 	} else {
 	 		return 0;
 	 	}
@@ -497,3 +509,69 @@
  	} else
  		return 0;
  }
+/*
+ * -------------------------------------------------
+ *  Block a affiliate member
+ *
+ *
+ * set the genealogy status = 0
+ * set the last deactived on = current timestamb
+ * -------------------------------------------------
+*/
+ 	function eps_affiliates_block_member_callback ($uid = '') {
+	 	if (!empty($uid)) {
+	 		global $wpdb;
+	 		//update genealogy ststus
+	 		$update = $wpdb->update(
+	 			_table_name('afl_user_genealogy'),
+	 			array(
+	 				'status' => 0,
+	 				'deactived_on' => afl_date()
+	 			),
+	 			array(
+	 				'uid' => $uid
+	 			)
+	 		);
+	 	 	if ( $update ) {
+	 	 		return true;
+	 	 	} else {
+	 	 		return false;
+	 	 	}
+	 	}
+ 	}
+/*
+ * -------------------------------------------------
+ *  UNBlock a affiliate member
+ *
+ *
+ * set the genealogy status = 1
+ * set the last actived on = current timestamb
+ * -------------------------------------------------
+*/
+ 	function eps_affiliates_unblock_member_callback ($uid = '') {
+	 	if (!empty($uid)) {
+	 		global $wpdb;
+	 		$update = $wpdb->update(
+	 			_table_name('afl_user_genealogy'),
+	 			array(
+	 				'status' => 1,
+	 				'actived_on' => afl_date()
+	 			),
+	 			array(
+	 				'uid' => $uid
+	 			)
+	 		);
+
+	 	 	if ( $update ) {
+	 	 		return true;
+	 	 	} else {
+	 	 		return false;
+	 	 	}
+	 	}
+ 	}
+
+function eps_affiliates_withdrawal_approve_callback($id = ''){
+	pr("eps_affiliates_withdrawal_approve_callback");
+	pr($id);exit();
+}
+

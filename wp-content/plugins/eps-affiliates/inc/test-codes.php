@@ -7,24 +7,23 @@ function afl_admin_test_codes(){
 }
 
 function afl_test_codes_callback () {
-  $query = array();
-  $query['#select'] = _table_name('afl_user_downlines');
-  $query['#join']   = array(
-    _table_name('afl_user_genealogy') => array(
-      '#condition' => '`'._table_name('afl_user_downlines').'`.`downline_user_id` = `'._table_name('afl_user_genealogy').'`.`uid`'
-    )
-  );
-  $query['#where']  = array(
-    '`'._table_name('afl_user_genealogy').'`.`status` = 1',
-    '`'._table_name('afl_user_downlines').'`.`uid` = 162'
-  );
-  $query['#expression'] = array(
-    'COUNT(`'._table_name('afl_user_genealogy').'`.`uid`) as count'
-  );
+    if (eps_is_admin()) {
+      $uid = afl_root_user();
+    } else {
+      $uid = afl_current_uid();
+    }
 
-  $respo = db_select($query, 'get_row');
-        $count = !empty($respo->count) ? $respo->count : 0;
-  pr($count);
+    $query = array();
+    $query['#select'] = _tbale_name('afl_user_downlines');
+    $query['#where']  = array(
+      'uid = '.$uid,
+      'deleted = 0'
+    );
+    $query['#expression'] = array(
+      'COUNT(downline_user_id) as count'
+    );
+    $resp = db_select($query, 'get_row');
+    pr($resp);
 }
 function insertuser () {
   $uid  = 162;
