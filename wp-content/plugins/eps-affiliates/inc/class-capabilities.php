@@ -55,13 +55,11 @@
 
 			if ( is_object( $wp_roles ) ) {
 				/* ------ Site Admin Permission capabilities ------------*/
-					$wp_roles->add_cap( 'administrator', 'advanced_configurations' );
-					$wp_roles->add_cap( 'administrator', 'compensation_plan_configurations' );
-					$wp_roles->add_cap( 'administrator', 'afl_roles_configuration');
-					$wp_roles->add_cap( 'administrator', 'business_system_members');
-					$wp_roles->add_cap( 'afl_member', 'eps_system_member');
-					// $wp_roles->add_cap( 'business_admin', 'eps_system_member');
 
+					$all_permissions = custom_permissions();
+					foreach ($all_permissions as $key => $value) {
+						$wp_roles->add_cap( 'administrator', $key);
+					}
 			}
 		}
 

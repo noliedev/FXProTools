@@ -246,6 +246,7 @@
 
 /*  ------------------ e-wallet summary Over view ----------------------------------- */
 
+#afl-widgets-afl-dashboard-level-user-counts .afl-user-count-panel{border: 1px solid #23b7e5;} 
   /* small screen */
 @media (max-width: 768px) {
   .side-menu {

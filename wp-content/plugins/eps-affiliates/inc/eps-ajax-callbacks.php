@@ -67,13 +67,15 @@ function member_users_auto_complete_callback($search_key = '') {
     $query['#where'] = array(
       '`'._table_name('afl_user_genealogy').'`.`referrer_uid` = '.$uid
     );
+    $query['#where_or'] = array(
+      '`'._table_name('afl_user_genealogy').'`.`uid` = '.$uid
+    );
   }
   $query['#fields'] = array(
     _table_name('users') => array('user_login', 'ID')
   );
   $result = db_select($query, 'get_results');
   
-  // $result = $wpdb->get_results($querystr) or die(mysql_error());
 
   foreach ($result as $key => $value) {
     $response[] = array('name'=> ($value->user_login.' ('.$value->ID.')'));

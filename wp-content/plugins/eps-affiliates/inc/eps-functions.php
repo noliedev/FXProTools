@@ -39,6 +39,22 @@
  }
 /*
  * ---------------------------------------------------------
+ * Place a user into the holding tank
+ * ---------------------------------------------------------
+*/
+ function eps_affiliates_place_user_in_holding_tank_callback ($uid = '', $sponsor = '') {
+ 		 global $wpdb;
+ 		$reg_obj = new Eps_affiliates_registration;
+    //adds to the holding tank
+    $reg_obj->afl_add_to_holding_tank(
+    							array(
+										'sponsor_uid' => $sponsor,
+										'uid'					=> $uid
+									)
+							);
+ }
+/*
+ * ---------------------------------------------------------
  * Commerce purchase complete
  * ---------------------------------------------------------
 */
@@ -131,6 +147,7 @@
  * ------------------------------------------------------
 */
  function eps_affiliates_calculate_affiliate_rank_callback ($uid = '') {
+
  	global $wpdb;
  	$table_prefix = $wpdb->prefix;
  	if (!empty($uid)) {
@@ -144,12 +161,7 @@
 	 		 * ---------------------------------------------------------
 	 		*/
 	 			//check pv
-				// pr ('------------------------------------------------') ;
-				// pr ('Rank '. $i) ;
-				// pr ('PV : '._check_required_pv_meets( $uid, $i )) ;
-				// pr ('GV : '._check_required_gv_meets( $uid, $i )) ;
-				// pr ('DI : '._check_required_distributors_meets( $uid, $i )) ;
-				// pr ('------------------------------------------------') ;
+				
 	 			if (!_check_required_pv_meets( $uid, $i ) ){
 	 				continue;
 	 			}
@@ -167,7 +179,13 @@
 	 				continue;
 	 			}
 				// pr ('Rank '. $i) ;
-
+	 		// 	pr ('------------------------------------------------') ;
+				// pr ('Rank '. $i) ;
+				// pr ('PV : '._check_required_pv_meets( $uid, $i )) ;
+				// pr ('GV : '._check_required_gv_meets( $uid, $i )) ;
+				// pr ('DI : '._check_required_distributors_meets( $uid, $i )) ;
+				// pr ('QU : '._check_required_qualifications_meets( $uid, $i )) ;
+				// pr ('------------------------------------------------') ;
 	 		/*
 	 		 * ---------------------------------------------------------
 	 		 * After the condition success, run the below codes
@@ -177,7 +195,7 @@
 	 			$node = afl_genealogy_node($uid);
 	 			$member_rank = $node->member_rank;
 	 			$update_id = '';
-
+	 			// pr($member_rank);
 	 			if ( $member_rank <= $i) : 
 		 			$update_id = $wpdb->update(
 												$table_prefix.'afl_user_genealogy',
@@ -329,7 +347,9 @@
 	       * get the required rank holders neede in one leg
 	       * --------------------------------------------------------------
 	      */
+
 	        $required_in_one_count = afl_variable_get('rank_'.$rank.'_rank_'.$i.'_required_count', 0);
+
 
 	      if ( $required_in_one_count ) {
 	        /*
@@ -338,6 +358,7 @@
 	         * --------------------------------------------------------------
 	        */
 	          $required_in_legs_count    = afl_variable_get('rank_'.$rank.'_rank_'.$i.'_required_in_legs ', 0);
+
 
 	        //if in legs count specified
 	        if ( $required_in_legs_count ) {
@@ -364,16 +385,27 @@
 	          //find the ranks ($i) of this downlines
 	          foreach ($downlines as $key => $value) {
 	              //get the downlines users downlines count having the rank $i
-	              $down_downlines_count = afl_get_user_downlines_uid($value->downline_user_id, array('member_rank'=>$i), true);
-	              if ( $down_downlines_count )
+	              $down_downlines_count = afl_get_user_downlines_uid($value->downline_user_id, array('member_rank'=>$i),TRUE);
+	              /*
+	               * --------------------------------------------------
+	               * Get the downlines count of members having the rank
+	               * $i
+	               * check the downline count meets the required count 
+	               * in one leg
+	               * if it meets set status as 1
+	               * else set 0
+	               * --------------------------------------------------
+	              */
+	              if ( $down_downlines_count >= $required_in_one_count )
 	                $status = 1;
 	              else
 	                $status = 0;
 	              $condition_statuses[] = $status;
 	          }
+
 	          //count the occurence of 1 and 0
 	          $occurence = array_count_values($condition_statuses);
-
+	          
 	          //if the occurence of 1 is greater than or equals the count of legs needed it returns true
 	          if ( isset($occurence[1])  && $occurence[1] >= $required_in_legs_count ){
 	            $meets_flag = 1;
@@ -404,8 +436,11 @@
 	            $query['#select'] = _table_name('afl_user_downlines');
 	            $query['#where'] = array(
 	              '`'._table_name('afl_user_downlines').'`.`member_rank`='.$i,
-	              '`'._table_name('afl_user_downlines').'`.`uid` IN ('.$implodes.')'
 	            );
+	            if (!empty($implodes)) {
+	              $query['#where'][] = '`'._table_name('afl_user_downlines').'`.`uid` IN ('.$implodes.')';
+	            }
+
 	            $query['#expression'] = array(
 	              'COUNT(`'._table_name('afl_user_downlines').'`.`member_rank`) as count'
 	            );
@@ -570,8 +605,260 @@
 	 	}
  	}
 
+/**
+	* @param $id = payout id from tale wp_afl_payout_requests	 
+ 	* -----------------------------------------------------------
+ 	*  withdrawal approval bul operation a affiliate member
+ 	* -----------------------------------------------------------
+**/
 function eps_affiliates_withdrawal_approve_callback($id = ''){
-	pr("eps_affiliates_withdrawal_approve_callback");
-	pr($id);exit();
+	global $wpdb;
+	$uid = afl_current_uid();
+	$table_prefix = $wpdb->prefix ? $wpdb->prefix : 'wp_';
+	$table 				= $table_prefix.'afl_payout_requests';
+
+ 	$query 						=   array();
+ 	$query['#select'] = $table;
+ 	$query['#where'] 	= array(
+ 		'afl_payout_id ='.$id
+ 	);
+ 	$row = db_select($query, 'get_row');
+ 	
+ 	if ($row->request_status != 1) {
+      wp_set_message(__('Withdrawal Request is already processed of user id' .$row->uid ) ) ;
+    	return false;
+  }
+	  $update = $wpdb->update(
+		 	_table_name('afl_payout_requests'),
+		 		array(
+		 			'modified'				=> afl_date(),
+					'paid_by' 				=> $uid,
+					'notes'						=> 'Approved | Waiting For Payment',
+					'request_status'	=> 2,
+					'paid_status'			=> 1,
+		 		),
+		 		array(
+		 			'afl_payout_id' => $id,
+		 			'uid'						=> $row->uid,
+		 		)
+		);
+    if($update){
+    	return true;
+    }else{
+    	return false;
+    }
 }
 
+/**
+	* @param $id = payout id from tale wp_afl_payout_requests	 
+ 	* -----------------------------------------------------------
+ 	*  withdrawal reject bulk operation 
+ 	* -----------------------------------------------------------
+**/
+function eps_affiliates_withdrawal_reject_callback($id =''){
+	
+	global $wpdb;
+	$uid 					= afl_current_uid();
+	$table_prefix = $wpdb->prefix ? $wpdb->prefix : 'wp_';
+	$table 				= $table_prefix.'afl_payout_requests';
+
+ 
+ 	$query1 						=   array();
+ 	$query1['#select'] 	= $table;
+
+ 	$query1['#where'] 	= array(
+ 		'afl_payout_id ='.$id
+ 	);
+ 	$row = db_select($query1, 'get_row');
+ 	
+ 	if ($row->request_status != 1) {
+      wp_set_message(__('Withdrawal Request is already processed of user id' .$row->uid ) ) ;
+    	return false;
+  }
+
+  $transaction 											=	array();
+  $transaction['uid'] 							=	$row->uid;
+  $transaction['associated_user_id']= $row->uid;
+  $transaction['level'] 						= 0;
+  $transaction['currency_code'] 		= afl_currency($row->uid);
+  $transaction['order_id'] 					= 1;
+  $transaction['int_payout'] 				= 0;
+  $transaction['credit_status'] 		= 1;
+  $transaction['amount_paid'] 			= $row->amount_requested + $row->charges;
+  $transaction['amount_paid'] 			= $row->amount_requested;
+  $transaction['category'] 					= 'WITHDRAWAL CANCELLATION';
+  $transaction['notes'] 						= __('Amount credited back on withdrawal request rejection');
+  $transaction['hidden_transaction']= 0;
+  afl_member_transaction($transaction, FALSE, FALSE);
+
+  $b_transactions['category'] 					= 'RE WITHDRAWAL CHARGES';
+  $b_transactions['additional_notes'] 	= __('Return of Withdrawal Charges');
+  $b_transactions['uid'] 								= $row->uid;
+  $b_transactions['associated_user_id'] = $row->uid;
+  $b_transactions['credit_status'] 			= 0;
+  $b_transactions['amount_paid'] 				= $row->charges;
+  $b_transactions['notes']		 					= __('Return of  Withdrawal Charges');
+  $b_transactions['currency_code'] 			= afl_currency();
+  $b_transactions['order_id'] 					= 1;
+  afl_business_transaction($b_transactions);
+
+    $update = $wpdb->update(
+	 		_table_name('afl_payout_requests'),
+	 			array(
+	 				'modified'				=> afl_date(),
+	 				'paid_by' 				=> $uid,
+	 				'notes'						=> 'Rejected | Try Later',
+	 				'paid_status'			=> -99,
+	 				'request_status'	=> 3,
+	 				'processed_method'=> '',
+	 			),
+	 			array(
+	 				'afl_payout_id' => $id,
+	 				'uid'						=> $row->uid,
+	 			)
+	 		);
+
+  if($update){
+    return true;
+  }else{
+    return false;
+  }  
+}
+
+/**
+	* @param $id = payout id from tale wp_afl_payout_requests	 
+ 	* -----------------------------------------------------------
+ 	*  Payout approval bulk operation
+ 	* -----------------------------------------------------------
+**/
+function eps_affiliates_payout_paid_callback($id = ''){
+	
+	$afl_date 				= afl_date();
+ 	$afl_date_splits 	= afl_date_splits($afl_date);
+	$uid 							= afl_current_uid();
+ 	global $wpdb;
+
+	$table_prefix 		= $wpdb->prefix ? $wpdb->prefix : 'wp_';
+	$table 						= $table_prefix.'afl_payout_requests';
+ 
+ 	$query1 					= array();
+ 	$query1['#select']= $table;
+
+ 	$query1['#where']	= array(
+ 		'afl_payout_id ='.$id
+ 	);
+ 	$row = db_select($query1, 'get_row');
+ 	
+ 	if ($row->request_status != 2) {
+      wp_set_message(__('Admin Approval is required' .$row->uid ) ) ;
+    	return false;
+  }
+  if($row->paid_status != 1){
+    	wp_set_message(__('Admin Approval is required' .$row->uid ) ) ;
+      return false;
+  }
+
+  $update = $wpdb->update(
+	 			_table_name('afl_payout_requests'),
+	 			array(
+	 				'modified'				=> $afl_date,
+	 				'paid_date' 				=> $afl_date,
+	 				'notes'						=> 'Paid | Payment Processed',
+	 				'paid_status'			=> 2,
+	 				'request_status'	=> 3,
+	 				'payment_date' => $afl_date_splits['d'],
+          'payment_month' => $afl_date_splits['m'],
+          'payment_year' => $afl_date_splits['y'],
+          'payment_week' => $afl_date_splits['w'],
+	 			),
+	 			array(
+	 				'afl_payout_id' => $id,
+	 				'uid'						=> $row->uid,
+	 			)
+	 		);
+   if($update){
+    return true;
+  }else{
+    return false;
+  } 
+}
+
+/**
+	* @param $id = payout id from tale wp_afl_payout_requests	 
+ 	* -----------------------------------------------------------
+ 	*  withdrawal cancellation by user bulk operation
+ 	* -----------------------------------------------------------
+**/
+function eps_affliate_user_cancel_withdraw_callback($id = ''){
+	global $wpdb;
+	$afl_date 		= afl_date();
+	$uid 					= afl_current_uid();
+	$table_prefix = $wpdb->prefix ? $wpdb->prefix : 'wp_';
+	$table 				= $table_prefix.'afl_payout_requests';
+
+ 
+ 	$query 							=   array();
+ 	$query['#select'] 	= $table;
+
+ 	$query['#where'] 		= array(
+ 		'afl_payout_id ='.$id
+ 	);
+ 	$row = db_select($query, 'get_row');
+ 	
+ 	if ($uid != $row->uid) {
+     wp_set_message(__('You can not cancel other members withdrawal request' .$row->uid ) ) ;
+    	return false;
+  }
+  if ($row->request_status != 1) {
+      wp_set_message(__('Withdrawal Request is already processed of user id' .$row->uid ) ) ;
+    	return false;
+  }
+   	$transaction 												= array();
+    $transaction['uid'] 								= $row->uid;
+    $transaction['associated_user_id'] 	= $row->uid;
+    $transaction['level'] 							= 0;
+    $transaction['currency_code'] 			= afl_currency($row->uid);
+    $transaction['order_id'] 						= 1;
+    $transaction['int_payout'] 					= 0;
+    $transaction['credit_status'] 			= 1;
+    $transaction['hidden_transaction']	= 0;
+    $transaction['amount_paid'] 				= $row->amount_requested + $row->charges;
+    $transaction['amount_paid'] 				= $row->amount_requested;
+    $transaction['category'] 						= 'WITHDRAWAL CANCELLATION';
+    $transaction['notes'] 							= __('Amount credited back on withdrawal request cancelation');
+    afl_member_transaction($transaction, FALSE, FALSE);
+
+
+    $b_transactions['category'] 					= 'RE WITHDRAWAL CHARGES';
+    $b_transactions['additional_notes'] 	= __('Return of Withdrawal Charges');
+    $b_transactions['uid'] 								= $row->uid;
+    $b_transactions['associated_user_id'] = $row->uid;
+    $b_transactions['credit_status'] 			= 0;
+    $b_transactions['amount_paid'] 				= $row->charges;
+    $b_transactions['notes'] 							= __('Return of  Withdrawal Charges');
+    $b_transactions['currency_code'] 			= afl_currency();
+    $b_transactions['order_id']						= 1;
+    afl_business_transaction($b_transactions);
+
+    $update = $wpdb->update(
+	 			_table_name('afl_payout_requests'),
+	 			array(
+	 				'modified'				=> $afl_date,
+	 				'paid_date' 				=> $afl_date,
+	 				'notes'						=> 'Cancelled',
+	 				'paid_status'			=> -99,
+	 				'request_status'	=> 3,
+	 			),
+	 			array(
+	 				'afl_payout_id' => $id,
+	 				'uid'						=> $row->uid,
+	 			)
+	 		);
+   if($update){
+    return true;
+  }else{
+    return false;
+  } 
+
+}
+ 

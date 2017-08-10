@@ -237,9 +237,9 @@
 		 *
 	 	*/
 			private function includes() {
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
-				//common functions callback
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.common.php';
+				//common functions callback
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
 
 				//system permissions
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'eps-permissions.php';
@@ -293,8 +293,6 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-manage-members.php';
 				//variable configurations
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-variable-configuration.php';
-				//rank performance overview
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-rank-performance-overview.php';
 
 
 				//common files callback
@@ -322,6 +320,8 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-exporer-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-holding-tank-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-refered-members-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-rank-performance-overview.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-team-purchases-overview.php';
 
 				/* ------ Here comes all the member menu callback : End  -------------------*/
 
@@ -360,8 +360,16 @@
 				// Menu callback for payout 
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/payout/menu-callback/menu-payout-withdrawal-requests.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/payout/withdraw-request-datatable.php';
+
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/payout/menu-callback/menu-payout-in-remitance.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/payout/payout-in-remitance-datatable.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/eps_user_ewallet_my_withdrawal_datatable.php';
+				
+				//data tables
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/datatables/class-team-purchases-data-table.php';
 				
 			}
+			
 		/**
 		 * -------------------------------------------------------------------------
 		 * Setup all objects

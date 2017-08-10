@@ -1,7 +1,8 @@
+
 <?php 
  require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 
- class  Eps_withdraw_request_data_table extends WP_List_Table {
+ class  Eps_user_ewallet_my_withdrawal_datatable extends WP_List_Table {
 /**
 	 * Default number of items to show per page
 	 *
@@ -122,34 +123,36 @@
 		function get_columns(){
 			$tab 			= isset($_GET['tab']) 	? $_GET['tab'] : 'active_requestes';
 			if($tab == 'active_requestes'){
-				$columns = array(
-		  	'cb'        				=> '<input type="checkbox" />',
-		  	'payout_id'					=> __( 'Payout Id'),
-		  	'member'						=> __( 'Member', 'affiliate-eps' ),
-		  	'request_amount'		=> __( 'Request Amount', 'affiliate-eps' ),
-		  	'charges'						=> __( 'Charges', 'affiliate-eps' ),
-		  	'request_date'			=> __( 'Requested Date', 'affiliate-eps' ),
-		  	'notes'							=> __( 'Notes', 'affiliate-eps' ),
-		  	'preferred_method'	=> __( 'Preferred Method', 'affiliate-eps' ),
-		  	'paid_amount'				=> __( 'Amount Paid', 'affiliate-eps' ),
-		  	'paid_date'					=> __( 'Paid date', 'affiliate-eps' ),
-		  	'paid_status'				=> __( 'Paid Status', 'affiliate-eps' ),
-		  );
-			}
-			else{
-			  $columns = array(
-			  	'payout_id'					=> __( 'Payout Id'),
-			  	'member'						=> __( 'Member', 'affiliate-eps' ),
-			  	'request_amount'		=> __( 'Request Amount', 'affiliate-eps' ),
-			  	'charges'						=> __( 'Charges', 'affiliate-eps' ),
-			  	'request_date'			=> __( 'Requested Date', 'affiliate-eps' ),
-			  	'notes'							=> __( 'Notes', 'affiliate-eps' ),
-			  	'preferred_method'	=> __( 'Preferred Method', 'affiliate-eps' ),
-			  	'paid_amount'				=> __( 'Amount Paid', 'affiliate-eps' ),
-			  	'paid_date'					=> __( 'Paid date', 'affiliate-eps' ),
-			  	'paid_status'				=> __( 'Paid Status', 'affiliate-eps' ),
-			  );
-		}
+					$columns = array(
+				  	'cb'        			=> '<input type="checkbox" />',
+				  	'payout_id'				=> __("Payout ID"),
+				  	'member'					=> __( 'Member'),
+				  	'request_amount'	=> __('Requested Amount', 'affliate-eps'),
+				  	'charges'					=> __('Charges', 'affliate-eps'),
+				  	'requested_date'	=> __('Requested Date	','affiliate-eps'),
+				  	'notes'						=> __( 'Notes', 'affiliate-eps' ),
+				  	'payout_method'		=> __('Payout Method', 'affliate-eps'),
+				  	'payable_amount'	=> __('Payable Amount', 'affliate-eps'),
+				  	'paid_date'				=> __('Paid Date', 'affiliate-eps'),
+				  	'paid_status' 		=> __('Paid Status','affliate-eps'),
+		  		);
+				}
+				else{
+					$columns = array(
+				  	'payout_id'				=> __("Payout ID"),
+				  	'member'					=> __( 'Member'),
+				  	'request_amount'	=> __('Requested Amount', 'affliate-eps'),
+				  	'charges'					=> __('Charges', 'affliate-eps'),
+				  	'requested_date'	=> __('Requested Date	','affiliate-eps'),
+				  	'notes'						=> __( 'Notes', 'affiliate-eps' ),
+				  	'payout_method'		=> __('Payout Method', 'affliate-eps'),
+				  	'payable_amount'	=> __('Payable Amount', 'affliate-eps'),
+				  	'paid_date'				=> __('Paid Date', 'affiliate-eps'),
+				  	'paid_status' 		=> __('Paid Status','affliate-eps'),
+		  		);
+
+				}
+
 		  return apply_filters('affiliate_eps_member_data_table_colums',$columns);
 		}
 
@@ -171,8 +174,7 @@
 			$order   	= isset( $_GET['order'] )    ? $_GET['order']           : 'DESC';
 			$orderby 	= isset( $_GET['orderby'] )  ? $_GET['orderby']         : 'affiliate_id';
 
-			$tab 			= isset($_GET['tab']) 	? $_GET['tab'] : 'active_requestes';
-
+			$tab 			= isset($_GET['tab']) 	? $_GET['tab'] : 'active_requestes';	
 			$per_page = $this->get_items_per_page( 'affwp_edit_affiliates_per_page', $this->per_page );
 
 			$args = wp_parse_args( $this->query_args, array(
@@ -186,27 +188,46 @@
 			$query['#select'] = 'wp_afl_payout_requests';
    		$query['#join']  = array(
       'wp_users' => array(
-        '#condition' => '`wp_users`.`ID`=`wp_afl_payout_requests`.`uid`'
-      )
+        	'#condition' => '`wp_users`.`ID`=`wp_afl_payout_requests`.`uid`'
+      	)
+    	);
+   		$query['#where'] = array( 
+      '`wp_afl_payout_requests` . `category` = "WITHDRAWAL"'
     );
    	switch ($tab) {
    		case 'active_requestes':
    			$request_status = 1;
+   			$query['#where'] = array(
+   					'`wp_afl_payout_requests`.`request_status`='.$request_status
+   			);
    			break;
    		case 'approved_requests':
    			$request_status = 2;
+   			$paid_status 		= 1;
+   			$query['#where'] = array(
+   				'`wp_afl_payout_requests`.`request_status`='.$request_status,
+   				'`wp_afl_payout_requests`.`paid_status`='.$paid_status
+   			);
    			break;
    		case 'rejected_requests':
+   			$paid_status 		= -99;
+   			$query['#where'] = array(
+   				'`wp_afl_payout_requests`.`paid_status`='.$paid_status
+   			);
+   			break;
+   		case 'completed_requests':
    			$request_status = 3;
+   			$paid_status 		= 2;
+   			$query['#where'] = array(
+   					'`wp_afl_payout_requests`.`request_status`='.$request_status,
+   					'`wp_afl_payout_requests`.`paid_status`='.$paid_status
+   		);
    			break;
    		default:
-   			$request_status = 1;
+   			$request_status = 2;
    			break;
    	}
-   	$query['#where'] = array(
-      '`wp_afl_payout_requests`.`request_status`='.$request_status,
-      '`wp_afl_payout_requests` . `category` = "WITHDRAWAL"'
-    );
+   
     $affiliates = db_select($query, 'get_results');
     // pr($affiliates);exit();
 			// Retrieve the "current" total count for pagination purposes.
@@ -231,53 +252,55 @@
 	 * @access public
 	**/
 		public function column_member($item) {
-
 		  $text = $item->display_name.'<span class="label label-primary">'.$item->uid.'</span>';
 		  return $text;
 		}
-	/**
-	 * column member rank
-	 * @access public
-	 * @return string
-	*/
-	  public function column_request_amount($item) {
+	
+ 		public function column_request_amount($item) {
 			  $value = afl_get_commerce_amount($item->amount_requested) .$item->currency_code;
 				return $value;
 		}
+
 		public function column_charges($item) {
 			  $value = afl_get_commerce_amount($item->charges) .$item->currency_code;
 				return $value;
 		}
-		public function column_request_date($item) {
+
+		public function column_requested_date($item) {
 			  $value = afl_date_combined(afl_date_splits($item->created));
 				return $value;
 		}
+
 		public function column_notes($item) {
-			  $value = ucfirst(strtolower($item->notes));
+			  $value = $item->notes;
 				return $value;
 		}
-		public function column_preferred_method($item) {
+
+		public function column_payout_method($item) {
 			$payout_methods = list_extract_allowed_values(afl_variable_get('payout_methods'),'list_text',FALSE);
 			  $value = $payout_methods[$item->payout_method];
 				return $value;
 		}
-		public function column_paid_amount($item) {
-			
+
+		public function column_payable_amount($item) {
 			  $value = afl_get_commerce_amount($item->amount_paid) .$item->currency_code;
 				return $value;
 		}
-		public function column_paid_date($item) {
-				if($item->paid_date)
-			  $value = afl_date_combined(afl_date_splits($item->paid_date));
-				else
-				$value = NULL;
-				return $value;
-		}
+
 		public function column_paid_status($item) {
 			$paid_status = list_extract_allowed_values(afl_variable_get('paid_status'),'list_text',FALSE);		
 			  $value = $paid_status[$item->paid_status];
 				return $value;
 		}
+
+		public function column_paid_date($item) {
+			if(!empty($item->paid_date))
+			 $value = afl_date_combined(afl_date_splits($item->paid_date));
+				else
+					$value = NULL;
+				return $value;
+		}
+		
 	/**
 	 * Retrieve the bulk actions
 	 *
@@ -286,10 +309,10 @@
 	*/
 		public function get_bulk_actions() {
 			$tab 			= isset($_GET['tab']) 	? $_GET['tab'] : 'active_requestes';
+			// pr($tab);
 			if($tab == 'active_requestes'){
 				$actions = array(
-					'approve'     => __( 'Approve Withdrawal Request', '' ),
-					'reject'   		=> __( 'Reject withdrawal Request', '' )
+					'withdrawal_cancel'     => __( 'Cancel The Request'),
 				);
 				return apply_filters( 'eps_affiliats_bulk_action', $actions );
 			}
@@ -318,18 +341,10 @@
 				
 			foreach ( $ids as $id ) {
 
-				if ( 'approve' === $this->current_action() ) {
-					$response = apply_filters('eps_affiliates_withdrawal_approve', $id);
+				if ( 'withdrawal_cancel' === $this->current_action() ) {
+					$response = apply_filters('eps_affliate_user_cancel_withdraw', $id);
 					if ( $response ) {
-						echo wp_set_message('Payout approval successfully', 'success');
-					} else {
-						echo wp_set_message('Some error occured', 'error');
-					}
-				}
-				if ( 'reject' === $this->current_action() ) {
-					$response = apply_filters('eps_affiliates_withdrawal_reject', $id);
-					if ( $response ) {
-						echo wp_set_message('Payout Reject successfully', 'success');
+						echo wp_set_message('Cancel Withdrawal successfully Completed', 'success');
 					} else {
 						echo wp_set_message('Some error occured', 'error');
 					}

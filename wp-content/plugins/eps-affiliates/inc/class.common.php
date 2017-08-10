@@ -1002,7 +1002,7 @@ if(!function_exists('afl_get_rank_names')){
  function set_form_validation_rule ($rules = array()) {
  		global $reg_errors;
 		$reg_errors = new WP_Error;
-
+		$resp  = 1;
  		$validation_response = '';
 		require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-form-validation-rules.php';
 			if (class_exists('Form_validation_rules')) {
@@ -1032,9 +1032,13 @@ if(!function_exists('afl_get_rank_names')){
 	    foreach ( $reg_errors->get_error_messages() as $error ) {
 	    	$wp_error .= '<p>* '.$error.'</p>';
 	    }
-	    if (!empty($wp_error))
-	   		return wp_set_message($wp_error,'danger');
+	    if (!empty($wp_error)){
+	   		wp_set_message($wp_error,'danger');
+	   		$resp = 0;
+	    }
 		}
+
+		return $resp;
  }
 /*
  * ------------------------------------------------------------------------------
@@ -1090,7 +1094,8 @@ if(!function_exists('afl_get_rank_names')){
 		);
 
 		$query['#order_by'] = array(
-			'`'._table_name('afl_user_downlines').'`.`level`' => 'ASC'
+			'`'._table_name('afl_user_downlines').'`.`level`' => 'ASC',
+			'`'._table_name('afl_user_downlines').'`.`relative_position`' => 'ASC',
 		);
 
 		//if level condition
@@ -1465,6 +1470,29 @@ if(!function_exists('afl_get_rank_names')){
 			}
 		}
 
+		//where or codition
+		$where_in = '';
+		if (isset($data['#where_or'])) {
+			foreach ($data['#where_or'] as $key => $value) {
+				if (!$where_flag) {
+					$sql .= 'WHERE '.$value;
+					$where_flag = 1;
+				} else {
+					$sql .= 'OR '.$value;
+				}
+		 	}
+		}
+
+		if (!empty($where_in) ){
+			if (!$where_flag) {
+				$sql .= 'WHERE '.$where_in;
+				$where_flag = 1;
+			} else {
+				$sql .= 'AND '.$where_in;
+			}
+		}
+
+
 		//like
 		if(isset($data['#like'])){
 
@@ -1483,7 +1511,23 @@ if(!function_exists('afl_get_rank_names')){
 			}
 		}
 
+		//REGEXP
+		if(isset($data['#reg_exp'])){
 
+			if (!$where_flag) {
+				$sql .= 'WHERE ';
+			}
+			//check multiple like cluase exists
+			$count = count($data['#reg_exp']);
+			if ( $count == 1) {
+				foreach ($data['#reg_exp'] as $key => $value) {
+					if ( !$where_flag )
+						$sql .= ' '.$key.' REGEXP "'.$value.'" ';
+					else
+					$sql .= ' AND '.$key.' REGEXP "'.$value.'"';
+				}
+			}
+		}
 
 
 		//group by
@@ -2027,3 +2071,40 @@ if ( !function_exists('get_user_by') ){
 	   }
 	   return $datas;
 	 }
+
+ /**
+ * @param $uid
+ * @param $pament_method
+ * ----------------------------------------------------------------------
+ * get Day list
+* ----------------------------------------------------------------------
+**/
+
+function afl_get_payment_method_details($uid = 0, $method_name = ''){
+  global $wpdb;
+  if($method_name == ''){
+    return "";
+  }
+  $table 				= _table_name('afl_user_payment_methods');
+  $query 						=   array();
+ 	$query['#select'] = $table;
+
+ 	$query['#where'] 	= array(
+ 		'uid ='.$uid,
+ 		'method="'.$method_name.'"',
+ 	);
+ 	$row = db_select($query, 'get_row');
+  if(! $row){
+    return "";
+  }
+  $field_val = json_decode($row->data);
+  $output = array();
+     foreach ($field_val as $key => $value) {
+  			if(isset($value)){
+  				$output[]  = '<strong >'.str_replace('_', ' ', ucwords($key)) . '</strong> : '. $value;
+  			}
+  }
+  return implode("<br>", $output);
+
+
+}

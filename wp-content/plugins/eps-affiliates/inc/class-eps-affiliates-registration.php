@@ -17,6 +17,7 @@ class Eps_affiliates_registration {
 				//add the role afl_member to the user if he has no role
 				if (!has_role($post_data['uid'], 'afl_member')){
 					$theUser = new WP_User($post_data['uid']);
+					$theUser->remove_role( 'holding_member' );
 					$theUser->add_role( 'afl_member' );
 				}
 
@@ -423,11 +424,13 @@ class Eps_affiliates_registration {
 		 	$holding_tank = $wpdb->prefix . 'afl_user_holding_tank';
 			$downline_ins_id = $wpdb->insert($holding_tank, $ins_data);
 
+
+			//remove user afl_member role anda add holding Member role
+			$theUser = new WP_User($post_data['uid']);
+			$theUser->add_role( 'holding_member' );
+			$theUser->remove_role( 'afl_member' );
+
 	 	}
 	 }
 
 }
-// for($i= 257; $i<=598;$i++){
-// 	remove_role($i);
-// }
-// pr(WP_Roles(),1);

@@ -35,7 +35,12 @@
 		</div>
 	</div>
 	<div class="col-md-7">
-		asas
+			
+			<div id="afl-widgets-afl-dashboard-downline-chart" class="block col-md-12">
+			</div>
+
+			<div id="afl-widgets-afl-dashboard-level-user-counts" class="block col-md-12">
+			</div>
 	</div>
 </div>
 </div>

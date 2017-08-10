@@ -317,7 +317,7 @@ if($form_state['password'] && $form_state['withdrwal_amount']){
     $transaction['int_payout'] = 0;
     $transaction['hidden_transaction'] = 0;
     $transaction['credit_status'] = 0;
-    $transaction['amount_paid'] = $requested_amount;
+    $transaction['amount_paid'] = afl_commerce_amount($requested_amount);
     $transaction['category'] = 'WITHDRAWAL';
     $transaction['notes'] = 'Withdrawal Request on '. afl_date_combined($afl_date_splits);
     afl_member_transaction($transaction, FALSE, FALSE);
@@ -328,7 +328,7 @@ if($form_state['password'] && $form_state['withdrwal_amount']){
     $business_transactions['uid'] = $uid;
     $business_transactions['associated_user_id'] = $uid;
     $business_transactions['credit_status'] = 1;
-    $business_transactions['amount_paid'] = $processing_charge;
+    $business_transactions['amount_paid'] = afl_commerce_amount($processing_charge);
     $business_transactions['notes'] = 'Withdrawal Charges';
     $business_transactions['currency_code'] = afl_currency();
     $business_transactions['order_id'] = 1;

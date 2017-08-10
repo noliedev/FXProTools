@@ -556,7 +556,7 @@
 		 * --------------------------------------------------------------------------
 		*/
 			public function eps_affiiliates_dashboard () {
-				add_dashboard_page( 'EPS Dashboard', 'EPS Dashboard', 'read', 'eps-dashboard', array( $this,'eps_affiliates_dashboard_callback') );
+				add_dashboard_page( 'EPS Dashboard', 'EPS Dashboard', 'eps_affiliates_dashboard', 'eps-dashboard', array( $this,'eps_affiliates_dashboard_callback') );
 			}
 			public function eps_affiliates_dashboard_callback () {
 				afl_get_template('dashboard/eps_dashboard_template.php');
@@ -590,7 +590,7 @@
 				$menu['test_menu'] = array(
 					'#page_title'			=> __( 'Test', 'Test' ),
 					'#menu_title' 		=> __( 'Test', 'Test' ),
-					'#access_callback'=> 'features_and_configuration', 
+					'#access_callback'=> 'afl_code_testing', 
 					'#menu_slug' 			=> 'eps-test', 
 					'#page_callback' 	=> 'afl_generate_users', 
 				);
@@ -598,7 +598,7 @@
 					'#parent'					=> 'eps-test',
 					'#page_title'			=> __( 'Generate Users', 'Generate Users' ),
 					'#menu_title' 		=> __( 'Generate Users', 'Generate Users' ),
-					'#access_callback'=> 'features_and_configuration', 
+					'#access_callback'=> 'afl_code_testing', 
 					'#menu_slug' 			=> 'eps-test', 
 					'#page_callback' 	=> 'afl_generate_users', 
 				);
@@ -606,7 +606,7 @@
 					'#parent'					=> 'eps-test',
 					'#page_title'			=> __( 'Generate Purchase', 'Generate Purchase' ),
 					'#menu_title' 		=> __( 'Generate Purchase', 'Generate Purchase' ),
-					'#access_callback'=> 'features_and_configuration', 
+					'#access_callback'=> 'afl_code_testing', 
 					'#menu_slug' 			=> 'eps-generate-purchase', 
 					'#page_callback' 	=> 'afl_generate_purchase', 
 				);
@@ -615,9 +615,18 @@
 					'#parent'					=> 'eps-test',
 					'#page_title'			=> __( 'Test codes', 'Test codes' ),
 					'#menu_title' 		=> __( 'Test codes', 'Test codes' ),
-					'#access_callback'=> 'features_and_configuration', 
+					'#access_callback'=> 'afl_code_testing', 
 					'#menu_slug' 			=> 'eps-test-codes', 
 					'#page_callback' 	=> 'afl_admin_test_codes', 
+				);
+
+				$menu['fund_deposit'] = array(
+					'#parent'					=> 'eps-test',
+					'#page_title'			=> __( 'Fund Deposit', 'Fund Deposit' ),
+					'#menu_title' 		=> __( 'Fund Deposit', 'Fund Deposit' ),
+					'#access_callback'=> 'afl_code_testing', 
+					'#menu_slug' 			=> 'eps-fund-deposit', 
+					'#page_callback' 	=> 'afl_admin_fund_deposit', 
 				);
 				afl_system_admin_menu($menu);
 		 }
@@ -658,6 +667,15 @@
 					'#access_callback'=> 'afl_rank_performance_overview', 
 					'#menu_slug' 			=> 'affiliate-eps-reports', 
 					'#page_callback' 	=> 'afl_rank_performance_overview',
+					'#weight' 				=> 8, 
+				);
+				$menu['team_purchases'] = array(
+					'#parent' 				=> 'affiliate-eps-reports',
+					'#page_title'			=> __( 'Team Purchases Overview', 'Team Purchases Overview' ),
+					'#menu_title' 		=> __( 'Team Purchases Overview', 'Team Purchases Overview' ),
+					'#access_callback'=> 'afl_team_purchases_overview', 
+					'#menu_slug' 			=> 'affiliate-eps-team-purchases-reports', 
+					'#page_callback' 	=> 'afl_team_purchases_overview',
 					'#weight' 				=> 8, 
 				);
 				afl_system_admin_menu($menu);

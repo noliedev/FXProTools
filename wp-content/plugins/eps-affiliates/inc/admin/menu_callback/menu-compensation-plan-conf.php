@@ -177,7 +177,7 @@ function afl_admin_compensation_plan_form_submit($POST){
  	if ( isset($_POST['submit'])) {
  		$validation = afl_admin_matrix_compensation_config_validation($_POST);
 
- 		if (empty($validation)) {
+ 		if ($validation) {
  			afl_admin_matrix_compensation_config_submit($_POST);
  		}
  	}

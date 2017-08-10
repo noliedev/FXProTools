@@ -115,7 +115,9 @@ function afl_payment_methods_form(){
 	if (isset($_POST['submit'])) {
  			$variables = $_POST;
  			unset($variables['submit']);
- 			afl_payment_methods_form_submit($variables);
+ 			if (afl_payment_methods_form_validation($variables)) {
+ 				afl_payment_methods_form_submit($variables);
+ 			}
  		}
 
  		$form = array();
@@ -185,6 +187,22 @@ function afl_payment_methods_form(){
 	 	);
 	 	echo afl_render_form($form);
 }
+function afl_payment_methods_form_validation ($form_state = array()) {
+	$rules = array();
+
+	foreach ($form_state as $key => $value) {
+		$rules[] = array(
+		 	'value'=> $value,
+	 		'name' => $key,
+	 		'field'=> $key,
+	 		'rules' => array(
+	 			'rule_required',
+	 		)
+	 	);
+	}
+
+	return set_form_validation_rule($rules);
+}
 
 function afl_payment_methods_form_submit($form_state){
 foreach ($form_state as $key => $value) {
@@ -204,10 +222,8 @@ foreach ($form_state as $key => $value) {
  			$variables = $_POST;
  			unset($variables['submit']);
  			$validation = afl_widget_settings_form_validation($variables);
- 			if ( empty($validation) ) {
+ 			if ( $validation ) {
  				afl_widget_settings_form_submit($variables);
- 			} else {
- 				echo $validation;
  			}
  		}
 

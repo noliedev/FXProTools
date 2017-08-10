@@ -327,8 +327,7 @@
 	 		)
 	 	);
 		$resp  = set_form_validation_rule($rules);
-		if (!empty($resp)) {
-			echo $resp;
+		if (!$resp) {
 			return false;
 		}
 		else 
@@ -404,8 +403,7 @@
 	 		)
 	 	);
 		$resp  = set_form_validation_rule($rules);
-		if (!empty($resp)) {
-			echo $resp;
+		if (!$resp) {
 			return false;
 		}
 		else 

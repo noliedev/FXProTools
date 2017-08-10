@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * -----------------------------------------
  * Creates all the dashbord widgets callbacks
@@ -54,7 +54,7 @@
  	add_action('wp_ajax_nopriv_afl_user_e_wallet', 'afl_user_e_wallet_callback');
 
 	function afl_user_e_wallet_callback () {
-	
+
   	if (eps_is_admin()) {
 			$uid = afl_root_user();
 		} else {
@@ -201,6 +201,9 @@
 		$query['#select'] = _table_name('afl_business_transactions');
 		$query['#where'] 	= array(
 			'deleted = 0',
+			'credit_status = 1',
+			'hidden_transaction=0'
+
 		);
 		$query['#expression'] = array(
 			'SUM(balance) as balance'
@@ -233,7 +236,7 @@
 			'hidden_transaction=0'
 		);
 		$query['#expression'] = array(
-			'SUM(balance) as balance'
+			'SUM(amount_paid) as balance'
 		);
 		$resp = db_select($query, 'get_row');
 
@@ -259,7 +262,6 @@
 		$query['#select'] = _table_name('afl_business_transactions');
 		$query['#where'] 	= array(
 			'deleted = 0',
-			'credit_status = 1',
 			'hidden_transaction=0'
 		);
 		$query['#expression'] = array(
@@ -284,14 +286,14 @@
  	add_action('wp_ajax_nopriv_afl_member_rank', 'afl_member_rank_callback');
 
 	function afl_member_rank_callback () {
-		//get the member rank 
+		//get the member rank
 		$uid = afl_current_uid();
 		$query = array();
 
 		$query['#select'] = _table_name('afl_user_genealogy');
 		$query['#where'] 	= array(
 			'`'._table_name('afl_user_genealogy').'`.`uid` ='.$uid
-		); 
+		);
 
 		$query['#fields'] = array(
 			_table_name('afl_user_genealogy') => array('member_rank')
@@ -320,9 +322,9 @@
 
   function afl_e_wallet_transaction_chart_callback () {
   	$visible_value = '';
-  	if ( isset($_POST['visible_value']) ){ 
+  	if ( isset($_POST['visible_value']) ){
   		$visible_value = $_POST['visible_value'];
-  	}	
+  	}
   	$uid = get_uid();
 
 
@@ -475,11 +477,11 @@
 	  $data = array();
 	  if($summary){
 	    $data['ewallet_summary'] = $summary;
-	    
+
 	  }
 	  echo afl_get_template('dashboard/afl_ewallet_summary.php', $data);
 	  die();
- 	}	
+ 	}
 /*
  * ------------------------------------------------------------
  * B-wallet Transactions
@@ -490,9 +492,9 @@
 
  	function afl_b_wallet_transactions_callback () {
  		$visible_value = '';
-  	if ( isset($_POST['visible_value']) ){ 
+  	if ( isset($_POST['visible_value']) ){
   		$visible_value = $_POST['visible_value'];
-  	}	
+  	}
   	$uid = get_uid();
 
 
@@ -613,7 +615,7 @@
 	  $data['chart_style'] = 'height:350px';
 	  echo json_encode($data);
 	  die();
- 	}	
+ 	}
 /*
  * ------------------------------------------------------------
  * B-wallet Report
@@ -649,7 +651,7 @@
 	  	'created'  => 'DESC'
 	  );
 	  $transaction_sum = db_select($query, 'get_results');
-	  
+
 	  $setData = array();
 	  $count =0;
 	  foreach ($transaction_sum as $transaction_valu) {
@@ -698,6 +700,131 @@
 	  $data['show_chart'] 	= 'pie';
 	  $data['icon_color'] 	= 'text-muted';
 	  $data['chart_style'] 	= 'height:350px';
+
+	  echo json_encode($data);
+	  die();
+ 	}
+/*
+ * ------------------------------------------------------------
+ * level users
+ * ------------------------------------------------------------
+*/
+	add_action('wp_ajax_afl_each_level_user_count', 'afl_each_level_user_count_callback');
+ 	add_action('wp_ajax_nopriv_afl_each_level_user_count', 'afl_each_level_user_count_callback');
+
+ 	function afl_each_level_user_count_callback () {
+ 		$uid 	 = get_uid();
+		$width = afl_variable_get('matrix_plan_width', 0);
+	 	$depth = afl_variable_get('matrix_plan_height', 0);
+
+	 	$query = array();
+	 	$query['#select'] 		= _table_name('afl_user_downlines');
+	 	$query['#group_by'] 	= array('level');
+	 	$query['#where']    	= array(
+			'`uid` ='.$uid
+	 	);
+	 	$query['#expression'] = array(
+		 'COUNT(downline_user_id) as count',
+		 'POWER('.$width.', level) as total'
+	 	);
+	 	$res = db_select($query, 'get_results');
+
+		if (count($res)<$depth) {
+			for ($i = count($res); $i < $depth ; $i++) {
+				$res[$i] = new stdClass();
+				$res[$i]->level = $i+1;
+				$res[$i]->count = 0;
+				$res[$i]->total = pow($width, ($i+1));
+			}
+		}
+
+		echo json_encode($res);
+		die();
+ 	}
+/*
+ * ------------------------------------------------------------
+ * Downlines members count chart
+ * ------------------------------------------------------------
+*/
+ 	add_action('wp_ajax_afl_downline_members_chart', 'afl_downline_members_chart_callback');
+ 	add_action('wp_ajax_nopriv_afl_downline_members_chart', 'afl_downline_members_chart_callback');
+
+ 	function afl_downline_members_chart_callback () {
+
+	  $max_list = afl_variable_get('afl_widgets_downline_members_c_max_list',5);
+
+	  $uid 		= get_uid();
+	  $query 	= array();
+	  $query['#select'] = _table_name('afl_user_downlines');
+	  $query['#where']  = array(
+	  	'`uid`='.$uid,
+	  	'`deleted` = 0'
+	  );
+	  $query['#expression'] = array(
+	  	'COUNT(downline_user_id) as total_count'
+	  );
+	  $query['group_by'] = array(
+	  	'joined_year'
+	  );
+	  $query['#order_by'] = array(
+	  	'created' => 'DESC'
+	  );
+	  $query['#limit'] = $max_list;
+
+	  $num_of_results = db_select($query, 'get_results');
+	  $dates = getDays(7,'day','d-M');
+
+	  $setData = $dates;
+
+	  if(!empty($num_of_results)){
+	    foreach ($num_of_results as $value) {
+	      $joined_date = $value->joined_year;
+	      if(!empty($value->joined_month)){ $joined_date .='-'.$value->joined_month;}
+	      if(!empty($value->joined_day)){ $joined_date .='-'.$value->joined_day;}
+	      $joined_date = date($date_format ,strtotime($joined_date));
+	      $setData[$joined_date] = (double) $value->total_count;
+	    }
+	  }
+
+	  $json = array();
+	  $json['series'][] = array(
+	    'name' => 'Members',
+	    'data' => array_values($setData),
+	  );
+	  $json['colors'] = array('#23b7e5');
+	  $json['chart']['fontFamily'] = "Source Sans Pro";
+	  $json['chart']['height'] = 240;
+	  $json['chart']['type'] = 'area';
+	  $json['title']['text'] = NULL;
+	  $json['legend']['enabled'] = false;
+	  $json['xAxis']['gridLineColor'] = '#EFEFEF';
+	  $json['xAxis']['categories'] = array_keys($dates);
+	  $json['xAxis']['gridLineWidth'] = 1;
+	  $json['xAxis']['labels']['style']['fontSize'] = '13px';
+	  $json['xAxis']['labels']['style']['color'] = '#a1a7ac';
+	  $json['yAxis']['minorTickInterval'] = 'auto';
+	  $json['yAxis']['title']['style']['textTransform'] = 'uppercase';
+	  $json['yAxis']['labels']['style']['fontSize'] = '13px';
+	  $json['yAxis']['title']['text'] = NULL;
+	  $json['yAxis']['gridLineColor'] = '#EFEFEF';
+	  $json['yAxis']['labels']['style']['color'] = '#a1a7ac';
+	  $json['plotOptions']['candlestick']['lineColor'] = '#323a45';
+	  $json['plotOptions']['candlestick']['fontSize'] = '13px';
+	  $json['plotOptions'] 	= array('area'=>array('fillOpacity' => 0.7));
+	  $json['tooltip']['shared'] = true;
+	  $json['tooltip']['valueSuffix'] 		= NULL;
+	  $json['tooltip']['backgroundColor'] = "#f0f3f4";
+	  $json['tooltip']['borderWidth'] = 1;
+	  $json['tooltip']['borderColor'] = '#e8eaea';
+	  $json['tooltip']['enabled'] = true;
+	  $json['credits']['enabled'] = false;
+
+	  $data['text'] 				= $json;
+	  $data['title'] 				= __('Downline Members');
+	  $data['title_color'] 	= 'text-primary-lt font-thin-bold';
+	  $data['show_chart'] 	= 'showSpline';
+	  $data['icon_color'] 	= 'text-muted';
+	  $data['chart_style'] 	= 'height:240px';
 
 	  echo json_encode($data);
 	  die();

@@ -18,10 +18,7 @@ function afl_system_genealogy_configurations () {
 	 	);
 	 	//validating fields with rules
 	 	$resp  = set_form_validation_rule($rules);
-	 	if (!empty($resp)) {
-	 		echo $resp;
-	 		$post = $_POST;
-	 	} else {
+	 	if ($resp) {
 	 		//set the root user and reset genealogy
 	 		afl_genealogy_configuration_form_submit($_POST);
 	 		echo wp_set_message('Configuration has been saved successfully', 'success');

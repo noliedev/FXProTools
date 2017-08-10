@@ -15,6 +15,7 @@ function eps_affiliates_install() {
 	//create business user
 	create_business_users();
 
+	//add all the capabilities to admin
 	// Create affiliate caps
 	$roles = new Eps_affiliates_Capabilities;
 	$roles->add_caps();
@@ -80,6 +81,12 @@ function eps_affiliates_install() {
 	  	);
 	  }
 	  
+	  if ( !role_exists('holding_member')) {
+	  	add_role( 'holding_member', 
+	  					'Holding Member', 
+	  					array('read' => true, 'level_0' => true,'level_1' => true,'eps_system_member'=>true) 
+	  	);
+	  }
 	}
 /*
  * ------------------------------------------------------------
@@ -134,4 +141,3 @@ function eps_affiliates_install() {
 		// Add role
 		$u->add_role( 'business_admin' );
  }
- 

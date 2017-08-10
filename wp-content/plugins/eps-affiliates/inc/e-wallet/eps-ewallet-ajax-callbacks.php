@@ -8,7 +8,7 @@ function afl_user_ewallet_summary_data_table_callback(){
 
 		global $wpdb;
 		$uid 					 = get_current_user_id();
-		$result = $wpdb->get_results("SELECT `wp_afl_user_transactions`.`category`, SUM(`wp_afl_user_transactions`.`balance`) as balance FROM `wp_afl_user_transactions` WHERE `uid` = $uid GROUP BY `category` DESC");
+		$result = $wpdb->get_results("SELECT `"._table_name('afl_user_transactions')."`.`category`,`currency_code`, SUM(`"._table_name('afl_user_transactions')."`.`balance`) as balance  FROM `"._table_name('afl_user_transactions')."` WHERE `uid` = $uid GROUP BY `category` DESC");
 		$output = [
 	    "draw" 						=> 1,
 	    "recordsTotal" 		=> 25,
@@ -19,7 +19,7 @@ function afl_user_ewallet_summary_data_table_callback(){
 			$output['data'][] = [
 	   		$key+1,
 	     	$value->category,
-	     	$value->balance  	
+	     	afl_format_payment_amount($value->balance).$value->currency_code  	
    		];
 		}
 	echo json_encode($output);
@@ -73,7 +73,8 @@ $input_valu = $_POST;
 	 			// number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
 	 			afl_format_payment_amount($value->amount_paid).$value->currency_code,
 	     	$status,
-	     	$value->transaction_date  	
+	     	$value->transaction_date , 	
+	     	$value->notes  	
    		];
 		}
 	echo json_encode($output);
@@ -179,7 +180,7 @@ function afl_user_ewallet_income_data_table(){
 function afl_user_ewallet_expense_report_data_table(){
 	global $wpdb;
 	$uid 						 = get_current_user_id();
-	$uid = 7;
+	// $uid = 7;
  
 	$input_valu = $_POST;
  	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
@@ -202,7 +203,7 @@ function afl_user_ewallet_expense_report_data_table(){
      "data" 						=> [],
    ];
     $result = get_all_user_transaction_details($uid,$filter,FALSE,0);
-		foreach ($result as $key => $value) { pr($value,1);
+		foreach ($result as $key => $value) { 
 			if($value->credit_status == 1 ){
 				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
 			}
@@ -213,73 +214,9 @@ function afl_user_ewallet_expense_report_data_table(){
 	   		$key+1,
 	     	ucfirst(strtolower($value->category)),
 	     	$value->display_name." (".$value->associated_user_id.")",
-	 			number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			afl_get_commerce_amount($value->amount_paid)." " .$value->currency_code ,
 	     	$status,
 	     	$value->transaction_date  	
-   		];
-		}
-	echo json_encode($output);
-	die();
-}
-
-function afl_user_my_withdraw_request_active_data_table(){
-
-	global $wpdb;
-	$uid 						 = get_current_user_id();
-	// $uid = 162;
-
-
-	$input_valu = $_POST;
- 	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
-     $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
-  }
-  if(!empty($input_valu['search']['value'])) {
-     $filter['search_valu'] = $input_valu['search']['value'];
-  }
-  $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
-  $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
-
-	 $query = array();
-   $query['#select'] = 'wp_afl_payout_requests';
-   $query['#join']  = array(
-      'wp_users' => array(
-        '#condition' => '`wp_users`.`ID`=`wp_afl_payout_requests`.`uid`'
-      )
-    );
-   $query['#where'] = array(
-      '`wp_afl_payout_requests`.`uid`= '.$uid.''
-    );
-   $limit = '';
-		if (isset($filter['start']) && isset($filter['length'])) {
-			$limit .= $filter['start'].','.$filter['length'];
-		}
-	
-		if (!empty($limit)) {
-			$query['#limit'] = $limit;
-		}
-	 $result = db_select($query, 'get_results');
-	 $output = [
-     "draw" 						=> $input_valu['draw'],
-     "recordsTotal" 		=> count($result),
-     "recordsFiltered" 	=> count($result),
-     "data" 						=> [],
-   ];
-   
-   	$payout_methods = list_extract_allowed_values(afl_variable_get('payout_methods'),'list_text',FALSE);
-   	$paid_status = list_extract_allowed_values(afl_variable_get('paid_status'),'list_text',FALSE);
-   	// pr($payment_methods);
-		foreach ($result as $key => $value) { 	
-			$output['data'][] = [
-	   		$key+1,
-	     	$value->display_name." (".$value->uid.")",
-	 			afl_get_commerce_amount($value->amount_requested) .$value->currency_code,
-	 			afl_get_commerce_amount($value->charges) .$value->currency_code,
-	     	afl_date_combined(afl_date_splits($value->created)),
-	     	ucfirst(strtolower($value->notes)),
-	     	$payout_methods[$value->payout_method],
-	     	afl_get_commerce_amount($value->amount_paid) .$value->currency_code,
-	     	NULL,
-	     	$paid_status[$value->paid_status]
    		];
 		}
 	echo json_encode($output);

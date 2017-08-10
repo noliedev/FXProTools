@@ -7,23 +7,15 @@ function afl_admin_test_codes(){
 }
 
 function afl_test_codes_callback () {
-    if (eps_is_admin()) {
-      $uid = afl_root_user();
-    } else {
-      $uid = afl_current_uid();
-    }
+  $uid = 924;
+  $downlines = afl_get_user_downlines_uid($uid, array('level'=>1));
+  pr($downlines);
+  foreach ($downlines as $key => $value) {
+    $downlines = afl_get_user_downlines_uid($value->downline_user_id, array('member_rank'=>3), TRUE);
+    pr($downlines);
+  }
 
-    $query = array();
-    $query['#select'] = _tbale_name('afl_user_downlines');
-    $query['#where']  = array(
-      'uid = '.$uid,
-      'deleted = 0'
-    );
-    $query['#expression'] = array(
-      'COUNT(downline_user_id) as count'
-    );
-    $resp = db_select($query, 'get_row');
-    pr($resp);
+  //get the count of rank under this users
 }
 function insertuser () {
   $uid  = 162;

@@ -138,7 +138,7 @@ $(document).ready(function() {
 	 }
 	/*
  	 * --------------------------------------------------
-	 * 
+	 * B-wallet report
  	 * --------------------------------------------------
 	*/
 		if ($('#afl-widgets-afl-b-wallet-report').length) {
@@ -147,6 +147,35 @@ $(document).ready(function() {
 	 		'afl_b_wallet_report_chart'
 	 	);
 	 }
+	/*
+ 	 * --------------------------------------------------
+	 * Downlines level users count
+ 	 * --------------------------------------------------
+	*/
+		if ($('#afl-widgets-afl-dashboard-level-user-counts').length) {
+	 	eps_level_users_count(
+	 		'#afl-widgets-afl-dashboard-level-user-counts',
+	 		'afl_each_level_user_count'
+	 	);
+	 }
+	 /*
+ 	 * --------------------------------------------------
+	 * Downlines chart
+ 	 * --------------------------------------------------
+	*/
+		if ($('#afl-widgets-afl-dashboard-downline-chart').length) {
+	 	eps_high_charts(
+	 		'#afl-widgets-afl-dashboard-downline-chart',
+	 		'afl_downline_members_chart'
+	 	);
+	 }
+	/*
+ 	 * --------------------------------------------------
+	 * Other events
+ 	 * --------------------------------------------------
+	*/
+	 // eps_affiliates_dashboard_js_events();
+
 });
 
 
@@ -294,7 +323,36 @@ $(document).ready(function() {
 	    }
 	  });
 	}
+/*
+ * -----------------------------------------------
+ * Users downines user count with each level
+ * -----------------------------------------------
+*/
 
+ function eps_level_users_count (obj,ajax_url) {
+ 	var html_tag = '';
+		$.ajax({
+	   	type :'POST',
+	   	data : {
+	   		action:ajax_url,
+	   	},
+	   	url:ajax_object.ajaxurl,
+	   	success: function(jsonDatas){
+	   		if (jsonDatas) {
+	   			jsonDatas = JSON.parse(jsonDatas);
+	   			var html_tag = theme_level_user_counts(jsonDatas);
+					$(obj).html(html_tag);
+	   		} else {
+	   			var html_tag = theme_panel_error();
+					$(obj).html(html_tag);
+	   		}
+	   	},
+	   	error: function(xhr, textStatus, errorThrown){
+	       var html_tag = theme_panel_error();
+				$(obj).html(html_tag);
+	    }
+	  });
+ }
 
 /*
  * --------------------------------------------------
@@ -311,15 +369,15 @@ $(document).ready(function() {
     html_tag +='</div>';
     html_tag += '<div class="text-muted text-xs '+jsonData.text_color+'">'+jsonData.title+'</div>';
     html_tag += '</a>';
-    html_tag += '<div class="top dropdown">';
-    html_tag += '<i class="fa fa-gear m-l-sm m-r-sm '+jsonData.icon_color+' dropdown-toggle" data-toggle="dropdown"></i>';
-    html_tag += '<ul class="dropdown-menu">';
-    html_tag += '<li><a href="#" type="y" '+((v_type=='y')?'class="active"':'')+'>'+'This Year'+'</a></li>';
-    html_tag += '<li><a href="#" type="m" '+((v_type=='m')?'class="active"':'')+'>'+'This Month'+'</a></li>';
-    html_tag += '<li><a href="#" type="d" '+((v_type=='d')?'class="active"':'')+'>'+'Today'+'</a></li>';
-    html_tag += '<li><a href="#" type="t" '+((v_type=='t')?'class="active"':'')+'>'+'Overall'+'</a></li>';
-    html_tag += '</ul>';
-    html_tag += '</div>';
+    // html_tag += '<div class="top dropdown">';
+    // html_tag += '<i class="fa fa-gear m-l-sm m-r-sm '+jsonData.icon_color+' dropdown-toggle" data-toggle="dropdown"></i>';
+    // html_tag += '<ul class="dropdown-menu">';
+    // html_tag += '<li><a href="#" type="y" '+((v_type=='y')?'class="active"':'class="visible-type"')+'>'+'This Year'+'</a></li>';
+    // html_tag += '<li><a href="#" type="m" '+((v_type=='m')?'class="active"':'class="visible-type"')+'>'+'This Month'+'</a></li>';
+    // html_tag += '<li><a href="#" type="d" '+((v_type=='d')?'class="active"':'class="visible-type"')+'>'+'Today'+'</a></li>';
+    // html_tag += '<li><a href="#" type="t" '+((v_type=='t')?'class="active"':'class="visible-type"')+'>'+'Overall'+'</a></li>';
+    // html_tag += '</ul>';
+    // html_tag += '</div>';
 
     html_tag += '</div>';
     return html_tag;
@@ -387,23 +445,79 @@ $(document).ready(function() {
     html_tag += '<h4 class="font-thin m-t-none m-b '+jsonData.title_color+' pull-left">'
     html_tag += jsonData.title;
     html_tag += '</h4>';
-    html_tag += '<div class="pull-left dropdown">';
-    html_tag += '<i class="fa fa-gear m-l-sm m-r-sm '+jsonData.icon_color+' dropdown-toggle" data-toggle="dropdown"></i>';
-    html_tag += '<ul class="dropdown-menu">';
-    if(jsonData.show_chart=='pie'){
-      html_tag += '<li><a href="#" type="y" '+((v_type=='y')?'class="active"':'')+'>'+('This Year')+'</a></li>';
-      html_tag += '<li><a href="#" type="m" '+((v_type=='m')?'class="active"':'')+'>'+('This Month')+'</a></li>';
-      html_tag += '<li><a href="#" type="d" '+((v_type=='d')?'class="active"':'')+'>'+('Today')+'</a></li>';
-      html_tag += '<li><a href="#" type="t" '+((v_type=='t')?'class="active"':'')+'>'+('Overall')+'</a></li>';
-    }else{
-      html_tag += '<li><a href="#" type="y" '+((v_type=='y')?'class="active"':'')+'>'+('Yearly')+'</a></li>';
-      html_tag += '<li><a href="#" type="m" '+((v_type=='m')?'class="active"':'')+'>'+('Monthly')+'</a></li>';
-      html_tag += '<li><a href="#" type="d" '+((v_type=='d' || v_type=='t')?'class="active"':'')+'>'+('Day')+'</a></li>';
-    }
-    html_tag += '</ul>';
-    html_tag += '</div>';
+    // html_tag += '<div class="pull-left dropdown">';
+    // html_tag += '<i class="fa fa-gear m-l-sm m-r-sm '+jsonData.icon_color+' dropdown-toggle" data-toggle="dropdown"></i>';
+    // html_tag += '<ul class="dropdown-menu">';
+    // if(jsonData.show_chart=='pie'){
+    //   html_tag += '<li><a href="#" type="y" '+((v_type=='y')?'class="active"':'class="visible-type"')+'>'+('This Year')+'</a></li>';
+    //   html_tag += '<li><a href="#" type="m" '+((v_type=='m')?'class="active"':'class="visible-type"')+'>'+('This Month')+'</a></li>';
+    //   html_tag += '<li><a href="#" type="d" '+((v_type=='d')?'class="active"':'class="visible-type"')+'>'+('Today')+'</a></li>';
+    //   html_tag += '<li><a href="#" type="t" '+((v_type=='t')?'class="active"':'class="visible-type"')+'>'+('Overall')+'</a></li>';
+    // }else{
+    //   html_tag += '<li><a href="#" type="y" '+((v_type=='y')?'class="active"':'class="visible-type"')+'>'+('Yearly')+'</a></li>';
+    //   html_tag += '<li><a href="#" type="m" '+((v_type=='m')?'class="active"':'class="visible-type"')+'>'+('Monthly')+'</a></li>';
+    //   html_tag += '<li><a href="#" type="d" '+((v_type=='d' || v_type=='t')?'class="active"':'class="visible-type"')+'>'+('Day')+'</a></li>';
+    // }
+    // html_tag += '</ul>';
+    // html_tag += '</div>';
     html_tag += '</div>';
     html_tag += '<div  ui-refresh="'+jsonData.show_chart+'" style="'+jsonData.chart_style+'" class="chart"></div>';
+    html_tag += '</div>';
+    return html_tag;
+ }
+/*
+ * -----------------------------------------------
+ * User downlines users based on level
+ * -----------------------------------------------
+*/
+ function theme_level_user_counts (jsonData) {
+ 		var cls = '';
+    var html_tag = '<div class="block panel item afl-user-count-panel clearfix">';
+    var arr_count = jsonData.length;
+    var ar_count_half = arr_count/2;
+    var ar_half_round = Math.round(arr_count/2);
+
+    pan_width = 100/ar_half_round;
+
+    if (arr_count <= 5) {
+      pan_width = 100/(arr_count);
+    }
+    
+    $.each(jsonData, function(key, value){
+      var color_timer = key%2;
+      cls = '';
+      if (ar_half_round % 2 == 0 && key >= ar_count_half && arr_count > 5) {
+         if (color_timer == 1) {
+            cls = 'bg-info';
+          }
+      }
+      else
+         if (color_timer == 0) {
+         cls = 'bg-info';
+      }
+        html_tag += '<div class="padder-v '+cls+'" style="width:'+pan_width+'%;float:left;text-align:center;"> L '+value.level;
+        html_tag += '<a href="#">';
+        html_tag += '<div class="font-thick">'+value.count+'/'+value.total;
+        html_tag +='</div>';
+        html_tag += '</a>';
+        html_tag += '</div>';
+    });
+    
+    if (cls == 'bg-info') {
+      cls = '';
+    }
+    else {
+      cls = 'bg-info';
+    }
+
+    if (arr_count % 2 == 1) {
+      html_tag += '<div class="padder-v '+cls+' " style="width:'+pan_width+'%;float:left;text-align:center;">""';
+        html_tag += '<a href="#">';
+        html_tag += '<div class="font-thick">NILL';
+        html_tag +='</div>';
+        html_tag += '</a>';
+        html_tag += '</div>';
+    }
     html_tag += '</div>';
     return html_tag;
  }

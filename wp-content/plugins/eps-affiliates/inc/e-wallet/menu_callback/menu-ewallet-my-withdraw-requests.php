@@ -20,70 +20,58 @@ function afl_ewallet_my_withdraw_requests(){
 		  echo '<li class="'.(($active_tab == 'active_requestes') ? 'active' : '').'">
 		            	<a href="?page=affiliate-eps-ewallet-my-withdrawal&tab=active_requestes" >Active withdrawal Requests</a>  
 		          </li>';
-		           echo '<li class="'.(($active_tab == 'processed_requests') ? 'active' : '').'">
-		            	<a href="?page=affiliate-eps-ewallet-my-withdrawal&tab=processed_requests" >Processed Requests</a>  
+		           echo '<li class="'.(($active_tab == 'approved_requests') ? 'active' : '').'">
+		            	<a href="?page=affiliate-eps-ewallet-my-withdrawal&tab=approved_requests" >Approved Requests</a>  
 		          </li>';
 		           echo '<li class="'.(($active_tab == 'rejected_requests') ? 'active' : '').'">
 		            	<a href="?page=affiliate-eps-ewallet-my-withdrawal&tab=rejected_requests" >Rejected Requests</a>  
 		          </li>';
+		           echo '<li class="'.(($active_tab == 'completed_requests') ? 'active' : '').'">
+		            	<a href="?page=affiliate-eps-ewallet-my-withdrawal&tab=completed_requests" >Completed Requests</a>  
+		          </li>';
 		  echo '</ul>';
 
 		  switch ($active_tab) {
-		  	case 'active_requestes':
-					afl_withdrawal_requests_active();
-	  		break;
-	  		case 'processed_requests':
-	  			afl_withdrawal_requests_active();
-	  		break;
+		  	case 'active_requestes':	
+	  		case 'approved_requests':
 	  		case 'rejected_requests':
-	  			afl_withdrawal_requests_active();
+	  		case 'completed_requests':
+	  			afl_withdrawal_requests_status();
 	  		break;
 		  }
  }
 
-function afl_withdrawal_requests_active(){
-	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'no tab';
-	pr($active_tab);
+function afl_withdrawal_requests_status(){
+	$affiliates_table = new Eps_user_ewallet_my_withdrawal_datatable();
+	?>
+			<div class="wrap">
+			<?php
+			/**
+			 * Manage payouts eps-affiliates
+			 *
+			 * Use this hook to add content to this section of AffiliateWP.
+			 */
+				do_action( 'eps_affiliates_page_top' );
 
-	$uid = get_current_user_id();
+				?>
+				<form id="eps-affiliates-filter" method="get" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+					<?php $affiliates_table->search_box( __( 'Search', 'eps-affiliates' ), 'eps-affiliates' ); ?>
 
-	if (isset($_GET['uid'])) {
-		$uid = $_GET['uid'];
+					<input type="hidden" name="page" value="affiliate-eps-ewallet-my-withdrawal" />
+
+					<?php //$affiliates_table->views() ?>
+					<?php $affiliates_table->prepare_items() ?>
+					<?php $affiliates_table->display() ?>
+				</form>
+				<?php
+				/**
+				 * Fires at the bottom of the admin affiliates page.
+				 *
+				 * Use this hook to add content to this section of AffiliateWP.
+				 */
+				do_action( 'eps_affiliates_page_bottom' );
+				?>
+			</div>
+			<?php
 	}
-	//get user downlines details based on the uid
 
-	afl_content_wrapper_begin();
-
-	wp_register_script( 'jquery-data-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
-	wp_enqueue_script( 'jquery-data-table' );
-
-	wp_register_script( 'jquery-data-bootstrap-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/dataTables.bootstrap.min.js');
-	wp_enqueue_script( 'jquery-data-bootstrap-table' );
-
-	wp_enqueue_style( 'plan-develoepr', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/css/dataTables.bootstrap.min.css');
-
-	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/dataTables.bootstrap.min.js');
-	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.dataTables.min.js');
-
-?>
-<div class="data-filters"></div>
-
-<table id="afl-ewallet-summary-table" class="table table-striped table-bordered dt-responsive nowrap custom-withdraw-requsts-active" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Member</th>
-                <th>Requested Amount</th>
-                <th>Charges</th>
-                <th>Requested Date</th>
-                <th>Notes</th>
-                <th>Preferred Method</th>
-                <th>Amount Paid</th>
-                <th>Paid Date</th>
-                <th>Paid Status</th>
-            </tr>
-        </thead>
-    </table>
-	<?php 
-		afl_content_wrapper_end();
-}	

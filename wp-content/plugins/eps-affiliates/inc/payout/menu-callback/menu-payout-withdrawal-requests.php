@@ -1,18 +1,39 @@
 <?php 
-function afl_payout_withdrawal_requests(){
+
+function afl_payout_withdrawal_requests () {
 	echo afl_eps_page_header();
+ 	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'active_requestes';  
+
+		  //here render the tabs
+		  echo '<ul class="tabs--primary nav nav-tabs">';
+		  echo '<li class="'.(($active_tab == 'active_requestes') ? 'active' : '').'">
+		            	<a href="?page=affiliate-eps-payout&tab=active_requestes" >Active withdrawal Requests</a>  
+		          </li>';
+		           echo '<li class="'.(($active_tab == 'approved_requests') ? 'active' : '').'">
+		            	<a href="?page=affiliate-eps-payout&tab=approved_requests" >Approved Requests</a>  
+		          </li>';
+		           echo '<li class="'.(($active_tab == 'rejected_requests') ? 'active' : '').'">
+		            	<a href="?page=affiliate-eps-payout&tab=rejected_requests" >Rejected Requests</a>  
+		          </li>';
+		  echo '</ul>';
+
+		  switch ($active_tab) {
+		  	case 'active_requestes':
+	  		case 'approved_requests':
+	  		case 'rejected_requests':
+	  		default :
+	  			afl_payout_withdrawal_request_active();
+	  		break;
+		  }
+		 
+ }
+
+
+function afl_payout_withdrawal_request_active(){	
 	$affiliates_table = new Eps_withdraw_request_data_table();
 	?>
-		 
-		
 			<div class="wrap">
-			<h1>
-				<!-- <?php _e( 'Affiliates', 'affiliate-wp' ); ?> -->
-				<!-- <a href="<?php echo esc_url( add_query_arg( array( 'affwp_notice' => false, 'action' => 'add_affiliate' ) ) ); ?>" class="page-title-action"><?php _e( 'Add New', 'affiliate-wp' ); ?></a>
-				<a href="<?php echo esc_url( add_query_arg( array( 'page' => 'affiliate-wp-reports', 'tab' => 'affiliates' ) ) ); ?>" class="page-title-action"><?php _ex( 'Reports', 'affiliates', 'affiliate-wp' ); ?></a> -->
-			</h1>
 			<?php
-
 			/**
 			 * Manage Members pf eps-affiliates
 			 *
@@ -40,3 +61,4 @@ function afl_payout_withdrawal_requests(){
 				?>
 			</div>
 	<?php }
+

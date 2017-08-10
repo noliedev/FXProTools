@@ -216,32 +216,7 @@ if ($('.custom-ewallet-expense-table').length) {
         }], 
       }); 
   }
-/*
-* -------------------------------------------
-* Data tables for my withdrawal request active
-* -------------------------------------------
-*/
-  if ($('.custom-withdraw-requsts-active').length) {
-      var table; 
-      table = $(".custom-withdraw-requsts-active").DataTable({
-       "processing": true, 
-       "serverSide": true, 
-       "pageLength": 50,
-       "order": [], 
-       "ajax": { 
-          "url"   : ajax_object.ajaxurl,
-          "type"  : "POST",
-          "data"  :{
-            action:'afl_user_my_withdraw_request_active', 
-           
-          }   
-        }, 
-        "columnDefs": [{ 
-          "targets": [0,1,2,3,4,5,6], 
-          "orderable": false, 
-        }], 
-      }); 
-  }
+
 /*
 * -------------------------------------------
 * Data tables for business transaction summary  

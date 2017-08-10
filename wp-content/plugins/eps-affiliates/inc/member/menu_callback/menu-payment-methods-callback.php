@@ -204,7 +204,7 @@ function afl_user_payment_method_form_submit($form_state){
 function afl_user_payment_conf_method_bank_form(){
 	 if ( isset($_POST['submit']) ) {
 	 	$validation = afl_user_payment_conf_method_bank_form_validation($_POST);
-	 	if (!empty($validation)) {
+	 	if ($validation) {
 	 		afl_user_payment_conf_method_bank_form_submit($_POST);
 	 	}
 	 }
@@ -310,7 +310,7 @@ function afl_user_payment_conf_method_bank_form_validation($form_state){
 	 		)
 	 	);
 		$resp  = set_form_validation_rule($rules);
-		if (!empty($resp)) {
+		if (!$resp) {
 			return  $resp;
 			
 		}
@@ -343,7 +343,7 @@ function afl_user_payment_conf_method_bank_form_submit($form_state){
 function afl_user_payment_conf_method_paypal_form(){
 	if ( isset($_POST['submit']) ) {
 	 	$validation = afl_user_payment_conf_method_paypal_form_validate($_POST);
-	 	if (!empty($validation)) {
+	 	if ($validation) {
 	 		afl_user_payment_conf_method_paypal_form_submit($_POST);
 	 	}
 	 }
@@ -444,8 +444,7 @@ function afl_user_payment_conf_method_paypal_form_validate($form_state){
 	 		)
 	 	);
 		$resp  = set_form_validation_rule($rules);
-		if (!empty($resp)) {
-		return $resp;
+		if (!$resp) {
 			return false;
 		}
 		else

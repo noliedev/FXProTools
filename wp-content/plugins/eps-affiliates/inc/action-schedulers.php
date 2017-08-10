@@ -169,9 +169,13 @@
 		 				'#condition' => '`'._table_name('afl_user_downlines').'`.`downline_user_id` = `'._table_name('afl_user_genealogy').'`.`uid`'
 		 			)
 		 		);
+		 		//only get the users under 9 level
+		 		$max_level  = afl_variable_get('matrix_compensation_max_level', 9);
 		 		$query['#where']  = array(
 		 			'`'._table_name('afl_user_genealogy').'`.`status` = 1',
-		 			'`'._table_name('afl_user_downlines').'`.`uid` = '.$user->uid
+		 			'`'._table_name('afl_user_downlines').'`.`uid` = '.$user->uid,
+		 			'`'._table_name('afl_user_downlines').'`.`level` <='.$max_level,
+
 		 		);
 		 		$query['#expression'] = array(
 		 			'COUNT(`'._table_name('afl_user_genealogy').'`.`uid`) as count'
@@ -197,7 +201,7 @@
 				   $transaction['credit_status'] 			= 1;
 				   $transaction['amount_paid'] 				= afl_commerce_amount($user_amount);
 				   $transaction['category'] 					= 'MATRIX COMPENSATION';
-				   $transaction['notes'] 							= 'Matrix compensation for '.$months_actived.' actived months';
+				   $transaction['notes'] 							= 'Matrix compensation for '.$months_actived.' actived months having '.$count.' actived distributers';
 
 				   //check already paid
 				   $query = array();

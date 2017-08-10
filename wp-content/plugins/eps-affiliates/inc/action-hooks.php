@@ -207,15 +207,8 @@ function eps_affiliates_admin_notices () {
 */
  add_action('wp_ajax_afl_user_ewallet_expense_data_table', 'afl_user_ewallet_expense_report_data_table');
  add_action('wp_ajax_nopriv_afl_user_ewallet_expense_data_table', 'afl_user_ewallet_expense_report_data_table');
-/*
- * ------------------------------------------------------------
- * E wallet  expense report datatable
- * ------------------------------------------------------------
-*/
- add_action('wp_ajax_afl_user_my_withdraw_request_active', 'afl_user_my_withdraw_request_active_data_table');
- add_action('wp_ajax_nopriv_afl_user_my_withdraw_request_active', 'afl_user_my_withdraw_request_active_data_table');
 
- /*
+/**
  * ------------------------------------------------------------
  * business wallet summary datatable
  * ------------------------------------------------------------
@@ -280,8 +273,13 @@ function eps_affiliates_admin_notices () {
  * ------------------------------------------------------------
 */
  add_action('eps_affiliates_calculate_affiliate_rank', 'eps_affiliates_calculate_affiliate_rank_callback', 10, 1);
- // do_action('eps_affiliates_calculate_affiliate_rank',803);
- 
+ // do_action('eps_affiliates_calculate_affiliate_rank',924);
+/*
+ * ------------------------------------------------------------
+ * Add a user to holding tank
+ * ------------------------------------------------------------
+*/
+ add_action('eps_affiliates_place_user_in_holding_tank', 'eps_affiliates_place_user_in_holding_tank_callback', 10, 2);
 /*
  * ------------------------------------------------------------
  * Place user under a sponsor
@@ -316,21 +314,7 @@ function eps_affiliates_admin_notices () {
  * ------------------------------------------------------------
 */
  add_filter('eps_affiliates_unblock_member', 'eps_affiliates_unblock_member_callback', 10, 1);
-/*
- * ------------------------------------------------------------
- * Redirect to the eps-affiliates dashboard
- *
- * check the user is afl_member
- * then redirect
- * ------------------------------------------------------------
-*/
-	function admin_default_page() {
-		if (current_user_can('afl_member')) {
-	  	// return '/wp-admin/index.php?page=eps-dashboard';
-		}
-	}
 
-	add_filter('login_redirect', 'admin_default_page');
  /*
  * ------------------------------------------------------------
  * Approve a withdrawal request
@@ -340,7 +324,69 @@ function eps_affiliates_admin_notices () {
  * ------------------------------------------------------------
 */
  add_filter('eps_affiliates_withdrawal_approve', 'eps_affiliates_withdrawal_approve_callback', 10, 1);
-
+/*
+ * ------------------------------------------------------------
+ * Approve a withdrawal request
+ *
+ * Get an as input to the action, The payout/withdrawal Request is approve
+ * 
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affiliates_withdrawal_reject', 'eps_affiliates_withdrawal_reject_callback', 10, 1);
+ /*
+ * ------------------------------------------------------------
+ * Approve a withdrawal request
+ *
+ * Get an as input to the action, The payout/withdrawal Request is approve
+ * 
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affiliates_payout_paid', 'eps_affiliates_payout_paid_callback', 10, 1);
+ /*
+ * ------------------------------------------------------------
+ * Approve a withdrawal request
+ *
+ * Get an as input to the action, The payout/withdrawal Request is approve
+ * 
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affliate_user_cancel_withdraw', 'eps_affliate_user_cancel_withdraw_callback', 10, 1);
+/*
+ * ------------------------------------------------------------
+ * SEt cookie values for ajax callbackz  
+ * ------------------------------------------------------------
+*/
+	add_action('init', 'eps_affiliates_set_cookies');
+	function eps_affiliates_set_cookies() {
+		//dashboard widget dowlines count visible value
+    if (!isset($_COOKIE['eps_afl_widget_downlines_visible_value'])) {
+       setcookie('eps_afl_widget_downlines_visible_value', 'y', strtotime('+1 day'));
+    }
+		//dashboard widget ewallet amount visible value
+		if (!isset($_COOKIE['eps_afl_widget_ewallet_visible_value'])) {
+       setcookie('eps_afl_widget_ewallet_visible_value', 'y', strtotime('+1 day'));
+    }
+    //dashboard widget ewallet income visible value
+		if (!isset($_COOKIE['eps_afl_widget_ewallet_income_visible_value'])) {
+       setcookie('eps_afl_widget_ewallet_income_visible_value', 'y', strtotime('+1 day'));
+    }
+    //dashboard widget ewallet expense visible value
+		if (!isset($_COOKIE['eps_afl_widget_ewallet_expense_visible_value'])) {
+       setcookie('eps_afl_widget_ewallet_expense_visible_value', 'y', strtotime('+1 day'));
+    }
+    //dashboard widget ewallet transaction chart visible value
+		if (!isset($_COOKIE['eps_afl_widget_ewallet_transactions_chart_visible_value'])) {
+       setcookie('eps_afl_widget_ewallet_transactions_chart_visible_value', 'y', strtotime('+1 day'));
+    }
+    //dashboard widget bwallet transaction chart visible value
+		if (!isset($_COOKIE['eps_afl_widget_bwallet_transactions_chart_visible_value'])) {
+       setcookie('eps_afl_widget_bwallet_transactions_chart_visible_value', 'y', strtotime('+1 day'));
+    }
+    //dashboard widget bwallet report chart visible value
+		if (!isset($_COOKIE['eps_afl_widget_bwallet_report_chart_visible_value'])) {
+       setcookie('eps_afl_widget_bwallet_report_chart_visible_value', 'y', strtotime('+1 day'));
+    }
+	}
 /*
  * ------------------------------------------------------------
  *
@@ -396,7 +442,9 @@ function eps_affiliates_admin_notices () {
 
  			//reports
 			case 'affiliate-eps-reports':
-			case 'affiliate-eps-payout';
+			case 'affiliate-eps-team-purchases-reports':
+			case 'affiliate-eps-payout':
+			case 'affiliate-eps-payout-in-remittance':
 			//manage members
 			case 'affiliate-eps-manage-members':
 
@@ -405,6 +453,7 @@ function eps_affiliates_admin_notices () {
  			case 'affiliate-eps-purchases':
  			case 'eps-generate-purchase':
  			case 'eps-test-codes':
+ 			case 'eps-fund-deposit':
  				wp_enqueue_style( 'simple-line-icons', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/simple-line-icons/css/simple-line-icons.css');
  				wp_enqueue_style( 'app', EPSAFFILIATE_PLUGIN_ASSETS.'css/app.css');
 				wp_enqueue_style( 'developer', EPSAFFILIATE_PLUGIN_ASSETS.'css/developer.css');
