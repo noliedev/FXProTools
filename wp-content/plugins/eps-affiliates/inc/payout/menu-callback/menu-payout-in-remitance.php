@@ -1,7 +1,7 @@
 <?php 
 function afl_payout_in_remittance(){
 	afl_eps_page_header();
-
+	afl_content_wrapper_begin();
 	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'active_payouts';  
 
 		  //here render the tabs
@@ -28,6 +28,7 @@ function afl_payout_in_remittance(){
 	  			afl_payout_in_remittance_datatable();
 	  			break;
 		  }
+		  afl_content_wrapper_end();
  }
 
 function afl_payout_in_remittance_datatable(){

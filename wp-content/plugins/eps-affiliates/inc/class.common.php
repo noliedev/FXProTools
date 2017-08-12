@@ -618,7 +618,8 @@ if(!function_exists('afl_get_levels')){
  *
 */
 	function afl_user_data($uid = ''){
-		require_once ABSPATH . 'wp-includes/pluggable.php';
+		if  (!function_exists('get_userdata'))
+			require_once ABSPATH . 'wp-includes/pluggable.php';
 
 		if ($uid == '') {
 			$uid = get_current_user_id();

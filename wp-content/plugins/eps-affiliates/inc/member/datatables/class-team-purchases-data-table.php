@@ -72,6 +72,19 @@
 		}
 	/**
 	 * ---------------------------------------------------------------------
+	 * Search Box
+	 * ---------------------------------------------------------------------
+	*/
+    function search_box($text, $input_id){ ?>
+    <p class="search-box">
+		<label class="screen-reader-text" for="search_id-search-input">
+		search:</label> 
+		<input id="search_id-search-input" type="text" name="s" value="" /> 
+		<input id="search-submit" class="button" type="submit" name="" value="search" />
+		</p>
+   <?php  }
+	/**
+	 * ---------------------------------------------------------------------
 	 * Retrieve the table columns
 	 * ---------------------------------------------------------------------
 	 *
@@ -226,7 +239,15 @@
 
 		  $current_page = $this->get_pagenum();
 
-		  $total_items = count($this->example_data);
+		  $total_items = count($this->items);
+		  // only ncessary because we have sample data
+		  $this->found_data = array_slice($this->items,(($current_page-1)*$per_page),$per_page);
+
+		  $this->set_pagination_args( array(
+		    'total_items' => $total_items,                  //WE have to calculate the total number of items
+		    'per_page'    => $per_page                     //WE have to determine how many items to show on a page
+		  ) );
+		  $this->items = $this->found_data;
 
 		}
 	/**

@@ -60,7 +60,7 @@
 
 		//exclude some permissions
 		$excluded_perm = array(
-			'afl_roles_configuration' => 'afl_roles_configuration'
+			// 'afl_roles_configuration' => 'afl_roles_configuration'
 		);
 		//remove excluded permissions
 		$custom_permissions = array_diff_key($custom_permissions, $excluded_perm);
@@ -139,7 +139,7 @@
 		}
 		//exclude some permissions
 		$excluded_perm = array(
-			'afl_roles_configuration' => 'afl_roles_configuration'
+			// 'afl_roles_configuration' => 'afl_roles_configuration'
 		);
 		
 		//exclude the admin 

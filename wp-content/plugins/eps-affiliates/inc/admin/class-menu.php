@@ -516,14 +516,14 @@
 					'#menu_slug' 			=> 'affiliate-eps-payout', 
 					'#page_callback' 	=> 'afl_payout_withdrawal_requests', 
 				);
-				$menu['payout_reports'] = array(
+				/*$menu['payout_reports'] = array(
 					'#parent'					=> 'affiliate-eps-payout',
 					'#page_title'			=> __( 'Payout reports', 'Payout reports' ),
 					'#menu_title' 		=> __( 'Payout reports', 'Payout reports' ),
 					'#access_callback'=> 'payout', 
 					'#menu_slug' 			=> 'affiliate-eps-payout-reports', 
 					'#page_callback' 	=> 'afl_payout_reports', 
-				);
+				);*/
 				$menu['payout_remittance'] = array(
 					'#parent'					=> 'affiliate-eps-payout',
 					'#page_title'			=> __( 'Payout in Remittance', 'Payout in Remittance' ),

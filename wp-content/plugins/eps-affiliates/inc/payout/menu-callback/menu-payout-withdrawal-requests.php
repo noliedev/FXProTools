@@ -2,6 +2,8 @@
 
 function afl_payout_withdrawal_requests () {
 	echo afl_eps_page_header();
+	afl_content_wrapper_begin();
+	
  	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'active_requestes';  
 
 		  //here render the tabs
@@ -25,7 +27,8 @@ function afl_payout_withdrawal_requests () {
 	  			afl_payout_withdrawal_request_active();
 	  		break;
 		  }
-		 
+	afl_content_wrapper_end();
+
  }
 
 

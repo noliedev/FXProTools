@@ -66,8 +66,6 @@
 
 			$this->get_affiliates_counts();
 
-			$this->db_obj = new Eps_db;
-
 		}
 	/**
 	 * Retrieve the discount code counts

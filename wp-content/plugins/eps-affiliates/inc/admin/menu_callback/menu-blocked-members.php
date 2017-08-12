@@ -1,9 +1,10 @@
 <?php 
 
-	function afl_members_manage () { 
+	function afl_members_blocked () { 
 		echo afl_eps_page_header();
 		afl_content_wrapper_begin();
-		$affiliates_table = new Eps_data_table();
+
+		$affiliates_table = new Eps_blocked_members_data_table();
 	?>
 		 
 		
@@ -26,7 +27,7 @@
 				<form id="eps-affiliates-filter" method="get" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 					<?php $affiliates_table->search_box( __( 'Search', 'eps-affiliates' ), 'eps-affiliates' ); ?>
 
-					<input type="hidden" name="page" value="affiliate-eps-manage-members" />
+					<input type="hidden" name="page" value="affiliate-eps-blocked-members" />
 
 					<?php //$affiliates_table->views() ?>
 					<?php $affiliates_table->prepare_items() ?>

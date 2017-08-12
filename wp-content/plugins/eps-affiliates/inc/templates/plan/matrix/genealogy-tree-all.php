@@ -18,6 +18,7 @@
    $query['#fields']  = array(
       'wp_users' => array(
         'display_name',
+        'user_login'
         'ID'
       ),
       'wp_afl_user_downlines' => array(

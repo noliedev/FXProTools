@@ -447,6 +447,8 @@ function eps_affiliates_admin_notices () {
 			case 'affiliate-eps-payout-in-remittance':
 			//manage members
 			case 'affiliate-eps-manage-members':
+			case 'affiliate-eps-blocked-members':
+			case 'affiliate-eps-find-members':
 
 
  			case 'eps-test':

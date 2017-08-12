@@ -31,9 +31,10 @@ function afl_team_purchase_overview_template () {
 
 				?>
 				<form id="eps-affiliates-filter" method="get" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-					<input type="hidden" name="page" value="affiliate-eps-manage-members" />
+					<input type="hidden" name="page" value="affiliate-eps-team-purchases-reports" />
 
 					<?php //$affiliates_table->views() ?>
+					<?php $affiliates_table->search_box('search', 'search_id') ?>
 					<?php $affiliates_table->prepare_items() ?>
 					<?php $affiliates_table->display() ?>
 				</form>

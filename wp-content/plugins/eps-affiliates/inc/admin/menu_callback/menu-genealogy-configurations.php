@@ -1,4 +1,3 @@
-
 <?php 
 
 function afl_system_genealogy_configurations () {

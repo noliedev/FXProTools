@@ -271,49 +271,49 @@
 				//admin menus
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/class-menu.php';
 
-				/* ------Here comes all the admin menu callback functions : Begin ------------*/
-				//Menu callbacks for advanced configuration
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * Here comes all the admin menu callback functions
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-advanced-conf.php';
-				// Menu callback for compensation plan
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-compensation-plan-conf.php';
-				// Menu callback for roles and permission settings
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-roles-nd-permission-conf.php';
-
-				// Menu callback for rank configuration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-rank-conf.php';
-				// Menu callback for Pool Bonus configuration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-pool-bonus-conf.php';
-				//genealogy configurations
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-genealogy-configurations.php';
-				//payout configurations
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-payout-conf.php';
-				//business memebers creation
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-business-system-members.php';
-				//manage members
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-manage-members.php';
-				//variable configurations
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-blocked-members.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-find-members.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-variable-configuration.php';
-
-
-				//common files callback
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-features-and-config-settings.php';
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * common files callback
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.common.php';
-				/* ------Here comes all the menu callback functions : End ------------*/
 
 				//install tables
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.tables.php';
 
 				//eps-afl-dashboard menus templates
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-template-hooks.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-template-functions.php';
-
+				//database 
+				
 				//page function
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-page-functions.php';
 				//ajax callbacks
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-ajax-callbacks.php';
 				//member registration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-registration.php';
-
-				/* ------ Here comes all the member menu callback : Begin  -----------------*/
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * Here comes all the member menu callback
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-add-new-member-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-genealogy-tree-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-downline-members-callback.php';
@@ -322,52 +322,70 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-refered-members-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-rank-performance-overview.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-team-purchases-overview.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-payment-methods-callback.php';
 
-				/* ------ Here comes all the member menu callback : End  -------------------*/
-
-
-				//dashboard widgets
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * dashboard widgets
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-dashboard-widgets.php';
-
-				// Menu Callback for ewallet transactions
+      /* 
+			 * -----------------------------------------------------------------------------------------------
+			 * Menu Callback for ewallet transactions
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/eps-ewallet-ajax-callbacks.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/menu_callback/menu-ewallet-summary-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/menu_callback/menu-ewallet-withdraw-fund.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/menu_callback/menu-ewallet-my-withdraw-requests.php';
 
 
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-db.php';
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-datatable.php';
-
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/b-wallet/eps-bwallet-ajax-callbacks.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/b-wallet/menu-callback/menu-bwallet-callback.php';
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-features-and-config-settings.php';
 
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-payment-methods-callback.php';
 
 				//integrations
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/integrations/class-woocommerce.php';
 
 
-				//the functionality shortcodes
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * Actions, Short codes and schedulres
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-shortcodes.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-schedulers.php';
-
-				
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * Testing codes
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/test-codes.php';
-				// Menu callback for payout 
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * Menu callback for payout
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/payout/menu-callback/menu-payout-withdrawal-requests.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/payout/withdraw-request-datatable.php';
-
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/payout/menu-callback/menu-payout-in-remitance.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/payout/payout-in-remitance-datatable.php';
+				
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * data tables
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/e-wallet/eps_user_ewallet_my_withdrawal_datatable.php';
-				
-				//data tables
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/datatables/class-team-purchases-data-table.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/datatables/class-manage-members-datatable.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/datatables/class-blocked-members-datatable.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/datatables/class-find-members-datatable.php';
 				
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-table-filters.php';
 			}
 			
 		/**

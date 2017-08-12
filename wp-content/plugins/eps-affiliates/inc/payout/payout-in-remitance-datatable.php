@@ -65,9 +65,6 @@
 			parent::__construct( $args );
 
 			$this->get_affiliates_counts();
-
-			$this->db_obj = new Eps_db;
-
 		}
 	/**
 	 * Retrieve the discount code counts
@@ -144,6 +141,7 @@
 				  	'payment_details' => __('Payment Details','affliate-eps'),
 				  	'request_amount'	=> __('Requested Amount', 'affliate-eps'),
 				  	'charges'					=> __('Charges', 'affliate-eps'),
+				  	'notes'						=> __('Notes',''),
 				  	'payable_amount'	=> __('Payable Amount', 'affliate-eps'),
 		  		);
 				}	
@@ -248,8 +246,8 @@
 		}
 
 		public function column_payment_details($item) {
-			$a = afl_get_payment_method_details($item->uid, $item->payout_method);
-			echo $a;
+			$value = afl_get_payment_method_details($item->uid, $item->payout_method);
+			return $value;
 		}
 
 	  public function column_request_amount($item) {
@@ -267,9 +265,14 @@
 			  $value = afl_get_commerce_amount($item->amount_paid) .$item->currency_code;
 				return $value;
 		}
+		public function column_notes($item) {
+			  $value = ($item->notes);
+				return $value;
+		}
 
-	/**
-	 * Retrieve the bulk actions
+
+	/** 
+	 * Retrieve the bulk actions 
 	 *
 	 * @access public
 	 * @return array $actions Array of the bulk actions

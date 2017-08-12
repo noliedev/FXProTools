@@ -1,4 +1,3 @@
-
 <?php 
  require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 
@@ -66,8 +65,6 @@
 			parent::__construct( $args );
 
 			$this->get_affiliates_counts();
-
-			$this->db_obj = new Eps_db;
 
 		}
 	/**
