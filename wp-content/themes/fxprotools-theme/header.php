@@ -34,7 +34,7 @@
 					<div class="col-md-3">
 						<ul class="fx-nav-options">
 							<li><a href="#" title="Select Language"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
-							<li class="account"><a href="#">Account</a></li>
+							<li class="account"><a href="<?php bloginfo('url'); ?>/my-account">Account</a></li>
 							<li><a href="#" title="Download Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
 							<li><a href="#" title="Support Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
 						</ul>
