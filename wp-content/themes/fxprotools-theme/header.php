@@ -9,7 +9,9 @@
 
 <body <?php body_class(); ?>>
 
-	<div class="fx-wrapper">
+	<div class="fx-wrapper <?php echo is_page(array('login', 'forgot-password')) ? 'fx-login' : ''; ?>">
+		
+		<?php if(!is_page(array('login', 'forgot-password'))): ?>
 		<nav class="navbar fx-navbar-main" role="navigation">
 			<div class="container">
 				<div class="row">
@@ -40,3 +42,4 @@
 				</div>
 			</div>
 		</nav>
+		<?php endif; ?>
