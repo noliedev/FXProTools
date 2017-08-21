@@ -8,7 +8,7 @@ function afl_user_ewallet_summary_data_table_callback(){
 
 		global $wpdb;
 		$uid 					 = get_current_user_id();
-		$result = $wpdb->get_results("SELECT `wp_afl_user_transactions`.`category`, SUM(`wp_afl_user_transactions`.`balance`) as balance FROM `wp_afl_user_transactions` WHERE `uid` = $uid GROUP BY `category` DESC");
+		$result = $wpdb->get_results("SELECT `"._table_name('afl_user_transactions')."`.`category`,`currency_code`, SUM(`"._table_name('afl_user_transactions')."`.`balance`) as balance  FROM `"._table_name('afl_user_transactions')."` WHERE `uid` = $uid GROUP BY `category` DESC");
 		$output = [
 	    "draw" 						=> 1,
 	    "recordsTotal" 		=> 25,
@@ -19,7 +19,7 @@ function afl_user_ewallet_summary_data_table_callback(){
 			$output['data'][] = [
 	   		$key+1,
 	     	$value->category,
-	     	$value->balance  	
+	     	afl_format_payment_amount($value->balance).$value->currency_code  	
    		];
 		}
 	echo json_encode($output);
@@ -33,9 +33,8 @@ function afl_user_ewallet_summary_data_table_callback(){
 */
 function afl_user_ewallet_all_transaction_data_table(){
 	global $wpdb;
-	// $uid 						 = get_current_user_id();
-	$uid = 7;
-// 
+	$uid 						 = afl_current_uid();
+	
 $input_valu = $_POST;
  	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
      $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
@@ -71,9 +70,11 @@ $input_valu = $_POST;
 	   		$key+1,
 	     	ucfirst(strtolower($value->category)),
 	     	$value->display_name." (".$value->associated_user_id.")",
-	 			number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			// number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			afl_format_payment_amount($value->amount_paid).$value->currency_code,
 	     	$status,
-	     	$value->transaction_date  	
+	     	$value->transaction_date , 	
+	     	$value->notes  	
    		];
 		}
 	echo json_encode($output);
@@ -133,7 +134,7 @@ function get_all_user_transaction_details ($uid = '7', $filter = array(), $count
 function afl_user_ewallet_income_data_table(){
 	global $wpdb;
 	$uid 						 = get_current_user_id();
-	$uid = 7;
+	// $uid = 7;
  
 	$input_valu = $_POST;
  	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
@@ -156,7 +157,7 @@ function afl_user_ewallet_income_data_table(){
      "data" 						=> [],
    ];
     $result = get_all_user_transaction_details($uid,$filter,FALSE,1);
-		foreach ($result as $key => $value) { pr($value,1);
+		foreach ($result as $key => $value) { 
 			if($value->credit_status == 1 ){
 				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
 			}
@@ -167,7 +168,7 @@ function afl_user_ewallet_income_data_table(){
 	   		$key+1,
 	     	ucfirst(strtolower($value->category)),
 	     	$value->display_name." (".$value->associated_user_id.")",
-	 			number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			afl_format_payment_amount($value->amount_paid).$value->currency_code,
 	     	$status,
 	     	$value->transaction_date  	
    		];
@@ -179,7 +180,7 @@ function afl_user_ewallet_income_data_table(){
 function afl_user_ewallet_expense_report_data_table(){
 	global $wpdb;
 	$uid 						 = get_current_user_id();
-	$uid = 7;
+	// $uid = 7;
  
 	$input_valu = $_POST;
  	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
@@ -202,7 +203,7 @@ function afl_user_ewallet_expense_report_data_table(){
      "data" 						=> [],
    ];
     $result = get_all_user_transaction_details($uid,$filter,FALSE,0);
-		foreach ($result as $key => $value) { pr($value,1);
+		foreach ($result as $key => $value) { 
 			if($value->credit_status == 1 ){
 				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
 			}
@@ -213,7 +214,7 @@ function afl_user_ewallet_expense_report_data_table(){
 	   		$key+1,
 	     	ucfirst(strtolower($value->category)),
 	     	$value->display_name." (".$value->associated_user_id.")",
-	 			number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			afl_get_commerce_amount($value->amount_paid)." " .$value->currency_code ,
 	     	$status,
 	     	$value->transaction_date  	
    		];
@@ -221,3 +222,5 @@ function afl_user_ewallet_expense_report_data_table(){
 	echo json_encode($output);
 	die();
 }
+
+

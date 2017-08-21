@@ -84,18 +84,18 @@ function afl_system_features_and_configurations () {
 	);
 
 	//payment method conf
-	$rows[5]['label_1'] = array(
-		'#type' => 'label',
-		'#title'=> 'Payment Method Configurations',
-	);
-	$rows[5]['link_1'] = array(
-		'#type' => 'markup',
-		'#markup' => '<a href="?page=affiliate-eps-payment-method-configurations">
-										<span class="btn btn-rounded btn-sm btn-icon btn-default">
-											<i class="fa fa-cog"></i>
-										</span>
-									</a>',
-	);
+	// $rows[5]['label_1'] = array(
+	// 	'#type' => 'label',
+	// 	'#title'=> 'Payment Method Configurations',
+	// );
+	// $rows[5]['link_1'] = array(
+	// 	'#type' => 'markup',
+	// 	'#markup' => '<a href="?page=affiliate-eps-payment-method-configurations">
+	// 									<span class="btn btn-rounded btn-sm btn-icon btn-default">
+	// 										<i class="fa fa-cog"></i>
+	// 									</span>
+	// 								</a>',
+	// );
 
 	//pllo bonus config
 	$rows[6]['label_1'] = array(

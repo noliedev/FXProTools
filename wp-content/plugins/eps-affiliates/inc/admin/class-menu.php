@@ -32,6 +32,8 @@
 				add_action( 'admin_menu', array( $this , 'eps_admin_purchase') );
 
 				add_action( 'admin_menu', array( $this , 'afl_reports') );
+				
+				add_action( 'admin_menu', array( $this , 'afl_no_parent_pages') );
 
 				
 
@@ -186,6 +188,15 @@
 					'#menu_slug' 			=> 'affiliate-eps-downline-members', 
 					'#page_callback' 	=> 'afl_downline_members', 
 				);
+				$menu['referal_downlines'] = array(
+					'#parent'					=> 'affiliate-eps-user-network',
+					'#page_title'			=> __( 'Refered-members', 'Refered-members' ),    
+					'#menu_title' 		=> __( 'Refered-members', 'Refered-members' ),    
+					'#access_callback'=> 'afl_network_view', 
+					'#menu_slug' 			=> 'affiliate-eps-refered-members', 
+					'#page_callback' 	=> 'afl_refered_members', 
+				);
+
 				$menu['network_genealogy'] = array(
 					'#parent'					=> 'affiliate-eps-user-network',
 					'#page_title'			=> __( 'Genealogy-tree', 'Genealogy-tree' ),    
@@ -220,23 +231,23 @@
 					'#menu_title' 		=> __( 'E-wallet', 'e_wallet' ), 
 					'#access_callback'=> 'ewallet', 
 					'#menu_slug' 			=> 'affiliate-eps-e-wallet', 
-					'#page_callback' 	=> 'afl_ewallet_transactions', 
+					'#page_callback' 	=> 'afl_ewallet_summary', 
 					'#weight'					=> 3
 				);
-				$menu['e_wallet_sub'] = array(
-					'#parent'					=> 'affiliate-eps-e-wallet', 
-					'#page_title'			=> __( 'E-wallet', 'e_wallet' ), 
-					'#menu_title' 		=> __( 'E-wallet', 'e_wallet' ), 
-					'#access_callback'=> 'ewallet', 
-					'#menu_slug' 			=> 'affiliate-eps-e-wallet', 
-					'#page_callback' 	=> 'afl_ewallet_transactions', 
-				);
+				// $menu['e_wallet_sub'] = array(
+				// 	'#parent'					=> 'affiliate-eps-e-wallet', 
+				// 	'#page_title'			=> __( 'E-wallet', 'e_wallet' ), 
+				// 	'#menu_title' 		=> __( 'E-wallet', 'e_wallet' ), 
+				// 	'#access_callback'=> 'ewallet', 
+				// 	'#menu_slug' 			=> 'affiliate-eps-e-wallet', 
+				// 	'#page_callback' 	=> 'afl_ewallet_transactions', 
+				// );
 				$menu['e_wallet_summary'] = array(
 					'#parent'					=> 'affiliate-eps-e-wallet', 
 					'#page_title'			=> __( 'E-wallet Summary', 'E-wallet Summary' ),    
 					'#menu_title' 		=> __( 'E-wallet Summary', 'E-wallet Summary' ),    
 					'#access_callback'=> 'ewallet', 
-					'#menu_slug' 			=> 'affiliate-eps-e-wallet-summary', 
+					'#menu_slug' 			=> 'affiliate-eps-e-wallet', 
 					'#page_callback' 	=> 'afl_ewallet_summary', 
 				);
 				$menu['e_wallet_all_trans'] = array(
@@ -273,17 +284,17 @@
 				);
 				$menu['e_wallet_pending_withdrawal'] = array(
 					'#parent'					=> 'affiliate-eps-e-wallet', 
-					'#page_title'			=> __( 'Pending Withdrawal Request', 'Pending Withdrawal Request' ),    
-					'#menu_title' 		=> __( 'Pending Withdrawal Request', 'Pending Withdrawal Request' ),    
+					'#page_title'			=> __( 'My Withdrawal Request', 'My Withdrawal Request' ),    
+					'#menu_title' 		=> __( 'My Withdrawal Request', 'My Withdrawal Request' ),    
 					'#access_callback'=> 'ewallet', 
-					'#menu_slug' 			=> 'affiliate-eps-ewallet-pending-withdrawal', 
-					'#page_callback' 	=> 'afl_ewallet_pending_withdrawals', 
+					'#menu_slug' 			=> 'affiliate-eps-ewallet-my-withdrawal', 
+					'#page_callback' 	=> 'afl_ewallet_my_withdraw_requests', 
 				);
 				$menu['user_payment_method'] = array(
 					'#parent'					=> 'affiliate-eps-e-wallet', 
 					'#page_title'			=> __( 'Select Payment method', 'Select Payment method' ),    
 					'#menu_title' 		=> __( 'Select Payment method', 'Select Payment method' ),    
-					'#access_callback'=> 'ewallet', 
+					'#access_callback'=> 'user_payment_method_conf', 
 					'#menu_slug' 			=> 'affiliate-eps-payment_method', 
 					'#page_callback' 	=> 'afl_user_payment_methods', 
 				);
@@ -494,25 +505,25 @@
 					'#menu_title' 		=> __( 'Payout', 'Payout' ),
 					'#access_callback'=> 'payout', 
 					'#menu_slug' 			=> 'affiliate-eps-payout', 
-					'#page_callback' 	=> 'afl_payout_processing', 
+					// '#page_callback' 	=> 'afl_payout_processing', 
 					'#weight'					=>	6
 				);
 				$menu['payout_processing'] = array(
 					'#parent'					=> 'affiliate-eps-payout',
-					'#page_title'			=> __( 'Withdrawal request processing', 'Withdrawal request processing' ),
-					'#menu_title' 		=> __( 'Withdrawal request processing', 'Withdrawal request processing' ),
+					'#page_title'			=> __( 'Withdrawal requests', 'Withdrawal requests' ),
+					'#menu_title' 		=> __( 'Withdrawal requests', 'Withdrawal requests' ),
 					'#access_callback'=> 'payout', 
 					'#menu_slug' 			=> 'affiliate-eps-payout', 
-					'#page_callback' 	=> 'afl_payout_processing', 
+					'#page_callback' 	=> 'afl_payout_withdrawal_requests', 
 				);
-				$menu['payout_reports'] = array(
+				/*$menu['payout_reports'] = array(
 					'#parent'					=> 'affiliate-eps-payout',
 					'#page_title'			=> __( 'Payout reports', 'Payout reports' ),
 					'#menu_title' 		=> __( 'Payout reports', 'Payout reports' ),
 					'#access_callback'=> 'payout', 
 					'#menu_slug' 			=> 'affiliate-eps-payout-reports', 
 					'#page_callback' 	=> 'afl_payout_reports', 
-				);
+				);*/
 				$menu['payout_remittance'] = array(
 					'#parent'					=> 'affiliate-eps-payout',
 					'#page_title'			=> __( 'Payout in Remittance', 'Payout in Remittance' ),
@@ -545,7 +556,7 @@
 		 * --------------------------------------------------------------------------
 		*/
 			public function eps_affiiliates_dashboard () {
-				add_dashboard_page( 'EPS Dashboard', 'EPS Dashboard', 'read', 'eps-dashboard', array( $this,'eps_affiliates_dashboard_callback') );
+				add_dashboard_page( 'EPS Dashboard', 'EPS Dashboard', 'eps_affiliates_dashboard', 'eps-dashboard', array( $this,'eps_affiliates_dashboard_callback') );
 			}
 			public function eps_affiliates_dashboard_callback () {
 				afl_get_template('dashboard/eps_dashboard_template.php');
@@ -579,7 +590,7 @@
 				$menu['test_menu'] = array(
 					'#page_title'			=> __( 'Test', 'Test' ),
 					'#menu_title' 		=> __( 'Test', 'Test' ),
-					'#access_callback'=> 'features_and_configuration', 
+					'#access_callback'=> 'afl_code_testing', 
 					'#menu_slug' 			=> 'eps-test', 
 					'#page_callback' 	=> 'afl_generate_users', 
 				);
@@ -587,7 +598,7 @@
 					'#parent'					=> 'eps-test',
 					'#page_title'			=> __( 'Generate Users', 'Generate Users' ),
 					'#menu_title' 		=> __( 'Generate Users', 'Generate Users' ),
-					'#access_callback'=> 'features_and_configuration', 
+					'#access_callback'=> 'afl_code_testing', 
 					'#menu_slug' 			=> 'eps-test', 
 					'#page_callback' 	=> 'afl_generate_users', 
 				);
@@ -595,9 +606,27 @@
 					'#parent'					=> 'eps-test',
 					'#page_title'			=> __( 'Generate Purchase', 'Generate Purchase' ),
 					'#menu_title' 		=> __( 'Generate Purchase', 'Generate Purchase' ),
-					'#access_callback'=> 'features_and_configuration', 
+					'#access_callback'=> 'afl_code_testing', 
 					'#menu_slug' 			=> 'eps-generate-purchase', 
 					'#page_callback' 	=> 'afl_generate_purchase', 
+				);
+
+				$menu['test_codes'] = array(
+					'#parent'					=> 'eps-test',
+					'#page_title'			=> __( 'Test codes', 'Test codes' ),
+					'#menu_title' 		=> __( 'Test codes', 'Test codes' ),
+					'#access_callback'=> 'afl_code_testing', 
+					'#menu_slug' 			=> 'eps-test-codes', 
+					'#page_callback' 	=> 'afl_admin_test_codes', 
+				);
+
+				$menu['fund_deposit'] = array(
+					'#parent'					=> 'eps-test',
+					'#page_title'			=> __( 'Fund Deposit', 'Fund Deposit' ),
+					'#menu_title' 		=> __( 'Fund Deposit', 'Fund Deposit' ),
+					'#access_callback'=> 'afl_code_testing', 
+					'#menu_slug' 			=> 'eps-fund-deposit', 
+					'#page_callback' 	=> 'afl_admin_fund_deposit', 
 				);
 				afl_system_admin_menu($menu);
 		 }
@@ -640,11 +669,33 @@
 					'#page_callback' 	=> 'afl_rank_performance_overview',
 					'#weight' 				=> 8, 
 				);
+				$menu['team_purchases'] = array(
+					'#parent' 				=> 'affiliate-eps-reports',
+					'#page_title'			=> __( 'Team Purchases Overview', 'Team Purchases Overview' ),
+					'#menu_title' 		=> __( 'Team Purchases Overview', 'Team Purchases Overview' ),
+					'#access_callback'=> 'afl_team_purchases_overview', 
+					'#menu_slug' 			=> 'affiliate-eps-team-purchases-reports', 
+					'#page_callback' 	=> 'afl_team_purchases_overview',
+					'#weight' 				=> 8, 
+				);
 				afl_system_admin_menu($menu);
 		 }
 
+		 function afl_no_parent_pages(){
+		 	$payment_methods= list_extract_allowed_values(afl_variable_get('payment_methods'),'list_text',FALSE);
+		 	foreach ($payment_methods as $key => $value) {
+		 		$menu['payout_method_conf_'.$key] = array(
+		 			'#parent'					=>'no-parent',
+					'#page_title'			=> __( $value, $value ),
+					'#menu_title' 		=> __( $value, $value ),
+					'#access_callback'=> 'user_payment_method_conf', 
+					'#menu_slug' 			=> 'user-payment-configuration', 
+					'#page_callback' 	=> 'afl_user_payment_configuration',
+				);
+		 	}
+		 		afl_system_admin_menu($menu);		
+		 }
+
 	}
-
-
 $eps_afl_admin_menu = new Eps_Affiliates_Admin_Menu;
 

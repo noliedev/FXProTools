@@ -13,13 +13,75 @@ function users_auto_complete_callback($search_key = '') {
 
 	global $wpdb;
 	$querystr = " SELECT * from `wp_users` WHERE `display_name` LIKE '%".$search_key."%' ;";
-	$result = $wpdb->get_results($querystr) or die(mysql_error());
+
+
+  $query = array();
+  $query['#select']  =_table_name('afl_user_genealogy');
+  $query['#join'] = array(
+    _table_name('users') => array(
+     '#condition'=> '`'._table_name('users').'`.`ID` = `'._table_name('afl_user_genealogy').'`.`uid` '
+    )
+  );
+  $query['#fields'] = array(
+    _table_name('users') => array('user_login', 'ID')
+  );
+  $result = db_select($query, 'get_results');
+  
+	// $result = $wpdb->get_results($querystr) or die(mysql_error());
 
 	foreach ($result as $key => $value) {
 		$response[] = array('name'=> ($value->user_login.' ('.$value->ID.')'));
 	}
 	echo json_encode($response);
 	die();
+}
+/*
+ * ------------------------------------------------
+ * get users name and id unser the currenlty 
+ * logined user
+ * ------------------------------------------------
+*/
+function member_users_auto_complete_callback($search_key = '') {
+  $uid = afl_current_uid();
+  if (eps_is_admin()) {
+    $uid = afl_root_user();
+  }
+  if (isset($_POST['search_key'])) {
+    $search_key = $_POST['search_key'];
+  }
+  $data     = afl_get_users();
+  $response = array();
+
+  global $wpdb;
+  $querystr = " SELECT * from `wp_users` WHERE `display_name` LIKE '%".$search_key."%' ;";
+
+
+  $query = array();
+  $query['#select']  =_table_name('afl_user_genealogy');
+  $query['#join'] = array(
+    _table_name('users') => array(
+     '#condition'=> '`'._table_name('users').'`.`ID` = `'._table_name('afl_user_genealogy').'`.`uid` '
+    )
+  );
+  if (!eps_is_admin()) {
+    $query['#where'] = array(
+      '`'._table_name('afl_user_genealogy').'`.`referrer_uid` = '.$uid
+    );
+    $query['#where_or'] = array(
+      '`'._table_name('afl_user_genealogy').'`.`uid` = '.$uid
+    );
+  }
+  $query['#fields'] = array(
+    _table_name('users') => array('user_login', 'ID')
+  );
+  $result = db_select($query, 'get_results');
+  
+
+  foreach ($result as $key => $value) {
+    $response[] = array('name'=> ($value->user_login.' ('.$value->ID.')'));
+  }
+  echo json_encode($response);
+  die();
 }
 /*
  * ------------------------------------------------
@@ -40,27 +102,33 @@ function users_auto_complete_callback($search_key = '') {
   }
   // pr($filter['search_valu']);
   $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
-  $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
+  $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 50;
 
+  $filter['fields'] = array(
+  _table_name('afl_user_downlines') => array('level'),
+  _table_name('afl_user_genealogy') => array('member_rank', 'relative_position','created'),
+  _table_name('users') => array('display_name', 'ID')
+ );
   $result_count = afl_get_user_downlines($uid,array(),TRUE);
   $filter_count = afl_get_user_downlines($uid,$filter,TRUE);
   // pr($result_count);
   // pr($filter_count);
- 	$output = [
-     "draw" 						=> $input_valu['draw'],
-     "recordsTotal" 		=> $result_count,
-     "recordsFiltered" 	=> $filter_count,
-     "data" 						=> [],
+  $output = [
+     "draw"             => $input_valu['draw'],
+     "recordsTotal"     => $result_count,
+     "recordsFiltered"  => $result_count,
+     "data"             => [],
    ];
 
-   $downlines_data = afl_get_user_downlines($uid,$filter);
+
+   $downlines_data = afl_get_user_downlines($uid,$filter, false);
 
    foreach ($downlines_data as $key => $value) {
    	$output['data'][] = [
    		$value->ID,
       $value->display_name,
-   		$value->relative_position,
    		$value->level,
+      $value->relative_position,
    		render_rank($value->member_rank),
    		date('Y-m-d',$value->created)
    	];
@@ -68,7 +136,58 @@ function users_auto_complete_callback($search_key = '') {
    echo json_encode($output);
  	die();
  }
+/*
+ * ------------------------------------------------
+ * User refered downlines
+ * ------------------------------------------------
+*/
+ function afl_user_refered_downlines_data_table_callback () {
+  $uid           = get_current_user_id();
+  if (eps_is_admin()) {
+    $uid = afl_root_user();
+  }
+  $input_valu = $_POST;
+  if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
+     $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
+  }
+  if(!empty($input_valu['search']['value'])) {
+     $filter['search_valu'] = $input_valu['search']['value'];
+  }
+  // pr($filter['search_valu']);
+  $filter['start']    = !empty($input_valu['start'])  ? $input_valu['start']  : 0;
+  $filter['length']   = !empty($input_valu['length']) ? $input_valu['length'] : 50;
 
+  $filter['fields'] = array(
+  _table_name('afl_user_genealogy') => array('level'),
+  _table_name('afl_user_genealogy') => array('member_rank', 'relative_position','created'),
+  _table_name('users') => array('display_name', 'ID')
+ );
+  $result_count = afl_get_user_refered_downlines($uid,array(),TRUE);
+  $filter_count = afl_get_user_refered_downlines($uid,$filter,TRUE);
+
+  $output = [
+     "draw"             => $input_valu['draw'],
+     "recordsTotal"     => $result_count,
+     "recordsFiltered"  => $result_count,
+     "data"             => [],
+   ];
+
+
+   $downlines_data = afl_get_user_refered_downlines($uid,$filter, false);
+
+   foreach ($downlines_data as $key => $value) {
+    $output['data'][] = [
+      $value->ID,
+      $value->display_name,
+      $value->level,
+      $value->relative_position,
+      render_rank($value->member_rank),
+      date('Y-m-d',$value->created)
+    ];
+   }
+   echo json_encode($output);
+  die();
+ }
 /*
  * -------------------------------------------------------------------------
  * Expand Genealogy tree
@@ -161,7 +280,8 @@ function users_auto_complete_callback($search_key = '') {
 
       //add the role afl_member to the user if he has no role
       if (!has_role($uid, 'afl_member')){
-        add_role($uid, 'afl_member');
+        $theUser = new WP_User($uid);
+        $theUser->add_role( 'afl_member' );
       }
 
 
@@ -276,4 +396,19 @@ function users_auto_complete_callback($search_key = '') {
 
  }
 
-// pr(afl_genealogy_node(163),1);
+
+
+/*
+ * ------------------------------------------------------------
+ * Ajax callback for autoplace a user
+ *
+ *
+ * ------------------------------------------------------------
+*/
+ function afl_auto_place_user_ajax_callback () {
+  if ( isset($_POST['sponsor']) && isset($_POST['uid'])) {
+    do_action('eps_affiliates_force_place_after_holding_expired', $_POST['uid'], $_POST['sponsor']);
+    wp_set_message('Success', 'success');
+    die();
+  }
+ }

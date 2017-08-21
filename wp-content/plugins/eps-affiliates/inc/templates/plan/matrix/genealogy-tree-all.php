@@ -17,7 +17,9 @@
     );
    $query['#fields']  = array(
       'wp_users' => array(
-        'display_name'
+        'display_name',
+        'user_login'
+        'ID'
       ),
       'wp_afl_user_downlines' => array(
         'downline_user_id',
@@ -66,7 +68,7 @@ if (!empty($parent)) :
                         <div class="person">
                             <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png'; ?>" alt="">
                             <p class="name">
-                                <?= $parent->display_name; ?>
+                                <?= $parent->display_name.' ('.$parent->ID.')'; ?>
                             </p>
                         </div>
                     </div>
@@ -83,7 +85,7 @@ if (!empty($parent)) :
                                     <div class="person">
                                         <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png'; ?>" alt="">
                                         <p class="name">
-                                          <?= $tree[$level[$i]]->display_name; ?>
+                                          <?= $tree[$level[$i]]->display_name.' ('.$tree[$level[$i]]->ID.')'; ?>
                                         </p>
                                       <span class="expand-tree" data-user-id ="<?= $level[$i];?>" onclick="expandTree(this)">
                                         <i class="fa fa-plus-circle fa-2x"></i>

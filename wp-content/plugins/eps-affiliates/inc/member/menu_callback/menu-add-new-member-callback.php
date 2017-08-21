@@ -14,8 +14,7 @@
  	if ( isset($_POST['submit'] ) ) {
         $rules = create_validation_rules($_POST);
 			 	$resp  = set_form_validation_rule($rules);
-			 	if (!empty($resp)) {
-			 		echo $resp;
+			 	if (!$resp) {
 			 		$post = $_POST;
 			 	} else {
 			 		// // sanitize user form input
@@ -52,10 +51,9 @@
 						preg_match('#\((.*?)\)#', $sponsor, $matches);
 
     				$post_data['sponsor_uid'] = $matches[1];
-	        //user get the uid,if a uid get then insert to genealogy
-	        $reg_object = new Eps_affiliates_registration;
-	        //adds to the holding tank
-	        $reg_object->afl_add_to_holding_tank($post_data);
+	        
+	        	//user get the uid,if a uid get then insert to genealogy
+    				do_action('eps_affiliates_place_user_in_holding_tank',$post_data['uid'] ,$post_data['sponsor_uid'] );
 
 	        	$post_data['uid'] = $user_uid;
 	        	//extract sponsor uid
@@ -72,10 +70,11 @@
     			$business_transactions['currency_code'] = 'USD';
     			$business_transactions['order_id'] = 1;
 	       	
-	       	// $business_transaction = afl_business_transaction($business_transactions);
-    			$user_transaction 		= afl_member_transaction($business_transactions, TRUE);
+	       	$business_transaction = afl_business_transaction($business_transactions);
+    			// $user_transaction 		= afl_member_transaction($business_transactions, TRUE);
 	         //user get the uid,if a uid get then insert to genealogy
-
+				 	echo wp_set_message('Member has been created successfully', 'success');
+    			
 
 	      }
 			}
@@ -174,7 +173,8 @@
  		$default_value = afl_variable_get('root_user','');
  	} else {
  		$user = wp_get_current_user();
- 		$default_value = $user->data->display_name.' ('.$user->ID.')';
+
+ 		$default_value = $user->data->user_login.' ('.$user->ID.')';
  	}
  	$form['sponsor'] = array(
  		'#title' => 'Sponsor',
@@ -267,6 +267,7 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
 			 	$rules[] = array(
 			 		'value'=>$POST['user_name'],
 			 		'name' =>'user name',
+			 		'field'=>'user_name',
 			 		'rules' => array(
 			 			'rule_required',
 			 			'rule_name_length',
@@ -277,6 +278,7 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
 			 	$rules[] = array(
 			 		'value'=>$POST['password'],
 			 		'name' =>'Password',
+			 		'field'=>'password',
 			 		'rules' => array(
 			 			'rule_required',
 			 			'rule_name_length',
@@ -285,6 +287,7 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
 			 	$rules[] = array(
 			 		'value'=> $POST['email'],
 			 		'name' =>'Email',
+			 		'field'=>'email',
 			 		'rules' => array(
 			 			'rule_required',
 			 			'rule_valid_email',
@@ -297,6 +300,7 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
 			 	$rules[] = array(
 			 		'value'=> $sponsor_name,
 			 		'name' =>'Sponsor',
+			 		'field'=>'sponsor',
 			 		'rules' => array(
 			 			'rule_user_name_exists',
 			 			'rule_required',

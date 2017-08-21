@@ -27,8 +27,8 @@ class Eps_affiliates_common {
  	 * ----------------------------------------------------------------
 	*/
 		public function _load_common_scritps() {
-			wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
-			wp_enqueue_script( 'jquery-js' );
+			// wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
+			// wp_enqueue_script( 'jquery-js' );
 
 			wp_register_script( 'bootstrap-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap.min.js');
 			wp_enqueue_script( 'bootstrap-js' );
@@ -42,13 +42,13 @@ class Eps_affiliates_common {
 			wp_register_script( 'bootstrap-typehead-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap-typeahead.js');
 			wp_enqueue_script( 'bootstrap-typehead-ui' );
 
-			wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
-			wp_enqueue_script( 'common-js' );
+			// wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
+			// wp_enqueue_script( 'common-js' );
 
 			wp_register_script( 'widget-scripts',  EPSAFFILIATE_PLUGIN_ASSETS.'js/widget-scripts.js');
 			wp_enqueue_script( 'widget-scripts' );
 
-	    wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+	    // wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 		}
 	/*
  	 * ----------------------------------------------------------------
@@ -160,12 +160,15 @@ $common_include = new Eps_affiliates_common();
 		//add prefix
 		if (!empty($prefix))
 			$table_html .= $prefix;
-		//add title
-		if ($title)
-			$table_html .= $title;
+
 		//table starts here
 		//table responsive
 
+		$table_html 	.= '<div class="panel panel-default">';
+		//add title
+		if ($title)
+			$table_html .= '<div class="panel-heading wrapper b-b b-light"><h4 class="font-thin m-t-none m-b-none text-muted">'.$title.'</h4>
+            </div>';
 		$table_html 	.= '<div class="table-responsive">';
 		$table_html 	.= '<table class="table-striped '.$classes.'">';
 
@@ -197,6 +200,7 @@ $common_include = new Eps_affiliates_common();
 			}
 		/* -----------rendering rows :  End	----------*/
 		$table_html .= '</table>';
+		$table_html .= '</div>';
 		$table_html .= '</div>';
 
 		//append suffix
@@ -271,7 +275,12 @@ $common_include = new Eps_affiliates_common();
 				case 'checkbox':
 
 					$checked = (!empty($element['#default_value']) && isset($element['#default_value'])) ? TRUE : FALSE ;
+					$switch  = !empty($element['#attributes']['switch']) ? $element['#attributes']['switch'] : '';
 
+					$i_calss = 'i-checks';
+					if ( !empty($switch)) {
+						$i_calss = 'i-switch';
+					}
 					// if ($checked) {
 					// 	$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" checked="'.$checked.'" >';
 					// }else {
@@ -283,7 +292,7 @@ $common_include = new Eps_affiliates_common();
 
 					$html .= '<div class="form-item clearfix form-type-checkbox ">';
 
-					$html .='<label class="i-checks">';
+					$html .='<label class="'.$i_calss.'">';
 
 					if ($checked) {
 						$html .= '<input type = "checkbox" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-checkbox checkbox form-control '.$class.'" checked="'.$checked.'" >';
@@ -589,14 +598,17 @@ if(!function_exists('afl_get_levels')){
  * -----------------------------------------------------------
 */
 	function wp_set_message($msg = '', $action = 'success'){
-		if ($action == 'error')
-			$action = 'danger';
+		if ($action == 'danger')
+			$action = 'error';
+
 		$alert = '';
 		$alert .= '<div class="alert alert-'.$action.'" role="alert">';
 	  $alert .= $msg;
 		$alert .='</div>';
 
-		return $alert;
+		$alert = '';
+		$alert = '<script>$(function(){toastr["'.$action.'"]("'.$msg.'");});</script>';
+		echo $alert;
 	}
 /**
  * -----------------------------------------------------------
@@ -606,7 +618,8 @@ if(!function_exists('afl_get_levels')){
  *
 */
 	function afl_user_data($uid = ''){
-		require_once ABSPATH . 'wp-includes/pluggable.php';
+		if  (!function_exists('get_userdata'))
+			require_once ABSPATH . 'wp-includes/pluggable.php';
 
 		if ($uid == '') {
 			$uid = get_current_user_id();
@@ -724,12 +737,12 @@ if(!function_exists('afl_get_levels')){
 		if ( is_array( $args ) && isset( $args ) ) :
 			extract( $args );
 		endif;
-
 		$template_file = afl_locate_template( $template_name, $tempate_path, $default_path );
 		if ( ! file_exists( $template_file ) ) :
 			_doing_it_wrong( __FUNCTION__, sprintf( '<code>%s</code> does not exist.', $template_file ), '1.0.0' );
 			return;
 		endif;
+		global $args;
 		include $template_file;
 	}
 /**
@@ -990,7 +1003,7 @@ if(!function_exists('afl_get_rank_names')){
  function set_form_validation_rule ($rules = array()) {
  		global $reg_errors;
 		$reg_errors = new WP_Error;
-
+		$resp  = 1;
  		$validation_response = '';
 		require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-form-validation-rules.php';
 			if (class_exists('Form_validation_rules')) {
@@ -1020,9 +1033,13 @@ if(!function_exists('afl_get_rank_names')){
 	    foreach ( $reg_errors->get_error_messages() as $error ) {
 	    	$wp_error .= '<p>* '.$error.'</p>';
 	    }
-	    if (!empty($wp_error))
-	   		return wp_set_message($wp_error,'danger');
+	    if (!empty($wp_error)){
+	   		wp_set_message($wp_error,'danger');
+	   		$resp = 0;
+	    }
 		}
+
+		return $resp;
  }
 /*
  * ------------------------------------------------------------------------------
@@ -1057,7 +1074,8 @@ if(!function_exists('afl_get_rank_names')){
  * get the downlines details of uid
  * -----------------------------------------------------------------------------
 */
-	function afl_get_user_downlines ($uid = '3', $filter = array(), $count = false){
+	function afl_get_user_downlines ($uid = '', $filter = array(), $count = false){
+
 		global $wpdb;
 
 		$query = array();
@@ -1077,9 +1095,25 @@ if(!function_exists('afl_get_rank_names')){
 		);
 
 		$query['#order_by'] = array(
-			'`'._table_name('afl_user_downlines').'`.`level`' => 'ASC'
+			'`'._table_name('afl_user_downlines').'`.`level`' => 'ASC',
+			'`'._table_name('afl_user_downlines').'`.`relative_position`' => 'ASC',
 		);
 
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`wp_afl_user_downlines`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`wp_afl_user_downlines`.`member_rank`= '.$filter['member_rank'];
+		}
+		//if filter fields
+		if (isset($filter['fields'])) {
+			$query['fields'] = empty($query['fields']) ? array() : $query['fields'];
+			$fields = array_merge($query['fields'],$filter['fields']);
+			$query['#fields'] = $fields;
+		}
 		$limit = '';
 		if (isset($filter['start']) && isset($filter['length'])) {
 			$limit .= $filter['start'].','.$filter['length'];
@@ -1105,7 +1139,7 @@ if(!function_exists('afl_get_rank_names')){
  * get the downlines uid details of uid
  * -----------------------------------------------------------------------------
 */
-	function afl_get_user_downlines_uid ($uid = '3', $filter = array(), $count = false){
+	function afl_get_user_downlines_uid ($uid = '', $filter = array(), $count = false){
 		global $wpdb;
 
 		$query = array();
@@ -1122,6 +1156,16 @@ if(!function_exists('afl_get_rank_names')){
 		$query['#where'] = array(
 			'`wp_afl_user_downlines`.`uid`='.$uid.''
 		);
+
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`wp_afl_user_downlines`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`wp_afl_user_downlines`.`member_rank`= '.$filter['member_rank'];
+		}
 
 		$query['#order_by'] = array(
 			'`level`' => 'ASC'
@@ -1145,6 +1189,130 @@ if(!function_exists('afl_get_rank_names')){
 		if ($count)
 			return count($result);
 		return $result;
+	}
+/*
+	* -----------------------------------------------------------------------------
+  * User refered downlines
+	* -----------------------------------------------------------------------------
+*/
+	function afl_get_user_refered_downlines ($uid = '',$filter = array(), $count = false) {
+		global $wpdb;
+
+		$query = array();
+		$query['#select'] = _table_name('afl_user_genealogy');
+
+		$query['#join'] 	= array(
+			_table_name('users') => array(
+				'#condition' => '`wp_users`.`ID`=`'._table_name('afl_user_genealogy').'`.`uid`'
+			)
+		);
+		// $query['#fields'] = array(
+		// 	_table_name('afl_user_genealogy') => array('uid')
+		// );
+		$query['#where'] = array(
+			'`'._table_name('afl_user_genealogy').'`.`referrer_uid`='.$uid.''
+		);
+		$query['#order_by'] = array(
+			'`'._table_name('afl_user_genealogy').'`.`level`' => 'ASC'
+		);
+
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`member_rank`= '.$filter['member_rank'];
+		}
+		//if filter fields
+		if (isset($filter['fields'])) {
+			$query['fields'] = empty($query['fields']) ? array() : $query['fields'];
+			$fields = array_merge($query['fields'],$filter['fields']);
+			$query['#fields'] = $fields;
+		}
+		$limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+
+		if (!empty($filter['search_valu'])) {
+			$query['#like'] = array('`display_name`' => $filter['search_valu']);
+		}
+
+		$result = db_select($query, 'get_results');
+
+		// pr($result = db_select($query, 'get_results'),1);
+		if ($count)
+			return count($result);
+		return $result;
+
+	}
+/*
+	* -----------------------------------------------------------------------------
+  * User refered downlines uids
+	* -----------------------------------------------------------------------------
+*/
+	function afl_get_user_refered_downlines_uid ($uid = '',$filter = array(), $count = false) {
+		global $wpdb;
+
+		$query = array();
+		$query['#select'] = _table_name('afl_user_genealogy');
+
+		$query['#join'] 	= array(
+			_table_name('users') => array(
+				'#condition' => '`wp_users`.`ID`=`'._table_name('afl_user_genealogy').'`.`uid`'
+			)
+		);
+		$query['#fields'] = array(
+			_table_name('afl_user_genealogy') => array('uid')
+		);
+		$query['#where'] = array(
+			'`'._table_name('afl_user_genealogy').'`.`referrer_uid`='.$uid.''
+		);
+		$query['#order_by'] = array(
+			'`'._table_name('afl_user_genealogy').'`.`level`' => 'ASC'
+		);
+
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`member_rank`= '.$filter['member_rank'];
+		}
+		//if filter fields
+		if (isset($filter['fields'])) {
+			$query['fields'] = empty($query['fields']) ? array() : $query['fields'];
+			$fields = array_merge($query['fields'],$filter['fields']);
+			$query['#fields'] = $fields;
+		}
+		$limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+
+		if (!empty($filter['search_valu'])) {
+			$query['#like'] = array('`display_name`' => $filter['search_valu']);
+		}
+
+		$result = db_select($query, 'get_results');
+
+		// pr($result = db_select($query, 'get_results'),1);
+		if ($count)
+			return count($result);
+		return $result;
+
 	}
 	/*
 	 * -----------------------------------------------------------------------------
@@ -1245,7 +1413,7 @@ if(!function_exists('afl_get_rank_names')){
 		$expression = '';
 		if (isset($data['#expression'])) {
 			foreach ($data['#expression'] as $value) {
-				$expression = empty($expression) ? $value : ','.$value;
+				$expression .= empty($expression) ? $value : ','.$value;
 			}
 		}
 
@@ -1260,7 +1428,7 @@ if(!function_exists('afl_get_rank_names')){
 		//join
 		if (isset($data['#join']) ){
 			foreach ($data['#join'] as $table => $value) {
-					$sql .= 'JOIN `'.$table.'`'.'ON '.$value['#condition'].' ';
+					$sql .= ' JOIN `'.$table.'`'.'ON '.$value['#condition'].' ';
 			}
 		}
 		//where condition
@@ -1277,7 +1445,7 @@ if(!function_exists('afl_get_rank_names')){
 				}
 			} else {
 				foreach ($data['#where'] as $condition) {
-					$sql .= 'WHERE '.$condition.' ';
+					$sql .= ' WHERE '.$condition.' ';
 				}
 			}
 		}
@@ -1303,6 +1471,29 @@ if(!function_exists('afl_get_rank_names')){
 			}
 		}
 
+		//where or codition
+		$where_in = '';
+		if (isset($data['#where_or'])) {
+			foreach ($data['#where_or'] as $key => $value) {
+				if (!$where_flag) {
+					$sql .= 'WHERE '.$value;
+					$where_flag = 1;
+				} else {
+					$sql .= 'OR '.$value;
+				}
+		 	}
+		}
+
+		if (!empty($where_in) ){
+			if (!$where_flag) {
+				$sql .= 'WHERE '.$where_in;
+				$where_flag = 1;
+			} else {
+				$sql .= 'AND '.$where_in;
+			}
+		}
+
+
 		//like
 		if(isset($data['#like'])){
 
@@ -1313,26 +1504,59 @@ if(!function_exists('afl_get_rank_names')){
 			$count = count($data['#like']);
 			if ( $count == 1) {
 				foreach ($data['#like'] as $key => $value) {
-					$sql .= $key.' LIKE "%'.$value.'%"'.' ';
+					if ( !$where_flag )
+						$sql .= $key.' LIKE "%'.$value.'%"'.' ';
+					else
+					$sql .= ' AND '.$key.' LIKE "%'.$value.'%"'.' ';
+				}
+			}
+		}
+
+		//REGEXP
+		if(isset($data['#reg_exp'])){
+
+			if (!$where_flag) {
+				$sql .= 'WHERE ';
+			}
+			//check multiple like cluase exists
+			$count = count($data['#reg_exp']);
+			if ( $count == 1) {
+				foreach ($data['#reg_exp'] as $key => $value) {
+					if ( !$where_flag )
+						$sql .= ' '.$key.' REGEXP "'.$value.'" ';
+					else
+					$sql .= ' AND '.$key.' REGEXP "'.$value.'"';
 				}
 			}
 		}
 
 
-
-
-		//order by
-		if (isset($data['#order_by'])) {
-			foreach ($data['#order_by'] as $key => $order) {
-				$sql .= 'ORDER BY '.$key.' '.$order.' ';
+		//group by
+		if (isset($data['#group_by'])) {
+			$sql .= ' GROUP BY ';
+			foreach ($data['#group_by'] as $by => $value) {
+				if ($by !=0)
+				$sql .= ',';
+				$sql .= $value;
 			}
 		}
 
+		//order by
+		if (isset($data['#order_by'])) {
+			$sql .= ' ORDER BY ';
+			$i = 1;
+			foreach ($data['#order_by'] as $key => $order) {
+				if ($i != 1)
+					$sql .= ',';
+				$sql .= $key.' '.$order.' ';
+				$i++;
+			}
+		}
 		//limit
 		if (isset($data['#limit'])) {
 				$sql .= 'LIMIT '.$data['#limit'].' ';
 		}
-
+		// pr($sql);
 		return $wpdb->$fetch_mode($sql);
 	}
 /*
@@ -1389,7 +1613,10 @@ function afl_commerce_amount($amount_paid){
  * -----------------------------------------------------------------------
 */
 function afl_get_commerce_amount($amount_paid){
-  return $amount_paid / 100;
+
+
+  $amount_paid = $amount_paid / 100;
+  return number_format($amount_paid, 2, '.', ',');
 }
 /*
  * -----------------------------------------------------------------------
@@ -1611,7 +1838,7 @@ function afl_root_user() {
 */
  if (!function_exists('eps_is_admin')){
  	function eps_is_admin(){
- 		if (current_user_can('administrator')) {
+ 		if (current_user_can('administrator') || current_user_can('business_admin')) {
  			return TRUE;
     } else {
     	return FALSE;
@@ -1726,3 +1953,159 @@ if ( !function_exists('get_user_by') ){
  	  return '<span style="display: inline; padding: .2em .6em .3em; font-size: 100%;font-weight: 700;line-height: 1; color: #fff;
         text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em;background-color:'.$rank_color.';">'.$rank_name.' </span>';
  }
+/*
+ * ----------------------------------------------------------------------
+ * Get relative position from a user
+ * ----------------------------------------------------------------------
+*/
+  function get_relative_position_from ($from = '', $uid = '') {
+		$query = array();
+		$query['#select'] = _table_name('afl_user_downlines');
+		$query['#where'] = array(
+			'`'._table_name('afl_user_downlines').'`.`uid`='.$from,
+			'`'._table_name('afl_user_downlines').'`.`downline_user_id`='.$uid
+		);
+		$query['#fields'] = array(
+			_table_name('afl_user_downlines') => array('relative_position')
+		);
+
+		$res = db_select($query, 'get_var');
+		return $res;
+	}
+/*
+ * ----------------------------------------------------------------------
+ * Get last inserted position in tree
+ * ----------------------------------------------------------------------
+*/
+ function _get_last_inserted_positon ($uid = '', $level = '') {
+	 if (empty( $uid ))
+	 	$uid = afl_current_uid();
+
+	$query = array();
+	$query['#select'] = _table_name('afl_tree_last_insertion_positions');
+	$query['#fields'] = array(
+		_table_name('afl_tree_last_insertion_positions') => array('position')
+	);
+	$query['#where']  = array(
+		'`uid` = '.$uid,
+		'`level` = '.$level,
+
+	);
+	$position = db_select($query, 'get_var');
+
+	return $position;
+
+
+ }
+ /*
+  * ----------------------------------------------------------------------
+  * update the inserted position table
+  * ----------------------------------------------------------------------
+ */
+  function _update_inserted_positon ($uid = '', $level = '', $position = '') {
+		global $wpdb;
+		$table_name = _table_name('afl_tree_last_insertion_positions');
+		$query 		= 'SELECT * FROM '.$table_name.' WHERE uid = %d AND level = %d';
+		$row 			= $wpdb->get_row(
+										$wpdb->prepare($query,$uid, $level)
+								 );
+		//if the level of uid already exists
+		if (!empty($row)){
+			$wpdb->update(
+					$table_name,
+					array(
+						'position' => $position
+					),
+					array(
+						'uid' 	=> $uid,
+						'level' => $level
+					)
+				);
+		} else {
+			$wpdb->insert(
+					$table_name,
+					array(
+						'uid'				=> $uid,
+						'level' 		=> $level,
+						'position' 	=> $position
+					)
+				);
+		}
+	}
+	/*
+	 * ----------------------------------------------------------------------
+	 * get the uid, if the user is admin return the root user set
+	 * ----------------------------------------------------------------------
+	*/
+	 function get_uid () {
+		 $uid = afl_current_uid();
+		 if ( eps_is_admin()) {
+			 $uid = afl_root_user();
+		 }
+
+		 return $uid;
+	 }
+
+ /*
+  * ----------------------------------------------------------------------
+  * get Day list
+	* ----------------------------------------------------------------------
+*/
+	 function getDays($date_count = 0 , $date_type = 'day', $date_format = 'd-M-Y', $date_before = TRUE){
+	   $datas = array();
+	   if(!empty($date_count)){
+	     $array_count = 0;
+	     $current_date = afl_date();
+	     $current_date = strtotime('+1 '.$date_type, $current_date);
+	     for($count = $date_count; $count >= 0; $count--){
+
+	         if($date_before == TRUE){
+	           $data = date($date_format ,strtotime('-'.$count.' '.$date_type,$current_date));
+	         }else{
+	           $data = date($date_format ,strtotime('+'.$count.' '.$date_type,$current_date));
+	         }
+
+	         $datas[$data] = $array_count;
+	         //$datas['tag'][] = array($array_count++,$data);
+	     }
+
+	   }
+	   return $datas;
+	 }
+
+ /**
+ * @param $uid
+ * @param $pament_method
+ * ----------------------------------------------------------------------
+ * get Day list
+* ----------------------------------------------------------------------
+**/
+
+function afl_get_payment_method_details($uid = 0, $method_name = ''){
+  global $wpdb;
+  if($method_name == ''){
+    return "";
+  }
+  $table 				= _table_name('afl_user_payment_methods');
+  $query 						=   array();
+ 	$query['#select'] = $table;
+
+ 	$query['#where'] 	= array(
+ 		'uid ='.$uid,
+ 		'method="'.$method_name.'"',
+ 	);
+ 	$row = db_select($query, 'get_row');
+  if(! $row){
+    return "";
+  }
+  $field_val = json_decode($row->data);
+  $output = array();
+     foreach ($field_val as $key => $value) {
+  			if(isset($value)){
+  				$output[]  = '<strong >'.str_replace('_', ' ', ucwords($key)) . '</strong> : '. $value;
+  			}
+  }
+  return implode("<br>", $output);
+
+
+}

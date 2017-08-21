@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
 	$( ".date_time_picker" ).datepicker();
 
   $('[data-toggle="tooltip"]').tooltip();   
@@ -6,6 +7,25 @@ $(document).ready(function(){
 });
 
 $(function () {
+
+    toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": false,
+      "progressBar": false,
+      "rtl": false,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": 300,
+      "hideDuration": 2000,
+      "timeOut": 5000,
+      "extendedTimeOut": 1000,
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
   
     $('.navbar-toggle').click(function () {
         $('.navbar-nav').toggleClass('slide-in');
@@ -50,12 +70,39 @@ $(function () {
       table = $(".custom-data-tables").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
           "type"  : "POST",
           "data"  :{
             action:'afl_user_downlines_data_table',
+          }   
+        }, 
+        "columnDefs": [{ 
+          "targets": [0,1,2,3], 
+          "orderable": false, 
+        }], 
+      }); 
+  }
+/*
+ * -------------------------------------------
+* Data tables for user refred members
+ * -------------------------------------------
+*/
+  if ($('.refered-members').length) {
+
+      var table; 
+      table = $(".refered-members").DataTable({
+       "processing": true, 
+       "serverSide": true, 
+       "pageLength": 50,
+       "order": [], 
+       "ajax": { 
+          "url"   : ajax_object.ajaxurl,
+          "type"  : "POST",
+          "data"  :{
+            action:'afl_user_refered_downlines_data_table',
           }   
         }, 
         "columnDefs": [{ 
@@ -76,6 +123,7 @@ if ($('.custom-ewallet-summary-table').length) {
       "bInfo": false,
       "searching": false,
       "paging": false,
+      "pageLength": 50,
        "processing": true, 
        "serverSide": true, 
        "order": [], 
@@ -95,7 +143,7 @@ if ($('.custom-ewallet-summary-table').length) {
 
 /*
 * -------------------------------------------
-* Data tables for ewallet summary
+* Data tables for ewallet transaction
 * -------------------------------------------
 */
 if ($('.custom-ewallet-all-trans-table').length) {
@@ -103,6 +151,7 @@ if ($('.custom-ewallet-all-trans-table').length) {
       table = $(".custom-ewallet-all-trans-table").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -127,6 +176,7 @@ if ($('.custom-ewallet-income-table').length) {
       table = $(".custom-ewallet-income-table").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -150,7 +200,8 @@ if ($('.custom-ewallet-expense-table').length) {
       var table; 
       table = $(".custom-ewallet-expense-table").DataTable({
        "processing": true, 
-       "serverSide": true, 
+       "serverSide": true,
+       "pageLength": 50, 
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -165,6 +216,7 @@ if ($('.custom-ewallet-expense-table').length) {
         }], 
       }); 
   }
+
 /*
 * -------------------------------------------
 * Data tables for business transaction summary  
@@ -177,6 +229,7 @@ if ($('.custom-business-summary-table').length) {
       "bInfo": false,
       "searching": false,
       "paging": false,
+      "pageLength": 50,
        "processing": true, 
        "serverSide": true, 
        "order": [], 
@@ -203,6 +256,7 @@ if ($('.custom-business-all-trans-table').length) {
       table = $(".custom-business-all-trans-table").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -229,6 +283,7 @@ if ($('.custom-business-income-history-table').length) {
       table = $(".custom-business-income-history-table").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -253,6 +308,7 @@ if ($('.custom-business-expense-history-table').length) {
       table = $(".custom-business-expense-history-table").DataTable({
        "processing": true, 
        "serverSide": true, 
+       "pageLength": 50,
        "order": [], 
        "ajax": { 
           "url"   : ajax_object.ajaxurl,
@@ -352,7 +408,32 @@ if ($('.custom-business-expense-history-table').length) {
     $(this).find('input[type="radio"]').prop("checked", true);
     
   });
-  
+/*
+ * -------------------------------------------------------------
+ * On clicking the auto placement button
+ * get the uid
+ * user automatically place under a user
+ * -------------------------------------------------------------
+*/  
+ $('#auto-place-user').click(function (){
+    var sponsor = $('#current-user-id').val();
+    var uid     = $('#seleted-user-id').val();
+    $.ajax({
+      type :'POST',
+      data : {
+        action:'afl_auto_place_user_ajax',
+        sponsor : $('#current-user-id').val(),
+        uid     : $('#seleted-user-id').val(),
+      },
+      url:ajax_object.ajaxurl,
+      success: function(data){
+          setTimeout(function() { window.location.reload(true); }, 500 );
+      }
+    });
+
+ });
+
+
 //document ends here
 });
 

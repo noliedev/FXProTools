@@ -23,7 +23,7 @@ function afl_generate_users_form () {
 		$sponsor_uid = $matches[1];
 
 		$begin_from = _get_last_inserted($start_with);
-
+		// pr($begin_from,1);
 		for ($i = $begin_from ; $i <= ($count + $begin_from - 1) ; $i++) {
 			$name = $start_with.'-'.$i;
 			if (!username_exists( $name )) {
@@ -47,6 +47,20 @@ function afl_generate_users_form () {
 				//add afl_member role to the user
 				$theUser = new WP_User($user);
 				$theUser->add_role( 'afl_member' );
+				//add the Enrollment fee to the business vallet
+				$business_transactions['associated_user_id'] = $user;
+  			$business_transactions['uid'] = afl_root_user(); /*Business admin uid or root user id*/;
+  			$business_transactions['credit_status'] = 1;
+        $business_transactions['category'] 			= 'ENROLMENT FEE';
+  			$business_transactions['additional_notes'] 	= 'Enrolment joining Free';
+  			$business_transactions['amount_paid'] 			= afl_commerce_amount(100);
+  			$business_transactions['notes'] 				= 'Enrolment Fee';
+  			$business_transactions['currency_code'] = 'USD';
+  			$business_transactions['order_id'] 			= 1;
+       	
+       	$business_transaction = afl_business_transaction($business_transactions);
+
+
 
         	$success_count+=1;
         } else {
@@ -76,12 +90,14 @@ function _get_last_inserted($string_prefix = '') {
 	$query['#order_by'] = array(
 		'ID' => 'ASC'
 	);
-	$query['#like']   = array(
-		'`'._table_name('users').'`.`user_login`' => $string_prefix.'-'
+	// $query['#like']   = array(
+	// 	'`'._table_name('users').'`.`user_login`' => $string_prefix.'-'
+	// );
+	$query['#reg_exp'] = array(
+		'`'._table_name('users').'`.`user_login`' => $string_prefix.'-[0-9]+$'
 	);
-
 	$existed_users = db_select($query, 'get_results');
-
+	
 	end($existed_users);         // move the internal pointer to the end of the array
 	$key = key($existed_users);
 	$begin = 0;
@@ -460,4 +476,91 @@ function afl_generate_purchase_form_callback () {
 		'#value' =>'Generate'
 	);
 	echo afl_render_form($form);
+}
+
+
+function afl_admin_fund_deposit () {
+	echo afl_eps_page_header();
+
+	echo afl_content_wrapper_begin();
+		afl_admin_fund_deposit_callback();
+	echo afl_content_wrapper_end();
+}
+
+function afl_admin_fund_deposit_callback () {
+	if ( isset($_POST['submit'])) {
+		unset($_POST['submit']);
+		$validation = afl_admin_fund_deposit_validation($_POST); 
+
+		if ($validation) {
+			afl_admin_fund_deposit_submit($_POST);
+		} 
+	}
+
+	$form = array();
+	$form['#method'] = 'post';
+	$form['#action'] = $_SERVER['REQUEST_URI'];
+
+	$form['user'] = array(
+		'#type' =>'auto_complete',
+		'#title' =>'user',
+		'#auto_complete_path' => 'users_auto_complete',
+
+	);
+	$form['fund'] = array(
+		'#type' =>'text',
+		'#title' =>'Amount',
+	);
+	$form['submit'] = array(
+		'#type' =>'submit',
+		'#value' =>'Generate'
+	);
+	echo afl_render_form($form);
+}
+
+function afl_admin_fund_deposit_validation($form_state = array()) {
+		$rules = array();
+		
+		$split = explode('(', $_POST['user']);
+		$user = $split[0];
+
+		$rules[] = array(
+		 	'value'=> $user,
+	 		'name' =>'user',
+	 		'field'=>'user',
+	 		'rules' => array(
+	 			'rule_required',
+	 			'rule_user_name_exists',
+	 		)
+	 	);
+	 $rules[] = array(
+		 	'value'=> $form_state['fund'],
+	 		'name' =>'user',
+	 		'field'=>'fund',
+	 		'rules' => array(
+	 			'rule_required',
+	 		)
+	 	);
+	return set_form_validation_rule($rules);
+}
+
+function afl_admin_fund_deposit_submit($form_state = array()){
+	$uid 		= extract_sponsor_id($form_state['user']);
+	$amount = $form_state['fund'];
+
+	$transaction = array();
+  $transaction['uid'] 								= $uid;
+  $transaction['associated_user_id'] 	= $uid;
+  $transaction['currency_code'] 			= afl_currency();
+  $transaction['order_id'] 						= 1;
+  $transaction['int_payout'] 					= 0;
+  $transaction['hidden_transaction'] 	= 0;
+  $transaction['credit_status'] 			= 1;
+  $transaction['amount_paid'] 				= afl_commerce_amount($amount);
+  $transaction['category'] 						= 'FUND DEPOSIT';
+  $transaction['notes'] 							= 'Fund Deposited';
+
+	afl_member_transaction($transaction, FALSE, FALSE);
+	wp_set_message('Fund Deposited', 'success');
+
 }

@@ -51,7 +51,7 @@ function afl_admin_business_trans_datatable_callback(){
   	$output = [
      "draw" 						=> $input_valu['draw'],
      "recordsTotal" 		=> $result_count,
-     "recordsFiltered" 	=> $filter_count,
+     "recordsFiltered" 	=> $result_count,
      "data" 						=> [],
    	];
     $result = get_all_business_transaction_details($uid,$filter,FALSE);
@@ -66,7 +66,7 @@ function afl_admin_business_trans_datatable_callback(){
 	   		$key+1,
 	     	ucfirst(strtolower($value->category)),
 	     	$value->display_name." (".$value->associated_user_id.")",
-	 			number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			number_format(afl_get_commerce_amount($value->amount_paid), 2, '.', ',')." " .$value->currency_code ,
 	     	$status,
 	     	$value->transaction_date,  	
 	     	$value->additional_notes
@@ -95,9 +95,9 @@ function get_all_business_transaction_details($uid = '7', $filter = array(), $co
         '#condition' => '`wp_users`.`ID`=`wp_afl_business_transactions`.`associated_user_id`'
       )
     );
-   	$query['#where'] = array(
-      '`wp_afl_business_transactions`.`uid`= '.$uid.''
-    );
+   	// $query['#where'] = array(
+    //   '`wp_afl_business_transactions`.`uid`= '.$uid.''
+    // );
    	if(($credit_status != -1) ){
 	   	$query['#where'][] = '`wp_afl_business_transactions`.`credit_status`= '.$credit_status.'';
    	}

@@ -387,11 +387,8 @@
 	*/
 		public function get_bulk_actions() {
 			$actions = array(
-				'accept'     => __( 'Accept', 'affiliate-wp' ),
-				'reject'     => __( 'Reject', 'affiliate-wp' ),
-				'activate'   => __( 'Activate', 'affiliate-wp' ),
-				'deactivate' => __( 'Deactivate', 'affiliate-wp' ),
-				'delete'     => __( 'Delete', 'affiliate-wp' )
+				'block'     => __( 'Block user', 'eps-affiliates' ),
+				'unblock'   => __( 'Unblock user', 'eps-affiliates' )
 			);
 
 			/**
@@ -404,7 +401,7 @@
 
 		function column_cb($item) {
         return sprintf(
-            '<input type="checkbox" name="book[]" value="%s" />', 1
+            '<input type="checkbox" name="member_id[]" value="%s" />', $item->uid
         );
     }
 
@@ -432,12 +429,12 @@
 			if ( empty( $_REQUEST['_wpnonce'] ) ) {
 				return;
 			}
-
+			
 			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'bulk-affiliates' ) && ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'affiliate-nonce' ) ) {
 				return;
 			}
 
-			$ids = isset( $_GET['affiliate_id'] ) ? $_GET['affiliate_id'] : false;
+			$ids = isset( $_GET['member_id'] ) ? $_GET['member_id'] : false;
 
 			if ( ! is_array( $ids ) ) {
 				$ids = array( $ids );
@@ -451,24 +448,22 @@
 
 			foreach ( $ids as $id ) {
 
-				if ( 'accept' === $this->current_action() ) {
-					// affwp_set_affiliate_status( $id, 'active' );
+				if ( 'block' === $this->current_action() ) {
+					$response = apply_filters('eps_affiliates_block_member', $id);
+					if ( $response ) {
+						echo wp_set_message('The user has been blocked successfully', 'success');
+					} else {
+						echo wp_set_message('Unable to block the user', 'error');
+					}
 				}
 
-				if ( 'reject' === $this->current_action() ) {
-					// affwp_set_affiliate_status( $id, 'rejected' );
-				}
-
-				if ( 'activate' === $this->current_action() ) {
-					// affwp_set_affiliate_status( $id, 'active' );
-				}
-
-				if ( 'deactivate' === $this->current_action() ) {
-					// affwp_set_affiliate_status( $id, 'inactive' );
-				}
-
-				if ( 'delete' === $this->current_action() ) {
-					// affwp_delete_affiliate( $id );
+				if ( 'unblock' === $this->current_action() ) {
+					$response = apply_filters('eps_affiliates_unblock_member', $id);
+					if ( $response ) {
+						echo wp_set_message('The user has been unblocked successfully', 'success');
+					} else {
+						echo wp_set_message('Unable to unblock the user', 'error');
+					}
 				}
 
 				/**
@@ -481,7 +476,7 @@
 				 *
 				 * @param int $id The ID of the object.
 				 */
-				do_action( 'eps_affiliates_do_bulk_action' . $this->current_action(), $id );
+				// do_action( 'eps_affiliates_do_bulk_action' . $this->current_action(), $id );
 
 			}
 

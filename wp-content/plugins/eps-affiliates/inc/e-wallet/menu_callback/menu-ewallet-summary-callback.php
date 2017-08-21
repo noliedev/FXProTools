@@ -81,6 +81,7 @@ function afl_ewallet_all_transactions(){
                 <th>Amount</th>
                 <th>Credit Status</th>
                 <th>Date</th>
+                <th>Notes</th>
             </tr>
         </thead>
     </table>

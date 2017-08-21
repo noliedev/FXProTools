@@ -1,7 +1,54 @@
 <?php
 /* --------- All the action hooks ------------------------*/
-add_action('init', 'test');
-function test(){
+add_action('init', 'common_scripts_load');
+function common_scripts_load(){
+	wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
+	wp_enqueue_script( 'jquery-js' );
+
+	wp_register_script( 'bootstrap-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap.min.js');
+	wp_enqueue_script( 'bootstrap-js' );
+
+	wp_register_script( 'jquery-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/jquery-ui/jquery-ui.min.js');
+	wp_enqueue_script( 'jquery-ui' );
+
+	wp_register_script( 'autocomplete-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.autocomplete.min.js');
+	wp_enqueue_script( 'autocomplete-ui' );
+
+	wp_register_script( 'bootstrap-typehead-ui',  EPSAFFILIATE_PLUGIN_ASSETS.'js/bootstrap-typeahead.js');
+	wp_enqueue_script( 'bootstrap-typehead-ui' );
+
+	wp_register_script( 'widget-scripts',  EPSAFFILIATE_PLUGIN_ASSETS.'js/widget-scripts.js');
+	wp_enqueue_script( 'widget-scripts' );
+
+
+	wp_register_script( 'jquery-data-table-init',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
+	wp_enqueue_script( 'jquery-data-table-init' );
+
+	wp_register_script( 'jquery-data-bootstrap-table-init',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/dataTables.bootstrap.min.js');
+	wp_enqueue_script( 'jquery-data-bootstrap-table-init' );
+
+	wp_enqueue_style( 'plan-develoepr-init', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/css/dataTables.bootstrap.min.css');
+
+	//toaster
+	wp_register_script( 'toaster-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/toastr.js');
+	wp_enqueue_script( 'toaster-js' );
+	wp_register_style( 'toaster-cs',  EPSAFFILIATE_PLUGIN_ASSETS.'css/toastr.css');
+	wp_enqueue_style( 'toaster-cs' );
+	
+	//high charts
+	wp_register_script( 'highchart-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/highcharts.js');
+	wp_enqueue_script( 'highchart-js' );
+
+
+
+
+	wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
+	wp_enqueue_script( 'common-js' );
+
+  wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
+
+
+			
 
 }
 
@@ -75,7 +122,13 @@ function eps_affiliates_admin_notices () {
 */
  add_action('wp_ajax_users_auto_complete', 'users_auto_complete_callback');
  add_action('wp_ajax_nopriv_users_auto_complete', 'users_auto_complete_callback');
-
+/*
+ * ------------------------------------------------------------
+ * Auto complete under a particular user
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_member_users_autocomplete', 'member_users_auto_complete_callback');
+ add_action('wp_ajax_nopriv_member_users_autocomplete', 'member_users_auto_complete_callback');
 /*
  * ------------------------------------------------------------
  * Get the admin bar
@@ -108,6 +161,13 @@ function eps_affiliates_admin_notices () {
 */
  add_action('wp_ajax_afl_user_downlines_data_table', 'afl_user_downlines_data_table_callback');
  add_action('wp_ajax_nopriv_afl_user_downlines_data_table', 'afl_user_downlines_data_table_callback');
+/*
+ * ------------------------------------------------------------
+ * Users refered downline users datatable
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_user_refered_downlines_data_table', 				'afl_user_refered_downlines_data_table_callback');
+ add_action('wp_ajax_nopriv_afl_user_refered_downlines_data_table', 'afl_user_refered_downlines_data_table_callback');
 
 /*
  * ------------------------------------------------------------
@@ -148,7 +208,7 @@ function eps_affiliates_admin_notices () {
  add_action('wp_ajax_afl_user_ewallet_expense_data_table', 'afl_user_ewallet_expense_report_data_table');
  add_action('wp_ajax_nopriv_afl_user_ewallet_expense_data_table', 'afl_user_ewallet_expense_report_data_table');
 
- /*
+/**
  * ------------------------------------------------------------
  * business wallet summary datatable
  * ------------------------------------------------------------
@@ -193,6 +253,15 @@ function eps_affiliates_admin_notices () {
  add_action('wp_ajax_nopriv_afl_place_user_from_tank', 'afl_place_user_from_tank_callback');
 /*
  * ------------------------------------------------------------
+ * Autoplace a user under a sponsor
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_auto_place_user_ajax', 'afl_auto_place_user_ajax_callback');
+ add_action('wp_ajax_nopriv_afl_auto_place_user_ajax', 'afl_auto_place_user_ajax_callback');
+
+
+/*
+ * ------------------------------------------------------------
  * Hook after purchase complete save details to eps backend
  * ------------------------------------------------------------
 */
@@ -204,46 +273,120 @@ function eps_affiliates_admin_notices () {
  * ------------------------------------------------------------
 */
  add_action('eps_affiliates_calculate_affiliate_rank', 'eps_affiliates_calculate_affiliate_rank_callback', 10, 1);
-// do_action('eps_affiliates_calculate_affiliate_rank', 189);
-// pr('com', 1) ;
+ // do_action('eps_affiliates_calculate_affiliate_rank',924);
 /*
  * ------------------------------------------------------------
- * Redirect after successful login
+ * Add a user to holding tank
  * ------------------------------------------------------------
 */
- // add_filter( 'login_redirect', 'dashboard_redirect' );
-	// function dashboard_redirect( $url ) {
-	//     if ( has_role(afl_current_uid(),'afl_member' ) ) {
-	//          $url = esc_url( admin_url( 'index.php' ) );
-	//     }
+ add_action('eps_affiliates_place_user_in_holding_tank', 'eps_affiliates_place_user_in_holding_tank_callback', 10, 2);
+/*
+ * ------------------------------------------------------------
+ * Place user under a sponsor
+ * ------------------------------------------------------------
+*/
+ add_action('eps_affiliates_place_user_under_sponsor', 'eps_affiliates_place_user_under_sponsor_callback', 10, 2);
 
-	//     return $url;
-	// }
-add_action('init', 'eps_create_system_user_callback');
+/*
+ * ------------------------------------------------------------
+ * Place user under a sponsor from the holding tank validity 
+ * expired
+ * ------------------------------------------------------------
+*/
+ add_action('eps_affiliates_force_place_after_holding_expired', 'eps_affiliates_force_place_after_holding_expired_callback', 10, 2);
 
-function eps_create_system_user_callback() {
+/*
+ * ------------------------------------------------------------
+ * Block a user
+ *
+ * Get an as input to the action, the member account has 
+ * been blocked using this id
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affiliates_block_member', 'eps_affiliates_block_member_callback', 10, 1);
 
-	$username = 'username123';
-	$password = 'pasword123';
-	$email = 'drew@example.com';
-	$user = get_user_by( 'email', $email );
-	if( ! $user ) {
-	    // Create the new user
-	    $user_id = wp_create_user( $username, $password, $email );
-	    if( is_wp_error( $user_id ) ) {
-	        // examine the error message
-	        echo( "Error: " . $user_id->get_error_message() );
-	        exit;
-	    }
-	    // Get current user object
-	    $user = get_user_by( 'id', $user_id );
+/*
+ * ------------------------------------------------------------
+ * UN Block a user
+ *
+ * Get an as input to the action, the member account has 
+ * been blocked using this id
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affiliates_unblock_member', 'eps_affiliates_unblock_member_callback', 10, 1);
+
+ /*
+ * ------------------------------------------------------------
+ * Approve a withdrawal request
+ *
+ * Get an as input to the action, The payout/withdrawal Request is approve
+ * 
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affiliates_withdrawal_approve', 'eps_affiliates_withdrawal_approve_callback', 10, 1);
+/*
+ * ------------------------------------------------------------
+ * Approve a withdrawal request
+ *
+ * Get an as input to the action, The payout/withdrawal Request is approve
+ * 
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affiliates_withdrawal_reject', 'eps_affiliates_withdrawal_reject_callback', 10, 1);
+ /*
+ * ------------------------------------------------------------
+ * Approve a withdrawal request
+ *
+ * Get an as input to the action, The payout/withdrawal Request is approve
+ * 
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affiliates_payout_paid', 'eps_affiliates_payout_paid_callback', 10, 1);
+ /*
+ * ------------------------------------------------------------
+ * Approve a withdrawal request
+ *
+ * Get an as input to the action, The payout/withdrawal Request is approve
+ * 
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_affliate_user_cancel_withdraw', 'eps_affliate_user_cancel_withdraw_callback', 10, 1);
+/*
+ * ------------------------------------------------------------
+ * SEt cookie values for ajax callbackz  
+ * ------------------------------------------------------------
+*/
+	add_action('init', 'eps_affiliates_set_cookies');
+	function eps_affiliates_set_cookies() {
+		//dashboard widget dowlines count visible value
+    if (!isset($_COOKIE['eps_afl_widget_downlines_visible_value'])) {
+       setcookie('eps_afl_widget_downlines_visible_value', 'y', strtotime('+1 day'));
+    }
+		//dashboard widget ewallet amount visible value
+		if (!isset($_COOKIE['eps_afl_widget_ewallet_visible_value'])) {
+       setcookie('eps_afl_widget_ewallet_visible_value', 'y', strtotime('+1 day'));
+    }
+    //dashboard widget ewallet income visible value
+		if (!isset($_COOKIE['eps_afl_widget_ewallet_income_visible_value'])) {
+       setcookie('eps_afl_widget_ewallet_income_visible_value', 'y', strtotime('+1 day'));
+    }
+    //dashboard widget ewallet expense visible value
+		if (!isset($_COOKIE['eps_afl_widget_ewallet_expense_visible_value'])) {
+       setcookie('eps_afl_widget_ewallet_expense_visible_value', 'y', strtotime('+1 day'));
+    }
+    //dashboard widget ewallet transaction chart visible value
+		if (!isset($_COOKIE['eps_afl_widget_ewallet_transactions_chart_visible_value'])) {
+       setcookie('eps_afl_widget_ewallet_transactions_chart_visible_value', 'y', strtotime('+1 day'));
+    }
+    //dashboard widget bwallet transaction chart visible value
+		if (!isset($_COOKIE['eps_afl_widget_bwallet_transactions_chart_visible_value'])) {
+       setcookie('eps_afl_widget_bwallet_transactions_chart_visible_value', 'y', strtotime('+1 day'));
+    }
+    //dashboard widget bwallet report chart visible value
+		if (!isset($_COOKIE['eps_afl_widget_bwallet_report_chart_visible_value'])) {
+       setcookie('eps_afl_widget_bwallet_report_chart_visible_value', 'y', strtotime('+1 day'));
+    }
 	}
-	// Remove role
-	$user->remove_role( 'subscriber' );
-	// Add role
-	$user->add_role( 'administrator' );
-}
-// pr(apply_filters('eps_create_system_user', array()));
 /*
  * ------------------------------------------------------------
  *
@@ -263,6 +406,7 @@ function eps_create_system_user_callback() {
  			case 'affiliate-eps-downline-members':
  			case 'affiliate-eps-genealogy-tree':
  			case 'affiliate-eps-holding-tank':
+ 			case 'affiliate-eps-refered-members':
  			//e-wallet
  			case 'affiliate-eps-e-wallet-summary':
  			case 'affiliate-eps-e-wallet':
@@ -270,8 +414,9 @@ function eps_create_system_user_callback() {
  			case 'affiliate-eps-ewallet-income-report':
  			case 'affiliate-eps-ewallet-withdraw-report':
  			case 'affiliate-eps-ewallet-withdraw-fund':
- 			case 'affiliate-eps-ewallet-pending-withdrawal':
+ 			case 'affiliate-eps-ewallet-my-withdrawal':
  			case 'affiliate-eps-payment_method';
+ 			case 'user-payment-configuration';
 
  			//system configurations
  			case 'affiliate-eps-business-system-members':
@@ -297,10 +442,20 @@ function eps_create_system_user_callback() {
 
  			//reports
 			case 'affiliate-eps-reports':
+			case 'affiliate-eps-team-purchases-reports':
+			case 'affiliate-eps-payout':
+			case 'affiliate-eps-payout-in-remittance':
+			//manage members
+			case 'affiliate-eps-manage-members':
+			case 'affiliate-eps-blocked-members':
+			case 'affiliate-eps-find-members':
+
 
  			case 'eps-test':
  			case 'affiliate-eps-purchases':
  			case 'eps-generate-purchase':
+ 			case 'eps-test-codes':
+ 			case 'eps-fund-deposit':
  				wp_enqueue_style( 'simple-line-icons', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/simple-line-icons/css/simple-line-icons.css');
  				wp_enqueue_style( 'app', EPSAFFILIATE_PLUGIN_ASSETS.'css/app.css');
 				wp_enqueue_style( 'developer', EPSAFFILIATE_PLUGIN_ASSETS.'css/developer.css');
@@ -312,25 +467,25 @@ function eps_create_system_user_callback() {
 
 
 
-// add_action('init', 'prefix_add_user');
-function prefix_add_user() {
-    $username = '1450';
-    $password = '1450';
-    $email = '1405@example.com';
-    $user = get_user_by( 'email', $email );
-    if( ! $user ) {
-        // Create the new user
-        $user_id = wp_create_user( $username, $password, $email );
-        if( is_wp_error( $user_id ) ) {
-            // examine the error message
-            echo( "Error: " . $user_id->get_error_message() );
-            exit;
-        }
-        // Get current user object
-        $user = get_user_by( 'id', $user_id );
-    }
-    // Remove role
-    $user->remove_role( 'subscriber' );
-    // Add role
-    $user->add_role( 'administrator' );
-}
+// // add_action('init', 'prefix_add_user');
+// function prefix_add_user() {
+//     $username = '1450';
+//     $password = '1450';
+//     $email = '1405@example.com';
+//     $user = get_user_by( 'email', $email );
+//     if( ! $user ) {
+//         // Create the new user
+//         $user_id = wp_create_user( $username, $password, $email );
+//         if( is_wp_error( $user_id ) ) {
+//             // examine the error message
+//             echo( "Error: " . $user_id->get_error_message() );
+//             exit;
+//         }
+//         // Get current user object
+//         $user = get_user_by( 'id', $user_id );
+//     }
+//     // Remove role
+//     $user->remove_role( 'subscriber' );
+//     // Add role
+//     $user->add_role( 'administrator' );
+// }

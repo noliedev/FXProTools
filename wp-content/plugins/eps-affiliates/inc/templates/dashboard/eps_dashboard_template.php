@@ -11,7 +11,7 @@
 <?php echo afl_eps_page_header(); ?>
 
 <?php echo afl_content_wrapper_begin(); ?>
-
+<div class="panel wrapper">
 <div class="row ">
 
 	<div class="col-md-5">
@@ -34,15 +34,44 @@
 
 		</div>
 	</div>
+	<div class="col-md-7">
+			
+			<div id="afl-widgets-afl-dashboard-downline-chart" class="block col-md-12">
+			</div>
+
+			<div id="afl-widgets-afl-dashboard-level-user-counts" class="block col-md-12">
+			</div>
+	</div>
+</div>
 </div>
 
-
 <div class="panel wrapper">
-  <div class="row">
-  </div>
- </div>
+	<div class="row ">
+		<div class="col-md-6">
+			<div id="afl-widgets-afl-e-wallet-transaction-chart">
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div id="afl-widgets-afl-e-wallet-summary" >
+			</div>
+		</div>
+	</div>
+</div>
 
-
+<?php if (eps_is_admin())  : ?>
+<div class="panel wrapper">
+	<div class="row ">
+		<div class="col-md-6">
+			<div id="afl-widgets-afl-b-wallet-transaction-chart">
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div id="afl-widgets-afl-b-wallet-report" >
+			</div>
+		</div>
+	</div>
+</div>
+<?php endif; ?>
 
 
 
