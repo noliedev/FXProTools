@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-	<?php get_template_part('inc/templates/nav-distributor'); ?>
+	<?php get_template_part('inc/templates/nav-welcome'); ?>
 
 	<div class="container">
 		<div class="row">
@@ -26,22 +26,20 @@
 							<span class="fx-text"><?php echo $list; ?></span>
 						</li>
 						<?php endforeach; ?>
-						<li>
-							<a href="" class="start">I'm ready for the next step</a>
-						</li>
+						<li><a href="" class="btn btn-danger btn-lg fx-btn block">I'm ready for the next step</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="container">
-		<div class="row fx-lg-links">
+	<div class="container m-t-lg">
+		<div class="row">
 			<div class="col-md-8">
-				<a href="#" class="fx-lg-link">Schedule for "Welcome Webinar"</a>
+				<a href="#" class="btn btn-default btn-lg block">Schedule for "Welcome Webinar"</a>
 			</div>
 			<div class="col-md-4">
-				<a href="#" class="fx-lg-link">Get Your Free T-shirt(Store)</a>
+				<a href="#" class="btn btn-default btn-lg block">Get Your Free T-shirt(Store)</a>
 			</div>
 		</div>
 	</div>

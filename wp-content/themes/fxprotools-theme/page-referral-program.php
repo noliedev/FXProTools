@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-	<?php get_template_part('inc/templates/nav-distributor'); ?>
+	<?php get_template_part('inc/templates/nav-welcome'); ?>
 
 	<div class="container">
 		<div class="row">
@@ -21,13 +21,18 @@
 						tempor incididunt ut labore et dolore magna aliqua.</p>
 					</div>
 					<ul class="fx-board-list">
-						<?php $lists = ['Refer First Friend', 'Refer Second Friend', 'Refer Third Friend']; ?>
-						<?php foreach ($lists as $key => $list): ?>
 						<li>
-							<span class="fx-checkbox <?php echo $key == 0 ? 'checked': ''; ?>"></span>
-							<span class="fx-text"><?php echo $list; ?></span>
+							<span class="fx-checkbox checked"></span>
+							<span class="fx-text">Refer First Friend</span>
 						</li>
-						<?php endforeach; ?>
+						<li>
+							<span class="fx-checkbox checked"></span>
+							<span class="fx-text">Refer Second Friend</span>
+						</li>
+						<li>
+							<span class="fx-checkbox"></span>
+							<span class="fx-text">Refer Third Friend</span>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -63,7 +68,7 @@
 									<div class="text-center">
 										We provide you with all the Marketing Sales <br/>Funnels you need to explain FX Pro tools
 									</div>
-									<a href="#" class="link-btn">
+									<a href="#" class="btn btn-danger block padding-md">
 										Access Your Sales Funnels
 									</a>
 								</div>
@@ -71,6 +76,11 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="clearfix"></div>
+			<br/>
+			<div class="col-md-12">
+				<a href="#" class="btn btn-danger block padding-lg">Thanks For Letting Me Know.. Continue To Your Products</a>
 			</div>
 		</div>
 	</div>
