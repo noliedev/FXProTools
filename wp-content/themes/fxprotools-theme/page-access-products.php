@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-	<?php get_template_part('inc/templates/nav-welcome'); ?>
+	<?php get_template_part('inc/templates/nav-dashboard'); ?>
 
 	<div class="container">
 		<div class="row">
