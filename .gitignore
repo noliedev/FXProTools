@@ -1,12 +1,16 @@
-# ignore everything in the root except the following
-wp-content/*
-!wp-content/mu-plugins/
-!wp-content/
-!wp-content/plugins/
-!wp-content/themes/
-
-.package.json
-.gulpfile.js
-wp-config.php
-vendor/
+# Exclude these files from the git repo
+wp-content/backup/*
+wp-content/cache/*
+wp-content/upgrade/*
 node_modules/
+vendor/
+sitemap.*
+wp-config.php
+ 
+# Hidden system files
+*.DS_Store
+*[Tt]humbs.db
+*.Trashes
+ 
+# Include these files in previously blocked directories
+!wp-content/uploads/.htaccess
