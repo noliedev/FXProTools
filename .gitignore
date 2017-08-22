@@ -6,6 +6,7 @@ node_modules/
 vendor/
 sitemap.*
 wp-config.php
+composer.lock
  
 # Hidden system files
 *.DS_Store
