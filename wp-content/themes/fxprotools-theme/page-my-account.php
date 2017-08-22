@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="fx-header-title">
-				<h1>Your Contact</h1>
+				<h1>Your Account</h1>
 				<p>Check Below for your available contact</p>
 			</div>
 			<div class="panel panel-default fx-contact-panel">

@@ -40,6 +40,8 @@ if(!class_exists('ThemeSettings')){
 			// Include custom scripts here
 		}
 
+		
+
 	}
 
 }
