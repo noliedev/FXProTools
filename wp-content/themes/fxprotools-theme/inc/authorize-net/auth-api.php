@@ -6,7 +6,7 @@
  * Authorize.net API functions
  */
 
-require  $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+require  $_SERVER['DOCUMENT_ROOT'] . '/fxprotools/vendor/autoload.php';
 	
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
