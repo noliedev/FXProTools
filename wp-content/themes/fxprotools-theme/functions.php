@@ -25,7 +25,8 @@ foreach ($core_settings as $cs) {
  * Includes all custom functions
  */
 $custom_functions = array(
-	'function-helper.php'
+	'function-helper.php',
+	'function-custom.php'
 );
 
 if($custom_functions){
