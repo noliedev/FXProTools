@@ -24,11 +24,11 @@
 					</div>
 					<div class="col-md-7">
 						<ul class="fx-nav-options">
-							<li><a href="#" title="Dashboard Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
-							<li><a href="#" title="Product Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
-							<li><a href="#" title="Marketing Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
-							<li><a href="#" title="Team Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
-							<li><a href="#" title="Money Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
+							<li><a href="<?php bloginfo('url'); ?>/dashboard" title="Dashboard Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
+							<li><a href="<?php bloginfo('url'); ?>/basic-training" title="Product Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
+							<li><a href="<?php bloginfo('url'); ?>/marketing/funnels" title="Marketing Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
+							<li><a href="<?php bloginfo('url'); ?>/team" title="Team Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
+							<li><a href="<?php bloginfo('url'); ?>/wallet" title="Money Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
 						</ul>
 					</div>
 					<div class="col-md-3">
