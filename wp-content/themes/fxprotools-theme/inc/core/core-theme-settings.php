@@ -58,6 +58,11 @@ if(!class_exists('ThemeSettings')){
 						'type' => 'textarea',
 						'name' => esc_html__( 'Short Description', 'fxprotools' ),
 					),
+					array(
+						'id' => $prefix . 'subtitle',
+						'type' => 'text',
+						'name' => esc_html__( 'Subtitle', 'fxprotools' ),
+					),
 				),
 			);
 

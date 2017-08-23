@@ -19,11 +19,11 @@
 					<div class="panel-body">
 						<h5 class="text-bold">Course Navigation</h5>
 						<ul>
-							<li><a href="<?php bloginfo('url');?>/product/course/lesson">Lesson #1</a></li>
-							<li><a href="<?php bloginfo('url');?>/product/course/lesson">Lesson #2</a></li>
-							<li><a href="<?php bloginfo('url');?>/product/course/lesson">Lesson #3</a></li>
-							<li><a href="<?php bloginfo('url');?>/product/course/lesson">Lesson #4</a></li>
-							<li><a href="<?php bloginfo('url');?>/product/course/lesson">Lesson #5</a></li>
+							<li><a href="product-course-lesson.html">Lesson #1</a></li>
+							<li><a href="product-course-lesson.html">Lesson #2</a></li>
+							<li><a href="product-course-lesson.html">Lesson #3</a></li>
+							<li><a href="product-course-lesson.html">Lesson #4</a></li>
+							<li><a href="product-course-lesson.html">Lesson #5</a></li>
 						</ul>
 					</div>
 				</div>
@@ -73,7 +73,7 @@
 										<tr>
 											<td class="text-center number">1</td>
 											<td>
-												<a href="<?php bloginfo('url');?>/product/course/lesson">First Lesson Title</a>
+												<a href="lesson-view.html">First Lesson Title</a>
 												<div class="status pull-right">
 													<i class="fa fa-check text-success"></i>
 												</div>
@@ -82,7 +82,7 @@
 										<tr>
 											<td class="text-center number">2</td>
 											<td>
-												<a href="<?php bloginfo('url');?>/product/course/lesson">Second Lesson Title</a>
+												<a href="lesson-view.html">Second Lesson Title</a>
 												<div class="status pull-right">
 													<i class="fa fa-check text-success"></i>
 												</div>
@@ -91,7 +91,7 @@
 										<tr>
 											<td class="text-center number">3</td>
 											<td>
-												<a href="<?php bloginfo('url');?>/product/course/lesson">Third Lesson Title</a>
+												<a href="lesson-view.html">Third Lesson Title</a>
 												<div class="status pull-right">
 													
 												</div>
