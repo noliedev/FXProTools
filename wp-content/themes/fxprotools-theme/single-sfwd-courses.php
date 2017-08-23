@@ -2,13 +2,11 @@
 
 	<?php get_template_part('inc/templates/nav-products'); ?>
 
-	<?php get_template_part('learndash/course'); ?>
-
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="fx-header-title">
-					<h1>Basic Overview Of Forex Course</h1>
+					<h1><?php the_title();?></h1>
 					<p>Course subtitle goes here</p>
 				</div>
 			</div>

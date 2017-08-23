@@ -17,6 +17,8 @@ if(!class_exists('ThemeSettings')){
 		public function __construct()
 		{
 			add_action('wp_enqueue_scripts', array($this, 'enqueue_theme_assets'));
+			add_filter( 'rwmb_meta_boxes',  array($this,'initialize_meta_boxes') );
+
 		}
 
 		// Theme assets
@@ -38,6 +40,44 @@ if(!class_exists('ThemeSettings')){
 			wp_enqueue_script('script-bootstrap', get_stylesheet_directory_uri().'/vendors/bootstrap-3.3.7/js/bootstrap.min.js', $theme_version);
 			// Scripts - Custom
 			// Include custom scripts here
+		}
+
+		function initialize_meta_boxes( $meta_boxes ) {
+			$prefix = '';
+
+			$meta_boxes[] = array(
+				'id' => 'course_custom_fields',
+				'title' => esc_html__( 'Course Custom Fields', 'fxprotools' ),
+				'post_types' => array( 'sfwd-courses' ),
+				'context' => 'normal',
+				'priority' => 'high',
+				'autosave' => false,
+				'fields' => array(
+					array(
+						'id' => $prefix . 'short_description',
+						'type' => 'textarea',
+						'name' => esc_html__( 'Short Description', 'fxprotools' ),
+					),
+				),
+			);
+
+			$meta_boxes[] = array(
+				'id' => 'product_custom_fields',
+				'title' => esc_html__( 'Product Custom Fields', 'fxprotools' ),
+				'post_types' => array( 'product' ),
+				'context' => 'normal',
+				'priority' => 'high',
+				'autosave' => false,
+				'fields' => array(
+					array(
+						'id' => $prefix . 'subtitle',
+						'type' => 'text',
+						'name' => esc_html__( 'Short Description', 'fxprotools' ),
+					),
+				),
+			);
+
+			return $meta_boxes;
 		}
 
 	}

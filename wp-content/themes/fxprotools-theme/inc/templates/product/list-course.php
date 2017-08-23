@@ -12,7 +12,7 @@
 				<span class="title"><?php the_title();?></span>
 			</div>
 			<div class="col-md-10">
-				<p><?php the_field('short_description');?></p>	
+				<p><?php echo rwmb_meta('short_description');?></p>	
 			</div>
 			<div class="col-md-2">
 				<a href="<?php the_permalink(); ?>" class="btn btn-default block">Learn More</a>

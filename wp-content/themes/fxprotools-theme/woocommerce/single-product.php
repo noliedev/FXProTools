@@ -26,7 +26,7 @@
 				<br/>
 				<div class="fx-header-title">
 					<h1><?php the_title();?></h1>
-					<p><?php the_field('subtitle');?></p>
+					<p><?php echo rwmb_meta('subtitle');?></p>
 				</div>
 			</div>
 			<div class="col-md-12">
