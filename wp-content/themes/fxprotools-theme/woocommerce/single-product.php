@@ -1,61 +1,70 @@
 <?php
-/**
- * The Template for displaying all single products
- *
- * This template can be overridden by copying it to yourtheme/woocommerce/single-product.php.
- *
- * HOWEVER, on occasion WooCommerce will need to update template files and you
- * (the theme developer) will need to copy the new files to your theme to
- * maintain compatibility. We try to do this as little as possible, but it does
- * happen. When this occurs the version of the template file will be bumped and
- * the readme will list any important changes.
- *
- * @see 	    https://docs.woocommerce.com/document/template-structure/
- * @author 		WooThemes
- * @package 	WooCommerce/Templates
- * @version     1.6.4
- */
+	$related_courses = get_courses_by_product_id( get_the_ID() ); 
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
 
-get_header( 'shop' ); ?>
+?>
+<?php get_header(); ?>
 
-	<?php
-		/**
-		 * woocommerce_before_main_content hook.
-		 *
-		 * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
-		 * @hooked woocommerce_breadcrumb - 20
-		 */
-		do_action( 'woocommerce_before_main_content' );
-	?>
+	<?php get_template_part('inc/templates/nav-products'); ?>
 
-		<?php while ( have_posts() ) : the_post(); ?>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="fx-list-courses">
+					<?php if( $related_courses ) : ?>
 
-			<?php wc_get_template_part( 'content', 'single-product' ); ?>
+						<?php $count = 0; foreach($related_courses as $post): setup_postdata($post); $count++; ?>
 
-		<?php endwhile; // end of the loop. ?>
+							<?php get_template_part('inc/templates/product/list-course'); ?>
 
-	<?php
-		/**
-		 * woocommerce_after_main_content hook.
-		 *
-		 * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
-		 */
-		do_action( 'woocommerce_after_main_content' );
-	?>
+						<?php endforeach;?>
 
-	<?php
-		/**
-		 * woocommerce_sidebar hook.
-		 *
-		 * @hooked woocommerce_get_sidebar - 10
-		 */
-		do_action( 'woocommerce_sidebar' );
-	?>
+						<?php wp_reset_query(); ?>
 
-<?php get_footer( 'shop' );
+					<?php endif;?>
+				</ul>
+				<br/>
+				<div class="fx-header-title">
+					<h1><?php the_title();?></h1>
+					<p><?php the_field('subtitle');?></p>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div role="tabpanel">
+							<ul class="nav nav-tabs fx-tabs courses" role="tablist">
+								<li role="presentation" class="active">
+									<a href="#one" aria-controls="one" role="tab" data-toggle="tab">Demo Account</a>
+								</li>
+								<li role="presentation">
+									<a href="#two" aria-controls="two" role="tab" data-toggle="tab">Live Account</a>
+								</li>
+							</ul>
+							<br/>
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="one">
+									<div class="fx-video-container"></div>
+									<br/>
+									<a href="#" class="btn btn-lg btn-danger block">Download Software</a>
+								</div>
+								<div role="tabpanel" class="tab-pane" id="two">
+									<div class="fx-video-container"></div>
+									<br/>
+									<div class="panel panel-default">
+										<div class="panel-body centered-item" style="height: 400px;">
+											<i class="fa fa-users" style="font-size: 70px;"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-/* Omit closing PHP tag at the end of PHP files to avoid "headers already sent" issues. */
+	
+
+<?php get_footer(); ?>
