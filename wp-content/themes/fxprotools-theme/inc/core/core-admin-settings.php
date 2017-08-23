@@ -28,7 +28,7 @@ if(!class_exists('AdminSettings')){
 		public function enqueue_admin_assets()
 		{
 			global $theme_version;
-			wp_enqueue_style('admin-style', get_stylesheet_directory_uri().'/assets/css/admin.css', $theme_version);
+			// wp_enqueue_style('admin-style', get_stylesheet_directory_uri().'/assets/css/admin.css', $theme_version);
 		}
 
 		// Change link of logo in login(Default is wordpress link)
