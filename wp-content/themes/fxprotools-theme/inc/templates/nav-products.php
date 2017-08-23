@@ -8,7 +8,7 @@
 					<li><a href="<?php bloginfo('url');?>/advanced-training">Advance Training</a></li>
 					<li><a href="<?php bloginfo('url');?>/product/forex-scanner">Market Scanner</a></li>
 					<li><a href="<?php bloginfo('url');?>/product/auto-trader">Auto Trader</a></li>
-					<li><a href="<?php bloginfo('url');?>/product/sessions">Coaching / Webinars </a></li>
+					<li><a href="<?php bloginfo('url');?>/sessions">Coaching / Webinars </a></li>
 				</ul>
 			</div>
 		</div>

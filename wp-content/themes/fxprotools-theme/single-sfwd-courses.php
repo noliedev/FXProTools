@@ -2,6 +2,8 @@
 
 	<?php get_template_part('inc/templates/nav-products'); ?>
 
+	<?php get_template_part('learndash/course'); ?>
+
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">

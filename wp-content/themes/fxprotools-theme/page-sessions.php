@@ -12,7 +12,7 @@
 			</div>
 			<div class="col-md-12">
 				<div class="fx-coaching-tab">
-					<a href="<?php bloginfo('url');?>/product/coaching" class="btn btn-danger no-border-radius pull-right">Schedule Coaching</a>
+					<a href="<?php bloginfo('url');?>/coaching" class="btn btn-danger no-border-radius pull-right">Schedule Coaching</a>
 					<div role="tabpanel">
 						<ul class="nav nav-tabs" role="tablist">
 							<li role="presentation">
