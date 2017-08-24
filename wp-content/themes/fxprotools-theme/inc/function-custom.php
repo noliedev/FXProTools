@@ -38,6 +38,7 @@ function get_lessons_by_course_id($course_id){
 	$args = array(
 			'posts_per_page'   => -1,
 			'orderby'          => 'menu_order',
+			'order'			   => 'ASC',
 			'post_status'      => 'publish',
 			'post_type'		   => 'sfwd-lessons',
 			'meta_query' => array(
@@ -63,6 +64,12 @@ function get_user_progress(){
 function get_course_lesson_progress($course_id, $lesson_id){
 	if(!$course_id || !$lesson_id) return false;
 	$course_progress = get_user_progress();
-
 	return $course_progress[$course_id]['lessons'][$lesson_id];
+}
+
+function get_lesson_parent_course($lesson_id){
+	$course_id = get_post_meta($lesson_id , 'course_id',true); 
+	$course = get_post($course_id);
+	return !$course ? false : $course;
+
 }

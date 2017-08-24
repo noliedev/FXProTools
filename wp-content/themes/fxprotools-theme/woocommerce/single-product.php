@@ -1,7 +1,5 @@
 <?php
 	$related_courses = get_courses_by_product_id( get_the_ID() ); 
-
-
 ?>
 <?php get_header(); ?>
 
