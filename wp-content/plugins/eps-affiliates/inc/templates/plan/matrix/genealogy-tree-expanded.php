@@ -43,7 +43,7 @@
                   <div class="person">
                       <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png'; ?>" alt="">
                       <p class="name">
-                        <?= $tree[$level[$i]]->display_name.' ('.$tree[$level[$i]]->ID.')'; ?>
+                        <?= $tree[$level[$i]]->user_login.' ('.$tree[$level[$i]]->ID.')'; ?>
                       </p>
                     <span class="expand-tree" data-user-id ="<?= $level[$i];?>" onclick="expandTree(this)">
                       <i class="fa fa-plus-circle fa-2x"></i>
@@ -80,4 +80,3 @@
 endif;
  } 
  die();
- ?>

@@ -42,7 +42,13 @@
 	 		$this->afl_ranks_history();
 	 		
 	 		$this->afl_tree_last_insertion_positions();
+	 		$this->afl_global_pool_bonus_transactions();
 
+	 		$this->afl_customer();
+	 		
+	 		$this->afl_processing_queue();
+	 		
+	 		$this->afl_log_messages();
 
 
 	 	}
@@ -156,7 +162,9 @@
 					  `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
 					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name',
 					  `actived_on` varchar(250) DEFAULT 'default' COMMENT 'Actived on',
-					  `deactived_on` varchar(250) DEFAULT 'default' COMMENT 'Deactived on'
+					  `deactived_on` varchar(250) DEFAULT 'default' COMMENT 'Deactived on',
+					  `remote_user_mlmid` int(10) unsigned DEFAULT '0' COMMENT 'Remote user mlm ID',
+					  `remote_sponsor_mlmid` int(10) unsigned DEFAULT '0' COMMENT 'Remote sponsor mlm ID'
 					) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='Stores the user genealogy information';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
@@ -353,7 +361,9 @@
 					  `joined_week` int(10) unsigned DEFAULT '0',
 					  `joined_date` varchar(100) DEFAULT NULL COMMENT 'Joined Date',
 					  `day_remains` int(10) unsigned DEFAULT '0' COMMENT 'Day remains',
-					  `last_updated` int(10) unsigned DEFAULT '0' COMMENT 'Last updated date'
+					  `last_updated` int(10) unsigned DEFAULT '0' COMMENT 'Last updated date',
+					  `remote_user_mlmid` int(10) unsigned DEFAULT '0' COMMENT 'Remote user mlm ID',
+					  `remote_sponsor_mlmid` int(10) unsigned DEFAULT '0' COMMENT 'Remote sponsor mlm ID'
 					) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='Stores the user genealogy information';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
@@ -879,5 +889,166 @@
     $wpdb->query( 'ALTER TABLE `'.$table_name.'`
                   MODIFY `ins_id` int(11) NOT NULL AUTO_INCREMENT;' );
  }
+/*
+ * -----------------------------------------------------------------------------------------------------------
+ * Global pool bonus Transactions
+ * -----------------------------------------------------------------------------------------------------------
+*/
+		private function afl_global_pool_bonus_transactions(){
+			$table_name = $this->tbl_prefix . 'afl_global_pool_bonus_transactions';
+			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+					  `afl_pool_transactions_id` int(11) NOT NULL,
+					  `uid` int(10) unsigned NOT NULL COMMENT 'Member',
+					  `associated_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Associated user id',
+					  `level` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Level',
+					  `credit_status` tinyint(4) NOT NULL COMMENT 'Credit Status',
+					  `amount_paid` decimal(50,25) NOT NULL DEFAULT '0.0000000000000000000000000',
+					  `currency_code` varchar(100) DEFAULT NULL COMMENT 'Currency Code',
+					  `balance` decimal(50,25) NOT NULL DEFAULT '0.0000000000000000000000000',
+					  `category` varchar(100) DEFAULT NULL COMMENT 'Payment Source',
+					  `notes` varchar(350) DEFAULT NULL COMMENT 'Notes',
+					  `created` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Created',
+					  `additional_notes` varchar(350) DEFAULT NULL COMMENT 'Additional Notes',
+					  `order_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Order ID',
+					  `transaction_day` int(10) unsigned DEFAULT '0' COMMENT 'Transaction day 1-31',
+					  `transaction_month` int(10) unsigned DEFAULT '0' COMMENT 'Transaction Month 1-12',
+					  `transaction_year` int(10) unsigned DEFAULT '0' COMMENT 'Transaction Year',
+					  `transaction_week` int(10) unsigned DEFAULT '0' COMMENT 'Transaction Week',
+					  `transaction_date` varchar(100) DEFAULT NULL COMMENT 'Transaction Date',
+					  `deleted` int(10) unsigned DEFAULT '0' COMMENT 'Deleted Status',
+					  `int_return` int(11) unsigned DEFAULT '0' COMMENT 'Return Status',
+					  `int_payout` int(11) DEFAULT '0' COMMENT 'Payment Initiated',
+					  `hidden_transaction` int(11) DEFAULT '0' COMMENT 'Hidden Transactions',
+					  `merchant_id` varchar(250) DEFAULT 'default' COMMENT 'Merchant Id',
+					  `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
+					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name',
+					  `payout_id` int(10) unsigned DEFAULT '0' COMMENT 'Order ID'
+					) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='Stores the user transactions';";
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
 
+			global $wpdb;
+			//indexes
+			$wpdb->query('ALTER TABLE `'.$table_name.'`
+  							ADD PRIMARY KEY (`afl_pool_transactions_id`);');
+
+			//AUTO_INCREMENT
+			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
+  							MODIFY `afl_pool_transactions_id` int(11) NOT NULL AUTO_INCREMENT;' );
+		}
+/*
+ * -----------------------------------------------------------------------------------------------------------
+ *  customers Table
+ * -----------------------------------------------------------------------------------------------------------
+*/
+ 	private function afl_customer(){
+			$table_name = $this->tbl_prefix . 'afl_customer';
+			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+					  `afl_customer_id` int(11) NOT NULL,
+					  `uid` int(10) unsigned NOT NULL COMMENT 'Registered user',
+					  `referrer_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Referrer user',
+					  `parent_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Parent user',
+					  `level` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Level',
+					  `left_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Left Child',
+					  `right_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Right Child',
+					  `status` tinyint(4) NOT NULL COMMENT 'Status',
+					  `created` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Created',
+					  `modified` int(10) unsigned DEFAULT '0' COMMENT 'Modified',
+					  `member_rank` int(10) unsigned DEFAULT '0' COMMENT 'Rank',
+					  `position` varchar(100) DEFAULT NULL COMMENT 'Genealogy position',
+					  `rejoined_phase` int(10) unsigned DEFAULT '0' COMMENT 'Rejoined Phase',
+					  `amount_paid` int(10) unsigned NOT NULL DEFAULT '0',
+					  `order_id` int(10) unsigned NOT NULL DEFAULT '0',
+					  `expiry_date` int(10) unsigned DEFAULT '0',
+					  `expiry_date_2` int(10) unsigned NOT NULL DEFAULT '0',
+					  `enrolment_package_id` int(10) unsigned NOT NULL DEFAULT '0',
+					  `joined_day` int(10) unsigned DEFAULT '0',
+					  `joined_month` int(10) unsigned DEFAULT '0',
+					  `joined_year` int(10) unsigned DEFAULT '0',
+					  `joined_week` int(10) unsigned DEFAULT '0',
+					  `joined_date` varchar(100) DEFAULT NULL COMMENT 'Joined Date',
+					  `currency_code` varchar(100) DEFAULT NULL COMMENT 'Currency Code',
+					  `extra_info` varchar(300) DEFAULT NULL COMMENT 'Extra Info',
+					  `deleted` int(10) unsigned DEFAULT '0' COMMENT 'Deleted Status',
+					  `merchant_id` varchar(250) DEFAULT 'default' COMMENT 'Merchant Id',
+					  `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
+					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name',
+					  `prefered_customer` int(11) NOT NULL DEFAULT '0' COMMENT '0 - No , 1- Yes'
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stores the cusomer details';";
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+
+			global $wpdb;
+			//indexes
+			$wpdb->query('ALTER TABLE `'.$table_name.'`
+  							ADD PRIMARY KEY (`afl_customer_id`);');
+
+			//AUTO_INCREMENT
+			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
+  							MODIFY `afl_customer_id` int(11) NOT NULL AUTO_INCREMENT;' );
+		}
+/*
+ * -----------------------------------------------------------------------------------------------------------
+ *  Processing Queue
+ * -----------------------------------------------------------------------------------------------------------
+*/
+ 	private function afl_processing_queue(){
+			$table_name = $this->tbl_prefix . 'afl_processing_queue';
+			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+						  `item_id` int(10) unsigned NOT NULL COMMENT 'Primary Key: Unique item ID.',
+						  `name` varchar(255) NOT NULL DEFAULT '' COMMENT 'The queue name.',
+						  `uid` int(10) unsigned NOT NULL COMMENT 'The user to which the item belongs.',
+						  `title` varchar(400) NOT NULL COMMENT 'The title of this item.',
+						  `data` longblob COMMENT 'The arbitrary data for the item.',
+						  `result` longblob COMMENT 'The arbitrary result for the item, only significant if advancedqueue.status <> 0',
+						  `expire` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp when the claim lease expires on the item.',
+						  `status` tinyint(4) NOT NULL DEFAULT '-1' COMMENT 'Indicates whether the item has been processed (-1 = queue, 0 = processing, 1 = successfully processed, 2 = failed).',
+						  `created` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp when the item was created.',
+						  `processed` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp when the item was processed.',
+						  `runs` int(11) NOT NULL DEFAULT '0' COMMENT 'How many times the queue processed.'
+						) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stores items in queues.';";
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+
+			global $wpdb;
+			//indexes
+			$wpdb->query('ALTER TABLE `'.$table_name.'`
+  							ADD PRIMARY KEY (`item_id`);');
+
+			//AUTO_INCREMENT
+			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
+  							MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT;' );
+		}
+/*
+ * -----------------------------------------------------------------------------------------------------------
+ *  Processing Queue
+ * -----------------------------------------------------------------------------------------------------------
+*/
+ 	private function afl_log_messages(){
+			$table_name = $this->tbl_prefix . 'afl_log_messages';
+			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+						  `wid` int(11) NOT NULL COMMENT 'Primary Key: Unique log event ID.',
+						  `uid` int(11) NOT NULL DEFAULT '0' COMMENT 'The users.uid of the user who triggered the event.',
+						  `type` varchar(64) NOT NULL DEFAULT '' COMMENT 'Type of log message, for example `user` or `page not found.`',
+						  `message` longtext NOT NULL COMMENT 'Text of log message to be passed into the t() function.',
+						  `variables` longblob NOT NULL COMMENT 'Serialized array of variables that match the message string and that is passed into the t() function.',
+						  `severity` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'The severity level of the event ranges from 0 (Emergency) to 7 (Debug)',
+						  `link` varchar(255) DEFAULT '' COMMENT 'Link to view the result of the event.',
+						  `location` text NOT NULL COMMENT 'URL of the origin of the event.',
+						  `referer` text COMMENT 'URL of referring page.',
+						  `hostname` varchar(128) NOT NULL DEFAULT '' COMMENT 'Hostname of the user who triggered the event.',
+						  `timestamp` int(11) NOT NULL DEFAULT '0' COMMENT 'Unix timestamp of when event occurred.'
+						) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Table that contains logs of all system events.';";
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+
+			global $wpdb;
+			//indexes
+			$wpdb->query('ALTER TABLE `'.$table_name.'`
+						  ADD PRIMARY KEY (`wid`);');
+
+			//AUTO_INCREMENT
+			$wpdb->query( "ALTER TABLE `".$table_name."`
+  				MODIFY `wid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key: Unique watchdog event ID.';" );
+		}	
 } //here closing the class

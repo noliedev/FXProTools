@@ -20,7 +20,9 @@
 										'uid'					=> $uid
 									)
 							);
+
 	}
+
 /*
  * ------------------------------------------------------
  * Place user under a sponsor if the tank validity expires
@@ -35,15 +37,54 @@
 										'uid'					=> $uid
 									)
 							);
+		//get the details from the holding tank
+		$holding_data = _get_holding_tank_data($uid);
+		$remote_user_mlm_id 		= '';
+		$remote_sponsor_mlm_id 	= '';
+
+		if ( $holding_data ) {
+			if (!empty( $holding_data->remote_user_mlmid)) {
+				$remote_user_mlm_id = $holding_data->remote_user_mlmid;
+			}
+			if (!empty( $holding_data->remote_sponsor_mlmid)) {
+				$remote_sponsor_mlm_id = $holding_data->remote_sponsor_mlmid;
+			}
+
+			$wpdb->update(
+				_table_name('afl_user_genealogy'),
+				array(
+					'remote_user_mlmid' => $remote_user_mlm_id,
+					'remote_sponsor_mlmid' => $remote_sponsor_mlm_id,
+				),
+				array(
+					'uid' => $uid
+				)
+			);
+		}
 		$wpdb->delete(_table_name('afl_user_holding_tank'), array('uid'=>$uid));
  }
+/*
+ * -------------------------------------------------------
+ * Place a customer under a sponsor 
+ * -------------------------------------------------------
+*/
+	function eps_affiliates_place_customer_under_sponsor_callback ($uid = '', $sponsor = '') {
+		$reg_obj = new Eps_affiliates_customer_registration;
+		$reg_obj->afl_join_customer(
+									array(
+										'sponsor_uid' => $sponsor,
+										'uid'					=> $uid
+									)
+							);
+	}
 /*
  * ---------------------------------------------------------
  * Place a user into the holding tank
  * ---------------------------------------------------------
 */
  function eps_affiliates_place_user_in_holding_tank_callback ($uid = '', $sponsor = '') {
- 		 global $wpdb;
+ 	
+ 		global $wpdb;
  		$reg_obj = new Eps_affiliates_registration;
     //adds to the holding tank
     $reg_obj->afl_add_to_holding_tank(
@@ -119,7 +160,7 @@
 	 	if (!empty($args['afl_point']) && !is_numeric($args['afl_point'])){
 	 		$response['status'] 	= 0;
 	 		$response['response']	=	'Failure';
-	 		$response['error'][] 	= 'Amount needs to be an integer number';
+	 		$response['error'][] 	= 'Affiliate point needs to be an integer number';
 	 	}
 
 	 	//details enter to the purchase table
@@ -133,6 +174,31 @@
 		foreach ($refers_uids as $uid) {
 			do_action('eps_affiliates_calculate_affiliate_rank', $uid);
 		}
+
+		//insert details into transactions table
+		$afl_date_splits = afl_date_splits(afl_date());
+	  $transaction = array();
+    $transaction['uid'] 								= $args['uid'];
+    $transaction['associated_user_id'] 	= $args['uid'];
+    $transaction['payout_id'] 					= 0;
+    $transaction['level']								= 0;
+    $transaction['currency_code'] 			= afl_currency();
+    $transaction['order_id'] 						= 1;
+    $transaction['int_payout'] 					= 0;
+    $transaction['hidden_transaction'] 	= 0;
+    $transaction['credit_status'] 			= 0;
+    $transaction['amount_paid'] 				= afl_commerce_amount($args['afl_point']);
+    $transaction['category'] 						= 'Product Purchase';
+    $transaction['notes'] 							= 'Product Purchase';
+    $transaction['transaction_day'] 		= $afl_date_splits['d'];
+    $transaction['transaction_month'] 	= $afl_date_splits['m'];
+    $transaction['transaction_year'] 		= $afl_date_splits['y'];
+    
+    $transaction['transaction_week'] 		= $afl_date_splits['w'];
+    $transaction['transaction_date'] 		= afl_date_combined($afl_date_splits);
+    $transaction['created'] 						= afl_date();
+	  //to mbr transaction
+		afl_member_transaction($transaction, TRUE);
 
 	 	if (!$ins) {
 	 		$response['status'] 	= 0;
@@ -862,3 +928,61 @@ function eps_affliate_user_cancel_withdraw_callback($id = ''){
 
 }
  
+function _get_company_profit ($type = '') {
+	switch ($type) {
+		case 'monthly':
+			return _get_company_profit_monthly();
+		break;
+		
+		default:
+		break;
+	}
+}
+/*
+ * --------------------------------------------------
+ * Get this month profit
+ * --------------------------------------------------
+*/
+function _get_company_profit_monthly () {
+
+		$date  = afl_date() - (30*24*60*60);
+		$afl_date_splits = afl_date_splits($date);
+		
+		$query = array();
+		$query['#select'] = _table_name('afl_business_transactions');
+		$query['#where'] 	= array(
+			'deleted = 0',
+			'hidden_transaction=0',
+			'transaction_month='.$afl_date_splits['m'],
+			'transaction_year='.$afl_date_splits['y']
+		);
+		$query['#expression'] = array(
+			'SUM(balance) as balance'
+		);
+		$resp = db_select($query, 'get_row');
+		return $resp;
+}
+/*
+ * --------------------------------------------------
+ * Get this month profit
+ * --------------------------------------------------
+*/
+function _get_company_profit_yearly () {
+
+		$date  = afl_date() - (12*30*24*60*60);
+		$afl_date_splits = afl_date_splits($date);
+
+		$query = array();
+		$query['#select'] = _table_name('afl_business_transactions');
+		$query['#where'] 	= array(
+			'deleted = 0',
+			'hidden_transaction=0',
+			'transaction_month='.$afl_date_splits['m'],
+			'transaction_year='.$afl_date_splits['y']
+		);
+		$query['#expression'] = array(
+			'SUM(balance) as balance'
+		);
+		$resp = db_select($query, 'get_row');
+		return $resp;
+}

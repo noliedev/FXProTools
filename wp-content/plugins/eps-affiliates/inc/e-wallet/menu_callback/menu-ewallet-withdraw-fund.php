@@ -29,16 +29,15 @@ function afl_ewallet_withdraw_fund_form(){
 	$table = $wpdb->prefix. 'afl_user_payment_methods';
 	$payment_method = $wpdb->get_row("SELECT * FROM $table WHERE (uid = '$uid' AND status= '". 1 ."')");
 	if(!$payment_method || !$payment_method->completed){
+				header("Location: ?page=affiliate-eps-payment_method");
 			echo wp_set_message('Please set your payment method details first before proceeding withdrawal ', 'warning');
-			/*
-				goto set payment method forms
-			*/
 	}
 	else{
 		$table = $wpdb->prefix. 'afl_transaction_authorization';
 		$password = $wpdb->get_row("SELECT * FROM $table WHERE (uid = '$uid' )");
   	if(!$password){
   		echo wp_set_message('Please create a transaction password before proceeding', 'warning');
+  		header("Location: ?page=affiliate-eps-payment_method&tab=autherization");
   		/*
 				goto set payment password set forms
 			*/
@@ -102,6 +101,21 @@ function afl_ewallet_withdraw_fund_form(){
   	$withdrawal_max_value = /*afl_commerce_amount*/( afl_variable_get('withdrawal_max_value', -100));
   	$withdrawal_min_value = /*afl_commerce_amount*/( afl_variable_get('withdrawal_min_value',-100) );
 
+		if(strpos($withdrawal_max_value, '%')){
+  						$withdrawal_max = $withdrawal_max_value;
+ 		}else{ 
+  		$withdrawal_max = ($withdrawal_max_value).' '.afl_currency();	
+ 		}
+		if(strpos($processing_charge, '%')){
+  			$process_charge = $processing_charge;
+ 		}else{ 
+  		$process_charge = ($processing_charge).' '.afl_currency();	
+ 		}
+ 		if(strpos($withdrawal_min_value, '%')){
+  			$withdrawal_min = $withdrawal_min_value;
+ 		}else{ 
+  		$withdrawal_min = ($withdrawal_min_value).' '.afl_currency();	
+ 		}
   	$eligible_amount = afl_get_max_withrawal_amount($processing_charge ,$withdrawal_max_value, $withdrawal_min_value, $balance);
 
 		$table 								= array();
@@ -124,7 +138,7 @@ function afl_ewallet_withdraw_fund_form(){
 	 	);
 		$rows[0][] = array(
 			'#type' => 'label',
-			'#title'=> afl_format_payment_amount($balance, FALSE)
+			'#title'=> afl_format_payment_amount($balance, TRUE).' '.afl_currency(),
 	 	);
 		$rows[1][] = array(
 			'#type' => 'label',
@@ -132,7 +146,7 @@ function afl_ewallet_withdraw_fund_form(){
 	 	);
 		$rows[1][] = array(
 			'#type' => 'label',
-			'#title'=> afl_format_payment_amount($processed_for_payments, FALSE),	
+			'#title'=> afl_format_payment_amount($processed_for_payments, TRUE).'' .afl_currency(),	
 	 	);
 	 	$rows[2][] = array(
 			'#type' => 'label',
@@ -148,7 +162,7 @@ function afl_ewallet_withdraw_fund_form(){
 	 	);
 		$rows[3][] = array(
 			'#type' => 'label',
-			'#title'=> $processing_charge,	
+			'#title'=> $process_charge,	
 	 	);
 		$rows[4][] = array(
 			'#type' => 'label',
@@ -156,7 +170,7 @@ function afl_ewallet_withdraw_fund_form(){
 	 	);
 		$rows[4][] = array(
 			'#type' => 'label',
-			'#title'=> $withdrawal_min_value,	
+			'#title'=> $withdrawal_min,	
 	 	);
 	 	$rows[5][] = array(
 			'#type' => 'label',
@@ -164,15 +178,15 @@ function afl_ewallet_withdraw_fund_form(){
 	 	);
 		$rows[5][] = array(
 			'#type' => 'label',
-			'#title'=> $withdrawal_max_value,	
+			'#title'=> $withdrawal_max,	
 	 	);
 	 		$rows[6][] = array(
 			'#type' => 'label',
-			'#title'=> 'Available Maximum Withdrawal Amount(Inc. processing charge)',
+			'#title'=> 'Available Maximum Withdrawal Amount',
 	 	);
 		$rows[6][] = array(
 			'#type' => 'label',
-			'#title'=> afl_format_payment_amount($eligible_amount,FALSE),	
+			'#title'=> afl_format_payment_amount($eligible_amount,TRUE).' '.afl_currency(),	
 	 	);
 
 		$table['#rows'] = $rows;
@@ -213,13 +227,13 @@ function afl_ewallet_withdraw_fund_form_validation($form_state){
 		    return false;
 		  }
 
-		  /*$table = $wpdb->prefix. 'afl_payout_requests';
+		  $table = $wpdb->prefix. 'afl_payout_requests';
 		  $afl_payout_id = $wpdb->get_row("SELECT afl_payout_id FROM $table WHERE (uid = '$uid' AND deleted = 0  AND request_status = 1 AND category = 'WITHDRAWAL')"); 
   		if($afl_payout_id){
       echo wp_set_message(__('You have already one active withdrawal request. Users can not place multiple active withdrawal requests.'), 'danger');
       return false;
 
-  		}*/
+  		}
 		 	$table = $wpdb->prefix. 'afl_user_transactions';
 		 	$balance = $wpdb->get_var("SELECT  SUM(`$table`.`balance`) as balance FROM `$table` WHERE `uid` = $uid AND `deleted` = 0 AND `int_payout` = 0 AND `int_return` = 0");	
 	  	$balance = (!empty($balance) ? $balance  : 0);
@@ -275,32 +289,35 @@ if($form_state['password'] && $form_state['withdrwal_amount']){
 	$uid 		 	= get_current_user_id();
 	$afl_date = afl_date();
 	$afl_date_splits = afl_date_splits($afl_date);
+
 	$amount_entered = $form_state['withdrwal_amount'];
 	$requested_amount = ($amount_entered) ;
 	$processing_charge =  (afl_variable_get('payout_charges_'.$form_state['payment_method'], -100));
+  $charges = afl_commission($processing_charge, $requested_amount, 0);
+	
 	$payout_table = $wpdb->prefix . 'afl_payout_requests';
 	$payout_his_table = $wpdb->prefix . 'afl_payout_history';
 
-	$records = array();
-  $records['uid'] = $uid;
-  $records['initiated_by'] = $uid;
-  $records['payout_method'] = $form_state['payment_method'];
-  $records['request_status'] = 1;
-  $records['paid_status'] = 0;
-  $records['payout_type'] = '';
-  $records['amount_requested'] = afl_commerce_amount($requested_amount);
-  $records['charges'] =afl_commerce_amount($processing_charge);
-  $records['currency_code'] = afl_currency();
-  $records['amount_paid'] = afl_commerce_amount ( ($requested_amount - $processing_charge) );
-  $records['category'] = 'WITHDRAWAL';
-  $records['notes'] = 'Submitted withdrawal request';
-  $records['created'] = $afl_date;
-  $records['modified'] = $afl_date;
-  $records['deleted'] = 0;
-  $records['payment_date'] = $afl_date_splits['d'];
-  $records['payment_month'] = $afl_date_splits['m'];
-  $records['payment_year'] = $afl_date_splits['y'];
-  $records['payment_week'] = $afl_date_splits['w'];
+	$records 		= array();
+  $records['uid'] 							= $uid;
+  $records['initiated_by'] 			= $uid;
+  $records['payout_method']			=	$form_state['payment_method'];
+  $records['request_status']		= 1;
+  $records['paid_status'] 			= 0;
+  $records['payout_type'] 			= '';
+  $records['amount_requested'] 	= afl_commerce_amount($requested_amount);
+  $records['charges']  					= afl_commerce_amount($charges);
+  $records['currency_code'] 		= afl_currency();
+  $records['amount_paid'] 			= afl_commerce_amount ( ($requested_amount - $charges) );
+  $records['category'] 					= 'WITHDRAWAL';
+  $records['notes'] 						= 'Submitted withdrawal request';
+  $records['created'] 					= $afl_date;
+  $records['modified'] 					= $afl_date;
+  $records['deleted'] 					= 0;
+  $records['payment_date'] 			= $afl_date_splits['d'];
+  $records['payment_month'] 		= $afl_date_splits['m'];
+  $records['payment_year'] 			= $afl_date_splits['y'];
+  $records['payment_week'] 			= $afl_date_splits['w'];
 
     $tempary_id = $wpdb->insert($payout_table, $records);
     if($tempary_id){
@@ -322,13 +339,12 @@ if($form_state['password'] && $form_state['withdrwal_amount']){
     $transaction['notes'] = 'Withdrawal Request on '. afl_date_combined($afl_date_splits);
     afl_member_transaction($transaction, FALSE, FALSE);
 
-
     $business_transactions['category'] = 'WITHDRAWAL CHARGES';
     $business_transactions['additional_notes'] = 'Withdrawal Charges';
     $business_transactions['uid'] = $uid;
     $business_transactions['associated_user_id'] = $uid;
     $business_transactions['credit_status'] = 1;
-    $business_transactions['amount_paid'] = afl_commerce_amount($processing_charge);
+    $business_transactions['amount_paid'] = afl_commerce_amount($charges);
     $business_transactions['notes'] = 'Withdrawal Charges';
     $business_transactions['currency_code'] = afl_currency();
     $business_transactions['order_id'] = 1;
@@ -352,15 +368,15 @@ if($form_state['password'] && $form_state['withdrwal_amount']){
 function afl_get_max_withrawal_amount($commission ,$withdrawal_max_value, $withdrawal_min, $balance){
   $chrg = explode('%', $commission); 
   $max_amount = explode('%', $withdrawal_max_value);
-  $balance = afl_format_payment_amount($balance, FALSE); 
+  $bal = afl_format_payment_amount($balance, FALSE); 
   if (strpos($withdrawal_max_value, '%')) {
-     /*// $net_amount = ((($balance * $max_amount[0]) / 100) * 100) / (100 + $chrg[0]);
-     $net_amount = afl_commission($withdrawal_max_value, $balance);*/
-  	$net_amount = -100;
+     // $net_amount = ((($balance * $max_amount[0]) / 100) * 100) / (100 + $chrg[0]);
+     $net_amount = afl_commission($withdrawal_max_value, $balance);
+  	
 
   } 
   else {
-  	$bal = $balance-$chrg[0];
+  
     if ($bal >= $withdrawal_max_value) {
       $net_amount = $withdrawal_max_value;
     } else {
@@ -376,5 +392,4 @@ function afl_get_max_withrawal_amount($commission ,$withdrawal_max_value, $withd
   }
   return $net_amount;
 }
-
 

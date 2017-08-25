@@ -5,7 +5,7 @@
 	 * Description: Affiliate plans and configurations of Epixelmlm for WordPress
 	 * Author: EPIXEL SOLUTIONS
 	 * Author URI: https://epixelsolutions.com
-	 * Version: 2.1.2
+	 * Version: 1.0
 	 * Text Domain: eps-affiliates
 	 * Domain Path: languages
 	 *
@@ -224,6 +224,33 @@
 				if ( ! defined( 'CAL_GREGORIAN' ) ) {
 					define( 'CAL_GREGORIAN', 1 );
 				}
+				//define variables for log messages
+				
+				//Critical conditions
+				if ( ! defined( 'LOGS_CRITICAL' ) ) {
+					define( 'LOGS_CRITICAL',0);
+				}
+				//Error conditions
+				if ( ! defined( 'LOGS_ERROR' ) ) {
+					define( 'LOGS_ERROR',1);
+				}
+				//Warning conditions
+				if ( ! defined( 'LOGS_WARNING' ) ) {
+					define( 'LOGS_WARNING',2);
+				}
+				//(default) Normal but significant conditions.
+				if ( ! defined( 'LOGS_NOTICE' ) ) {
+					define( 'LOGS_NOTICE',3);
+				}
+				//Informational messages
+				if ( ! defined( 'LOGS_INFO' ) ) {
+					define( 'LOGS_INFO',4);
+				}
+				//Debug-level messages
+				if ( ! defined( 'LOGS_DEBUG' ) ) {
+					define( 'LOGS_DEBUG',5);
+				}
+
 			}
 
 		/**
@@ -237,7 +264,17 @@
 		 *
 	 	*/
 			private function includes() {
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * Hereload library files
+			 * -----------------------------------------------------------------------------------------------
+			*/
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'libraries/Pagination.php';
+				
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.common.php';
+
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-queue-processing-functions.php';
+				
 				//common functions callback
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
 
@@ -289,6 +326,9 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-find-members.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-variable-configuration.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-features-and-config-settings.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-business-profit-report.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-advanced-queue-conf.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-recent-log-messages.php';
 			/* 
 			 * -----------------------------------------------------------------------------------------------
 			 * common files callback
@@ -309,12 +349,14 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-ajax-callbacks.php';
 				//member registration
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-registration.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-customer-registration.php';
 			/* 
 			 * -----------------------------------------------------------------------------------------------
 			 * Here comes all the member menu callback
 			 * -----------------------------------------------------------------------------------------------
 			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-add-new-member-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-add-new-customer-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-genealogy-tree-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-downline-members-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-network-exporer-callback.php';
@@ -323,6 +365,7 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-rank-performance-overview.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-team-purchases-overview.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-payment-methods-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-my-customers.php';
 
 			/* 
 			 * -----------------------------------------------------------------------------------------------
@@ -356,7 +399,9 @@
 			 * -----------------------------------------------------------------------------------------------
 			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-shortcodes.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-shortcodes-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-schedulers.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-hooks-global.php';
 			/* 
 			 * -----------------------------------------------------------------------------------------------
 			 * Testing codes
@@ -386,6 +431,24 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/datatables/class-find-members-datatable.php';
 				
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-table-filters.php';
+
+
+
+			/*
+			 * -----------------------------------------------------------------------------------------------
+			 * API
+			 * -----------------------------------------------------------------------------------------------
+			*/
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/menu_callback/menu-user-remote-get.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/api-ajax-callbacks.php';
+				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/eps-remote-users-background-process.php';
+				
+				
+
+				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/api-remote-user-embedd-cron-callback.php';
+				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/example-plugin.php';
+				
+
 			}
 			
 		/**
@@ -440,15 +503,14 @@ function eps_affiliate() {
  * Custom print function
  * -------------------------------------------------------------------------
 */
-	function pr($data = array(), $ex = FALSE){
-		echo '<pre>';
-		print_r($data);
-		echo '</pre>';
-		if ($ex){
-			exit();
+	if (!function_exists('pr')) :
+		function pr($data = array(), $ex = FALSE){
+			echo '<pre>';
+			print_r($data);
+			echo '</pre>';
+			if ($ex){
+				exit();
+			}
 		}
-	}
+	endif;
 eps_affiliate();
-
-
-?>

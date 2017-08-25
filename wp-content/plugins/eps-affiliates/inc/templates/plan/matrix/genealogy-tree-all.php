@@ -18,7 +18,7 @@
    $query['#fields']  = array(
       'wp_users' => array(
         'display_name',
-        'user_login'
+        'user_login',
         'ID'
       ),
       'wp_afl_user_downlines' => array(
@@ -68,7 +68,7 @@ if (!empty($parent)) :
                         <div class="person">
                             <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png'; ?>" alt="">
                             <p class="name">
-                                <?= $parent->display_name.' ('.$parent->ID.')'; ?>
+                                <?= $parent->user_login.' ('.$parent->ID.')'; ?>
                             </p>
                         </div>
                     </div>
@@ -85,7 +85,7 @@ if (!empty($parent)) :
                                     <div class="person">
                                         <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png'; ?>" alt="">
                                         <p class="name">
-                                          <?= $tree[$level[$i]]->display_name.' ('.$tree[$level[$i]]->ID.')'; ?>
+                                          <?= $tree[$level[$i]]->user_login.' ('.$tree[$level[$i]]->ID.')'; ?>
                                         </p>
                                       <span class="expand-tree" data-user-id ="<?= $level[$i];?>" onclick="expandTree(this)">
                                         <i class="fa fa-plus-circle fa-2x"></i>
@@ -121,14 +121,4 @@ if (!empty($parent)) :
             </div>
         </div>
     </section>
-<?php endif; ?>
-
-<script type="text/javascript">
-  // $('.expand-tee').click(function(){
-    
-  //   $(this).find('i').toggleClass('fa-times-circle fa-plus-circle');
-  //   var id = $(this).attr('id');
-  //   $(this).parent().parent().addClass('hv-item-parent');
-  //   $('.append-child-'+id).html('<div class="hv-item-children">                                <div class="hv-item-child">                                                                               <div class="person">                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">                                                <p class="name">                                                         Wilner <b>/ Creative Director</b>                                                </p>                                            </div>                                                                           </div>                                    <div class="hv-item-child">                                                                                    <div class="person">                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">                                                <p class="name">                                                         Wilner <b>/ Creative Director</b>                                                </p>                                            </div>                                                                           </div>                                    <div class="hv-item-child">                                                                                    <div class="person">                                                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="">                                                <p class="name">                                                         Wilner <b>/ Creative Director</b>                                                </p>                                            </div>                                                                            </div>                                </div>');
-  // });
-</script>
+<?php endif;

@@ -158,8 +158,7 @@ function member_users_auto_complete_callback($search_key = '') {
   $filter['length']   = !empty($input_valu['length']) ? $input_valu['length'] : 50;
 
   $filter['fields'] = array(
-  _table_name('afl_user_genealogy') => array('level'),
-  _table_name('afl_user_genealogy') => array('member_rank', 'relative_position','created'),
+  _table_name('afl_user_genealogy') => array('member_rank', 'relative_position','created','level'),
   _table_name('users') => array('display_name', 'ID')
  );
   $result_count = afl_get_user_refered_downlines($uid,array(),TRUE);

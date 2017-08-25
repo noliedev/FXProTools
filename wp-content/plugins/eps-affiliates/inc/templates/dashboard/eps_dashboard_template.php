@@ -76,4 +76,4 @@
 
 
 
-<?php echo afl_content_wrapper_end(); ?>
+<?php echo afl_content_wrapper_end();

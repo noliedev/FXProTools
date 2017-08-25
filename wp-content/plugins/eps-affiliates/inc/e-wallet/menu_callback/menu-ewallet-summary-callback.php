@@ -6,6 +6,12 @@
 */
 function afl_ewallet_summary(){
 	echo afl_eps_page_header();
+	afl_content_wrapper_begin();
+	afl_ewallet_summary_callback();
+	afl_content_wrapper_end();
+}
+
+function afl_ewallet_summary_callback(){
 
 	$uid = get_current_user_id();
 
@@ -14,7 +20,6 @@ function afl_ewallet_summary(){
 	}
 	//get user downlines details based on the uid
 
-	afl_content_wrapper_begin();
 
 	wp_register_script( 'jquery-data-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
 	wp_enqueue_script( 'jquery-data-table' );
@@ -40,7 +45,7 @@ function afl_ewallet_summary(){
         </thead>
     </table>
 	<?php 
-		afl_content_wrapper_end();
+
 }
 /*
  * ------------------------------------------------

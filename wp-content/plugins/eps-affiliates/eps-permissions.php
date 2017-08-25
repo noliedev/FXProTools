@@ -4,7 +4,8 @@
  * Afl Custom permissions
  * ------------------------------------------------------------------------------
 */
-	function custom_permissions(){
+	function custom_permissions($perm = array()){
+
 		$permissions = array();
 		//eps system member
 		$permissions['eps_system_member'] = array(
@@ -27,16 +28,18 @@
 			'#title' 				=> __('AFL Add New Member'),
 			'#description'	=> 'Add new affiliate under the user'
 		);
+		//new customer
+		$permissions['afl_add_new_customer'] = array(
+			'#title' 				=> __('AFL Add New customer'),
+			'#description'	=> 'Add new affiliate customer under the user'
+		);
+
 		//ewallet
 		$permissions['ewallet'] = array(
 			'#title' 				=> __('E-wallet'),
 			'#description' 	=> 'Access for E-wallet'
 		);
-		//epin
-		$permissions['epin'] = array(
-			'#title' 				=> __('E-pin'),
-			'#description' 	=> 'Access for E-pin'
-		);
+		
 		//business transaction
 		$permissions['business_transactions'] = array(
 			'#title' 				=> __('Manage Business transactions '),
@@ -129,6 +132,14 @@
 			'#title' 				=> __('AFL Code testing'),
 			'#description' 	=> 'affiliates system code testing '
 		);
+
+		//Remote api callback
+		$permissions['remote_api_access'] = array(
+			'#title' 				=> __('Remote Services API'),
+			'#description' 	=> 'Remote api access'
+		);
+
+		$permissions = array_merge($perm,$permissions);
 		
-		return $permissions;
+		return apply_filters('eps_affiliates_custom_permissions_table',$permissions);
 	}

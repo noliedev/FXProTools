@@ -2,43 +2,50 @@
 function afl_admin_variable_configurations (){
 	echo afl_eps_page_header();
 	echo afl_content_wrapper_begin();
-		afl_admin_config_variable_form();
+		afl_admin_config_variable_form(afl_variable_tabs());
 	echo afl_content_wrapper_end();
 }
-
+/*
+ * ------------------------------------------------------------
+ * Variable configuration tabs
+ * ------------------------------------------------------------
+*/
+ function afl_variable_tabs () {
+ 	$tabs = array();
+ 	$tabs['system_variables'] = array(
+ 		'page_callback' => 'afl_system_variables_form',
+ 		'title'					=> 'System Variables'
+ 	);	
+ 	$tabs['payment_methods'] = array(
+ 		'page_callback' => 'afl_payment_methods_form',
+ 		'title'					=> 'Payment Methods'
+ 	);
+ 		$tabs['widget_var'] = array(
+ 		'page_callback' => 'afl_widget_settings_form',
+ 		'title'					=> 'Widgets Settings'
+ 	);
+ 	return apply_filters('eps_affiliates_system_variable_tabs',$tabs);
+ }
 /*
  * ------------------------------------------------------------
  * Variable config form
  * ------------------------------------------------------------
 */
- function afl_admin_config_variable_form () {
- 	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'system_variables';  
-
+ function afl_admin_config_variable_form ($tabs) {
+	 	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'system_variables';  
 		  //here render the tabs
 		  echo '<ul class="tabs--primary nav nav-tabs">';
-		  echo '<li class="'.(($active_tab == 'system_variables') ? 'active' : '').'">
-		            	<a href="?page=affiliate-eps-variable-configurations&tab=system_variables" >System Variables</a>  
-		          </li>';
-      echo '<li class="'.(($active_tab == 'payment_methods') ? 'active' : '').'">
-        					<a href="?page=affiliate-eps-variable-configurations&tab=payment_methods" >Payment Methods</a>  
-      			</li>';
 
-      echo '<li class="'.(($active_tab == 'widget_var') ? 'active' : '').'">
-        					<a href="?page=affiliate-eps-variable-configurations&tab=widget_var" >Widgets Settings</a>  
-      			</li>';
+		  foreach ($tabs as $key => $value) {
+		  	echo '<li class="'.(($active_tab == $key) ? 'active' : '').'">
+		            	<a href="?page=affiliate-eps-variable-configurations&tab='.$key.'" >'.$value['title'].'</a>  
+		          </li>';
+		  }
 
 		  echo '</ul>';
-
-		  switch ($active_tab) {
-		  	case 'system_variables':
-		  		afl_system_variables_form();
-	  		break;
-	  		case 'payment_methods':
-	  			afl_payment_methods_form();
-	  		break;
-	  		case 'widget_var':
-	  			afl_widget_settings_form();
-	  		break;
+		  if (isset($active_tab)) {
+		  	$function = $tabs[$active_tab]['page_callback'];
+		  	$function();
 		  }
  }
 /*
@@ -92,6 +99,31 @@ function afl_admin_variable_configurations (){
 	 		'#default_value' 	=> afl_variable_get('afl_var_credit_status', ''),
 	 		'#prefix'					=> '<div class="form-group row">',
 	 		'#suffix' 				=> '</div>'
+	 	);
+
+
+	 	global $wp_roles;
+	  $all_roles 			= $wp_roles->roles;
+	 	$editable_roles = apply_filters('editable_roles', $all_roles);
+	 	$roles_keys = '';
+	 	foreach ($editable_roles as $key => $value) {
+	  		$roles_keys .=' ,'.$key;
+	  }
+ 		$form['afl_var_permission_table_roles_markup'] = array(
+	 		'#type' 					=> 'markup',
+	 		'#markup' 				=> '<div class="alert alert-info" role="alert">
+  														<strong>System available Roles : </strong> 
+  														'.$roles_keys.'
+														</div>',
+	 	);
+	 	//Permission table roles
+	 	$form['afl_var_permission_table_roles'] = array(
+	 		'#type' 					=> 'text-area',
+	 		'#title' 					=> 'Permission Table Excluded Roles',
+	 		'#default_value' 	=> afl_variable_get('afl_var_permission_table_roles', ''),
+	 		'#prefix'					=> '<div class="form-group row">',
+	 		'#suffix' 				=> '</div>',
+	 		'#description'		=> __('these roles could not be displayed in the eps affiliates roles permission table')
 	 	);
 	 	$form['submit'] = array(
 	 		'#type' => 'submit',

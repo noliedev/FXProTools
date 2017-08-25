@@ -4,6 +4,7 @@ function afl_generate_users () {
 
 	echo afl_content_wrapper_begin();
 		afl_generate_users_form();
+		afl_generate_customers_form();
 	echo afl_content_wrapper_end();
 }
 
@@ -12,6 +13,7 @@ function afl_generate_users_form () {
 
 	afl_generate_users_form_callback();
 	if (!empty($_POST['submit'])) {
+		
 		$error_count 		= 0;
 		$success_count 	= 0;
 
@@ -115,23 +117,27 @@ function afl_generate_users_form_callback( ){
 	$form = array();
 	$form['#method'] = 'post';
 	$form['#action'] = $_SERVER['REQUEST_URI'];
-	$form['user_name_start'] = array(
+	$form['fieldset']  = array(
+		'#type' => 'fieldset',
+		'#title' => 'Generate Members'
+	);
+	$form['fieldset']['user_name_start'] = array(
 		'#type' =>'text',
 		'#title' =>'starting-with',
 
 	);
-	$form['sponsor'] = array(
+	$form['fieldset']['sponsor'] = array(
 		'#type' =>'auto_complete',
 		'#title' =>'sponsor',
 		'#auto_complete_path' => 'users_auto_complete',
 
 	);
-	$form['user_count'] = array(
+	$form['fieldset']['user_count'] = array(
 		'#type' =>'text',
 		'#title' =>'No.of users',
 
 	);
-	$form['submit'] = array(
+	$form['fieldset']['submit'] = array(
 		'#type' =>'submit',
 		'#value' =>'Generate'
 	);
@@ -142,6 +148,96 @@ function afl_generate_users_form_validation ($name) {
 }
 
 
+function afl_generate_customers_form () {
+	$website = "http://example.com";
+
+	afl_generate_customers_form_callback();
+	if (!empty($_POST['generate_customer'])) {
+
+		$error_count 		= 0;
+		$success_count 	= 0;
+
+		$start_with = $_POST['user_name_start'];
+		$count = $_POST['user_count'];
+
+		$sponsor = $_POST['sponsor'];
+		preg_match('#\((.*?)\)#', $sponsor, $matches);
+		$sponsor_uid = $matches[1];
+
+		$begin_from = _get_last_inserted($start_with);
+		// pr($begin_from,1);
+		for ($i = $begin_from ; $i <= ($count + $begin_from - 1) ; $i++) {
+			$name = $start_with.'-'.$i;
+			if (!username_exists( $name )) {
+				$userdata = array(
+	        'user_login'    	=>  $name ,
+	        'user_email'    	=>   $name.'@eps.com',
+	        'user_pass'     	=>   $name,
+	        'first_name'    	=>   $name,
+	        'last_name'     	=>   $name,
+        );
+        $user = wp_create_user( $name, $name, $name.'@eps.com' );
+
+        if ($user) {
+        	$reg_object = new Eps_affiliates_customer_registration;
+	        $reg_object->afl_join_customer(
+	        	array(
+	        		'uid'=>$user,
+	        		'sponsor_uid' => $sponsor_uid
+	        		)
+	        );
+				//add afl_member role to the user
+				$theUser = new WP_User($user);
+				$theUser->add_role( 'afl_customer' );
+
+        	$success_count+=1;
+        } else {
+        	$error_count+=1;
+        }
+			} else {
+        $error_count+=1;
+			}
+		}
+		if ($success_count) {
+			echo wp_set_message('Generated customers count : '.$success_count, 'success');
+		}
+		if ($error_count) {
+			echo wp_set_message('Errro occured count : '.$error_count, 'error');
+		}
+	}
+}
+
+function afl_generate_customers_form_callback () {
+	$form = array();
+	$form['#method'] = 'post';
+	$form['#action'] = $_SERVER['REQUEST_URI'];
+	$form['fieldset']  = array(
+		'#type' => 'fieldset',
+		'#title' => 'Generate Customers'
+	);
+	$form['fieldset']['user_name_start'] = array(
+		'#type' =>'text',
+		'#title' =>'starting-with',
+
+	);
+	$form['fieldset']['sponsor'] = array(
+		'#type' =>'auto_complete',
+		'#title' =>'sponsor',
+		'#auto_complete_path' => 'users_auto_complete',
+
+	);
+	$form['fieldset']['user_count'] = array(
+		'#type' =>'text',
+		'#title' =>'No.of users',
+
+	);
+	$form['fieldset']['generate_customer'] = array(
+		'#type' =>'submit',
+		'#name' => 'generate_customer',
+		'#value' =>'Generate'
+	);
+	echo afl_render_form($form);
+}
 /* ------------------- Purchases ------------------------------------------*/
 function afl_test_purchases () {
 	echo afl_eps_page_header();

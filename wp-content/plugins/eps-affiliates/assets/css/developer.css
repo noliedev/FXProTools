@@ -1,36 +1,13 @@
 /*  ------------------- Main Wrapper -------------------------------------- */
 .wrapper-md {padding: 20px;background-color: #f0f3f4;}
 
-:focus {
-  outline: none;
-}
-.row {
-  margin-right: 0;
-  margin-left: 0;
-}
-.side-menu {
-  width: 300px;
-  height: 100%;
-  background-color: #f8f8f8;
-  border-right: 1px solid #e7e7e7;
-}
-.side-menu .navbar {
-  border: none;
-}
-.side-menu .navbar-header {
-  width: 100%;
-  border-bottom: 1px solid #e7e7e7;
-}
-.side-menu .navbar-nav .active a {
-  background-color: transparent;
-  margin-right: -1px;
-  border-right: 5px solid #e7e7e7;
-}
-.side-menu .navbar-nav li {
-  display: block;
-  width: 100%;
-  border-bottom: 1px solid #e7e7e7;
-}
+:focus {outline: none;}
+.row {margin-right: 0;margin-left: 0;}
+.side-menu {width: 300px;height: 100%;background-color: #f8f8f8;border-right: 1px solid #e7e7e7;}
+.side-menu .navbar {border: none;}
+.side-menu .navbar-header {width: 100%;border-bottom: 1px solid #e7e7e7;}
+.side-menu .navbar-nav .active a {background-color: transparent;margin-right: -1px;border-right: 5px solid #e7e7e7;}
+.side-menu .navbar-nav li {display: block;width: 100%;border-bottom: 1px solid #e7e7e7;}
 .side-menu .navbar-nav li a {
   padding: 15px;
 }
@@ -136,6 +113,7 @@
     outline: none;
 }
 /* ------------------ Holding tanks ------------------------ */
+.holding-tank-profiles .person{min-height: 262px;}
 .holding-tank-profiles li{text-align: center;cursor: pointer; transition: box-shadow .3s;padding: 2px;}
 .holding-tank-profiles li:hover{box-shadow: 0 5px 15px rgba(0,0,0,0.3);transition: opacity 0.9s ease-in-out;}
 .holding-tank-profiles .person > img{
@@ -167,7 +145,6 @@
 /* ---------------- Progress bar ------------------------- */
 
 /*  ------------------ Tree user details tootip ------------------------------------ */
-/*------------------------Mahesh-22-06-2016--------------------*/
 
 .wrap_content{font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;}
 .images_wrapper img {margin: -4px 0 0;}
@@ -185,19 +162,13 @@
 .profile_tooltip_pick h2{display: inline-block;padding: 0;vertical-align: middle;border:none;}
 .tooltip_profile_detaile {display: block;padding-left: 0;text-align: center;vertical-align: top;}
 
-/*------------------------Mahesh-22-06-2016--------------------*/
 
-/*------------------------Mahesh-24-06-2016--------------------*/
 .genology-view {display: inline-block;padding-left: 10px;}
 .tooltip_profile_detaile{border-bottom:solid 1px #ccc;padding-bottom:5px;}
 .pop-up-content .rank_area{text-align: center;}
 .pop-up-content .rank_area .created-dl {display: inline-block;padding:0;text-align: right;line-height:normal;margin-bottom:0;line-height:0;}
 .pop-up-content .rank_area .created-dl dt{display: inline-block;vertical-align:middle;}
 .pop-up-content .rank_area .created-dl dd{display: inline-block;vertical-align:middle;}
-/*------------------------Mahesh-24-06-2016--------------------*/
-
-
-.count-members {border: 2px solid #000;border-radius: 50%;display: block;height: 80px;line-height: 80px;margin: 40px auto 0;text-align: center;width: 80px;z-index:2;background: #fff;position: relative;}
 .stright-line .node-item-root.main-member::after{height: 61%;}
 .stright-line .node-item-root::after{height:90%;}
 .stright-line .binary-node-single-item{background:#F0F3F4;position: relative;}
@@ -251,6 +222,24 @@
     display:none;
 }
 
+ #progress {
+  width: 100%;
+  border: 1px solid #aaa;
+  height: 20px;
+  /* border-radius: 20px; */
+  padding: 1px;
+}
+#progress .bar {
+  background-color: #ccc;
+  height: 16px;
+  border-radius: 20px;
+}
+.wp-list-table.epin-affiliates tfoot{
+    display:none;
+}
+.bigger-lable{
+  font-size: 100%;
+}
   /* small screen */
 @media (max-width: 768px) {
   .side-menu {

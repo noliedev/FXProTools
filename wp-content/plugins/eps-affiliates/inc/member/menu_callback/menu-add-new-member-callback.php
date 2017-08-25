@@ -76,6 +76,8 @@
 				 	echo wp_set_message('Member has been created successfully', 'success');
     			
 
+    			//update the rank of sposnsor and uplines
+
 	      }
 			}
 		}
@@ -168,7 +170,6 @@
  	);
 
  	$default_value = '';
- 	
  	if (eps_is_admin()) {
  		$default_value = afl_variable_get('root_user','');
  	} else {
@@ -308,3 +309,4 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
 			 	);
 		return $rules;
 	}
+

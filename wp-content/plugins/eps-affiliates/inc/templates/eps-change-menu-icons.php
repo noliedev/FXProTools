@@ -109,4 +109,16 @@
     font-weight: normal;
     text-decoration: inherit;
 }
+
+/* ------------ Reports ------------- */
+#adminmenu #toplevel_page_affiliate-eps-remote-user-get div.wp-menu-image img {
+  display: none;
+}
+#adminmenu #toplevel_page_affiliate-eps-remote-user-get div.wp-menu-image:before {
+    content: "\f233";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+}
 </style>

@@ -418,11 +418,16 @@ if ($('.custom-business-expense-history-table').length) {
  $('#auto-place-user').click(function (){
     var sponsor = $('#current-user-id').val();
     var uid     = $('#seleted-user-id').val();
+    var choose_sponsor  = $('#choose-parent').val();
+    if ( choose_sponsor ) {
+      sponsor =choose_sponsor.match(/\((\d+)\)/)[1];
+    }
+    
     $.ajax({
       type :'POST',
       data : {
         action:'afl_auto_place_user_ajax',
-        sponsor : $('#current-user-id').val(),
+        sponsor : sponsor,
         uid     : $('#seleted-user-id').val(),
       },
       url:ajax_object.ajaxurl,
@@ -436,7 +441,7 @@ if ($('.custom-business-expense-history-table').length) {
 
 //document ends here
 });
-
+  
 /*
  * -------------------------------------------------------------
  * Expand genealogy tree on click  expense
@@ -482,3 +487,26 @@ function expandTree(obj) {
   $('#'+id).addClass('required error');
   $('#'+id).parent('div').addClass('has-error');
  }
+
+/*
+ * -------------------------------------------------------------
+ * Increment the progress bar
+ * -------------------------------------------------------------
+*/
+  function progressBarIncrement () {
+    var width   = $('.progress-bar').css('width');
+    parentWidth = $('.progress-bar').offsetParent().width(),
+    
+    
+    percent = Math.round(100 * parseInt(width) / parseInt(parentWidth));
+    percent = percent + 4;
+     if ( width == undefined)
+      percent = 1;
+    
+    if (percent <= 98) {
+       $('#message').html('authenticating API....');
+       $("#progress").html('<div class="progress-bar" role="progressbar"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>');
+       $('.progress-bar').css('transition-duration','300ms');
+       $('.progress-bar').css( 'width' ,percent+'%');
+    }
+  }

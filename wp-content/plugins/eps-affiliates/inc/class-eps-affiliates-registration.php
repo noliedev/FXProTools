@@ -393,6 +393,7 @@ class Eps_affiliates_registration {
 	 * -----------------------------------------------------------------
 	*/
 	 public function afl_add_to_holding_tank ($post_data = array()) {
+
 	 	global $wpdb;
 	 	if (!empty($post_data)) {
 	 		$uid 			= $post_data['uid'];
@@ -432,5 +433,6 @@ class Eps_affiliates_registration {
 
 	 	}
 	 }
+	
 
 }

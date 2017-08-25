@@ -16,7 +16,7 @@
         'display_name'
       ),
       'wp_afl_user_holding_tank' => array(
-        'parent_uid','uid','created','day_remains'
+        'parent_uid','uid','created','day_remains','remote_sponsor_mlmid'
       )
     );
    	$query['#where'] = array(
@@ -27,9 +27,18 @@
     );
     
     $tank_users = db_select($query, 'get_results');
-    
+    $count = count($tank_users);
+
+if ( !function_exists('_check_remote_mlmid_exist')) {
+  require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/api-remote-user-embedd-cron-callback.php';
+}
+
 if ( $tank_users ) : ?>
-  
+  <div class="panel panel-default">
+    <div class="panel-body text-center">
+      <b>Holding Users : <?php echo $count; ?></b>
+    </div>
+  </div>
 	<section class="holding-tank-warpper">
 		<div class="holding-tank-wrapper">
 			<div class="holding-tank-profiles">
@@ -39,7 +48,15 @@ if ( $tank_users ) : ?>
 					      <div class="person">
 	                <img src="http://woocommerce-plugin/wp-content/plugins/eps-affiliates/assets/images/avathar.png" alt="">
 		              <p class="name"><?= $value->display_name; ?></p>
-		              <span class=""><?= $value->day_remains;?> Day remains</span>
+                  <span class=""><?= $value->day_remains;?> Day remains</span>
+		              
+                  <p style="color:red;">
+                    <?php 
+                      if($sp_id = _check_remote_mlmid_exist($value->remote_sponsor_mlmid)) 
+                        echo 'Sponsor Available : '.$sp_id; 
+                    ?>
+                  </p>
+
 	              </div>
 					    </li>
 					<?php endforeach; ?>
@@ -65,7 +82,6 @@ if ( $tank_users ) : ?>
   			</div>
         
         <div class="form-group row" id="available-free-spaces">
-
         </div>
   			
 
@@ -76,6 +92,10 @@ if ( $tank_users ) : ?>
         </div>
       </div>
       <div class="modal-footer">
+        <div class="form-group row">
+          <p class="pull-left"><b>Auto Place :</b>Automatically place user in the available position of current user or the selected user</p>
+          <p class="pull-left"><b>Place User :</b>You can choose the position of selected user</p>
+        </div>
         <button type="button" class="btn btn-primary pull-left" id="auto-place-user">Auto place</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="place-user">Place user</button>

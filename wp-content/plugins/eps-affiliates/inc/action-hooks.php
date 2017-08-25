@@ -47,7 +47,10 @@ function common_scripts_load(){
 
   wp_localize_script( 'common-js', 'ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 
+  wp_register_script( 'api-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/api.js');
+	wp_enqueue_script( 'api-js' );
 
+  wp_localize_script( 'api-js', 'api_ajax_object', array( 'api_ajaxurl' => admin_url( 'admin-ajax.php' )));
 			
 
 }
@@ -260,61 +263,6 @@ function eps_affiliates_admin_notices () {
  add_action('wp_ajax_nopriv_afl_auto_place_user_ajax', 'afl_auto_place_user_ajax_callback');
 
 
-/*
- * ------------------------------------------------------------
- * Hook after purchase complete save details to eps backend
- * ------------------------------------------------------------
-*/
- add_filter('eps_commerce_purchase_complete', 'eps_commerce_purchase_complete', 10, 1);
-
-/*
- * ------------------------------------------------------------
- * Hook calculate the rank of a user
- * ------------------------------------------------------------
-*/
- add_action('eps_affiliates_calculate_affiliate_rank', 'eps_affiliates_calculate_affiliate_rank_callback', 10, 1);
- // do_action('eps_affiliates_calculate_affiliate_rank',924);
-/*
- * ------------------------------------------------------------
- * Add a user to holding tank
- * ------------------------------------------------------------
-*/
- add_action('eps_affiliates_place_user_in_holding_tank', 'eps_affiliates_place_user_in_holding_tank_callback', 10, 2);
-/*
- * ------------------------------------------------------------
- * Place user under a sponsor
- * ------------------------------------------------------------
-*/
- add_action('eps_affiliates_place_user_under_sponsor', 'eps_affiliates_place_user_under_sponsor_callback', 10, 2);
-
-/*
- * ------------------------------------------------------------
- * Place user under a sponsor from the holding tank validity 
- * expired
- * ------------------------------------------------------------
-*/
- add_action('eps_affiliates_force_place_after_holding_expired', 'eps_affiliates_force_place_after_holding_expired_callback', 10, 2);
-
-/*
- * ------------------------------------------------------------
- * Block a user
- *
- * Get an as input to the action, the member account has 
- * been blocked using this id
- * ------------------------------------------------------------
-*/
- add_filter('eps_affiliates_block_member', 'eps_affiliates_block_member_callback', 10, 1);
-
-/*
- * ------------------------------------------------------------
- * UN Block a user
- *
- * Get an as input to the action, the member account has 
- * been blocked using this id
- * ------------------------------------------------------------
-*/
- add_filter('eps_affiliates_unblock_member', 'eps_affiliates_unblock_member_callback', 10, 1);
-
  /*
  * ------------------------------------------------------------
  * Approve a withdrawal request
@@ -351,6 +299,7 @@ function eps_affiliates_admin_notices () {
  * ------------------------------------------------------------
 */
  add_filter('eps_affliate_user_cancel_withdraw', 'eps_affliate_user_cancel_withdraw_callback', 10, 1);
+
 /*
  * ------------------------------------------------------------
  * SEt cookie values for ajax callbackz  
@@ -396,96 +345,89 @@ function eps_affiliates_admin_notices () {
  //our custom styles only applied to the following pages only
  function _load_common_styles () {
  	$page = isset($_GET['page']) ?$_GET['page'] : '';
- 	$common_include = new Eps_affiliates_common;
+ 	$style_applied_pages 	= eps_affiliates_style_applied_pages();
+
  	if ($page) {
- 		switch ($page) {
- 			//dashboard
- 			case 'eps-dashboard':
- 			//network
- 			case 'affiliate-eps-user-network':
- 			case 'affiliate-eps-downline-members':
- 			case 'affiliate-eps-genealogy-tree':
- 			case 'affiliate-eps-holding-tank':
- 			case 'affiliate-eps-refered-members':
- 			//e-wallet
- 			case 'affiliate-eps-e-wallet-summary':
- 			case 'affiliate-eps-e-wallet':
- 			case 'affiliate-eps-ewallet-all-transactions':
- 			case 'affiliate-eps-ewallet-income-report':
- 			case 'affiliate-eps-ewallet-withdraw-report':
- 			case 'affiliate-eps-ewallet-withdraw-fund':
- 			case 'affiliate-eps-ewallet-my-withdrawal':
- 			case 'affiliate-eps-payment_method';
- 			case 'user-payment-configuration';
-
- 			//system configurations
- 			case 'affiliate-eps-business-system-members':
- 			case 'affiliate-eps-system-configurations':
- 			case 'affiliate-eps-compensation-plan-configurations':
- 			case 'affiliate-eps-rank-configurations':
- 			case 'affiliate-eps-role-config-settings':
- 			case 'affiliate-eps-genealogy-configurations':
- 			case 'affiliate-eps-payout-configurations':
- 			case 'affiliate-eps-pool-bonus-configurations':
- 			case 'affiliate-eps-payment-method-configurations':
- 			case 'affiliate-eps-variable-configurations':
-
- 			case 'affiliate-eps-features-and-configurations':
-
- 			// Business transaction
-			case 'affiliate-eps-business':
-			case 'affiliate-eps-business-summary':
-			case 'affiliate-eps-business-income-history':
-			case 'affiliate-eps-business-expense-report':
-			case 'affiliate-eps-business-transaction':
-			case 'afl_add_edit_business_system_members':
-
- 			//reports
-			case 'affiliate-eps-reports':
-			case 'affiliate-eps-team-purchases-reports':
-			case 'affiliate-eps-payout':
-			case 'affiliate-eps-payout-in-remittance':
-			//manage members
-			case 'affiliate-eps-manage-members':
-			case 'affiliate-eps-blocked-members':
-			case 'affiliate-eps-find-members':
-
-
- 			case 'eps-test':
- 			case 'affiliate-eps-purchases':
- 			case 'eps-generate-purchase':
- 			case 'eps-test-codes':
- 			case 'eps-fund-deposit':
- 				wp_enqueue_style( 'simple-line-icons', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/simple-line-icons/css/simple-line-icons.css');
- 				wp_enqueue_style( 'app', EPSAFFILIATE_PLUGIN_ASSETS.'css/app.css');
-				wp_enqueue_style( 'developer', EPSAFFILIATE_PLUGIN_ASSETS.'css/developer.css');
-			break;
-
+ 		if (in_array($page, $style_applied_pages)) {
+ 			wp_enqueue_style( 'simple-line-icons', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/simple-line-icons/css/simple-line-icons.css');
+			wp_enqueue_style( 'app', EPSAFFILIATE_PLUGIN_ASSETS.'css/app.css');
+			wp_enqueue_style( 'developer', EPSAFFILIATE_PLUGIN_ASSETS.'css/developer.css');
  		}
  	}
  }
+/*
+ * ------------------------------------------------------------
+ * Style Applied pages
+ * ------------------------------------------------------------
+*/
+	function eps_affiliates_style_applied_pages ($pages = array()) {
+		$pages = array();
+		$pages = array(
+			//dashboard
+			'eps-dashboard',
+			//network
+			'affiliate-eps-user-network',
+			'affiliate-eps-downline-members',
+			'affiliate-eps-genealogy-tree',
+			'affiliate-eps-holding-tank',
+			'affiliate-eps-refered-members',
+			'affiliate-eps-add-new-customer',
+			'affiliate-eps-my-customers',
+			//e-wallet
+			'affiliate-eps-e-wallet-summary',
+			'affiliate-eps-e-wallet',
+			'affiliate-eps-ewallet-all-transactions',
+			'affiliate-eps-ewallet-income-report',
+			'affiliate-eps-ewallet-withdraw-report',
+			'affiliate-eps-ewallet-withdraw-fund',
+			'affiliate-eps-ewallet-my-withdrawal',
+			'affiliate-eps-payment_method',
+			'user-payment-configuration',
+
+			//system configurations
+			'affiliate-eps-business-system-members',
+			'affiliate-eps-system-configurations',
+			'affiliate-eps-compensation-plan-configurations',
+			'affiliate-eps-rank-configurations',
+			'affiliate-eps-role-config-settings',
+			'affiliate-eps-genealogy-configurations',
+			'affiliate-eps-payout-configurations',
+			'affiliate-eps-pool-bonus-configurations',
+			'affiliate-eps-payment-method-configurations',
+			'affiliate-eps-variable-configurations',
+			'affiliate-eps-advanced-queue-configurations',
+			'affiliate-eps-recent-log-messages',
+
+			'affiliate-eps-features-and-configurations',
+
+			// Business transaction
+			'affiliate-eps-business',
+			'affiliate-eps-business-summary',
+			'affiliate-eps-business-income-history',
+			'affiliate-eps-business-expense-report',
+			'affiliate-eps-business-transaction',
+			'afl_add_edit_business_system_members',
+
+				//reports
+			'affiliate-eps-reports',
+			'affiliate-eps-team-purchases-reports',
+			'affiliate-eps-payout',
+			'affiliate-eps-payout-in-remittance',
+			//manage members
+			'affiliate-eps-manage-members',
+			'affiliate-eps-blocked-members',
+			'affiliate-eps-find-members',
 
 
+			'eps-test',
+			'affiliate-eps-purchases',
+			'eps-generate-purchase',
+			'eps-test-codes',
+			'eps-fund-deposit',
+			'affiliate-eps-business-profit',
+			'affiliate-eps-remote-user-get'
+		);
 
-// // add_action('init', 'prefix_add_user');
-// function prefix_add_user() {
-//     $username = '1450';
-//     $password = '1450';
-//     $email = '1405@example.com';
-//     $user = get_user_by( 'email', $email );
-//     if( ! $user ) {
-//         // Create the new user
-//         $user_id = wp_create_user( $username, $password, $email );
-//         if( is_wp_error( $user_id ) ) {
-//             // examine the error message
-//             echo( "Error: " . $user_id->get_error_message() );
-//             exit;
-//         }
-//         // Get current user object
-//         $user = get_user_by( 'id', $user_id );
-//     }
-//     // Remove role
-//     $user->remove_role( 'subscriber' );
-//     // Add role
-//     $user->add_role( 'administrator' );
-// }
+		return apply_filters('eps_affiliates_style_applied_pages',$pages);
+	}
+	

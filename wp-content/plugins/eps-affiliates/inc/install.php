@@ -17,8 +17,8 @@ function eps_affiliates_install() {
 
 	//add all the capabilities to admin
 	// Create affiliate caps
-	$roles = new Eps_affiliates_Capabilities;
-	$roles->add_caps();
+	// $roles = new Eps_affiliates_Capabilities;
+	// $roles->add_caps();
 
 
 
@@ -66,7 +66,12 @@ function eps_affiliates_install() {
 	  					array( 'read' => true, 'level_0' => true,'level_1' => true,'eps_system_member'=>true) 
 	  		);	
  		}
-
+ 		if (!role_exists('afl_customer')) {
+		   	add_role( 'afl_customer', 
+	  					'AFL Customer', 
+	  					array( 'read' => true, 'level_0' => true,'level_1' => true,'eps_system_member'=>true) 
+	  		);	
+ 		}
  		if ( !role_exists('business_admin') ){
  			add_role( 'business_admin', 
 	  					'Business Admin', 

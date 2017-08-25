@@ -513,16 +513,19 @@
 			//check filters applied
 			if (isset($_GET['filter-user']) && !empty($_GET['filter-user'])) {
 				$uid =  extract_sponsor_id($_GET['filter-user']);
+				$uid = empty($uid) ? 0 : $uid;
 				$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`uid`='.$uid;
 			}
 
 			if (isset($_GET['filter-sponsor']) && !empty($_GET['filter-sponsor'])) {
 				$suid =  extract_sponsor_id($_GET['filter-sponsor']);
+				$suid = empty($suid) ? 0 : $suid;
 				$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`referrer_uid`='.$suid;
 			}
 
 			if (isset($_GET['filter-parent']) && !empty($_GET['filter-parent'])) {
 				$puid =  extract_sponsor_id($_GET['filter-parent']);
+				$puid = empty($puid) ? 0 : $puid;
 				$query['#where'][] = '`'._table_name('afl_user_genealogy').'`.`parent_uid`='.$puid;
 			}
 			

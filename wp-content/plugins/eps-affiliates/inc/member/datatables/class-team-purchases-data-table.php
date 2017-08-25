@@ -191,6 +191,7 @@
 	 * ---------------------------------------------------------------------
 	*/
 		public function column_total($item) {
+			// pr($item);
 			  $value = afl_format_payment_amount($item->total_purchase).afl_currency_symbol();
 				return $value;
 		}
@@ -247,7 +248,7 @@
 		    'total_items' => $total_items,                  //WE have to calculate the total number of items
 		    'per_page'    => $per_page                     //WE have to determine how many items to show on a page
 		  ) );
-		  $this->items = $this->found_data;
+		  // $this->items = $this->found_data;
 
 		}
 	/**
@@ -273,13 +274,16 @@
 				)
 			);
 			$query['#expression'] = array(
-				'SUM(`'._table_name('afl_purchases').'`.`amount_paid`) as total_purchase'
+				'SUM(`'._table_name('afl_purchases').'`.`afl_points`) as total_purchase'
 			);
 			$query['#where'] = array(
 				'`'._table_name('afl_user_genealogy').'`.`referrer_uid` = '.$uid
 			);
+			$query['#group_by'] = array(
+				_table_name('afl_user_genealogy').'.uid'
+			);
 			$result  = db_select($query, 'get_results');
-			
+
 			return $result;
 		}
 	}

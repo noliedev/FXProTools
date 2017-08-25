@@ -6,7 +6,7 @@
   <div class="panel-body">
     <ul class="overview-inner clearfix">
     <?php
-    if(!$ewallet_summary){
+    if(empty($ewallet_summary)){
       echo '<li class="clearfix text-primary">'.__("Earning not showing or not start yet!!! ").'</li>';
     }
     else{

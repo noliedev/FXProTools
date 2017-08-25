@@ -152,4 +152,42 @@
 			}
 			
 		}
+		//is  field is posative integer
+		public function rule_is_numeric_posative($name = '',$value = '',$field = '') {
+			if (!empty($value)) {
+				if (!is_numeric($value) || $value < 0 ) {  
+					$response['status'] 	= 0;
+					$response['message'] 	= 'Field '.$name.' must contain a Posative number';
+
+					if (!empty($field) ){
+						$field = str_replace('_','-',$field);
+						echo '<script>$(function () {inform_error("'.$field.'");});</script>';
+					}
+
+				} else {
+					$response['status'] 	= 1;
+				}
+				return $response;
+			}
+		}
+		//is  field is posative integer percentage 
+		public function rule_is_numeric_percentage_posative($name = '',$value = '',$field = '') {
+			if (!empty($value)) {
+				$value =explode('%', $value);
+				if (!is_numeric($value[0]) || $value[0] < 0 ) {  
+					$response['status'] 	= 0;
+					$response['message'] 	= 'Field '.$name.' must contain a Posative number';
+
+					if (!empty($field) ){
+						$field = str_replace('_','-',$field);
+						echo '<script>$(function () {inform_error("'.$field.'");});</script>';
+					}
+
+				} else {
+					$response['status'] 	= 1;
+				}
+				return $response;
+			}
+		}
 	}
+

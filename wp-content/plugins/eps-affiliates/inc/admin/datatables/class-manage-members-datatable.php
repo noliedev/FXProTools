@@ -427,7 +427,7 @@
 					if ( $response ) {
 						echo wp_set_message('The user has been unblocked successfully', 'success');
 					} else {
-						echo wp_set_message('Unable to unblock the user', 'error');
+						echo wp_set_message('Unable to block the user', 'error');
 					}
 				}
 

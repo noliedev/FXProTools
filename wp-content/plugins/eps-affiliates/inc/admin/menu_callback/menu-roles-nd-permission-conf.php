@@ -23,14 +23,16 @@
 	  $all_roles 			= $wp_roles->roles;
 	  $editable_roles = apply_filters('editable_roles', $all_roles);
 	  //exclude some roles
-	  $excluded_roles = array(
-	  	'editor',
-	  	'author',
-	  	'contributor',
-	  	'subscriber',
-	  	'customer',
-	  	'shop_manager',
-	  );
+	  // $excluded_roles = array(
+	  // 	'editor',
+	  // 	'author',
+	  // 	'contributor',
+	  // 	'subscriber',
+	  // 	'customer',
+	  // 	'shop_manager',
+	  // );
+	  $excluded_roles = list_extract_allowed_values(afl_variable_get('afl_var_permission_table_roles'),'list_text','');
+	  
 	  $roles 					= array();
 
 	  foreach ($editable_roles as $key => $value) {
@@ -143,7 +145,7 @@
 		);
 		
 		//exclude the admin 
-	  $excluded_roles = array();
+	  $excluded_roles = list_extract_allowed_values(afl_variable_get('afl_var_permission_table_roles'),'list_text','');
 
 		//add capability to the role
 		foreach ($per_names['per_name_vs_role'] as $permission_name => $var) {

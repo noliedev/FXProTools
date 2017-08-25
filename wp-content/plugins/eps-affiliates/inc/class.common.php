@@ -97,7 +97,7 @@ $common_include = new Eps_affiliates_common();
 		if (!empty($prefix))
 			$html .= $prefix;
 
-		$html .= '<form action="' .$action. '"" method="'.$method.'" id="" accept-charset="UTF-8" class="'.$classes.'"> ';
+		$html .= '<form action="' .$action. '" method="'.$method.'" id="" accept-charset="UTF-8" class="'.$classes.'"> ';
 		$html .= '<div class="panel panel-default">';
 		$html .= '<div class="panel-body">';
 
@@ -116,6 +116,10 @@ $common_include = new Eps_affiliates_common();
 						foreach ($elements[$key] as $key => $field_element) {
 							$html .= html_input_render($field_element,$key,$attributes);
 						}
+						
+						$html .= '</div>';
+						$html .= '</fieldset>';
+						
 					} else {
 							$html .= html_input_render($element,$key,$attributes);
 					}
@@ -125,8 +129,10 @@ $common_include = new Eps_affiliates_common();
 				}
 
 			}
+
 		$html .= '</div>';
 		$html .= '</div>';
+		$html .= '</form>';
 
 			if ($suffix)
 				$html .= $suffix;
@@ -207,7 +213,14 @@ $common_include = new Eps_affiliates_common();
 		if (isset($table['#suffix'])) {
 			$table_html .= $table['#suffix'];
 		}
-
+		
+		/* -----------Pagination Links : Begin	----------*/
+		if (!empty($table['#links'])) {
+			$table_html .= '<div class="clearfix"><div class="pull-right">
+			'.$table['#links'].'
+		</div></div>';
+		}
+		/* -----------Pagination Links : END	------------*/
 		return $table_html;
 	}
 /*
@@ -243,6 +256,7 @@ $common_include = new Eps_affiliates_common();
 
 			switch ($element_type) {
 				case 'text':
+				case 'textfield':
 					$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
 					if (isset($element['#title']) && !empty($element['#title'])) :
 						$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
@@ -257,7 +271,11 @@ $common_include = new Eps_affiliates_common();
 					$html .= '<input type = "text" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';
 
 				break;
+				case 'hidden':
+					$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
+					$html .= '<input type = "hidden" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-control '.$class.'" value="'.$deflt.'">';
 
+				break;
 				case 'password':
 					$deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
 					$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
@@ -317,7 +335,8 @@ $common_include = new Eps_affiliates_common();
 					$html .= '<div class="'.$class.'">'.$element['#markup'].'</div>';
 				break;
 				case 'submit':
-					$html .= '<input type="submit" class=" btn btn-primary '.$class.'" value="'.$element['#value'].'" name="submit">';
+					$bt_name = !empty($element['#name']) ? $element['#name'] : 'submit';
+					$html .= '<input type="submit" class=" btn btn-primary '.$class.'" value="'.$element['#value'].'" name="'.$bt_name.'">';
 				break;
 				case 'label':
 					$html .= '<label class="label-style '.$class.'">'.$element['#title'].'</label>';
@@ -373,6 +392,7 @@ $common_include = new Eps_affiliates_common();
 				break;
 
 				case 'text-area':
+				case 'textarea':
 					$html .= '<label for="'.str_replace('_','-',$key).'">';
 					$html .= isset($element['#title']) ? $element['#title'] : '';
 
@@ -408,7 +428,22 @@ $common_include = new Eps_affiliates_common();
 					$html .= '<i></i></label>'.$value;
 					}
 					$html .= '</div>';
-					break;
+				break;
+				case 'file':
+					// $deflt = isset($element['#default_value']) ? $element['#default_value'] : '';
+					// if (isset($element['#title']) && !empty($element['#title'])) :
+						$html .= '<label for="'.str_replace('_','-',$key).'" class="form-label">';
+						$html .= isset($element['#title']) ? $element['#title'] : '';
+
+						if (!empty($element['#required']) && $element['#required'] == TRUE ){
+							$html .= '<span class="form-required" title="This field is required.">*</span>';
+						}
+					// 	$html .= '</label>';
+					// endif;
+					$html .= ' <div id="edit-file-wrapper-file-2-upload-file-upload-wrapper" class="form-managed-file">';
+					$html .= '<input type = "file" name = "'.$key.'" id="'.str_replace('_','-',$key).'" class="form-file '.$class.'">';
+					$html .='</div>';
+				break;
 			}
 
 			$html .= '</div>';
@@ -1554,7 +1589,7 @@ if(!function_exists('afl_get_rank_names')){
 		}
 		//limit
 		if (isset($data['#limit'])) {
-				$sql .= 'LIMIT '.$data['#limit'].' ';
+				$sql .= ' LIMIT '.$data['#limit'].' ';
 		}
 		// pr($sql);
 		return $wpdb->$fetch_mode($sql);
@@ -1600,7 +1635,7 @@ if(!function_exists('afl_get_rank_names')){
     $result = db_select($query, 'get_row');
     return $result;
 	}
- /* -----------------------------------------------------------------------
+/* -----------------------------------------------------------------------
  * convert to Commerce Amount
  * -----------------------------------------------------------------------
 */
@@ -1615,7 +1650,7 @@ function afl_commerce_amount($amount_paid){
 function afl_get_commerce_amount($amount_paid){
 
 
-  $amount_paid = $amount_paid / 100;
+  $amount_paid = $amount_paid /100;
   return number_format($amount_paid, 2, '.', ',');
 }
 /*
@@ -1639,7 +1674,46 @@ function afl_get_payment_amount($amount = 0){
   return $amount / 100;
 
 }
+/*
+ * -----------------------------------------------------------------------
+ * Find out the commission amount based on input
+ * -----------------------------------------------------------------------
+*/
+	function afl_commission($commission = 0, $amount_paid = 0, $max_min = 1){
+	  //intval(string) or floatval(string
 
+	  $com = trim(str_replace('%','',$commission) );
+	  if(strpos($com, '.') === FALSE){
+	    $commission_refined = intval($com);
+	  }
+	  else{
+	    $commission_refined = floatval($com);
+	  }
+
+
+	  if($commission_refined == 0 ){
+	    if($max_min == 1 ){
+	      return $amount_paid;
+	    }
+	    else{
+	      return 0;
+	    }
+
+	  }
+
+	  if($commission == 0 || $amount_paid == 0){
+	    return 0;
+	  }
+
+	  if(strpos($commission, '%') === FALSE){
+	    //return intval(afl_commerce_amount($commission) );
+	    return $commission;
+	  }
+	  else{
+	    //$commission = intval(str_replace('%','',$commission) );
+	    return $amount_paid * ($commission_refined / 100);
+	  }
+	}
 /*
  * -----------------------------------------------------------------------
  * Convert the amount to number format
@@ -1827,7 +1901,7 @@ function afl_root_user() {
 	function extract_sponsor_id ($string = '') {
 		if (!empty($string)) {
 			preg_match('#\((.*?)\)#', $string, $matches);
-	    $sponsor = $matches[1];
+	    $sponsor = !empty($matches[1]) ? $matches[1] : 0 ;
 	    return $sponsor;
 		}
 	}
@@ -2109,3 +2183,42 @@ function afl_get_payment_method_details($uid = 0, $method_name = ''){
 
 
 }
+/*
+ * -----------------------------------------------------------------
+ * Get the holding tank details of user
+ * -----------------------------------------------------------------
+*/
+	function _get_holding_tank_data ($uid = '') {
+		$query = array();
+		$query['#select'] = _table_name('afl_user_holding_tank');
+		$query['#where'] 	= array(
+			'uid ='.$uid
+		);
+		$res = db_select($query,'get_row');
+		return $res;
+	}
+/*
+ * -------------------------------------------------------------------
+ * Log the events
+ * -------------------------------------------------------------------
+*/
+	function afl_log($type, $message, $variables = array(), $severity = LOGS_NOTICE, $link = NULL) {
+	  global $user, $base_root;
+	  
+	  // Prepare the fields to be logged
+	  $log_message = array(
+	    'type' 			=> $type,
+	    'message' 	=> $message,
+	    'variables' => maybe_serialize($variables),
+	    'severity' 	=> $severity,
+	    'link' 			=> $link,
+	    'uid' 			=> 0,
+	    'hostname' 	=> $_SERVER['SERVER_ADDR'],
+	    'timestamp' => time(),
+	  );
+	 global $wpdb;
+	 $wpdb->insert(
+	 	_table_name('afl_log_messages'),
+	 	$log_message
+	 );
+	}

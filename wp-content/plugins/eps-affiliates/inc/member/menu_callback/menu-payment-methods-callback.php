@@ -496,18 +496,27 @@ function  afl_user_payment_autherization_form(){
 	 $table = $table = $wpdb->prefix .'afl_transaction_authorization';
 	 $exist = $wpdb->get_row("SELECT  * FROM `$table` WHERE `uid` = $uid ");
 	 if($exist){
-		//  Change Password fields
+		$form['old_password'] = array(
+	 		'#title' 		=>	'Old Password',
+	 		'#type' 		=>	'password',
+	 		'#required' =>	TRUE,
+	 		'#name' 		=>	'Old Password',
+	 	);
     }
+
 		$form['password'] = array(
-	 		'#title' => 'Password',
-	 		'#type' => 'password',
-	 		'#name' => 'Password',
+	 		'#title' 		=>	'Password',
+	 		'#type' 		=>	'password',
+	 		'#required' =>	TRUE,
+	 		'#name' 		=> 	'Password',
 	 	);
 	 	$form['confirm_password'] = array(
-	 		'#title' => 'Confirm Password',
-	 		'#type' => 'password',
-	 		'#name' => 'Confirm Password',
+	 		'#title' 		=> 	'Confirm Password',
+	 		'#type' 		=> 	'password',
+	 		'#required' =>	TRUE,
+	 		'#name' 		=> 	'Confirm Password',
 	 	);
+	 
 		$form['submit'] = array(
 			'#type' => 'submit',
 			'#value' =>'Save Password'
@@ -521,6 +530,23 @@ function  afl_user_payment_autherization_form(){
 * ------------------------------------------------------------
 */
 function afl_user_payment_autherization_form_validation($form_state){
+	global $wpdb;
+	$uid 					 = get_current_user_id();
+	$table = _table_name('afl_transaction_authorization');
+	$exist = $wpdb->get_row("SELECT  * FROM `$table` WHERE `uid` = $uid ");
+	if($exist){
+		if( isset($form_state['old_password']) &&  empty($form_state['old_password'])){
+			echo wp_set_message(__('Old Password field is reuired'), 'danger');
+			return FALSE;
+		}
+		else{
+			$old_pass = md5($form_state['old_password']);
+				if($old_pass != $exist->password){
+					echo wp_set_message(__('You entered an incorrect password'), 'danger');
+					return FALSE;
+				}
+		}
+	}	
 	if( empty($form_state['password']) ||  empty($form_state['confirm_password']) ){
 		echo wp_set_message(__('Password and Confirm Password fields are reuired'), 'danger');
 		return FALSE;
@@ -530,7 +556,7 @@ function afl_user_payment_autherization_form_validation($form_state){
 		return $resp;
 		return FALSE;
 	}else{
-		return true;
+		 return true;
 	}
 }
 
@@ -546,7 +572,7 @@ function afl_user_payment_autherization_form_submit($form_state){
 	$table = $wpdb->prefix .'afl_transaction_authorization';
 	$exist = $wpdb->get_row("SELECT  * FROM `$table` WHERE `uid` = $uid ");
 	if($exist){
-				$wpdb->update($table, array('password	'=>$password), array('uid'=>$uid));
+				$wpdb->update($table, array('password'=>$password), array('uid'=>$uid));
 				echo wp_set_message(__('Your password changed successfully..'), 'success');
 	}elseif(!$exist){
 	   	$insert['uid'] 			= $uid;

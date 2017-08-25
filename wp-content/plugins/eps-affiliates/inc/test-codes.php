@@ -7,16 +7,19 @@ function afl_admin_test_codes(){
 }
 
 function afl_test_codes_callback () {
-  $uid = 924;
-  $downlines = afl_get_user_downlines_uid($uid, array('level'=>1));
-  pr($downlines);
-  foreach ($downlines as $key => $value) {
-    $downlines = afl_get_user_downlines_uid($value->downline_user_id, array('member_rank'=>3), TRUE);
-    pr($downlines);
-  }
-
-  //get the count of rank under this users
+  require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/api-remote-user-embedd-cron-callback.php';
+    if (function_exists('_process_embedd_users_queue')) {
+      _process_embedd_users_queue();
+    }
 }
+
+
+
+
+
+
+
+
 function insertuser () {
   $uid  = 162;
   for ($rank = 13; $rank >0; $rank--)  :

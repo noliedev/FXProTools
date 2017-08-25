@@ -644,7 +644,7 @@
 	  	'`deleted`=0',
 	  );
 	  $query['#group_by'] = array(
-	  	'credit_status','category'
+	  	'credit_status'
 	  );
 	  $query['#order_by'] = array(
 	  	'category' =>'ASC',
@@ -775,7 +775,7 @@
 	  $dates = getDays(7,'day','d-M');
 
 	  $setData = $dates;
-
+	  $date_format = 'Y';
 	  if(!empty($num_of_results)){
 	    foreach ($num_of_results as $value) {
 	      $joined_date = $value->joined_year;

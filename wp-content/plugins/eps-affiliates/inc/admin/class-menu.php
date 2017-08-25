@@ -14,7 +14,7 @@
 
 				add_action( 'admin_menu', array( $this , 'afl_network_menus' ) );
 				add_action( 'admin_menu', array( $this , 'afl_ewallet_menus') );
-				add_action( 'admin_menu', array( $this , 'afl_epin_menus') );
+				// add_action( 'admin_menu', array( $this , 'afl_epin_menus') );
 				add_action( 'admin_menu', array( $this , 'afl_business_menus') );
 				add_action( 'admin_menu', array( $this , 'afl_manage_members_menus') );
 				add_action( 'admin_menu', array( $this , 'afl_promotion_tools_menus') );
@@ -35,16 +35,18 @@
 				
 				add_action( 'admin_menu', array( $this , 'afl_no_parent_pages') );
 
-				
+				add_action( 'admin_menu', array( $this , 'afl_admin_remote_api') );
 
 
 
 			}
+			
 		/* -------------------------------------------------------------------------
 		 *  All system Configuration
 		 * -------------------------------------------------------------------------
 		*/
 			public function afl_system_settings (){
+
 				$menu = array();
 				$menu['system_settings'] = array(
 					'#page_title'			=> __( 'Eps Affiliates System Settings', 'System Settings' ), 
@@ -61,6 +63,15 @@
 					'#access_callback'=> 'system_settings', 
 					'#menu_slug' 			=> 'affiliate-eps-system-configurations', 
 					'#page_callback' 	=> 'afl_admin_advanced_configuration', 
+				);
+				//variable configuration
+				$menu['afl_logs'] = array(
+					'#parent'					=> 'affiliate-eps-system-configurations',
+					'#page_title'			=> __( 'Recent log messages', 'eps-affiliates' ), 
+					'#menu_title' 		=> __( 'Recent log messages', 'eps-affiliates' ), 
+					'#access_callback'=> 'system_settings', 
+					'#menu_slug' 			=> 'affiliate-eps-recent-log-messages', 
+					'#page_callback' 	=> 'afl_admin_recent_log_messages', 
 				);
 				//compensation plan
 				$menu['compensation_plan'] = array(
@@ -142,6 +153,17 @@
 					'#menu_slug' 			=> 'affiliate-eps-variable-configurations', 
 					'#page_callback' 	=> 'afl_admin_variable_configurations', 
 				);
+
+				//variable configuration
+				$menu['adv_queue_conf'] = array(
+					// '#parent'					=> 'affiliate-eps-system-configurations',
+					'#parent'					=> 'no-parent',
+					'#page_title'			=> __( 'Advanced Queue Configuration', 'eps-affiliates' ), 
+					'#menu_title' 		=> __( 'Advanced Queue Configuration', 'eps-affiliates' ), 
+					'#access_callback'=> 'system_settings', 
+					'#menu_slug' 			=> 'affiliate-eps-advanced-queue-configurations', 
+					'#page_callback' 	=> 'afl_admin_advanced_queue_conf', 
+				);
 				afl_system_admin_menu($menu);
 
 			}
@@ -171,6 +193,16 @@
 					'#menu_slug' 			=> 'affiliate-eps-user-network', 
 					'#page_callback' 	=> 'afl_add_new_member', 
 				);
+
+				$menu['add_new_customer'] = array(
+					'#parent'					=> 'affiliate-eps-user-network',
+					'#page_title'			=> __( 'Add new customer', 'Add new customer' ), 
+					'#menu_title' 		=> __( 'Add new customer', 'Add new customer' ), 
+					'#access_callback'=> 'afl_add_new_customer', 
+					'#menu_slug' 			=> 'affiliate-eps-add-new-customer', 
+					'#page_callback' 	=> 'afl_add_new_customer', 
+				);
+
 				$menu['network_explorer'] = array(
 					'#parent'					=> 'user-network',
 					'#page_title'			=> __( 'Network Explorer', 'Network Explorer' ),    
@@ -213,6 +245,15 @@
 					'#access_callback'=> 'afl_network_view', 
 					'#menu_slug' 			=> 'affiliate-eps-holding-tank', 
 					'#page_callback' 	=> 'afl_network_holding_tank', 
+				);
+
+				$menu['my_customers'] = array(
+					'#parent'					=> 'affiliate-eps-user-network',
+					'#page_title'			=> __( 'My Customers', 'My Customers' ),    
+					'#menu_title' 		=> __( 'My Customers', 'My Customers' ),    
+					'#access_callback'=> 'afl_add_new_customer', 
+					'#menu_slug' 			=> 'affiliate-eps-my-customers', 
+					'#page_callback' 	=> 'afl_my_customers', 
 				);
 				afl_system_admin_menu($menu);
 
@@ -301,71 +342,7 @@
 
 				afl_system_admin_menu($menu);
 			}
-		/*
-		 * -------------------------------------------------------------------------
-		 * E-pin menus
-		 * ------------- ------------------------------------------------------------
-		*/
-			public function afl_epin_menus() {
-				$menu = array();
-				$menu['e_pin'] = array(
-					'#page_title'			=> __( 'E-pin', 'e_pin' ),
-					'#menu_title' 		=> __( 'E-pin', 'e_pin' ),
-					'#access_callback'=> 'epin', 
-					'#menu_slug' 			=> 'e-pin', 
-					'#page_callback' 	=> 'afl_epins', 
-					'#weight'					=> 4
-				);
-				$menu['e_pin_sub'] = array(
-					'#parent'					=> 'e-pin',
-					'#page_title'			=> __( 'E-pin', 'e_pin' ),
-					'#menu_title' 		=> __( 'E-pin', 'e_pin' ),
-					'#access_callback'=> 'epin', 
-					'#menu_slug' 			=> 'e-pin', 
-					'#page_callback' 	=> 'afl_epins', 
-				);
-				$menu['e_pin_generate'] = array(
-					'#parent'					=> 'e-pin',
-					'#page_title'			=> __( 'Generate E-pin', 'generate-e-pin' ),
-					'#menu_title' 		=> __( 'Generate E-pin', 'generate-e-pin' ),
-					'#access_callback'=> 'epin', 
-					'#menu_slug' 			=> 'e-pin-history', 
-					'#page_callback' 	=> 'afl_epin_generate', 
-				);
-				$menu['e_pin_history'] = array(
-					'#parent'					=> 'e-pin',
-					'#page_title'			=> __( 'E-pin History', 'e-pin-history' ),
-					'#menu_title' 		=> __( 'E-pin History', 'e-pin-history' ),
-					'#access_callback'=> 'epin', 
-					'#menu_slug' 			=> 'e-pin-history', 
-					'#page_callback' 	=> 'afl_epin_history', 
-				);
-				$menu['e_pin_config'] = array(
-					'#parent'					=> 'e-pin',
-					'#page_title'			=> __( 'E-pin Configurations', 'e-pin-configs' ),
-					'#menu_title' 		=> __( 'E-pin Configurations', 'e-pin-configs' ),
-					'#access_callback'=> 'epin', 
-					'#menu_slug' 			=> 'e-pin-configs', 
-					'#page_callback' 	=> 'afl_epin_configurations', 
-				);
-				$menu['e_pin_delete'] = array(
-					'#parent'					=> 'e-pin',
-					'#page_title'			=> __( 'Delete E-pin', 'e-pin-delete' ),
-					'#menu_title' 		=> __( 'Delete E-pin', 'e-pin-delete' ),
-					'#access_callback'=> 'epin', 
-					'#menu_slug' 			=> 'e-pin-delete', 
-					'#page_callback' 	=> 'afl_epin_delete', 
-				);
-				$menu['e_pin_refund'] = array(
-					'#parent'					=> 'e-pin',
-					'#page_title'			=> __( 'Refund from E-pin', 'e-pin-refund' ),
-					'#menu_title' 		=> __( 'Refund from E-pin', 'e-pin-refund' ),
-					'#access_callback'=> 'epin', 
-					'#menu_slug' 			=> 'e-pin-refund', 
-					'#page_callback' 	=> 'afl_epin_refund', 
-				);
-				afl_system_admin_menu($menu);
-			}
+		
 		/*
 		 * --------------------------------------------------------------------------
 		 * Business menus
@@ -416,13 +393,22 @@
 					'#page_callback' 	=> 'afl_business_transactions',
 				);
 				//system business members manage
-				$menu['business_system_members'] = array(
+				/*$menu['business_system_members'] = array(
 					'#parent'					=> 'affiliate-eps-business',
 					'#page_title'			=> __( 'Business System Members', 'Business System Members' ),
 					'#menu_title' 		=> __( 'Business System Members', 'Business System Members' ),
 					'#access_callback'=> 'business_system_members', 
 					'#menu_slug' 			=> 'affiliate-eps-business-system-members', 
 					'#page_callback' 	=> 'afl_add_edit_business_system_members', 
+				);*/
+				//system business profit report
+				$menu['business_system_profit_report'] = array(
+					'#parent'					=> 'affiliate-eps-business',
+					'#page_title'			=> __( 'Business Profit Report', 'Business Profit Report' ),
+					'#menu_title' 		=> __( 'Business Profit Report', 'Business Profit Report' ),
+					'#access_callback'=> 'business_system_members', 
+					'#menu_slug' 			=> 'affiliate-eps-business-profit', 
+					'#page_callback' 	=> 'afl_system_business_profit_report', 
 				);
 				afl_system_admin_menu($menu);
 			}
@@ -695,6 +681,23 @@
 		 	}
 		 		afl_system_admin_menu($menu);		
 		 }
+		/*
+		 * ---------------------------------------------------------------------------
+		 * Admin Remote Access
+		 * ---------------------------------------------------------------------------
+		*/
+     function afl_admin_remote_api () {
+
+				//Remote users
+				$menu['remote_users'] = array(
+					'#page_title'			=> __( 'Remote API', 'eps-affiliates' ), 
+					'#menu_title' 		=> __( 'Remote API', 'eps-affiliates' ), 
+					'#access_callback'=> 'remote_api_access', 
+					'#menu_slug' 			=> 'affiliate-eps-remote-user-get', 
+					'#page_callback' 	=> 'afl_admin_user_remote_access', 
+				);
+				afl_system_admin_menu($menu);
+     }
 
 	}
 $eps_afl_admin_menu = new Eps_Affiliates_Admin_Menu;
