@@ -18,6 +18,9 @@ if(!class_exists('ThemeSettings')){
 		{
 			add_action('wp_enqueue_scripts', array($this, 'enqueue_theme_assets'));
 			add_filter( 'rwmb_meta_boxes',  array($this,'initialize_meta_boxes') );
+			add_action( 'init', array($this,'course_category_rewrite') );
+			add_action( 'template_redirect',  array($this,'course_category_template') );
+			add_filter( 'query_vars',  array($this,'course_category_vars') );
 
 		}
 
@@ -42,7 +45,7 @@ if(!class_exists('ThemeSettings')){
 			// Include custom scripts here
 		}
 
-		function initialize_meta_boxes( $meta_boxes ) {
+		public function initialize_meta_boxes( $meta_boxes ) {
 			$prefix = '';
 
 			$meta_boxes[] = array(
@@ -84,6 +87,27 @@ if(!class_exists('ThemeSettings')){
 
 			return $meta_boxes;
 		}
+
+		public function course_category_rewrite(){
+			add_rewrite_rule('course-category/([^/]*)/?','index.php?category_slug=$matches[1]&course_category=1','top');
+		}
+
+		public function course_category_vars( $vars ) {
+		    $vars[] = 'course_category';
+		    $vars[] = 'category_slug';
+		    return $vars;
+		}
+
+		public function course_category_template(){
+		    if ( get_query_var( 'category_slug' ) ) {
+		        add_filter( 'template_include', function() {
+		            return get_template_directory() . '/sfwd-course-category.php';
+		        });
+		    }
+		}
+
+
+
 
 	}
 
