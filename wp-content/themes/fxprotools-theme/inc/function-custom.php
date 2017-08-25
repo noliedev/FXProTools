@@ -34,6 +34,25 @@ function get_courses_by_product_id($product_id){
 	return $courses;
 }
 
+function get_courses_by_category_id($category_id){
+	$args = array(
+			'posts_per_page'   => -1,
+			'orderby'          => 'menu_order',
+			'order'			   => 'ASC',
+			'post_status'      => 'publish',
+			'post_type'		   => 'sfwd-courses',
+			'tax_query' => array(
+			array(
+				'taxonomy'    	 => 'ld_course_category',
+				'field'  		 => 'term_id',
+				'terms'			 => $category_id,
+			),
+		),
+	);
+	$courses = get_posts($args);
+	return !$courses ? false : $courses;
+}
+
 function get_lessons_by_course_id($course_id){
 	$args = array(
 			'posts_per_page'   => -1,
@@ -71,5 +90,19 @@ function get_lesson_parent_course($lesson_id){
 	$course_id = get_post_meta($lesson_id , 'course_id',true); 
 	$course = get_post($course_id);
 	return !$course ? false : $course;
+}
 
+function get_course_category_children($course_cat_id){
+	$children_ids = get_term_children($course_cat_id , 'ld_course_category');
+	if( is_array($children_ids) ){
+		$child_categories = get_terms( array(
+		    'taxonomy'   => 'ld_course_category',
+		    'include'    => $children_ids,
+		    'hide_empty' => false,
+		) ); 
+		return !$child_categories ? false: $child_categories;
+	}
+	else{
+		return false;
+	}
 }

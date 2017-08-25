@@ -10,15 +10,10 @@
 			<div class="col-md-12">
 				<ul class="fx-list-courses">
 					<?php if( $related_courses ) : ?>
-
 						<?php $count = 0; foreach($related_courses as $post): setup_postdata($post); $count++; ?>
-
 							<?php get_template_part('inc/templates/product/list-course'); ?>
-
 						<?php endforeach;?>
-
 						<?php wp_reset_query(); ?>
-
 					<?php endif;?>
 				</ul>
 				<br/>
