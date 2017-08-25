@@ -94,7 +94,8 @@ function get_lesson_parent_course($lesson_id){
 
 function get_course_category_children($course_cat_id){
 	$children_ids = get_term_children($course_cat_id , 'ld_course_category');
-	if( is_array($children_ids) ){
+
+	if( !empty($children_ids) ){
 		$child_categories = get_terms( array(
 		    'taxonomy'   => 'ld_course_category',
 		    'include'    => $children_ids,
