@@ -1,0 +1,21 @@
+/*============*/
+/*== GLOBAL ==*/ 
+/*============*/
+
+*, *:after, *::before {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+*, body, html {
+    -webkit-font-smoothing: antialiased;
+}
+html.is-loading {
+    overflow: hidden;
+}
+html,
+body {
+    height: 100%;
+}
+html {
+    font-size: 100%;
+}

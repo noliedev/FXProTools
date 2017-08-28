@@ -21,8 +21,7 @@ $course_progress = get_user_progress();
 				</div>
 				<div class="panel panel-default fx-course-navigation">
 					<div class="panel-body">
-						<h5 class="text-bold">Course Navigation</h5>
-
+						<h5 class="text-bold">Lesson Navigation</h5>
 						<?php if( $lessons ) : ?>
 							<ul>
 							<?php $count = 0;  foreach($lessons as $post): setup_postdata($post); $count++; ?>
@@ -31,7 +30,6 @@ $course_progress = get_user_progress();
 							<?php endforeach;  wp_reset_query(); ?>
 							</ul>
 						<?php endif;?>
-						
 					</div>
 				</div>
 			</div>
@@ -51,41 +49,22 @@ $course_progress = get_user_progress();
 					<div class="col-md-12">
 						<div class="panel panel-default fx-course-outline">
 							<div class="panel-body">
-								<h3>Course Description</h3>
 								<div class="content">
-									<?php echo $course->post_content; ?>
+									<?php echo $lesson->post_content; ?>
 								</div>
-							</div>
-						</div>
-						<a href="#" class="btn btn-danger block">Upgrade For Access - $197</a>
-						<br/>
-						<div class="panel panel-default fx-course-outline">
-							<div class="panel-body">
-								<h5 class="text-bold">Course Lessons</h5>
-								<table class="table table-bordered fx-table-lessons">
-									<thead>
-										<tr>
-											<th style="width: 100px;">Lessons</th>
-											<th>Status</th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php if( $lessons ) : ?>
-											<?php $count = 0;  foreach($lessons as $post): setup_postdata($post); $count++; ?>
-												<?php $is_complete = get_course_lesson_progress($course_id, get_the_ID());?>
-												<tr>
-													<td class="text-center number"><?php echo $count; ?></td>
-													<td>
-														<a href="<?php the_permalink();?>"><?php the_title();?></a>
-														<div class="status pull-right">
-															<i class="fa <?php echo  $is_complete ?  'fa-check text-success' : '';?>"></i>
-														</div>
-													</td>
-												</tr>
-											<?php endforeach; wp_reset_query();?>
-										<?php endif;?>
-									</tbody>
-								</table>
+								<br>
+								<div class="mark-complete">
+									<form id="sfwd-mark-complete" method="post" action="">
+										<input type="hidden" value="<?php echo $lesson_id;?>" name="post" />
+										<input type="hidden" value="<?php echo wp_create_nonce( 'sfwd_mark_complete_'. get_current_user_id() .'_'. $lesson_ID );?>" name="sfwd_mark_complete" />
+										<input type="submit" value="Mark Complete" class="btn btn-success block" style="width:100%;" id="learndash_mark_complete_button"/>
+									</form>
+								</div>
+								<div class="adjacent-lessons">
+									<?php echo learndash_previous_post_link(); ?>
+									<?php echo learndash_next_post_link(); ?>
+								</div>
+								
 							</div>
 						</div>
 					</div>

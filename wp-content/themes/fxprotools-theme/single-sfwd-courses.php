@@ -129,8 +129,10 @@ $course_progress = get_user_progress();
 									</div>
 								</div>
 							</div>
+							<!--
 							<a href="#" class="btn btn-danger block">Upgrade For Access - $197</a>
-							<br/>
+							<br/
+							>-->
 							<div class="panel panel-default fx-course-outline">
 								<div class="panel-body">
 									<h5 class="text-bold">Course Lessons</h5>

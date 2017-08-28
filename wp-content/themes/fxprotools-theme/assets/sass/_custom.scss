@@ -1,0 +1,364 @@
+/*============*/
+/*== CUSTOM ==*/ 
+/*============*/
+
+// Login
+.fx-login {
+	position: relative;
+	.left {
+		width: 50%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		.content-wrapper {
+			display:flex;
+			justify-content:center;
+			align-items:center;
+			height: 100%;
+			.content {
+				padding: 15px;
+				width: 85%;
+				h2 {
+					margin-top: 0;
+				}
+			}
+		}
+	}
+	.right {
+		background: #000;
+		width: 50%;
+		position: absolute;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		.content-wrapper {
+			display:flex;
+			justify-content:center;
+			align-items:center;
+			height: 100%;
+			.content {
+				padding: 15px;
+				width: 85%;
+				h2 {
+					margin-top: 0;
+					color: #FFF;
+				}
+				p, a {
+					color: #FFF;
+				}
+				.form-control {
+					height: auto;
+					padding: 10px 12px;
+				}
+				button {
+					width: 100%;
+					margin-bottom: 10px;
+				}
+			}
+		}
+	}
+}
+
+// Main Navigation
+.fx-navbar-main {
+	position: relative;
+	border-bottom: 1px solid #DDD;
+	.fx-nav-options {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		li {
+			float: left;
+			margin-right: 10px;
+			&:last-child { margin-right: 0; }
+			a {
+				font-size: 20px;
+			    display: block;
+			    padding: 25px 10px;
+			    line-height: 30px;
+			    text-align: center;
+			    &:hover, &:active, &:focus {
+			    	text-decoration: none;
+			    }
+			}
+			&.account {
+				padding-top: 15px;
+				a {
+					border: 1px solid #DDD;
+					line-height: 5px;
+					padding: 20px 25px;
+					font-size: 13px;
+				}
+			}
+		}
+	}
+	.fx-navbar-header .navbar-brand {
+		height: auto;
+	}
+}
+
+// Sub Navigation
+.fx-navbar-sub {
+	position: relative;
+    min-height: inherit;
+    .fx-nav-options {
+		margin: 0;
+	    padding: 10px;
+	    list-style: none;
+	    border: 1px solid #DDD;
+	    li {
+			display: inline-block;
+			margin-right: 10px;
+			&:last-child { margin-right: 0; }
+			a {
+				display: inline-block;
+				padding: 10px 15px;
+				width: 200px;
+				border: 1px solid #DDD;
+				&:hover, &:focus, &:active {
+					text-decoration: none;
+				}
+			}
+			&.dashboard a {
+				width: 45px;
+			}
+			&.active a {
+				background-color: #23527c;
+				color: #FFF;
+				border-color: #23527c;
+			}
+			&.locked a {
+				background-color: #DDD;
+				color: #FFF;
+				cursor: not-allowed;
+			}
+		}
+	}
+}
+
+// Referral Program
+.fx-ref-links {
+	margin-top: 30px;
+	border: 1px solid #DDD;
+	padding: 15px 30px 30px 30px;
+	.fx-ref-title {
+		text-align: center;
+		h3 {
+			font-weight: bold;
+			margin-bottom: 5px;
+		}
+	}
+	.box {
+		border: 1px solid #DDD;
+		padding: 15px;
+		margin-top: 20px;
+		.link {
+			margin-top: 10px;
+			border: 1px solid #DDD;
+			padding: 15px;
+			position: relative;
+		}
+		.btn {
+			margin-top: 10px;
+		}
+	}
+}
+
+// Product - Coaching / Webinars
+.fx-coaching-tab {
+	position: relative;
+	.tab-pane {
+		border-left: 1px solid #DDD;
+		border-right: 1px solid #DDD;
+		border-bottom: 1px solid #DDD;
+		min-height: 500px;
+	}
+}
+
+// Marketing Funnels
+.fx-tabs-vertical.marketing-funnels {
+	.list-group {
+		width: 100%;
+		.list-group-item {
+			height: 50px;
+			h4, span {
+				line-height: 11px;
+			}
+		}
+	}
+	.tab-profile {
+		position: relative;
+		.heading {
+			position: relative;
+			h3 {
+				margin-top: 0;
+			}
+		}
+		.social-media {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			li {
+				float: left;
+				width: 25%;
+				padding-right: 10px;
+				&:last-child { padding-right: 0; }
+			}
+		}
+		.url-group {
+			position: relative;
+			&.one {
+				input[type="text"] {
+					width: 87.5%;
+					float: left;
+					margin-right: 5px;
+				}
+				.btn {
+					width: 10%;
+					float: left;
+				}
+			}
+			&.two {
+				input[type="text"] {
+					width: 77%;
+					float: left;
+					margin-right: 5px;
+				}
+				.btn {
+					width: 10%;
+					float: left;
+					margin-right: 5px;
+				}
+			}
+		}
+		.toggle-action {
+			width: 85px;
+			padding: 5px 0;
+			label {
+				margin: 0 auto;
+			}
+		}
+	}
+}
+.total-count.funnel-stats {
+	border: 1px solid #DDD;
+	text-align: center;
+	display: block;
+	padding: 15px;
+}
+
+// Marketing Contacts
+.fx-contact-panel {
+	position: relative;
+	.media-body {
+		position: relative;
+		.info {
+			position: relative;
+			.info-list {
+				list-style: none;
+				padding: 0;
+				margin: 0 0 7px 0;
+				li {
+					display: inline-block;
+					margin-right: 10px;
+					font-size: 12px;
+					&:last-child {
+						margin-right: 0;
+					}
+				}
+			}
+			p {
+				font-size: 12px;
+			}
+		}
+		.action {
+			width: 100px;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			right: 0;
+			margin: auto;
+			display:flex;
+			justify-content:center;
+			align-items:center;
+			text-align: center;
+			i {
+				font-size: 35px;
+			}
+			a {
+				font-size: 12px;
+				&:hover, &:focus, &:active {
+					text-decoration: none;
+				}
+			}
+		}
+	}
+}
+.fx-tabs-vertical.marketing-contacts {
+	.list-info {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		li {
+			margin-bottom: 5px;
+			font-size: 13px;
+			span {
+				font-weight: bold;
+			}
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+#view-purchase-details {
+	display: none;
+}
+
+// Account - Inbox
+.fx-inbox-nav {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border-top: 1px solid #DDD;
+    margin-top: 15px;
+    li {
+		display: inline-block;
+		line-height: 45px;
+		width: 100%;
+		border-bottom: 1px solid #DDD;
+		&:last-child {
+			border-bottom: none;
+		}
+		a {
+			color: #6a6a6a;
+			display: inline-block;
+			line-height: 45px;
+			padding: 0 20px;
+			width: 100%;
+			span.label {
+				margin-top: 13px;
+			}
+			i {
+				color: #6a6a6a;
+				font-size: 16px;
+				padding-right: 10px;
+			}
+		}
+		&.active a, a:focus, a:hover {
+			color: #337ab7;
+			font-weight: bold;
+			text-decoration: none;
+		}
+    }
+}
+.fx-table-inbox {
+	tr.unread td {
+		background: #f7f7f7;
+		font-weight: bold;
+	}
+}
