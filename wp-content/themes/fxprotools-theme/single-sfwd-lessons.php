@@ -2,8 +2,10 @@
 $lesson_id = get_the_ID();
 $lesson = get_post($lesson_id);
 $course = get_lesson_parent_course( $lesson_id );
+$course_id = $course->ID;
 $lessons = get_lessons_by_course_id( $course->ID );
 $course_progress = get_user_progress();
+
 ?>
 
 <?php get_header(); ?>
@@ -53,19 +55,21 @@ $course_progress = get_user_progress();
 									<?php echo $lesson->post_content; ?>
 								</div>
 								<br>
-								<div class="mark-complete">
-									<form id="sfwd-mark-complete" method="post" action="">
-										<input type="hidden" value="<?php echo $lesson_id;?>" name="post" />
-										<input type="hidden" value="<?php echo wp_create_nonce( 'sfwd_mark_complete_'. get_current_user_id() .'_'. $lesson_ID );?>" name="sfwd_mark_complete" />
-										<input type="submit" value="Mark Complete" class="btn btn-success block" style="width:100%;" id="learndash_mark_complete_button"/>
-									</form>
-								</div>
-								<div class="adjacent-lessons">
-									<?php echo learndash_previous_post_link(); ?>
-									<?php echo learndash_next_post_link(); ?>
-								</div>
-								
+								<?php if( get_course_lesson_progress($course_id, $lesson_id) != 1 ): ?>
+									<div class="mark-complete">
+										<form id="sfwd-mark-complete" method="post" action="">
+											<input type="hidden" value="<?php echo $lesson_id;?>" name="post" />
+											<input type="hidden" value="<?php echo wp_create_nonce( 'sfwd_mark_complete_'. get_current_user_id() .'_'. $lesson_id );?>" name="sfwd_mark_complete" />
+											<input type="submit" value="Mark Complete" class="btn btn-success block" style="width:100%;" id="learndash_mark_complete_button"/>
+
+										</form>
+									</div>
+								<?php endif; ?>
 							</div>
+						</div>
+						<div class="fx-adjacent-lessons">
+							<?php echo learndash_next_post_link(); ?>
+							<?php echo learndash_previous_post_link(); ?>
 						</div>
 					</div>
 				</div>

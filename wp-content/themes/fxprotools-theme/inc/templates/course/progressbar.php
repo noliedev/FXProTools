@@ -1,7 +1,6 @@
 <?php
-
-$progress = learndash_course_progress(array( 'course_id' => get_the_ID(), 'array' => true) ); 
-
+global $course_id;
+$progress = learndash_course_progress(array( 'course_id' => $course_id, 'array' => true) ); 
 ?>
 
 <div class="progress">
