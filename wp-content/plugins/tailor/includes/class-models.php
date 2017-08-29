@@ -698,9 +698,7 @@ if ( ! class_exists( 'Tailor_Models' ) ) {
 			    }
 
 			    $shortcode = $element->generate_shortcode( $sanitized_model['id'], $sanitized_model['atts'], $content );
-
-			    $element_type =  str_replace( 'tailor_', '', $element->tag );
-			    $comment_data = "tailor:{$element_type}:{$sanitized_model['id']}";
+			    $comment_data = "tailor:{$element->tag}:{$sanitized_model['id']}";
 			    $shortcodes .= "<!-- {$comment_data} -->{$shortcode}<!-- /{$comment_data} -->";
 		    }
 
@@ -881,7 +879,7 @@ if ( ! class_exists( 'Tailor_Models' ) ) {
 	    public function generate_element_regex() {
 		    $element_types = array();
 		    foreach ( tailor_elements()->get_elements() as $element ) {
-			    $element_types[] = str_replace( 'tailor_', '', $element->tag );
+			    $element_types[] = $element->tag;
 		    }
 		    $this->regex = sprintf(
 			    "/<!--" .
@@ -928,6 +926,7 @@ if ( ! class_exists( 'Tailor_Models' ) ) {
 	     */
 	    public function generate_models_from_html( $html, $parent, $models ) {
 		    $placeholder = tailor_get_setting( 'content_placeholder', __( 'This is placeholder text which you can replace by editing this element.', 'tailor' ) );
+
 		    if ( preg_match_all( $this->regex, $html, $matches ) ) {
 			    for ( $i = 0; $i < count( $matches[3] ); $i++ ) {
 				    $id = $matches[3][ $i ];
@@ -935,17 +934,18 @@ if ( ! class_exists( 'Tailor_Models' ) ) {
 				    $content = $matches[5][ $i ];
 				    $model = array(
 					    'id'            =>  $id,
-					    'tag'           =>  'tailor_' . $type,
+					    'tag'           =>  $type,
 					    'atts'          =>  array(),
 					    'parent'        =>  $parent,
 					    'order'         =>  $i,
 				    );
 
 				    // Get the inner HTML of content elements
-				    if ( $type == 'content' ) {
-					    $dom = new DOMDocument();
-					    $dom->loadHtml(preg_replace( $this->regex, '', $content ));
+				    if ( $type == 'tailor_content' ) {
+					    $dom = new DOMDocument('1.0', 'UTF-8');
+					    $dom->loadHtml(mb_convert_encoding( preg_replace( $this->regex, '', $content ), 'HTML-ENTITIES', 'UTF-8') );
 					    $inner_html = '';
+
 					    foreach ( $dom->getElementsByTagName("div") as $node ) {
 						    if ( strpos( $node->getAttribute("class"), "tailor-{$id}" ) !== false ) {
 							    foreach ( $node->childNodes as $el ) {
