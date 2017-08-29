@@ -1,8 +1,22 @@
-<?php global $count; ?>
+<?php 
+	global $count; 
+	$course_id = get_the_ID();
+	$progress = get_user_progress();
+
+	if( isset($progress[$course_id]) ){
+		$sash = 'Active';
+	}
+	else{
+		$price = get_course_price_by_id( $course_id );
+		$sash = $price == 0 ? 'Free' : '$' . $price;
+	}
+
+?>
+
 <li class="list-item">
 	<div class="left">
 		<div class="box">
-			<span class="sash">Active</span>
+			<span class="sash"><?php echo $sash ;?></span>
 			<span class="number"><?php echo $count;?></span>
 		</div>
 	</div>

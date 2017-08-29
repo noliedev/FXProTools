@@ -53,6 +53,16 @@ function get_courses_by_category_id($category_id){
 	return !$courses ? false : $courses;
 }
 
+function get_course_metadata($course_id){
+	return get_post_meta( $course_id, '_sfwd-courses', true );
+}
+
+function get_course_price_by_id($course_id){
+	$course_data = get_course_metadata($course_id);
+	$price = $course_data['sfwd-courses_course_price'];
+	return is_numeric($price) ? $price : 0;
+}
+
 function get_lessons_by_course_id($course_id){
 	$args = array(
 			'posts_per_page'   => -1,
