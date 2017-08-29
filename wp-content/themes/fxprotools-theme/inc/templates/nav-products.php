@@ -6,8 +6,8 @@
 					<li class="dashboard"><a href="<?php bloginfo('url');?>/basic-training" title="Product Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
 					<li><a href="<?php bloginfo('url');?>/basic-training">Basic Training</a></li>
 					<li><a href="<?php bloginfo('url');?>/advanced-training">Advance Training</a></li>
-					<li><a href="<?php bloginfo('url');?>/course-category/forex-scanner">Market Scanner</a></li>
-					<li><a href="<?php bloginfo('url');?>/course-category/auto-trader">Auto Trader</a></li>
+					<li><a href="<?php bloginfo('url');?>/scanner">Market Scanner</a></li>
+					<li><a href="<?php bloginfo('url');?>/auto-trader">Auto Trader</a></li>
 					<li><a href="<?php bloginfo('url');?>/coaching">Coaching / Webinars </a></li>
 				</ul>
 			</div>
