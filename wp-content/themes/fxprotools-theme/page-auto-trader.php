@@ -1,6 +1,6 @@
 <?php
-	$product_id = 49; //professional package
-	$courses = get_courses_by_product_id( get_the_ID() ); 
+	$product_id = 49; //auto trader package
+	$courses = get_courses_by_product_id( $product_id  ); 
 ?>
 <?php get_header(); ?>
 
@@ -73,7 +73,7 @@
 						<div class="panel-body" style="padding: 50px;">
 							<div class="fx-video-container"></div>
 							<br/>
-							<a href="#" class="btn btn-lg btn-danger block">Upgrade Account</a>
+							<a href="<?php bloginfo('url');?>/product/auto-trader/" class="btn btn-lg btn-danger block">Upgrade Account</a>
 						</div>
 					</div>
 				</div>

@@ -21,6 +21,7 @@ if(!class_exists('ThemeSettings')){
 			add_action( 'init', array($this,'course_category_rewrite') );
 			add_action( 'template_redirect',  array($this,'course_category_template') );
 			add_filter( 'query_vars',  array($this,'course_category_vars') );
+			remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products' );
 
 		}
 
@@ -105,7 +106,6 @@ if(!class_exists('ThemeSettings')){
 		        });
 		    }
 		}
-
 
 
 
