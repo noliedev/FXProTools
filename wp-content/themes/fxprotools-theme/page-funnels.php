@@ -42,14 +42,14 @@ $funnels = get_funnels();
 											<div class="fx-tabs-vertical marketing-funnels">
 												<ul class="nav nav-tabs">
 													<li class="active">
-														<a href="#a-<?php" data-toggle="tab">
+														<a href="#a-<?php echo $count;?>" data-toggle="tab">
 															<span class="block">Step 1</span>
 															<span class="block">Capture</span>
 															<small>Lead Gen</small>
 														</a>
 													</li>
 													<li>
-														<a href="#b" data-toggle="tab">
+														<a href="#b-<?php echo $count;?>" data-toggle="tab">
 															<span class="block">Step 2</span>
 															<span class="block">Landing</span>
 															<small>Information</small>
@@ -57,7 +57,7 @@ $funnels = get_funnels();
 													</li>
 												</ul>
 												<div class="tab-content">
-													<div class="tab-pane tab-profile active" id="a">
+													<div class="tab-pane tab-profile active" id="a-<?php echo $count;?>">
 														<?php 
 														$thumbnail = reset(rwmb_meta('capture_page_thumbnail'));
 														$title = rwmb_meta('capture_page_title');
@@ -156,7 +156,7 @@ $funnels = get_funnels();
 															</div>
 														</div>
 													</div>
-													<div class="tab-pane tab-profile" id="b">
+													<div class="tab-pane tab-profile" id="b-<?php echo $count;?>">
 														<?php 
 														$thumbnail = reset(rwmb_meta('landing_page_thumbnail'));
 														$title = rwmb_meta('landing_page_title');
@@ -196,7 +196,7 @@ $funnels = get_funnels();
 																		<div class="form-group url-group one">
 																			<label>Custom Video Embed:</label>
 																			<div class="clearfix"></div>
-																			<input type="text" class="form-control" value="">
+																			<textarea class="form-control"></textarea>
 																			<a href="#" class="btn btn-default">Save</a>
 																			<div class="clearfix"></div>
 																		</div>
