@@ -211,7 +211,8 @@
 		.url-group {
 			position: relative;
 			&.one {
-				input[type="text"] {
+				input[type="text"],
+				textarea{
 					width: 87.5%;
 					float: left;
 					margin-right: 5px;
@@ -222,7 +223,8 @@
 				}
 			}
 			&.two {
-				input[type="text"] {
+				input[type="text"],
+				textarea {
 					width: 77%;
 					float: left;
 					margin-right: 5px;

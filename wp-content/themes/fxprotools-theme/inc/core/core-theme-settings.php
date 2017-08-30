@@ -17,11 +17,11 @@ if(!class_exists('ThemeSettings')){
 		public function __construct()
 		{
 			add_action('wp_enqueue_scripts', array($this, 'enqueue_theme_assets'));
-			add_filter( 'rwmb_meta_boxes',  array($this,'initialize_meta_boxes') );
-			add_action( 'init', array($this,'course_category_rewrite') );
-			add_action( 'template_redirect',  array($this,'course_category_template') );
-			add_filter( 'query_vars',  array($this,'course_category_vars') );
-			remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products' );
+			add_filter('rwmb_meta_boxes',  array($this, 'initialize_meta_boxes'));
+			add_action('init', array($this, 'course_category_rewrite'));
+			add_action('template_redirect',  array($this, 'course_category_template'));
+			add_filter('query_vars',  array($this,'course_category_vars'));
+			add_action('init', array($this, 'register_funnel_post_type'));
 
 		}
 
@@ -86,6 +86,66 @@ if(!class_exists('ThemeSettings')){
 				),
 			);
 
+			$meta_boxes[] = array(
+				'id' => 'capture_page_fields',
+				'title' => esc_html__( 'Capture Page Fields', 'fxprotools' ),
+				'post_types' => array( 'fx_funnel' ),
+				'context' => 'advanced',
+				'priority' => 'high',
+				'autosave' => false,
+				'fields' => array(
+					array(
+						'id' => $prefix . 'capture_page_url',
+						'type' => 'text',
+						'name' => esc_html__( 'Capture Page URL', 'fxprotools' ),
+						'size' => 100,
+					),
+					array(
+						'id' => $prefix . 'capture_page_title',
+						'type' => 'text',
+						'name' => esc_html__( 'Capture Page Title', 'fxprotools' ),
+						'size' => 100,
+					),
+					array(
+						'id' => $prefix . 'capture_page_thumbnail',
+						'type' => 'image_advanced',
+						'name' => esc_html__( 'Cature Page Thumbnail', 'fxprotools' ),
+						'force_delete' => false,
+						'max_file_uploads' => '1',
+					),
+				),
+			);
+
+			$meta_boxes[] = array(
+				'id' => 'landing_page_fields',
+				'title' => esc_html__( 'Landing Page Fields', 'fxprotools' ),
+				'post_types' => array( 'fx_funnel' ),
+				'context' => 'advanced',
+				'priority' => 'high',
+				'autosave' => false,
+				'fields' => array(
+					array(
+						'id' => $prefix . 'landing_page_url',
+						'type' => 'text',
+						'name' => esc_html__( 'Landing Page URL', 'fxprotools' ),
+						'size' => 100,
+					),
+					array(
+						'id' => $prefix . 'landing_page_title',
+						'type' => 'text',
+						'name' => esc_html__( 'Landing Page Title', 'fxprotools' ),
+						'size' => 100,
+					),
+					array(
+						'id' => $prefix . 'landing_page_thumbnail',
+						'type' => 'image_advanced',
+						'name' => esc_html__( 'Landing Page Thumbnail', 'fxprotools' ),
+						'force_delete' => false,
+						'max_file_uploads' => '1',
+					),
+				),
+			);
+
 			return $meta_boxes;
 		}
 
@@ -107,6 +167,57 @@ if(!class_exists('ThemeSettings')){
 		    }
 		}
 
+		public function register_funnel_post_type(){
+			$labels = array(
+			'name'                  => _x( 'Funnels', 'Post Type General Name', 'fxprotools' ),
+			'singular_name'         => _x( 'Funnel', 'Post Type Singular Name', 'fxprotools' ),
+			'menu_name'             => __( 'Funnels', 'fxprotools' ),
+			'name_admin_bar'        => __( 'Funnel', 'fxprotools' ),
+			'archives'              => __( 'Funnel Archives', 'fxprotools' ),
+			'attributes'            => __( 'Funnel Attributes', 'fxprotools' ),
+			'parent_item_colon'     => __( 'Parent Funnel:', 'fxprotools' ),
+			'all_items'             => __( 'All Funnels', 'fxprotools' ),
+			'add_new_item'          => __( 'Add New Funnel', 'fxprotools' ),
+			'add_new'               => __( 'Add New', 'fxprotools' ),
+			'new_item'              => __( 'New Funnel', 'fxprotools' ),
+			'edit_item'             => __( 'Edit Funnel', 'fxprotools' ),
+			'update_item'           => __( 'Update Funnel', 'fxprotools' ),
+			'view_item'             => __( 'View Funnel', 'fxprotools' ),
+			'view_items'            => __( 'View Funnels', 'fxprotools' ),
+			'search_items'          => __( 'Search Funnel', 'fxprotools' ),
+			'not_found'             => __( 'Not found', 'fxprotools' ),
+			'not_found_in_trash'    => __( 'Not found in Trash', 'fxprotools' ),
+			'featured_image'        => __( 'Featured Image', 'fxprotools' ),
+			'set_featured_image'    => __( 'Set featured image', 'fxprotools' ),
+			'remove_featured_image' => __( 'Remove featured image', 'fxprotools' ),
+			'use_featured_image'    => __( 'Use as featured image', 'fxprotools' ),
+			'insert_into_item'      => __( 'Insert into item', 'fxprotools' ),
+			'uploaded_to_this_item' => __( 'Uploaded to this funnel', 'fxprotools' ),
+			'items_list'            => __( 'Funnels list', 'fxprotools' ),
+			'items_list_navigation' => __( 'Funnels list navigation', 'fxprotools' ),
+			'filter_items_list'     => __( 'Filter Funnels list', 'fxprotools' ),
+		);
+		$args = array(
+			'label'                 => __( 'Funnel', 'fxprotools' ),
+			'description'           => __( 'Post Type Description', 'fxprotools' ),
+			'labels'                => $labels,
+			'supports'              => array( 'title', 'thumbnail', 'page-attributes'),
+			'hierarchical'          => false,
+			'public'                => true,
+			'show_ui'               => true,
+			'show_in_menu'          => true,
+			'menu_position'         => 5,
+			'menu_icon'             => 'dashicons-desktop',
+			'show_in_admin_bar'     => true,
+			'show_in_nav_menus'     => true,
+			'can_export'            => true,
+			'has_archive'           => true,		
+			'exclude_from_search'   => true,
+			'publicly_queryable'    => true,
+			'capability_type'       => 'page',
+		);
+		register_post_type( 'fx_funnel', $args );
+		}
 
 
 	}
