@@ -11,7 +11,7 @@
 
 	<div class="fx-wrapper <?php echo is_page(array('login', 'forgot-password')) ? 'fx-login' : ''; ?>">
 		
-		<?php if(!is_page(array('login', 'forgot-password'))): ?>
+		<?php if( is_user_logged_in() && !is_page(array('login', 'forgot-password')) ): ?>
 		<nav class="navbar fx-navbar-main" role="navigation">
 			<div class="container">
 				<div class="row">
