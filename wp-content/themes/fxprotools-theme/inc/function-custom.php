@@ -6,14 +6,14 @@
  * All custom functions
  */
 
-add_action('init', 'check_authentication');
-function check_authentication(){
-	if(!is_user_logged_in()){
-		$url = get_site_url() . '/login/';
-		// Force using of js to avoid too many redirect and header sent errors
-		echo "<script>location.href = {$url};</script>'";
-	}
-}
+// add_action('init', 'check_authentication');
+// function check_authentication(){
+// 	if(!is_user_logged_in()){
+// 		$url = get_site_url() . '/login/';
+// 		// Force using of js to avoid too many redirect and header sent errors
+// 		// echo "<script>location.href = {$url};</script>";
+// 	}
+// }
 
 add_action('init', 'block_users_wp');
 function block_users_wp(){

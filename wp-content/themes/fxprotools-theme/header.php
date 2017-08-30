@@ -8,7 +8,7 @@
 </head>
 
 <body <?php body_class(); ?>>
-	<?php check_authentication(); ?>
+
 	<div class="fx-wrapper <?php echo is_page(array('login', 'forgot-password')) ? 'fx-login' : ''; ?>">
 		
 		<?php if(!is_page(array('login', 'forgot-password'))): ?>

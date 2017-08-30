@@ -71,10 +71,10 @@ if($custom_functions){
  * -----------
  * Authorize.net customer information and subscription manager
  */
-$anet_includes = [
+// $anet_includes = [
 	// 'auth-api.php',
 	// 'auth-ajax.php',
-];
-foreach ($anet_includes as $a) {
-	require_once('inc/authorize-net/'.$a);
-}
+// ];
+// foreach ($anet_includes as $a) {
+// 	require_once('inc/authorize-net/'.$a);
+// }
