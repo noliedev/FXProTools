@@ -60,10 +60,10 @@
 					<div class="panel-body">
 						<div class="form-inline pull-right">
 							<div class="form-group">
-								<input type="text" class="form-control" value="" placeholder="Starting: MM/DD/YYYY">
+								<input data-provide="datepicker" data-date-format="mm/dd/yyyy type="text" class="form-control" value="" placeholder="Starting: MM/DD/YYYY">
 							</div>
 							<div class="form-group">
-								<input type="text" class="form-control" value="" placeholder="Ending: MM/DD/YYYY">
+								<input data-provide="datepicker" data-date-format="mm/dd/yyyy type="text" class="form-control" value="" placeholder="Ending: MM/DD/YYYY">
 							</div>
 						</div>
 						<h4>E-Wallet Summary</h4>

@@ -6,17 +6,10 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="fx-header-title">
-					<h1>Your Sales Funnels Stats</h1>
-					<p>Let us do most of the work for you</p>
+					<h1>Contacts</h1>
 				</div>
-				<div class="form-inline m-b-md">
-					<div class="form-group">
-						<input type="text" class="form-control" value="" placeholder="Starting: MM/DD/YYYY">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" value="" placeholder="Ending: MM/DD/YYYY">
-					</div>
-					<a href="#" class="btn btn-default pull-right"><i class="fa fa-download"></i> Export Contacts</a>
+				<div class="text-right m-b-md">
+					<a href="#" class="btn btn-default"><i class="fa fa-download"></i> Export Contacts</a>
 				</div>
 				<div class="clearfix"></div>
 				<div class="fx-search-contact">

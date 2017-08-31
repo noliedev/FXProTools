@@ -32,7 +32,7 @@
 				<a href="<?php the_permalink(); ?>" class="btn btn-default block">Learn More</a>
 			</div>
 			<div class="col-md-12">
-				<?php get_template_part('inc/templates/product/progressbar'); ?>
+				<?php get_template_part('inc/templates/course/progressbar'); ?>
 			</div>
 		</div>
 	</div>

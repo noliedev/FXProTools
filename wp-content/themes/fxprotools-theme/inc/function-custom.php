@@ -128,3 +128,21 @@ function get_funnels(){
 	);
 	return get_posts($args);
 }
+
+function get_funnel_stats($funnel_id){
+	$stats = get_post_meta($funnel_id , 'course_id', true); 
+	$sample_stats = array( 'capture' => 
+							array( 'page_views' => array('all' 	 => 88, 'unique' => 61),
+								   'opt_ins' 	=> array('all' 	 => 21, 'rate' 	 => 34.4),
+								   'sales' 		=> array('count' => 21, 'rate'	 => 34.4),
+							),
+							'landing' => 
+							array( 'page_views' => array('all' 	 => 88, 'unique' => 61),
+								   'opt_ins' 	=> array('all' 	 => '', 'rate' 	 => ''),
+								   'sales' 		=> array('count' => '', 'rate' 	 => ''),
+							),
+							'totals' =>
+							array( 'customer_sales' => 10, 'distributor_sales' => 11),
+					);
+	return !$stats ? $sample_stats : $course;
+}
