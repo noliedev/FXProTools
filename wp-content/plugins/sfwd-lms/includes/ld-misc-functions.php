@@ -1084,3 +1084,38 @@ function learndash_setting_update_post_meta( $meta_id = 0, $object_id = '', $met
 //add_action( 'update_post_meta', 'learndash_setting_update_post_meta', 20, 4 );
 
 
+/**
+ * Used for the Support panel to get the MySQL priveleges for the DB_USER defined in the wp-config
+ *
+ * @since 2.4.7
+ *
+ * @returns array of grants
+ */
+function learndash_get_db_user_grants() {
+	global $wpdb;
+	
+	$grants = array();
+
+	if ( ( defined( 'DB_USER' ) ) && ( defined( 'DB_HOST' ) ) ) {
+		$grants_sql_str = "SHOW GRANTS FOR '". DB_USER ."'@'". DB_HOST ."';";
+		$grants_results = $wpdb->query($grants_sql_str);
+		if ( !empty( $grants_results ) ) {
+			foreach( $wpdb->last_result as $result_object ) {
+				foreach( $result_object as $result_key => $result_string ) {
+					preg_match('/GRANT (.*?) ON /', $result_string, $result_perms);
+					if ( ( isset( $result_perms[1] ) ) && ( !empty( $result_perms[1] ) ) ) {
+						$perms = explode(',', $result_perms[1] );
+						$perms = array_map( 'trim', $perms );
+						$grants = array_merge( $grants, $perms );
+					}
+				}
+			}
+		}
+		
+		if ( !empty( $grants ) ) {
+			$grants = array_unique( $grants );
+		}
+	}
+	
+	return $grants;
+}

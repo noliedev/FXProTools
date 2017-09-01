@@ -1277,13 +1277,21 @@ function learndash_course_status( $id, $user_id = null ) {
 		}
 	}
 
+	$course_status_str = '';
 	if ( ( empty( $course_progress[ $id ] ) || empty( $course_progress[ $id ]['lessons'] ) && ! $has_completed_topic ) && $quiz_notstarted ) {
-		return __( 'Not Started', 'learndash' );
+		$course_status_str = __( 'Not Started', 'learndash' );
 	} else if ( empty( $course_progress[ $id ] ) || @$course_progress[ $id ]['completed'] < @$course_progress[ $id ]['total'] ) {
-		return __( 'In Progress', 'learndash' );
+		$course_status_str = __( 'In Progress', 'learndash' );
 	} else {
-		return __( 'Completed', 'learndash' );
+		$course_status_str = __( 'Completed', 'learndash' );
 	}
+	return apply_filters( 
+		'learndash_course_status', 
+		$course_status_str, 
+		$id, 
+		$user_id, 
+		isset( $course_progress[ $id ] ) ? $course_progress[ $id ] : array() 
+	);
 }
 
 

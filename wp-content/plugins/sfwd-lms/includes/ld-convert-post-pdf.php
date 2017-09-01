@@ -380,7 +380,40 @@ if ( ! function_exists( 'post2pdf_conv_post_to_pdf' ) ) {
 		
 		// Create a new object
 		//$pdf = new TCPDF( PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false, false );
-		$pdf = new TCPDF( $learndash_certificate_options['pdf_page_orientation'], PDF_UNIT, $learndash_certificate_options['pdf_page_format'], true, 'UTF-8', false, false );
+		
+		$tcpdf_params = array(
+			'orientation'	=>	$learndash_certificate_options['pdf_page_orientation'], 
+			'unit'			=>	PDF_UNIT, 
+			'format'		=>	$learndash_certificate_options['pdf_page_format'], 
+			'unicode'		=>	true, 
+			'encoding'		=>	'UTF-8', 
+			'diskcache'		=>	false, 
+			'pdfa'			=>	false,
+			'margins'		=>	array(
+				'top'		=>	PDF_MARGIN_TOP,
+				'right'		=>	PDF_MARGIN_RIGHT,
+				'bottom'	=>	PDF_MARGIN_BOTTOM,
+				'left'		=>	PDF_MARGIN_LEFT
+			)
+		);
+
+		// Added to let external manipulate the TCPDF parameters. 
+		// @since 2.4.7
+		$tcpdf_params = apply_filters('learndash_certificate_params', $tcpdf_params, $post_id );
+		
+		$pdf = new TCPDF( 
+			$tcpdf_params['orientation'],
+			$tcpdf_params['unit'],
+			$tcpdf_params['format'],
+			$tcpdf_params['unicode'],
+			$tcpdf_params['encoding'],
+			$tcpdf_params['diskcache'],
+			$tcpdf_params['pdfa']
+		);
+		
+		// Added to let external manipulate the $pdf instance. 
+		// @since 2.4.7
+		do_action( 'learndash_certification_created', $pdf, $post_id );
 		
 		// Set document information
 		$pdf->SetCreator( PDF_CREATOR );
@@ -426,7 +459,8 @@ if ( ! function_exists( 'post2pdf_conv_post_to_pdf' ) ) {
 		$pdf->SetDefaultMonospacedFont( $monospaced_font );
 		
 		// Set margins
-		$pdf->SetMargins( PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT );
+		//$pdf->SetMargins( PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT );
+		$pdf->SetMargins( $tcpdf_params['margins']['left'], $tcpdf_params['margins']['top'], $tcpdf_params['margins']['right'] );
 
 		if ( $header_enable == 1 ) {
 			$pdf->SetHeaderMargin( PDF_MARGIN_HEADER );
@@ -437,8 +471,9 @@ if ( ! function_exists( 'post2pdf_conv_post_to_pdf' ) ) {
 		}
 		
 		// Set auto page breaks
-		$pdf->SetAutoPageBreak( true, PDF_MARGIN_BOTTOM );
-		
+		//$pdf->SetAutoPageBreak( true, PDF_MARGIN_BOTTOM );
+		$pdf->SetAutoPageBreak( true, $tcpdf_params['margins']['bottom'] );
+				
 		// Set image scale factor
 		$pdf->setImageScale( $ratio );
 		
@@ -453,6 +488,10 @@ if ( ! function_exists( 'post2pdf_conv_post_to_pdf' ) ) {
 		
 		// Add a page
 		$pdf->AddPage();
+		
+		// Added to let external manipulate the $pdf instance. 
+		// @since 2.4.7
+		do_action( 'learndash_certification_after', $pdf, $post_id );
 		
 		// Create post content to print
 		if ( $wrap_title == 1 ) {

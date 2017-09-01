@@ -454,6 +454,12 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 			
 			$ld_admin_settings_data_upgrades_db = new Learndash_Admin_Data_Upgrades_User_Activity_DB_Table();
 			$ld_admin_settings_data_upgrades_db->upgrade_data_settings();
+			
+			/**
+			 * Ensure we call WPProQuiz activate functions
+			 * @since 2.4.6.1
+			 */
+			WpProQuiz_Helper_Upgrade::upgrade();
 		}
 
 

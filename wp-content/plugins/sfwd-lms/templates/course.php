@@ -66,8 +66,7 @@
 	<?php echo learndash_payment_buttons( $post ); ?>
 <?php endif; ?>
 
-
-<?php if ( isset( $materials ) ) : ?>
+<?php if ( ( isset( $materials ) ) && ( !empty( $materials ) ) ) : ?>
 	<div id="learndash_course_materials" class="learndash_course_materials">
 		<h4><?php printf( _x( '%s Materials', 'Course Materials Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'course' ) ); ?></h4>
 		<p><?php echo $materials; ?></p>

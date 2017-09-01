@@ -60,7 +60,7 @@ function learndash_timer() {
         document.getElementById( 'learndash_timer' ).innerHTML = '';
     }
 }
-
+/*
 jQuery( function() {
     function force_max_12px_font_size() {
         var f1 = jQuery( '#course_navigation .learndash_navigation_lesson_topics_list a' ).css( 'font-size' );
@@ -71,6 +71,7 @@ jQuery( function() {
     }
     force_max_12px_font_size();
 });
+*/
 
 jQuery(document).ready(function() {
 	

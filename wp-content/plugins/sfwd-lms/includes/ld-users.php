@@ -588,15 +588,12 @@ function learndash_save_user_course_complete( $user_id = 0) {
 		return;
 	}
 	
-	if ( ( !empty( $user_id ) ) && ( learndash_is_admin_user( ) ) || ( learndash_is_group_leader_user( ) ) ) {
+	if ( ( !empty( $user_id ) ) && ( current_user_can( 'edit_users' ) ) ) {
 		if ( ( isset( $_POST['user_progress'] ) ) && ( isset( $_POST['user_progress'][$user_id] ) ) && ( !empty( $_POST['user_progress'][$user_id] ) ) ) {
 			if ( ( isset( $_POST['user_progress-'. $user_id .'-nonce'] ) ) && ( !empty( $_POST['user_progress-'. $user_id .'-nonce'] ) ) ) {
 				if (wp_verify_nonce( $_POST['user_progress-'. $user_id .'-nonce'], 'user_progress-'. $user_id )) {
 					$user_progress = (array)json_decode( stripslashes( $_POST['user_progress'][$user_id] ) );
 					$user_progress = json_decode(json_encode($user_progress), true);
-					//error_log('user_progress<pre>'. print_r($user_progress, true) .'</pre>');
-					//return;
-					
 					
 					$processed_course_ids = array();
 

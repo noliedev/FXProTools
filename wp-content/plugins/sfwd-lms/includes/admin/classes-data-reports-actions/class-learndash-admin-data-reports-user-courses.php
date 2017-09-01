@@ -267,9 +267,21 @@ if ( !class_exists( 'Learndash_Admin_Data_Reports_Courses' ) ) {
 							if ( !empty( $course_progress_data ) ) {
 								$this->csv_parse->file = $this->report_filename;
 								$this->csv_parse->output_filename = $this->report_filename;
+
+								// legacy 
 								$this->csv_parse = apply_filters('learndash_csv_object', $this->csv_parse, 'courses' );
+
+								/**
+								 * Filter to override CSV object attributes
+								 * @since 2.4.7
+								 * This is basically the same as the above line with the exeption of the last param used 
+								 * being the proper data slug instead of just 'courses'.
+								 */
+								$this->csv_parse = apply_filters('learndash_csv_object', $this->csv_parse, $this->data_slug );
+								$course_progress_data = apply_filters('learndash_csv_data', $course_progress_data, $this->data_slug );
+
+								$save_ret = $this->csv_parse->save( $this->report_filename, $course_progress_data, true );
 								
-								$this->csv_parse->save( $this->report_filename, $course_progress_data, true );
 							}
 						} 
 						
@@ -342,8 +354,21 @@ if ( !class_exists( 'Learndash_Admin_Data_Reports_Courses' ) ) {
 			if ( !empty( $this->data_headers ) ) {
 				$this->csv_parse->file = $this->report_filename;
 				$this->csv_parse->output_filename = $this->report_filename;
+
+				// legacy 
 				$this->csv_parse = apply_filters('learndash_csv_object', $this->csv_parse, 'courses' );
 				
+
+				/**
+				 * Filter to override CSV object attributes
+				 * @since 2.4.7
+				 * This is basically the same as the above line with the exeption of the last param used 
+				 * being the proper data slug instead of just 'courses'.
+				 */
+				$this->csv_parse = apply_filters('learndash_csv_object', $this->csv_parse, $this->data_slug );
+				
+				$this->data_headers = apply_filters('learndash_csv_data', $this->data_headers, $this->data_slug );
+
 				$this->csv_parse->save( $this->report_filename, array( wp_list_pluck( $this->data_headers, 'label' ) ), false );
 			}
 		}
@@ -365,7 +390,7 @@ if ( !class_exists( 'Learndash_Admin_Data_Reports_Courses' ) ) {
 			// Because we on;y want to store the relative path 
 			//$ld_wp_upload_filename = str_replace( ABSPATH, '', $ld_wp_upload_filename );
 		
-			$this->transient_data['report_filename'] = $ld_wp_upload_filename;
+			$this->transient_data['report_filename'] = apply_filters( 'learndash_report_filename', $ld_wp_upload_filename, $this->data_slug );
 
 			//$this->transient_data['report_url'] = $wp_upload_dir['baseurl'] . $ld_file_part;
 			$this->transient_data['report_url'] = add_query_arg(
@@ -391,6 +416,8 @@ if ( !class_exists( 'Learndash_Admin_Data_Reports_Courses' ) ) {
 				case 'user_name': 
 					if ( $report_user instanceof WP_User ) {
 						$column_value =  $report_user->display_name;
+						$column_value = str_replace("’", "'", $column_value );
+						
 					}
 					break;
 
@@ -409,6 +436,7 @@ if ( !class_exists( 'Learndash_Admin_Data_Reports_Courses' ) ) {
 				case 'course_title':
 					if ( property_exists( $report_item, 'post_title' ) ) {
 						$column_value = $report_item->post_title;
+						$column_value = str_replace("’", "'", $column_value );
 					}
 					break;
 				
@@ -483,8 +511,11 @@ if ( !class_exists( 'Learndash_Admin_Data_Reports_Courses' ) ) {
 				default:	
 					break;
 			}
-			
-			return $column_value;
+			/**
+			 * Allow filtering of the report column data
+			 * @since 2.4.7
+			 */
+			return apply_filters('learndash_report_column_item', $column_value, $column_key, $report_item, $report_user, $this->data_slug );
 		}
 		
 		

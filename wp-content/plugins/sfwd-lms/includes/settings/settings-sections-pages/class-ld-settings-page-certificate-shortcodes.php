@@ -51,6 +51,8 @@ if ( ( class_exists( 'LearnDash_Settings_Page' ) ) && ( !class_exists( 'LearnDas
 										<li><b>SHOW</b>: ' . sprintf( _x( 'This parameter determines the information to be shown by the shortcode. Possible values are:
 											<ol class="cert_shortcode_parm_list">
 												<li>course_title</li>
+												<li>course_points</li>
+												<li>user_course_points</li>
 												<li>completed_on</li>
 												<li>cumulative_score</li>
 												<li>cumulative_points</li>

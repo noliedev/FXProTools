@@ -1090,7 +1090,8 @@ function learndash_update_submitted_essay_data( $quiz_id, $question_id, $essay, 
  * @param WP_Post	$essay
  */
 function learndash_update_quiz_data( $quiz_id, $question_id, $updated_scoring, $essay ) {
-
+	$affected_quiz_keys = array();
+	
 	$users_quiz_data = get_user_meta( $essay->post_author, '_sfwd-quizzes', true );
 
 	// We need to find the user meta quiz to matches the essay being scored. 
@@ -1102,6 +1103,8 @@ function learndash_update_quiz_data( $quiz_id, $question_id, $updated_scoring, $
 		if ( ( !isset( $quiz_data['graded'][$question_id]['post_id'] ) ) || ( $quiz_data['graded'][$question_id]['post_id'] != $essay->ID ) )
 			continue;
 
+		$affected_quiz_keys[] = $quiz_key;
+		
 		// update total score
 		$users_quiz_data[ $quiz_key ]['score'] = $users_quiz_data[ $quiz_key ]['score'] + $updated_scoring['score_difference'];
 
@@ -1122,6 +1125,14 @@ function learndash_update_quiz_data( $quiz_id, $question_id, $updated_scoring, $
 	}
 
 	update_user_meta( $essay->post_author, '_sfwd-quizzes', $users_quiz_data );
+
+	if ( !empty( $affected_quiz_keys ) ) {
+		foreach( $affected_quiz_keys as $quiz_key ) {
+			if ( isset( $users_quiz_data[ $quiz_key ] ) ) {
+				learndash_process_mark_complete( $essay->post_author, $users_quiz_data[ $quiz_key ]['quiz'] );
+			}
+		}
+	}
 
 	/**
 	 * Perform action after essay quiz data is updated

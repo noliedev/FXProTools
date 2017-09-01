@@ -334,8 +334,13 @@ if ( ! class_exists( 'SFWD_CPT_Instance' ) ) {
 						$courses_prefix = $this->get_prefix();
 						$prefix_len = strlen( $courses_prefix );
 
+						$materials = '';
 						if ( ! empty( $course_settings['course_materials'] ) ) {
-							$materials = wp_kses_post( wp_specialchars_decode( $course_settings['course_materials'], ENT_QUOTES ) );
+							//$materials = wp_kses_post( wp_specialchars_decode( $course_settings['course_materials'], ENT_QUOTES ) );
+							$materials = wp_specialchars_decode( $course_settings['course_materials'], ENT_QUOTES );
+							if ( !empty( $materials ) ) {
+								$materials = do_shortcode( $materials );
+							}
 						}
 
 						learndash_check_convert_settings_to_single( $post->ID, $this->post_type );

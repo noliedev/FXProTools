@@ -38,11 +38,21 @@ if ( !class_exists( 'Learndash_Admin_Settings_Data_Reports' ) ) {
 						if ( ( isset( $transient_data['report_filename'] ) ) && ( !empty( $transient_data['report_filename'] ) ) ) {
 							//$report_filename = ABSPATH . $transient_data['report_filename'];
 							$report_filename = $transient_data['report_filename'];
-							if ( ( file_exists( $report_filename ) ) && (is_readable( $report_filename ) ) ) {
-								header('Content-Type: text/csv');
-								header('Content-Disposition: attachment; filename='. basename( $report_filename ) );
-								header('Pragma: no-cache');
-								header("Expires: 0");
+							if ( ( file_exists( $report_filename ) ) && ( is_readable( $report_filename ) ) ) {
+								$http_headers = array(
+									'Content-Encoding: '. DB_CHARSET, 
+									'Content-type: text/csv; charset='.DB_CHARSET,
+									'Content-Disposition: attachment; filename='. basename( $report_filename ),
+									'Pragma: no-cache',
+									'Expires: 0'
+								);
+								$http_headers = apply_filters('learndash_csv_download_headers', $http_headers, $transient_data, esc_attr( $_GET['data-slug'] ) );
+								if ( !empty( $http_headers ) ) {
+									foreach( $http_headers as $http_header ) {
+										header( $http_header );
+									}
+								}	
+								do_action('learndash_csv_download_after_headers');
 
 								echo file_get_contents($report_filename);
 							}

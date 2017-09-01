@@ -1,4 +1,4 @@
-# Translation of the WordPress plugin LearnDash LMS 2.4.6 by LearnDash.
+# Translation of the WordPress plugin LearnDash LMS 2.4.7 by LearnDash.
 # Copyright (C) 2017 LearnDash
 # This file is distributed under the same license as the LearnDash LMS package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: LearnDash LMS 2.4.6\n"
+"Project-Id-Version: LearnDash LMS 2.4.7\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/sfwd-lms\n"
-"POT-Creation-Date: 2017-07-24 00:17-0500\n"
+"POT-Creation-Date: 2017-08-28 07:00-0500\n"
 "PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -207,9 +207,9 @@ msgstr ""
 
 #: includes/admin/class-learndash-admin-groups-edit.php:123
 #: includes/admin/class-learndash-admin-groups-edit.php:134
-#: includes/class-ld-lms.php:2476 includes/class-ld-lms.php:2581
-#: includes/class-ld-lms.php:2778 includes/class-ld-lms.php:2874
-#: includes/class-ld-lms.php:2961 includes/ld-users.php:57
+#: includes/class-ld-lms.php:2482 includes/class-ld-lms.php:2587
+#: includes/class-ld-lms.php:2784 includes/class-ld-lms.php:2880
+#: includes/class-ld-lms.php:2967 includes/ld-users.php:57
 #: includes/ld-users.php:68
 #, php-format
 msgctxt "Select a Course Label"
@@ -436,7 +436,7 @@ msgctxt "Submitted Essays Menu Label"
 msgid "Submitted Essays"
 msgstr ""
 
-#. #-#-#-#-#  sfwd-lms.pot (LearnDash LMS 2.4.6)  #-#-#-#-#
+#. #-#-#-#-#  sfwd-lms.pot (LearnDash LMS 2.4.7)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/admin/class-learndash-admin-menus-tabs.php:335
 #: includes/admin/class-learndash-admin-menus-tabs.php:336
@@ -465,7 +465,7 @@ msgid "Import/Export"
 msgstr ""
 
 #: includes/admin/class-learndash-admin-menus-tabs.php:520
-#: includes/class-ld-lms.php:644
+#: includes/class-ld-lms.php:650
 #, php-format
 msgctxt "Edit Quiz Label"
 msgid "Edit %s"
@@ -512,13 +512,13 @@ msgctxt "Learndash Report Menu Label"
 msgid "Reports"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-data-reports.php:146
-#: includes/admin/class-learndash-admin-settings-data-reports.php:152
+#: includes/admin/class-learndash-admin-settings-data-reports.php:156
+#: includes/admin/class-learndash-admin-settings-data-reports.php:162
 #: includes/admin/ld-admin.php:160
 msgid "User Reports"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-data-reports.php:151
+#: includes/admin/class-learndash-admin-settings-data-reports.php:161
 #: includes/admin/class-learndash-admin-settings-data-upgrades.php:209
 msgid "Click to toggle"
 msgstr ""
@@ -575,14 +575,14 @@ msgstr ""
 #: includes/admin/class-learndash-admin-settings-support-panel.php:108
 #: includes/admin/class-learndash-admin-settings-support-panel.php:151
 #: includes/admin/class-learndash-admin-settings-support-panel.php:194
-#: includes/admin/class-learndash-admin-settings-support-panel.php:328
+#: includes/admin/class-learndash-admin-settings-support-panel.php:339
 msgid "Setting"
 msgstr ""
 
 #: includes/admin/class-learndash-admin-settings-support-panel.php:109
 #: includes/admin/class-learndash-admin-settings-support-panel.php:152
 #: includes/admin/class-learndash-admin-settings-support-panel.php:195
-#: includes/admin/class-learndash-admin-settings-support-panel.php:329
+#: includes/admin/class-learndash-admin-settings-support-panel.php:340
 msgid "Value"
 msgstr ""
 
@@ -621,8 +621,8 @@ msgstr ""
 
 #: includes/admin/class-learndash-admin-settings-support-panel.php:159
 #: includes/admin/class-learndash-admin-settings-support-panel.php:185
-#: includes/admin/class-learndash-admin-settings-support-panel.php:310
-#: includes/admin/class-learndash-admin-settings-support-panel.php:344
+#: includes/admin/class-learndash-admin-settings-support-panel.php:321
+#: includes/admin/class-learndash-admin-settings-support-panel.php:355
 #: includes/quiz/ld-quiz-info-shortcode.php:98
 #: includes/settings/settings-sections/class-ld-settings-section-general-admin-user.php:54
 #: includes/settings/settings-sections/class-ld-settings-section-general-admin-user.php:64
@@ -649,8 +649,8 @@ msgstr ""
 
 #: includes/admin/class-learndash-admin-settings-support-panel.php:159
 #: includes/admin/class-learndash-admin-settings-support-panel.php:185
-#: includes/admin/class-learndash-admin-settings-support-panel.php:312
-#: includes/admin/class-learndash-admin-settings-support-panel.php:342
+#: includes/admin/class-learndash-admin-settings-support-panel.php:323
+#: includes/admin/class-learndash-admin-settings-support-panel.php:353
 #: includes/quiz/ld-quiz-info-shortcode.php:98
 #: includes/settings/shortcodes-sections/ld_profile.php:54
 #: includes/vendor/wp-pro-quiz/lib/view/WpProQuiz_View_FrontQuiz.php:613
@@ -727,7 +727,7 @@ msgid "Learndash settings"
 msgstr ""
 
 #: includes/admin/class-learndash-admin-settings-support-panel.php:199
-#: includes/admin/class-learndash-admin-settings-support-panel.php:347
+#: includes/admin/class-learndash-admin-settings-support-panel.php:358
 msgid "Version"
 msgstr ""
 
@@ -765,43 +765,56 @@ msgstr ""
 msgid "Database Tables"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:301
+#: includes/admin/class-learndash-admin-settings-support-panel.php:298
+msgid ""
+"When activated LearnDash will create the following tables. If the tables are "
+"not present try reactivating the plugin. If the table still do not show "
+"check the DB_USER defined in your wp-config.php and ensure it has the proper "
+"permissions to create tables. Check with your host for help."
+msgstr ""
+
+#: includes/admin/class-learndash-admin-settings-support-panel.php:303
+msgid ""
+"The DB_USER defined in your wp-config.php does not have CREATE permission."
+msgstr ""
+
+#: includes/admin/class-learndash-admin-settings-support-panel.php:312
 msgid "Table Name"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:302
+#: includes/admin/class-learndash-admin-settings-support-panel.php:313
 msgid "Present"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:324
+#: includes/admin/class-learndash-admin-settings-support-panel.php:335
 msgid "PHP Settings"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:338
+#: includes/admin/class-learndash-admin-settings-support-panel.php:349
 msgid "cURL - Used for PayPal IPN Processing"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:348
+#: includes/admin/class-learndash-admin-settings-support-panel.php:359
 msgid "SSL Version"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:349
+#: includes/admin/class-learndash-admin-settings-support-panel.php:360
 msgid "Libz Version"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:350
+#: includes/admin/class-learndash-admin-settings-support-panel.php:361
 msgid "Protocols"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:359
+#: includes/admin/class-learndash-admin-settings-support-panel.php:370
 msgid "Reset LearnDash"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:361
+#: includes/admin/class-learndash-admin-settings-support-panel.php:372
 msgid "This option will remove ALL LearnDash data."
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:364
+#: includes/admin/class-learndash-admin-settings-support-panel.php:375
 #, php-format
 msgctxt "placeholder: DELETE ALL DATA"
 msgid ""
@@ -809,15 +822,15 @@ msgid ""
 "below and click the submit button"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:366
+#: includes/admin/class-learndash-admin-settings-support-panel.php:377
 msgid "Submit"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:370
+#: includes/admin/class-learndash-admin-settings-support-panel.php:381
 msgid "Are you sure that you want to remove ALL LearnDash data?"
 msgstr ""
 
-#: includes/admin/class-learndash-admin-settings-support-panel.php:377
+#: includes/admin/class-learndash-admin-settings-support-panel.php:388
 msgid "All LearnDash successfully remove from site."
 msgstr ""
 
@@ -838,27 +851,27 @@ msgctxt "Export User Course Data Label"
 msgid "Export User %s Data"
 msgstr ""
 
-#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-courses.php:278
-#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-quizzes.php:254
+#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-courses.php:290
+#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-quizzes.php:266
 #: includes/admin/classes-data-uprades-actions/class-learndash-admin-data-upgrades-user-meta-courses.php:94
 #: includes/admin/classes-data-uprades-actions/class-learndash-admin-data-upgrades-user-meta-quizzes.php:95
 #, php-format
 msgid "%d of %s Users"
 msgstr ""
 
-#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-courses.php:360
-#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-quizzes.php:370
+#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-courses.php:385
+#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-quizzes.php:392
 msgid ""
 "ERROR: Cannot create working folder. Check that the parent folder is writable"
 msgstr ""
 
-#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-courses.php:458
+#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-courses.php:486
 msgctxt "Course Complete Report label: NO"
 msgid "NO"
 msgstr ""
 
-#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-courses.php:462
-#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-courses.php:465
+#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-courses.php:490
+#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-courses.php:493
 msgctxt "Course Complete Report label: YES"
 msgid "YES"
 msgstr ""
@@ -869,12 +882,12 @@ msgctxt "Export User Quiz Data Label"
 msgid "Export User %s Data"
 msgstr ""
 
-#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-quizzes.php:344
+#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-quizzes.php:356
 msgctxt "Quiz Passed Report label: NO"
 msgid "NO"
 msgstr ""
 
-#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-quizzes.php:522
+#: includes/admin/classes-data-reports-actions/class-learndash-admin-data-reports-user-quizzes.php:546
 msgctxt "Quiz Passed Report label: YES"
 msgid "YES"
 msgstr ""
@@ -911,7 +924,7 @@ msgid ""
 "table for better reporting. (Required)"
 msgstr ""
 
-#: includes/admin/ld-admin.php:144 includes/class-ld-lms.php:625
+#: includes/admin/ld-admin.php:144 includes/class-ld-lms.php:631
 #, php-format
 msgctxt "Edit Topic Label"
 msgid "Edit %s"
@@ -943,7 +956,7 @@ msgstr ""
 
 #: includes/admin/ld-admin.php:287 includes/quiz/ld-quiz-essays.php:280
 #: includes/vendor/wp-pro-quiz/lib/view/WpProQuiz_View_StatisticsAjax.php:500
-#: templates/course.php:108 templates/course.php:215
+#: templates/course.php:107 templates/course.php:214
 #: templates/course_content_shortcode.php:53
 #: templates/course_content_shortcode.php:116
 #: templates/course_info_shortcode.php:327 templates/lesson.php:100
@@ -1068,7 +1081,7 @@ msgstr ""
 msgid " Options"
 msgstr ""
 
-#: includes/class-ld-cpt-instance.php:82 includes/class-ld-lms.php:1388
+#: includes/class-ld-cpt-instance.php:82 includes/class-ld-lms.php:1394
 #: includes/settings/settings-sections/class-ld-settings-section-lessons-display-order.php:78
 msgid "Sort By"
 msgstr ""
@@ -1078,20 +1091,20 @@ msgid "select"
 msgstr ""
 
 #: includes/class-ld-cpt-instance.php:85 includes/class-ld-cpt-instance.php:97
-#: includes/class-ld-lms.php:1390 includes/class-ld-lms.php:1401
+#: includes/class-ld-lms.php:1396 includes/class-ld-lms.php:1407
 msgid "Select a choice..."
 msgstr ""
 
-#: includes/class-ld-cpt-instance.php:86 includes/class-ld-lms.php:983
-#: includes/class-ld-lms.php:1391
+#: includes/class-ld-cpt-instance.php:86 includes/class-ld-lms.php:989
+#: includes/class-ld-lms.php:1397
 #: includes/settings/settings-sections/class-ld-settings-section-lessons-display-order.php:82
 #: includes/settings/shortcodes-sections/courseinfo.php:28
 #: includes/vendor/wp-pro-quiz/lib/view/WpProQuiz_View_QuestionEdit.php:40
 msgid "Title"
 msgstr ""
 
-#: includes/class-ld-cpt-instance.php:87 includes/class-ld-lms.php:984
-#: includes/class-ld-lms.php:1392
+#: includes/class-ld-cpt-instance.php:87 includes/class-ld-lms.php:990
+#: includes/class-ld-lms.php:1398
 #: includes/settings/settings-sections/class-ld-settings-section-lessons-display-order.php:83
 #: includes/vendor/wp-pro-quiz/lib/view/WpProQuiz_View_QuizEdit.php:1430
 #: includes/vendor/wp-pro-quiz/lib/view/WpProQuiz_View_Statistics.php:323
@@ -1100,32 +1113,32 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: includes/class-ld-cpt-instance.php:88 includes/class-ld-lms.php:985
-#: includes/class-ld-lms.php:1393
+#: includes/class-ld-cpt-instance.php:88 includes/class-ld-lms.php:991
+#: includes/class-ld-lms.php:1399
 #: includes/settings/settings-sections/class-ld-settings-section-lessons-display-order.php:84
 msgid "Menu Order"
 msgstr ""
 
 #: includes/class-ld-cpt-instance.php:91
-#: includes/class-ld-cpt-instance.php:102 includes/class-ld-lms.php:1396
-#: includes/class-ld-lms.php:1406
+#: includes/class-ld-cpt-instance.php:102 includes/class-ld-lms.php:1402
+#: includes/class-ld-lms.php:1412
 #: includes/settings/settings-sections/class-ld-settings-section-lessons-display-order.php:79
 msgid "Choose the sort order."
 msgstr ""
 
-#: includes/class-ld-cpt-instance.php:94 includes/class-ld-lms.php:1399
+#: includes/class-ld-cpt-instance.php:94 includes/class-ld-lms.php:1405
 #: includes/settings/settings-sections/class-ld-settings-section-lessons-display-order.php:90
 msgid "Sort Direction"
 msgstr ""
 
-#: includes/class-ld-cpt-instance.php:98 includes/class-ld-lms.php:996
-#: includes/class-ld-lms.php:1402
+#: includes/class-ld-cpt-instance.php:98 includes/class-ld-lms.php:1002
+#: includes/class-ld-lms.php:1408
 #: includes/settings/settings-sections/class-ld-settings-section-lessons-display-order.php:94
 msgid "Ascending"
 msgstr ""
 
-#: includes/class-ld-cpt-instance.php:99 includes/class-ld-lms.php:997
-#: includes/class-ld-lms.php:1403
+#: includes/class-ld-cpt-instance.php:99 includes/class-ld-lms.php:1003
+#: includes/class-ld-lms.php:1409
 #: includes/settings/settings-sections/class-ld-settings-section-lessons-display-order.php:95
 msgid "Descending"
 msgstr ""
@@ -1140,18 +1153,18 @@ msgstr ""
 msgid "Enter the number of posts to display per page."
 msgstr ""
 
-#: includes/class-ld-cpt-instance.php:754
+#: includes/class-ld-cpt-instance.php:759
 #: includes/course/ld-course-functions.php:701
 #: includes/course/ld-course-list-shortcode.php:1027
 #: includes/course/ld-course-progress.php:1244
-#: includes/course/ld-course-progress.php:1285
-#: includes/course/ld-course-progress.php:1804
+#: includes/course/ld-course-progress.php:1286
+#: includes/course/ld-course-progress.php:1812
 #: includes/ld-certificates.php:142 sfwd-lms.php:279
 #: templates/course_info_shortcode.php:150
 msgid "Completed"
 msgstr ""
 
-#: includes/class-ld-cpt-instance.php:852
+#: includes/class-ld-cpt-instance.php:857
 msgid "Access to certificate page is disallowed."
 msgstr ""
 
@@ -1166,7 +1179,7 @@ msgstr ""
 #: includes/class-ld-cpt-widget.php:682
 #: includes/course/ld-course-info-widget.php:114
 #: includes/course/ld-course-info-widget.php:228
-#: includes/course/ld-course-progress.php:1729
+#: includes/course/ld-course-progress.php:1737
 msgid "Title:"
 msgstr ""
 
@@ -1221,7 +1234,7 @@ msgstr ""
 msgid "Parent %s"
 msgstr ""
 
-#: includes/class-ld-cpt.php:591 templates/course.php:192
+#: includes/class-ld-cpt.php:591 templates/course.php:191
 msgid "« Previous"
 msgstr ""
 
@@ -1285,594 +1298,594 @@ msgstr ""
 msgid "Click Here to Continue"
 msgstr ""
 
-#: includes/class-ld-lms.php:623
+#: includes/class-ld-lms.php:629
 msgctxt "Add New Topic Label"
 msgid "Add New"
 msgstr ""
 
-#: includes/class-ld-lms.php:624
+#: includes/class-ld-lms.php:630
 #, php-format
 msgctxt "Add New Topic Label"
 msgid "Add New %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:626
+#: includes/class-ld-lms.php:632
 #, php-format
 msgctxt "New Topic Label"
 msgid "New %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:628
+#: includes/class-ld-lms.php:634
 #, php-format
 msgctxt "View Topic Label"
 msgid "View %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:629
+#: includes/class-ld-lms.php:635
 #, php-format
 msgctxt "Search Topic Label"
 msgid "Search %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:630
+#: includes/class-ld-lms.php:636
 #, php-format
 msgctxt "No Topic found Label"
 msgid "No %s found"
 msgstr ""
 
-#: includes/class-ld-lms.php:631
+#: includes/class-ld-lms.php:637
 #, php-format
 msgctxt "No Topic found in Trash"
 msgid "No %s found in Trash"
 msgstr ""
 
-#: includes/class-ld-lms.php:642
+#: includes/class-ld-lms.php:648
 msgctxt "Add New Quiz Label"
 msgid "Add New"
 msgstr ""
 
-#: includes/class-ld-lms.php:643
+#: includes/class-ld-lms.php:649
 #, php-format
 msgctxt "Add New Quiz Label"
 msgid "Add New %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:645
+#: includes/class-ld-lms.php:651
 #, php-format
 msgctxt "New Quiz Label"
 msgid "New %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:647
+#: includes/class-ld-lms.php:653
 #, php-format
 msgctxt "View Quiz Label"
 msgid "View %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:648
+#: includes/class-ld-lms.php:654
 #, php-format
 msgctxt "Search Quiz Label"
 msgid "Search %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:649
+#: includes/class-ld-lms.php:655
 #, php-format
 msgctxt "No Quiz found Label"
 msgid "No %s found"
 msgstr ""
 
-#: includes/class-ld-lms.php:650
+#: includes/class-ld-lms.php:656
 #, php-format
 msgctxt "No Quiz found in Trash Label"
 msgid "No %s found in Trash"
 msgstr ""
 
-#: includes/class-ld-lms.php:660
+#: includes/class-ld-lms.php:666
 msgctxt "Add New Lesson Label"
 msgid "Add New"
 msgstr ""
 
-#: includes/class-ld-lms.php:661
+#: includes/class-ld-lms.php:667
 #, php-format
 msgctxt "Add New Lesson Label"
 msgid "Add New %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:662
+#: includes/class-ld-lms.php:668
 #, php-format
 msgctxt "Edit Lesson Label"
 msgid "Edit %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:663
+#: includes/class-ld-lms.php:669
 #, php-format
 msgctxt "New Lesson Label"
 msgid "New %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:665
+#: includes/class-ld-lms.php:671
 #, php-format
 msgctxt "View Lesson Label"
 msgid "View %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:666
+#: includes/class-ld-lms.php:672
 #, php-format
 msgctxt "Search Lesson Label"
 msgid "Search %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:667
+#: includes/class-ld-lms.php:673
 #, php-format
 msgctxt "No Lesson found Label"
 msgid "No %s found"
 msgstr ""
 
-#: includes/class-ld-lms.php:668
+#: includes/class-ld-lms.php:674
 #, php-format
 msgctxt "No Lesson found in Trash Label"
 msgid "No %s found in Trash"
 msgstr ""
 
-#: includes/class-ld-lms.php:678
+#: includes/class-ld-lms.php:684
 msgctxt "Add New Course Label"
 msgid "Add New"
 msgstr ""
 
-#: includes/class-ld-lms.php:679
+#: includes/class-ld-lms.php:685
 #, php-format
 msgctxt "Add New Course Label"
 msgid "Add New %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:680
+#: includes/class-ld-lms.php:686
 #, php-format
 msgctxt "Edit Course Label"
 msgid "Edit %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:681
+#: includes/class-ld-lms.php:687
 #, php-format
 msgctxt "New Course Label"
 msgid "New %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:683
+#: includes/class-ld-lms.php:689
 #, php-format
 msgctxt "View Course Label"
 msgid "View %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:684
+#: includes/class-ld-lms.php:690
 #, php-format
 msgctxt "Search Courses Label"
 msgid "Search %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:685
+#: includes/class-ld-lms.php:691
 #, php-format
 msgctxt "No Courses found Label"
 msgid "No %s found"
 msgstr ""
 
-#: includes/class-ld-lms.php:686
+#: includes/class-ld-lms.php:692
 #, php-format
 msgctxt "No Courses found in Trash Label"
 msgid "No %s found in Trash"
 msgstr ""
 
-#: includes/class-ld-lms.php:721 includes/class-ld-lms.php:731
+#: includes/class-ld-lms.php:727 includes/class-ld-lms.php:737
 #, php-format
 msgctxt "placeholder: Course"
 msgid "%s Categories"
-msgstr ""
-
-#: includes/class-ld-lms.php:722
-#, php-format
-msgctxt "placeholder: Course"
-msgid "%s Category"
-msgstr ""
-
-#: includes/class-ld-lms.php:723
-#, php-format
-msgctxt "placeholder: Course"
-msgid "Search %s Categories"
-msgstr ""
-
-#: includes/class-ld-lms.php:724
-#, php-format
-msgctxt "placeholder: Course"
-msgid "All %s Categories"
-msgstr ""
-
-#: includes/class-ld-lms.php:725
-#, php-format
-msgctxt "placeholder: Course"
-msgid "Parent %s Category"
-msgstr ""
-
-#: includes/class-ld-lms.php:726
-#, php-format
-msgctxt "placeholder: Course"
-msgid "Parent %s Category:"
-msgstr ""
-
-#: includes/class-ld-lms.php:727
-#, php-format
-msgctxt "placeholder: Course"
-msgid "Edit %s Category"
 msgstr ""
 
 #: includes/class-ld-lms.php:728
 #, php-format
 msgctxt "placeholder: Course"
-msgid "Update %s Category"
+msgid "%s Category"
 msgstr ""
 
 #: includes/class-ld-lms.php:729
 #, php-format
 msgctxt "placeholder: Course"
-msgid "Add New %s Category"
+msgid "Search %s Categories"
 msgstr ""
 
 #: includes/class-ld-lms.php:730
 #, php-format
 msgctxt "placeholder: Course"
+msgid "All %s Categories"
+msgstr ""
+
+#: includes/class-ld-lms.php:731
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Parent %s Category"
+msgstr ""
+
+#: includes/class-ld-lms.php:732
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Parent %s Category:"
+msgstr ""
+
+#: includes/class-ld-lms.php:733
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Edit %s Category"
+msgstr ""
+
+#: includes/class-ld-lms.php:734
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Update %s Category"
+msgstr ""
+
+#: includes/class-ld-lms.php:735
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Add New %s Category"
+msgstr ""
+
+#: includes/class-ld-lms.php:736
+#, php-format
+msgctxt "placeholder: Course"
 msgid "New %s Category Name"
 msgstr ""
 
-#: includes/class-ld-lms.php:746 includes/class-ld-lms.php:756
+#: includes/class-ld-lms.php:752 includes/class-ld-lms.php:762
 #, php-format
 msgctxt "placeholder: Course"
 msgid "%s Tags"
-msgstr ""
-
-#: includes/class-ld-lms.php:747
-#, php-format
-msgctxt "placeholder: Course"
-msgid "%s Tag"
-msgstr ""
-
-#: includes/class-ld-lms.php:748
-#, php-format
-msgctxt "placeholder: Course"
-msgid "Search %s Tag"
-msgstr ""
-
-#: includes/class-ld-lms.php:749
-#, php-format
-msgctxt "placeholder: Course"
-msgid "All %s Tags"
-msgstr ""
-
-#: includes/class-ld-lms.php:750
-#, php-format
-msgctxt "placeholder: Course"
-msgid "Parent %s Tag"
-msgstr ""
-
-#: includes/class-ld-lms.php:751
-#, php-format
-msgctxt "placeholder: Course"
-msgid "Parent %s Tag:"
-msgstr ""
-
-#: includes/class-ld-lms.php:752
-#, php-format
-msgctxt "placeholder: Course"
-msgid "Edit %s Tag"
 msgstr ""
 
 #: includes/class-ld-lms.php:753
 #, php-format
 msgctxt "placeholder: Course"
-msgid "Update %s Tag"
+msgid "%s Tag"
 msgstr ""
 
 #: includes/class-ld-lms.php:754
 #, php-format
 msgctxt "placeholder: Course"
-msgid "Add New %s Tag"
+msgid "Search %s Tag"
 msgstr ""
 
 #: includes/class-ld-lms.php:755
 #, php-format
 msgctxt "placeholder: Course"
+msgid "All %s Tags"
+msgstr ""
+
+#: includes/class-ld-lms.php:756
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Parent %s Tag"
+msgstr ""
+
+#: includes/class-ld-lms.php:757
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Parent %s Tag:"
+msgstr ""
+
+#: includes/class-ld-lms.php:758
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Edit %s Tag"
+msgstr ""
+
+#: includes/class-ld-lms.php:759
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Update %s Tag"
+msgstr ""
+
+#: includes/class-ld-lms.php:760
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Add New %s Tag"
+msgstr ""
+
+#: includes/class-ld-lms.php:761
+#, php-format
+msgctxt "placeholder: Course"
 msgid "New %s Tag Name"
 msgstr ""
 
-#: includes/class-ld-lms.php:788 includes/class-ld-lms.php:798
+#: includes/class-ld-lms.php:794 includes/class-ld-lms.php:804
 #, php-format
 msgctxt "placeholder: Lesson"
 msgid "%s Categories"
-msgstr ""
-
-#: includes/class-ld-lms.php:789
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "%s Category"
-msgstr ""
-
-#: includes/class-ld-lms.php:790
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "Search %s Categories"
-msgstr ""
-
-#: includes/class-ld-lms.php:791
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "All %s Categories"
-msgstr ""
-
-#: includes/class-ld-lms.php:792
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "Parent %s Category"
-msgstr ""
-
-#: includes/class-ld-lms.php:793
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "Parent %s Category:"
-msgstr ""
-
-#: includes/class-ld-lms.php:794
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "Edit %s Category"
 msgstr ""
 
 #: includes/class-ld-lms.php:795
 #, php-format
 msgctxt "placeholder: Lesson"
-msgid "Update %s Category"
+msgid "%s Category"
 msgstr ""
 
 #: includes/class-ld-lms.php:796
 #, php-format
 msgctxt "placeholder: Lesson"
-msgid "Add New %s Category"
+msgid "Search %s Categories"
 msgstr ""
 
 #: includes/class-ld-lms.php:797
 #, php-format
 msgctxt "placeholder: Lesson"
+msgid "All %s Categories"
+msgstr ""
+
+#: includes/class-ld-lms.php:798
+#, php-format
+msgctxt "placeholder: Lesson"
+msgid "Parent %s Category"
+msgstr ""
+
+#: includes/class-ld-lms.php:799
+#, php-format
+msgctxt "placeholder: Lesson"
+msgid "Parent %s Category:"
+msgstr ""
+
+#: includes/class-ld-lms.php:800
+#, php-format
+msgctxt "placeholder: Lesson"
+msgid "Edit %s Category"
+msgstr ""
+
+#: includes/class-ld-lms.php:801
+#, php-format
+msgctxt "placeholder: Lesson"
+msgid "Update %s Category"
+msgstr ""
+
+#: includes/class-ld-lms.php:802
+#, php-format
+msgctxt "placeholder: Lesson"
+msgid "Add New %s Category"
+msgstr ""
+
+#: includes/class-ld-lms.php:803
+#, php-format
+msgctxt "placeholder: Lesson"
 msgid "New %s Category Name"
 msgstr ""
 
-#: includes/class-ld-lms.php:813 includes/class-ld-lms.php:823
+#: includes/class-ld-lms.php:819 includes/class-ld-lms.php:829
 #, php-format
 msgctxt "placeholder: Lesson"
 msgid "%s Tags"
-msgstr ""
-
-#: includes/class-ld-lms.php:814
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "%s Tag"
-msgstr ""
-
-#: includes/class-ld-lms.php:815
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "Search %s Tag"
-msgstr ""
-
-#: includes/class-ld-lms.php:816
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "All %s Tags"
-msgstr ""
-
-#: includes/class-ld-lms.php:817
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "Parent %s Tag"
-msgstr ""
-
-#: includes/class-ld-lms.php:818
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "Parent %s Tag:"
-msgstr ""
-
-#: includes/class-ld-lms.php:819
-#, php-format
-msgctxt "placeholder: Lesson"
-msgid "Edit %s Tag"
 msgstr ""
 
 #: includes/class-ld-lms.php:820
 #, php-format
 msgctxt "placeholder: Lesson"
-msgid "Update %s Tag"
+msgid "%s Tag"
 msgstr ""
 
 #: includes/class-ld-lms.php:821
 #, php-format
 msgctxt "placeholder: Lesson"
-msgid "Add New %s Tag"
+msgid "Search %s Tag"
 msgstr ""
 
 #: includes/class-ld-lms.php:822
 #, php-format
 msgctxt "placeholder: Lesson"
+msgid "All %s Tags"
+msgstr ""
+
+#: includes/class-ld-lms.php:823
+#, php-format
+msgctxt "placeholder: Lesson"
+msgid "Parent %s Tag"
+msgstr ""
+
+#: includes/class-ld-lms.php:824
+#, php-format
+msgctxt "placeholder: Lesson"
+msgid "Parent %s Tag:"
+msgstr ""
+
+#: includes/class-ld-lms.php:825
+#, php-format
+msgctxt "placeholder: Lesson"
+msgid "Edit %s Tag"
+msgstr ""
+
+#: includes/class-ld-lms.php:826
+#, php-format
+msgctxt "placeholder: Lesson"
+msgid "Update %s Tag"
+msgstr ""
+
+#: includes/class-ld-lms.php:827
+#, php-format
+msgctxt "placeholder: Lesson"
+msgid "Add New %s Tag"
+msgstr ""
+
+#: includes/class-ld-lms.php:828
+#, php-format
+msgctxt "placeholder: Lesson"
 msgid "New %s Tag Name"
 msgstr ""
 
-#: includes/class-ld-lms.php:854 includes/class-ld-lms.php:864
+#: includes/class-ld-lms.php:860 includes/class-ld-lms.php:870
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "%s Categories"
 msgstr ""
 
-#: includes/class-ld-lms.php:855
+#: includes/class-ld-lms.php:861
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "%s Category"
 msgstr ""
 
-#: includes/class-ld-lms.php:856
+#: includes/class-ld-lms.php:862
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Search %s Categories"
 msgstr ""
 
-#: includes/class-ld-lms.php:857
+#: includes/class-ld-lms.php:863
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "All %s Categories"
 msgstr ""
 
-#: includes/class-ld-lms.php:858
+#: includes/class-ld-lms.php:864
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Parent %s Category"
 msgstr ""
 
-#: includes/class-ld-lms.php:859
+#: includes/class-ld-lms.php:865
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Parent %s Category:"
 msgstr ""
 
-#: includes/class-ld-lms.php:860
+#: includes/class-ld-lms.php:866
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Edit %s Category"
 msgstr ""
 
-#: includes/class-ld-lms.php:861
+#: includes/class-ld-lms.php:867
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Update %s Category"
 msgstr ""
 
-#: includes/class-ld-lms.php:862
+#: includes/class-ld-lms.php:868
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Add New %s Category"
 msgstr ""
 
-#: includes/class-ld-lms.php:863
+#: includes/class-ld-lms.php:869
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "New %s Category Name"
 msgstr ""
 
-#: includes/class-ld-lms.php:879 includes/class-ld-lms.php:889
+#: includes/class-ld-lms.php:885 includes/class-ld-lms.php:895
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "%s Tags"
 msgstr ""
 
-#: includes/class-ld-lms.php:880
+#: includes/class-ld-lms.php:886
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "%s Tag"
 msgstr ""
 
-#: includes/class-ld-lms.php:881
+#: includes/class-ld-lms.php:887
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Search %s Tag"
 msgstr ""
 
-#: includes/class-ld-lms.php:882
+#: includes/class-ld-lms.php:888
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "All %s Tags"
 msgstr ""
 
-#: includes/class-ld-lms.php:883
+#: includes/class-ld-lms.php:889
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Parent %s Tag"
 msgstr ""
 
-#: includes/class-ld-lms.php:884
+#: includes/class-ld-lms.php:890
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Parent %s Tag:"
 msgstr ""
 
-#: includes/class-ld-lms.php:885
+#: includes/class-ld-lms.php:891
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Edit %s Tag"
 msgstr ""
 
-#: includes/class-ld-lms.php:886
+#: includes/class-ld-lms.php:892
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Update %s Tag"
 msgstr ""
 
-#: includes/class-ld-lms.php:887
+#: includes/class-ld-lms.php:893
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "Add New %s Tag"
 msgstr ""
 
-#: includes/class-ld-lms.php:888
+#: includes/class-ld-lms.php:894
 #, php-format
 msgctxt "placeholder: Topic"
 msgid "New %s Tag Name"
 msgstr ""
 
-#: includes/class-ld-lms.php:922 templates/course.php:72
+#: includes/class-ld-lms.php:928 templates/course.php:71
 #, php-format
 msgctxt "Course Materials Label"
 msgid "%s Materials"
 msgstr ""
 
-#: includes/class-ld-lms.php:924
+#: includes/class-ld-lms.php:930
 #, php-format
 msgctxt "Options for course materials"
 msgid "Options for %s materials"
 msgstr ""
 
-#: includes/class-ld-lms.php:934
+#: includes/class-ld-lms.php:940
 #, php-format
 msgctxt "Course Price Type Label"
 msgid "%s Price Type"
 msgstr ""
 
-#: includes/class-ld-lms.php:937
+#: includes/class-ld-lms.php:943
 msgid "Open"
 msgstr ""
 
-#: includes/class-ld-lms.php:938
+#: includes/class-ld-lms.php:944
 msgid "Closed"
 msgstr ""
 
-#: includes/class-ld-lms.php:939
+#: includes/class-ld-lms.php:945
 msgid "Free"
 msgstr ""
 
-#: includes/class-ld-lms.php:940
+#: includes/class-ld-lms.php:946
 msgid "Buy Now"
 msgstr ""
 
-#: includes/class-ld-lms.php:941
+#: includes/class-ld-lms.php:947
 msgid "Recurring"
 msgstr ""
 
-#: includes/class-ld-lms.php:944
+#: includes/class-ld-lms.php:950
 msgid ""
 "Is it open to all, free join, one time purchase, or a recurring subscription?"
 msgstr ""
 
-#: includes/class-ld-lms.php:953
+#: includes/class-ld-lms.php:959
 msgid "Custom Button URL"
 msgstr ""
 
-#: includes/class-ld-lms.php:955
+#: includes/class-ld-lms.php:961
 msgid "Optional"
 msgstr ""
 
-#: includes/class-ld-lms.php:956
+#: includes/class-ld-lms.php:962
 #, php-format
 msgctxt "placeholders: \"Take This Course\" button label"
 msgid ""
@@ -1880,171 +1893,171 @@ msgid ""
 "not display if this field is left empty."
 msgstr ""
 
-#: includes/class-ld-lms.php:960
+#: includes/class-ld-lms.php:966
 #, php-format
 msgctxt "Course Price Label"
 msgid "%s Price"
 msgstr ""
 
-#: includes/class-ld-lms.php:962
+#: includes/class-ld-lms.php:968
 #, php-format
 msgctxt "Enter course price here. Leave empty if the course is free."
 msgid "Enter %s price here. Leave empty if the %s is free."
 msgstr ""
 
-#: includes/class-ld-lms.php:966
+#: includes/class-ld-lms.php:972
 msgid "Billing Cycle"
 msgstr ""
 
-#: includes/class-ld-lms.php:969
+#: includes/class-ld-lms.php:975
 msgid "Billing Cycle for the recurring payments in case of a subscription."
 msgstr ""
 
-#: includes/class-ld-lms.php:973
+#: includes/class-ld-lms.php:979
 #, php-format
 msgctxt "Course Access List Label"
 msgid "%s Access List"
 msgstr ""
 
-#: includes/class-ld-lms.php:975
+#: includes/class-ld-lms.php:981
 msgid ""
 "This field is auto-populated with the UserIDs of those who have access to "
 "this course."
 msgstr ""
 
-#: includes/class-ld-lms.php:979
+#: includes/class-ld-lms.php:985
 #, php-format
 msgctxt "Sort Lesson By Label"
 msgid "Sort %s By"
 msgstr ""
 
-#: includes/class-ld-lms.php:982 includes/class-ld-lms.php:995
+#: includes/class-ld-lms.php:988 includes/class-ld-lms.php:1001
 msgid "Use Default"
 msgstr ""
 
-#: includes/class-ld-lms.php:988 includes/class-ld-lms.php:1000
+#: includes/class-ld-lms.php:994 includes/class-ld-lms.php:1006
 #, php-format
 msgctxt "Choose the sort order of lessons in this course."
 msgid "Choose the sort order of %s in this %s."
 msgstr ""
 
-#: includes/class-ld-lms.php:992
+#: includes/class-ld-lms.php:998
 #, php-format
 msgctxt "Sort Lesson Direction Label"
 msgid "Sort %s Direction"
 msgstr ""
 
-#: includes/class-ld-lms.php:1024
+#: includes/class-ld-lms.php:1030
 #, php-format
 msgctxt "placeholder: Course"
 msgid "Enable %s Prerequisites"
 msgstr ""
 
-#: includes/class-ld-lms.php:1027
+#: includes/class-ld-lms.php:1033
 msgid "Leave this field unchecked if prerequisite not used."
 msgstr ""
 
-#: includes/class-ld-lms.php:1031
+#: includes/class-ld-lms.php:1037
 #, php-format
 msgctxt "Course prerequisites Label"
 msgid "%s Prerequisites"
 msgstr ""
 
-#: includes/class-ld-lms.php:1033
+#: includes/class-ld-lms.php:1039
 #, php-format
 msgctxt "Select one or more course as prerequisites to view this course"
 msgid "Select one or more %s as prerequisites to view this %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:1040
+#: includes/class-ld-lms.php:1046
 #, php-format
 msgctxt "Course Prerequisites Compare Label"
 msgid "%s Prerequisites Compare"
 msgstr ""
 
-#: includes/class-ld-lms.php:1043
+#: includes/class-ld-lms.php:1049
 msgid ""
 "ANY (default) - The student must complete at least one of the prerequisites"
 msgstr ""
 
-#: includes/class-ld-lms.php:1044
+#: includes/class-ld-lms.php:1050
 msgid "ALL - The student must complete all the prerequisites"
 msgstr ""
 
-#: includes/class-ld-lms.php:1047
+#: includes/class-ld-lms.php:1053
 #, php-format
 msgctxt "pleaceholder: Course"
 msgid "Select how to compare the selected prerequisite %s."
 msgstr ""
 
-#: includes/class-ld-lms.php:1051
+#: includes/class-ld-lms.php:1057
 #, php-format
 msgctxt "placeholder: Course"
 msgid "Enable %s Points"
 msgstr ""
 
-#: includes/class-ld-lms.php:1053
+#: includes/class-ld-lms.php:1059
 msgid "Leave this field unchecked if points not used."
 msgstr ""
 
-#: includes/class-ld-lms.php:1057
+#: includes/class-ld-lms.php:1063
 msgid "Course Points"
 msgstr ""
 
-#: includes/class-ld-lms.php:1061
+#: includes/class-ld-lms.php:1067
 #, php-format
 msgctxt "placeholder: course"
 msgid "Enter the number of points a user will receive for this %s."
 msgstr ""
 
-#: includes/class-ld-lms.php:1065
+#: includes/class-ld-lms.php:1071
 msgid "Course Points Access"
 msgstr ""
 
-#: includes/class-ld-lms.php:1069
+#: includes/class-ld-lms.php:1075
 #, php-format
 msgctxt "placeholder: course"
 msgid "Enter the number of points a user must have to access this %s."
 msgstr ""
 
-#: includes/class-ld-lms.php:1073
+#: includes/class-ld-lms.php:1079
 #, php-format
 msgctxt "Disable Lesson Progression Label"
 msgid "Disable %s Progression"
 msgstr ""
 
-#: includes/class-ld-lms.php:1076
+#: includes/class-ld-lms.php:1082
 #, php-format
 msgctxt ""
 "Disable the feature that allows attempting lessons only in allowed order."
 msgid "Disable the feature that allows attempting %s only in allowed order."
 msgstr ""
 
-#: includes/class-ld-lms.php:1080
+#: includes/class-ld-lms.php:1086
 msgid "Expire Access"
 msgstr ""
 
-#: includes/class-ld-lms.php:1082
+#: includes/class-ld-lms.php:1088
 msgid "Leave this field unchecked if access never expires."
 msgstr ""
 
-#: includes/class-ld-lms.php:1086
+#: includes/class-ld-lms.php:1092
 msgid "Expire Access After (days)"
 msgstr ""
 
-#: includes/class-ld-lms.php:1089
+#: includes/class-ld-lms.php:1095
 #, php-format
 msgctxt "Enter the number of days a user has access to this course."
 msgid "Enter the number of days a user has access to this %s."
 msgstr ""
 
-#: includes/class-ld-lms.php:1093
+#: includes/class-ld-lms.php:1099
 #, php-format
 msgctxt "Delete Course and Quiz Data After Expiration Label"
 msgid "Delete %s and %s Data After Expiration"
 msgstr ""
 
-#: includes/class-ld-lms.php:1095
+#: includes/class-ld-lms.php:1101
 #, php-format
 msgctxt ""
 "Select this option if you want the user's course progress to be deleted when "
@@ -2054,55 +2067,55 @@ msgid ""
 "their access expires."
 msgstr ""
 
-#: includes/class-ld-lms.php:1099
+#: includes/class-ld-lms.php:1105
 #, php-format
 msgctxt "Hide Course Content Table Label"
 msgid "Hide %s Content Table"
 msgstr ""
 
-#: includes/class-ld-lms.php:1102
+#: includes/class-ld-lms.php:1108
 #, php-format
 msgctxt "Hide Course Content table when user is not enrolled."
 msgid "Hide %s Content table when user is not enrolled."
 msgstr ""
 
-#: includes/class-ld-lms.php:1107 includes/class-ld-lms.php:1282
+#: includes/class-ld-lms.php:1113 includes/class-ld-lms.php:1288
 msgid "Associated Certificate"
 msgstr ""
 
-#: includes/class-ld-lms.php:1109
+#: includes/class-ld-lms.php:1115
 #, php-format
 msgctxt "Select a certificate to be awarded upon course completion (optional)."
 msgid "Select a certificate to be awarded upon %s completion (optional)."
 msgstr ""
 
-#: includes/class-ld-lms.php:1130
+#: includes/class-ld-lms.php:1136
 #: includes/settings/settings-sections-pages/class-ld-settings-page-lessons-options.php:10
 #, php-format
 msgctxt "Lesson Options Label"
 msgid "%s Options"
 msgstr ""
 
-#: includes/class-ld-lms.php:1133 includes/class-ld-lms.php:1268
-#: includes/class-ld-lms.php:1326
+#: includes/class-ld-lms.php:1139 includes/class-ld-lms.php:1274
+#: includes/class-ld-lms.php:1332
 #, php-format
 msgctxt "Associated Course Label"
 msgid "Associated %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:1136 includes/class-ld-lms.php:1271
+#: includes/class-ld-lms.php:1142 includes/class-ld-lms.php:1277
 #, php-format
 msgctxt "Associate with a course."
 msgid "Associate with a %s."
 msgstr ""
 
-#: includes/class-ld-lms.php:1141
+#: includes/class-ld-lms.php:1147
 #, php-format
 msgctxt "Forced Lesson Timer Label"
 msgid "Forced %s Timer"
 msgstr ""
 
-#: includes/class-ld-lms.php:1143
+#: includes/class-ld-lms.php:1149
 #, php-format
 msgctxt "Minimum time a user has to spend on Lesson page Label"
 msgid ""
@@ -2111,46 +2124,46 @@ msgid ""
 "5m 10s, 1hr 5min 10sec"
 msgstr ""
 
-#: includes/class-ld-lms.php:1147 includes/class-ld-lms.php:1351
+#: includes/class-ld-lms.php:1153 includes/class-ld-lms.php:1357
 #: includes/course/ld-course-progress.php:111
 msgid "Upload Assignment"
 msgstr ""
 
-#: includes/class-ld-lms.php:1149 includes/class-ld-lms.php:1353
+#: includes/class-ld-lms.php:1155 includes/class-ld-lms.php:1359
 msgid "Check this if you want to make it mandatory to upload assignment"
 msgstr ""
 
-#: includes/class-ld-lms.php:1153 includes/class-ld-lms.php:1358
+#: includes/class-ld-lms.php:1159 includes/class-ld-lms.php:1364
 msgid "Auto Approve Assignment"
 msgstr ""
 
-#: includes/class-ld-lms.php:1155 includes/class-ld-lms.php:1360
+#: includes/class-ld-lms.php:1161 includes/class-ld-lms.php:1366
 msgid "Check this if you want to auto-approve the uploaded assignment"
 msgstr ""
 
-#: includes/class-ld-lms.php:1159 includes/class-ld-lms.php:1365
+#: includes/class-ld-lms.php:1165 includes/class-ld-lms.php:1371
 msgid "Award Points for Assignment"
 msgstr ""
 
-#: includes/class-ld-lms.php:1161 includes/class-ld-lms.php:1367
+#: includes/class-ld-lms.php:1167 includes/class-ld-lms.php:1373
 msgid "Allow this assignment to be assigned points when it is approved."
 msgstr ""
 
-#: includes/class-ld-lms.php:1165 includes/class-ld-lms.php:1372
+#: includes/class-ld-lms.php:1171 includes/class-ld-lms.php:1378
 msgid "Set Number of Points for Assignment"
 msgstr ""
 
-#: includes/class-ld-lms.php:1168 includes/class-ld-lms.php:1375
+#: includes/class-ld-lms.php:1174 includes/class-ld-lms.php:1381
 msgid "Assign the max amount of points someone can earn for this assignment."
 msgstr ""
 
-#: includes/class-ld-lms.php:1172
+#: includes/class-ld-lms.php:1178
 #, php-format
 msgctxt "Sample Lesson Label"
 msgid "Sample %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:1174
+#: includes/class-ld-lms.php:1180
 #, php-format
 msgctxt ""
 "Check this if you want this lesson and all its topics to be available for "
@@ -2158,61 +2171,61 @@ msgctxt ""
 msgid "Check this if you want this %s and all its %s to be available for free."
 msgstr ""
 
-#: includes/class-ld-lms.php:1178
+#: includes/class-ld-lms.php:1184
 #, php-format
 msgctxt "Make Lesson Visible X Days After Sign-up"
 msgid "Make %s visible X Days After Sign-up"
 msgstr ""
 
-#: includes/class-ld-lms.php:1182
+#: includes/class-ld-lms.php:1188
 #, php-format
 msgctxt "Make lesson visible ____ days after sign-up"
 msgid "Make %s visible ____ days after sign-up"
 msgstr ""
 
-#: includes/class-ld-lms.php:1186
+#: includes/class-ld-lms.php:1192
 #, php-format
 msgctxt "Make Lesson Visible on Specific Date"
 msgid "Make %s Visible on Specific Date"
 msgstr ""
 
-#: includes/class-ld-lms.php:1189
+#: includes/class-ld-lms.php:1195
 #, php-format
 msgctxt "Set the date that you would like this lesson to become available."
 msgid "Set the date that you would like this %s to become available."
 msgstr ""
 
-#: includes/class-ld-lms.php:1247
+#: includes/class-ld-lms.php:1253
 #, php-format
 msgctxt "Quiz Settings Label"
 msgid "%s Settings"
 msgstr ""
 
-#: includes/class-ld-lms.php:1250
+#: includes/class-ld-lms.php:1256
 msgid "Repeats"
 msgstr ""
 
-#: includes/class-ld-lms.php:1252
+#: includes/class-ld-lms.php:1258
 #, php-format
 msgctxt "Number of repeats allowed for quiz"
 msgid "Number of repeats allowed for %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:1256
+#: includes/class-ld-lms.php:1262
 msgid "Certificate Threshold"
 msgstr ""
 
-#: includes/class-ld-lms.php:1258
+#: includes/class-ld-lms.php:1264
 msgid ""
 "Minimum score required to award a certificate, between 0 and 1 where 1 = "
 "100%."
 msgstr ""
 
-#: includes/class-ld-lms.php:1262
+#: includes/class-ld-lms.php:1268
 msgid "Passing Percentage"
 msgstr ""
 
-#: includes/class-ld-lms.php:1264
+#: includes/class-ld-lms.php:1270
 #, php-format
 msgctxt ""
 "Passing percentage required to pass the quiz (number only). e.g. 80 for 80%."
@@ -2220,29 +2233,29 @@ msgid ""
 "Passing percentage required to pass the %s (number only). e.g. 80 for 80%%."
 msgstr ""
 
-#: includes/class-ld-lms.php:1276 includes/class-ld-lms.php:1335
+#: includes/class-ld-lms.php:1282 includes/class-ld-lms.php:1341
 #, php-format
 msgctxt "Associated Lesson Label"
 msgid "Associated %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:1278 includes/class-ld-lms.php:1338
+#: includes/class-ld-lms.php:1284 includes/class-ld-lms.php:1344
 #, php-format
 msgctxt "Optionally associate a quiz with a lesson."
 msgid "Optionally associate a %s with a %s."
 msgstr ""
 
-#: includes/class-ld-lms.php:1284
+#: includes/class-ld-lms.php:1290
 #, php-format
 msgctxt "Optionally associate a quiz with a certificate."
 msgid "Optionally associate a %s with a certificate."
 msgstr ""
 
-#: includes/class-ld-lms.php:1288
+#: includes/class-ld-lms.php:1294
 msgid "Associated Settings"
 msgstr ""
 
-#: includes/class-ld-lms.php:1290
+#: includes/class-ld-lms.php:1296
 #, php-format
 msgctxt ""
 "If you imported a quiz, use this field to select it. Otherwise, create new "
@@ -2254,36 +2267,36 @@ msgid ""
 "questions."
 msgstr ""
 
-#: includes/class-ld-lms.php:1290
+#: includes/class-ld-lms.php:1296
 #: includes/vendor/wp-pro-quiz/lib/view/WpProQuiz_View_QuizOverall.php:84
 msgid "Preview"
 msgstr ""
 
-#: includes/class-ld-lms.php:1308
+#: includes/class-ld-lms.php:1314
 #, php-format
 msgctxt "Lesson Topic Label"
 msgid "%s %s"
 msgstr ""
 
-#: includes/class-ld-lms.php:1323
+#: includes/class-ld-lms.php:1329
 #, php-format
 msgctxt "Lesson Topic Options Label"
 msgid "%s %s Options"
 msgstr ""
 
-#: includes/class-ld-lms.php:1329
+#: includes/class-ld-lms.php:1335
 #, php-format
 msgctxt "placeholders: course"
 msgid "Associate with a %s."
 msgstr ""
 
-#: includes/class-ld-lms.php:1344
+#: includes/class-ld-lms.php:1350
 #, php-format
 msgctxt "Forced Topic Timer Label"
 msgid "Forced %s Timer"
 msgstr ""
 
-#: includes/class-ld-lms.php:1346
+#: includes/class-ld-lms.php:1352
 #, php-format
 msgctxt "Minimum time a user has to spend on Topic page Label"
 msgid ""
@@ -2292,92 +2305,92 @@ msgid ""
 "5m 10s, 1hr 5min 10sec"
 msgstr ""
 
-#: includes/class-ld-lms.php:1431
+#: includes/class-ld-lms.php:1437
 msgid "Certificates"
 msgstr ""
 
-#: includes/class-ld-lms.php:1436
+#: includes/class-ld-lms.php:1442
 msgid "Certificates Options"
 msgstr ""
 
-#: includes/class-ld-lms.php:1451
+#: includes/class-ld-lms.php:1457
 msgid "Transactions"
 msgstr ""
 
-#: includes/class-ld-lms.php:1455
+#: includes/class-ld-lms.php:1461
 msgid "Transactions Options"
 msgstr ""
 
-#: includes/class-ld-lms.php:1469
+#: includes/class-ld-lms.php:1475
 msgid "Click the Export button below to export the transaction list."
 msgstr ""
 
-#: includes/class-ld-lms.php:1531
+#: includes/class-ld-lms.php:1537
 #, php-format
 msgctxt "Course Info Label"
 msgid "%s Info"
 msgstr ""
 
-#: includes/class-ld-lms.php:1737
+#: includes/class-ld-lms.php:1743
 msgid "day(s)"
 msgstr ""
 
-#: includes/class-ld-lms.php:1738
+#: includes/class-ld-lms.php:1744
 msgid "week(s)"
 msgstr ""
 
-#: includes/class-ld-lms.php:1739
+#: includes/class-ld-lms.php:1745
 msgid "month(s)"
 msgstr ""
 
-#: includes/class-ld-lms.php:1740
+#: includes/class-ld-lms.php:1746
 msgid "year(s)"
 msgstr ""
 
-#: includes/class-ld-lms.php:1896 includes/class-ld-lms.php:1938
-#: includes/class-ld-lms.php:2227 includes/class-ld-lms.php:2243
+#: includes/class-ld-lms.php:1902 includes/class-ld-lms.php:1944
+#: includes/class-ld-lms.php:2233 includes/class-ld-lms.php:2249
 msgid "No attempts"
 msgstr ""
 
-#: includes/class-ld-lms.php:1932 includes/class-ld-lms.php:2015
-#: includes/class-ld-lms.php:2308 includes/class-ld-semper-fi-module.php:1633
+#: includes/class-ld-lms.php:1938 includes/class-ld-lms.php:2021
+#: includes/class-ld-lms.php:2314 includes/class-ld-semper-fi-module.php:1633
 msgid ""
 "Security Check - If you receive this in error, log out and back in to "
 "WordPress"
 msgstr ""
 
-#: includes/class-ld-lms.php:1983
+#: includes/class-ld-lms.php:1989
 #, php-format
 msgctxt "Export User Course Data Label"
 msgid "Export User %s Data &raquo;"
 msgstr ""
 
-#: includes/class-ld-lms.php:2283
+#: includes/class-ld-lms.php:2289
 #, php-format
 msgctxt "Export Quiz Data Label"
 msgid "Export %s Data &raquo;"
 msgstr ""
 
-#: includes/class-ld-lms.php:2374
+#: includes/class-ld-lms.php:2380
 msgid "Export &raquo;"
 msgstr ""
 
-#: includes/class-ld-lms.php:2426 includes/class-ld-lms.php:2514
-#: includes/class-ld-lms.php:2811
+#: includes/class-ld-lms.php:2432 includes/class-ld-lms.php:2520
+#: includes/class-ld-lms.php:2817
 msgid "-- Select a Certificate --"
 msgstr ""
 
-#: includes/class-ld-lms.php:2526
+#: includes/class-ld-lms.php:2532
 msgid "-- Select Settings --"
 msgstr ""
 
-#: includes/class-ld-lms.php:2648
+#: includes/class-ld-lms.php:2654
 #, php-format
 msgctxt "Select a Lesson or Topic Label"
 msgid "-- Select a %s or %s --"
 msgstr ""
 
-#: includes/class-ld-lms.php:2718 includes/class-ld-lms.php:3022
+#: includes/class-ld-lms.php:2724 includes/class-ld-lms.php:3028
 #: includes/class-ld-semper-fi-module.php:644
 #, php-format
 msgctxt "Select a Lesson Label"
@@ -2528,12 +2541,12 @@ msgid "Select %s"
 msgstr ""
 
 #: includes/course/ld-course-list-shortcode.php:1047
-#: includes/course/ld-course-progress.php:1283 sfwd-lms.php:278
+#: includes/course/ld-course-progress.php:1284 sfwd-lms.php:278
 msgid "In Progress"
 msgstr ""
 
 #: includes/course/ld-course-list-shortcode.php:1067
-#: includes/course/ld-course-progress.php:1281 sfwd-lms.php:277
+#: includes/course/ld-course-progress.php:1282 sfwd-lms.php:277
 msgid "Not Started"
 msgstr ""
 
@@ -2577,18 +2590,18 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
-#: includes/course/ld-course-progress.php:1357
+#: includes/course/ld-course-progress.php:1365
 #, php-format
 msgid "%d out of %d steps completed"
 msgstr ""
 
-#: includes/course/ld-course-progress.php:1653
+#: includes/course/ld-course-progress.php:1661
 #, php-format
 msgctxt "placeholders: course"
 msgid "LearnDash %s progress bar"
 msgstr ""
 
-#: includes/course/ld-course-progress.php:1656
+#: includes/course/ld-course-progress.php:1664
 #, php-format
 msgctxt "Course Progress Bar Label"
 msgid "%s Progress Bar"
@@ -2729,7 +2742,7 @@ msgid ""
 msgstr ""
 
 #: includes/ld-assignment-uploads.php:461
-#: includes/quiz/ld-quiz-essays.php:1403
+#: includes/quiz/ld-quiz-essays.php:1414
 msgid "Unable to write to directory. Is this directory writable by the server?"
 msgstr ""
 
@@ -2886,25 +2899,25 @@ msgstr ""
 msgid "Post does not exist."
 msgstr ""
 
-#: includes/ld-convert-post-pdf.php:570
+#: includes/ld-convert-post-pdf.php:609
 msgid ""
 "<strong>Generating completed successfully.</strong><br /><br />Post/Page "
 "title: "
 msgstr ""
 
-#: includes/ld-convert-post-pdf.php:570
+#: includes/ld-convert-post-pdf.php:609
 msgid "<br />Output path: "
 msgstr ""
 
-#: includes/ld-convert-post-pdf.php:570
+#: includes/ld-convert-post-pdf.php:609
 msgid "<br /><br />Go back to "
 msgstr ""
 
-#: includes/ld-convert-post-pdf.php:570
+#: includes/ld-convert-post-pdf.php:609
 msgid "the settig panel</a>."
 msgstr ""
 
-#: includes/ld-convert-post-pdf.php:570
+#: includes/ld-convert-post-pdf.php:609
 msgid "POST2PDF Converter"
 msgstr ""
 
@@ -3059,39 +3072,39 @@ msgstr ""
 msgid "Remove the Quiz lock(s) for this user."
 msgstr ""
 
-#: includes/ld-users.php:1178
+#: includes/ld-users.php:1175
 msgid "User Login"
 msgstr ""
 
-#: includes/ld-users.php:1179
+#: includes/ld-users.php:1176
 msgid "User Display Name"
 msgstr ""
 
-#: includes/ld-users.php:1180
+#: includes/ld-users.php:1177
 msgid "User Nicename"
 msgstr ""
 
-#: includes/ld-users.php:1181
+#: includes/ld-users.php:1178
 msgid "User First Name"
 msgstr ""
 
-#: includes/ld-users.php:1182
+#: includes/ld-users.php:1179
 msgid "User Last Name"
 msgstr ""
 
-#: includes/ld-users.php:1183
+#: includes/ld-users.php:1180
 msgid "User Nickname"
 msgstr ""
 
-#: includes/ld-users.php:1184
+#: includes/ld-users.php:1181
 msgid "User Email"
 msgstr ""
 
-#: includes/ld-users.php:1185
+#: includes/ld-users.php:1182
 msgid "User URL"
 msgstr ""
 
-#: includes/ld-users.php:1186
+#: includes/ld-users.php:1183
 msgid "User Description"
 msgstr ""
 
@@ -3516,7 +3529,7 @@ msgid ""
 msgstr ""
 
 #: includes/settings/settings-sections-pages/class-ld-settings-page-certificate-shortcodes.php:46
-#: includes/settings/settings-sections-pages/class-ld-settings-page-certificate-shortcodes.php:71
+#: includes/settings/settings-sections-pages/class-ld-settings-page-certificate-shortcodes.php:73
 msgid ""
 "See <a target=\"_blank\" href=\"http://php.net/manual/en/function.date.php"
 "\">the full list of available date formating strings  here.</a>"
@@ -3536,6 +3549,8 @@ msgid ""
 "Possible values are:\n"
 "\t\t\t\t\t\t\t\t\t\t\t<ol class=\"cert_shortcode_parm_list\">\n"
 "\t\t\t\t\t\t\t\t\t\t\t\t<li>course_title</li>\n"
+"\t\t\t\t\t\t\t\t\t\t\t\t<li>course_points</li>\n"
+"\t\t\t\t\t\t\t\t\t\t\t\t<li>user_course_points</li>\n"
 "\t\t\t\t\t\t\t\t\t\t\t\t<li>completed_on</li>\n"
 "\t\t\t\t\t\t\t\t\t\t\t\t<li>cumulative_score</li>\n"
 "\t\t\t\t\t\t\t\t\t\t\t\t<li>cumulative_points</li>\n"
@@ -3555,7 +3570,7 @@ msgid ""
 "b> shows average points scored across all quizzes on the course."
 msgstr ""
 
-#: includes/settings/settings-sections-pages/class-ld-settings-page-certificate-shortcodes.php:69
+#: includes/settings/settings-sections-pages/class-ld-settings-page-certificate-shortcodes.php:71
 msgid ""
 "This can be used to change the date format. Default: \"F j, Y, g:i a\" shows "
 "as <i>March 10, 2001, 5:16 pm</i>. <br>Example: <b>[courseinfo show="
@@ -4482,7 +4497,7 @@ msgstr ""
 #: includes/settings/shortcodes-sections/course_content.php:22
 #: includes/settings/shortcodes-sections/course_inprogress.php:31
 #: includes/settings/shortcodes-sections/course_notstarted.php:31
-#: includes/settings/shortcodes-sections/courseinfo.php:59
+#: includes/settings/shortcodes-sections/courseinfo.php:62
 #: includes/settings/shortcodes-sections/ld_course_expire_status.php:22
 #: includes/settings/shortcodes-sections/learndash_course_progress.php:22
 #: includes/settings/shortcodes-sections/learndash_payment_buttons.php:22
@@ -4506,7 +4521,7 @@ msgstr ""
 #: includes/settings/shortcodes-sections/course_complete.php:40
 #: includes/settings/shortcodes-sections/course_inprogress.php:40
 #: includes/settings/shortcodes-sections/course_notstarted.php:40
-#: includes/settings/shortcodes-sections/courseinfo.php:70
+#: includes/settings/shortcodes-sections/courseinfo.php:73
 #: includes/settings/shortcodes-sections/ld_course_expire_status.php:31
 #: includes/settings/shortcodes-sections/ld_course_info.php:22
 #: includes/settings/shortcodes-sections/ld_user_course_points.php:22
@@ -4521,7 +4536,7 @@ msgstr ""
 #: includes/settings/shortcodes-sections/course_complete.php:41
 #: includes/settings/shortcodes-sections/course_inprogress.php:41
 #: includes/settings/shortcodes-sections/course_notstarted.php:41
-#: includes/settings/shortcodes-sections/courseinfo.php:71
+#: includes/settings/shortcodes-sections/courseinfo.php:74
 #: includes/settings/shortcodes-sections/ld_course_expire_status.php:32
 #: includes/settings/shortcodes-sections/ld_course_info.php:23
 #: includes/settings/shortcodes-sections/ld_user_course_points.php:23
@@ -4535,7 +4550,7 @@ msgstr ""
 #: includes/settings/shortcodes-sections/course_complete.php:49
 #: includes/settings/shortcodes-sections/course_inprogress.php:50
 #: includes/settings/shortcodes-sections/course_notstarted.php:50
-#: includes/settings/shortcodes-sections/courseinfo.php:60
+#: includes/settings/shortcodes-sections/courseinfo.php:63
 #: includes/settings/shortcodes-sections/ld_course_expire_status.php:59
 #, php-format
 msgctxt "placeholders: Course"
@@ -4603,8 +4618,11 @@ msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:11
 #, php-format
-msgctxt "placeholder: course"
-msgid "This shortcode displays %s related information on the certificate.."
+msgctxt "placeholder: course, quizzes, course"
+msgid ""
+"This shortcode displays %s related information on the certificate. "
+"<strong>Unless specified otherwise, all points, scores and percentages "
+"relate to the %s associated with the %s.</strong>"
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:22
@@ -4623,61 +4641,81 @@ msgid ""
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:29
-msgid "Completed On (date)"
+#, php-format
+msgctxt "placeholder: Course"
+msgid "Earned %s Points"
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:30
-msgid "Cumulative Score"
-msgstr ""
-
-#: includes/settings/shortcodes-sections/courseinfo.php:31
-msgid "Cumulative Points"
+#, php-format
+msgctxt "placeholder: Courses"
+msgid "Total User %s Points"
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:32
-msgid "Cumulative Total Points"
+msgid "Completed On (date)"
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:33
-msgid "Cumulative Percentage"
+msgid "Cumulative Score"
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:34
-msgid "Cumulative Time Spent"
+msgid "Cumulative Points"
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:35
-msgid "Aggregate Percentage"
+msgid "Possible Cumulative Total Points"
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:36
-msgid "Aggregate Score"
+msgid "Cumulative Percentage"
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:37
-msgid "Aggregate Points"
+msgid "Cumulative Time Spent"
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:38
-msgid "Aggregate Total Points"
+msgid "Aggregate Percentage"
 msgstr ""
 
 #: includes/settings/shortcodes-sections/courseinfo.php:39
+msgid "Aggregate Score"
+msgstr ""
+
+#: includes/settings/shortcodes-sections/courseinfo.php:40
+msgid "Aggregate Points"
+msgstr ""
+
+#: includes/settings/shortcodes-sections/courseinfo.php:41
+msgid "Possible Aggregate Total Points"
+msgstr ""
+
+#: includes/settings/shortcodes-sections/courseinfo.php:42
 msgid "Aggregate Time Spent"
 msgstr ""
 
-#: includes/settings/shortcodes-sections/courseinfo.php:46
+#: includes/settings/shortcodes-sections/courseinfo.php:49
 #: includes/settings/shortcodes-sections/quizinfo.php:44
 msgid "Format"
 msgstr ""
 
-#: includes/settings/shortcodes-sections/courseinfo.php:47
+#: includes/settings/shortcodes-sections/courseinfo.php:50
 #: includes/settings/shortcodes-sections/quizinfo.php:45
 msgid ""
 "This can be used to change the date format. Default: \"F j, Y, g:i a\" shows "
 "as <i>March 10, 2001, 5:16 pm</i>. See <a target=\"_blank\" href=\"http://"
 "php.net/manual/en/function.date.php\">the full list of available date "
 "formating strings  here.</a>"
+msgstr ""
+
+#: includes/settings/shortcodes-sections/courseinfo.php:84
+msgid "Decimals"
+msgstr ""
+
+#: includes/settings/shortcodes-sections/courseinfo.php:85
+msgid "Number of decimal places to show. Default is 2."
 msgstr ""
 
 #: includes/settings/shortcodes-sections/ld_course_expire_status.php:9
@@ -8048,23 +8086,23 @@ msgctxt "Course Status Label"
 msgid "%s Status:"
 msgstr ""
 
-#: templates/course.php:89 templates/course_content_shortcode.php:38
+#: templates/course.php:88 templates/course_content_shortcode.php:38
 #, php-format
 msgctxt "Course Content Label"
 msgid "%s Content"
 msgstr ""
 
-#: templates/course.php:100 templates/course_content_shortcode.php:45
+#: templates/course.php:99 templates/course_content_shortcode.php:45
 #: templates/profile.php:37
 msgid "Expand All"
 msgstr ""
 
-#: templates/course.php:100 templates/course_content_shortcode.php:45
+#: templates/course.php:99 templates/course_content_shortcode.php:45
 #: templates/profile.php:37
 msgid "Collapse All"
 msgstr ""
 
-#: templates/course.php:195
+#: templates/course.php:194
 msgid "Next »"
 msgstr ""
 
@@ -8361,9 +8399,9 @@ msgstr ""
 msgid "Assigned Group(s) : "
 msgstr ""
 
-#. #-#-#-#-#  sfwd-lms.pot (LearnDash LMS 2.4.6)  #-#-#-#-#
+#. #-#-#-#-#  sfwd-lms.pot (LearnDash LMS 2.4.7)  #-#-#-#-#
 #. Plugin URI of the plugin/theme
-#. #-#-#-#-#  sfwd-lms.pot (LearnDash LMS 2.4.6)  #-#-#-#-#
+#. #-#-#-#-#  sfwd-lms.pot (LearnDash LMS 2.4.7)  #-#-#-#-#
 #. Author URI of the plugin/theme
 msgid "http://www.learndash.com"
 msgstr ""

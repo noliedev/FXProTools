@@ -8,16 +8,21 @@ if ( typeof learndash_video_data !== 'undefined' ) {
 	var ld_video_players = {};
 
 	if ( learndash_video_data.videos_found_provider == 'youtube' ) {
+		
+		// We ensure the iframe elements have the needed ID attribute before calling onYouTubeIframeAPIReady
+		jQuery('.ld-video iframe').each( function(index, element) {
+			ld_video_count += 1;
+			
+			var element_id = jQuery(element).prop('id');
+			if ( ( typeof element_id === 'undefined' ) || ( element_id == '' ) ) {
+				element_id = 'ld-video-player-'+ld_video_count;
+				jQuery(element).prop('id', element_id);
+			}
+		});
+				
 		function onYouTubeIframeAPIReady() {
 			jQuery('.ld-video iframe').each( function(index, element) {
-				ld_video_count += 1;
-					
 				var element_id = jQuery(element).prop('id');
-				if ( ( typeof element_id === 'undefined' ) || ( element_id == '' ) ) {
-					jQuery(element).prop('id', 'ld-video-player-'+ld_video_count);
-					element_id = 'ld-video-player-'+ld_video_count
-				}
-		
 				if ( typeof element_id !== 'undefined' ) {
 			
 					LearnDash_disable_assets(true);

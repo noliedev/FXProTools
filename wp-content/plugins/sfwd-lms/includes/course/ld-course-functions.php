@@ -1728,3 +1728,33 @@ function learndash_update_course_users_groups( $user_id, $course_id, $access_lis
 add_action( 'learndash_update_course_access', 'learndash_update_course_users_groups', 50, 4 );
 
 
+function learndash_user_get_course_completed_date( $user_id = 0, $course_id = 0 ) {
+	$completed_on_timestamp = 0;
+	if ( ( !empty( $user_id ) ) && ( !empty( $course_id ) ) ) {
+		$completed_on = get_user_meta( $user_id, 'course_completed_' . $course_id, true );
+
+		if ( empty( $completed_on) ) {
+			$activity_query_args = array(
+				'post_ids'		=>	$course_id,
+				'user_ids'		=>	$user_id,
+				'activity_type'	=>	'course',
+				'per_page'		=>	1,
+			);
+			
+			$activity = learndash_reports_get_activity( $activity_query_args );
+			//error_log('activity<pre>'. print_r($activity, true) .'</pre>');
+			if ( !empty( $activity['results'] ) ) {
+				foreach( $activity['results'] as $activity_item ) {
+					if ( property_exists( $activity_item, 'activity_completed' ) ) {
+						$completed_on_timestamp = $activity_item->activity_completed;
+
+						// To make the next check easier we update the user meta.
+						update_user_meta( $user_id, 'course_completed_' . $course_id, $completed_on_timestamp );
+					}
+				}
+			}
+		}
+	}
+	
+	return $completed_on_timestamp;
+}

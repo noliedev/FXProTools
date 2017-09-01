@@ -295,6 +295,17 @@ if (!class_exists('Learndash_Admin_Settings_Support_Panel')) {
 				
 				?>
 				<h2><?php _e('Database Tables', 'learndash' ); ?></h2>
+				<p><?php _e('When activated LearnDash will create the following tables. If the tables are not present try reactivating the plugin. If the table still do not show check the DB_USER defined in your wp-config.php and ensure it has the proper permissions to create tables. Check with your host for help.', 'learndash'); ?></p>
+				<?php
+					$grants = learndash_get_db_user_grants();
+					if ( !empty( $grants ) ) {
+						if ( ( array_search( 'ALL PRIVILEGES', $grants ) === false ) && ( array_search( 'CREATE', $grants ) === false ) ) {
+							?><p style="color: red"><?php _e('The DB_USER defined in your wp-config.php does not have CREATE permission.', 'learndash'); ?></p><?php
+						}
+					}
+				?>
+				
+				
 				<table cellspacing="0" class="learndash-support-settings">
 					<thead>
 						<tr>

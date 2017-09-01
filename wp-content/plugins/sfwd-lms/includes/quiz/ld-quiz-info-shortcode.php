@@ -157,13 +157,13 @@ function learndash_courseinfo( $attr ) {
 			$attr
 		);
 
-	extract( $shortcode_atts );
+	//extract( $shortcode_atts );
 
-	$course_id = ! empty( $course_id ) ? $course_id : @$_GET['course_id'];
-	$user_id   = ! empty( $user_id ) ? $user_id : @$_GET['user_id'];
+	$shortcode_atts['course_id'] = ! empty( $shortcode_atts['course_id'] ) ? $shortcode_atts['course_id'] : @$_GET['course_id'];
+	$shortcode_atts['user_id']   = ! empty( $shortcode_atts['user_id'] ) ? $shortcode_atts['user_id'] : @$_GET['user_id'];
 
-	if ( empty( $user_id ) ) {
-		$user_id = get_current_user_id();
+	if ( empty( $shortcode_atts['user_id'] ) ) {
+		$shortcode_atts['user_id'] = get_current_user_id();
 		
 		/**
 		 * Added logic to allow admin and group_leader to view certificate from other users. 
@@ -176,21 +176,21 @@ function learndash_courseinfo( $attr ) {
 
 		if ( $post_type == 'sfwd-certificates' ) {
 			if ( ( ( learndash_is_admin_user() ) || ( learndash_is_group_leader_user() ) ) && ( ( isset( $_GET['user'] ) ) && (!empty( $_GET['user'] ) ) ) ) {
-				$user_id = intval( $_GET['user'] );
+				$shortcode_atts['user_id'] = intval( $_GET['user'] );
 			}
 		}
 		
 	}
 
-	if ( empty( $course_id ) || empty( $user_id ) ) {
+	if ( empty( $shortcode_atts['course_id'] ) || empty( $shortcode_atts['user_id'] ) ) {
 		return apply_filters( 'learndash_courseinfo', '', $shortcode_atts );;
 	}
 
-	$show = strtolower( $show );
+	$shortcode_atts['show'] = strtolower( $shortcode_atts['show'] );
 
-	switch ( $show ) {
+	switch ( $shortcode_atts['show'] ) {
 		case 'course_title':
-			$course = get_post( $course_id );
+			$course = get_post( $shortcode_atts['course_id'] );
 			return apply_filters( 'learndash_courseinfo', $course->post_title, $shortcode_atts );
 
 		case 'cumulative_score':
@@ -199,10 +199,10 @@ function learndash_courseinfo( $attr ) {
 		case 'cumulative_percentage':
 		case 'cumulative_timespent':
 		case 'cumulative_count':
-			$field    = str_replace( 'cumulative_', '', $show );
-			$quizdata = get_user_meta( $user_id, '_sfwd-quizzes', true );			
+			$field    = str_replace( 'cumulative_', '', $shortcode_atts['show'] );
+			$quizdata = get_user_meta( $shortcode_atts['user_id'], '_sfwd-quizzes', true );			
 			global $wpdb;
-			$quizzes = $wpdb->get_col( $wpdb->prepare( 'SELECT post_id FROM ' . $wpdb->postmeta . " WHERE meta_key = 'course_id' AND meta_value = '%d'", $course_id ) );
+			$quizzes = $wpdb->get_col( $wpdb->prepare( 'SELECT post_id FROM ' . $wpdb->postmeta . " WHERE meta_key = 'course_id' AND meta_value = '%d'", $shortcode_atts['course_id'] ) );
 			
 			if ( empty( $quizzes) ) {
 				return apply_filters( 'learndash_courseinfo', 0, $shortcode_atts );
@@ -230,7 +230,7 @@ function learndash_courseinfo( $attr ) {
 				$sum += $score;
 			}
 
-			$return = number_format( $sum / count( $scores ), $decimals );
+			$return = number_format( $sum / count( $scores ), $shortcode_atts['decimals'] );
 
 			if ( $field == 'timespent' ) {
 				return apply_filters( 'learndash_courseinfo', learndash_seconds_to_time( $return ), $shortcode_atts );
@@ -244,10 +244,10 @@ function learndash_courseinfo( $attr ) {
 		case 'aggregate_total_points':
 		case 'aggregate_timespent':
 		case 'aggregate_count':
-			$field    = substr_replace( $show, '', 0, 10 );
-			$quizdata = get_user_meta( $user_id, '_sfwd-quizzes', true );
+			$field    = substr_replace( $shortcode_atts['show'], '', 0, 10 );
+			$quizdata = get_user_meta( $shortcode_atts['user_id'], '_sfwd-quizzes', true );
 			global $wpdb;
-			$quizzes = $wpdb->get_col( $wpdb->prepare( 'SELECT post_id FROM ' . $wpdb->postmeta . " WHERE meta_key = 'course_id' AND meta_value = '%d'", $course_id ) );
+			$quizzes = $wpdb->get_col( $wpdb->prepare( 'SELECT post_id FROM ' . $wpdb->postmeta . " WHERE meta_key = 'course_id' AND meta_value = '%d'", $shortcode_atts['course_id'] ) );
 			
 			if ( empty( $quizzes) ) {
 				return apply_filters( 'learndash_courseinfo', 0, $shortcode_atts );
@@ -275,23 +275,41 @@ function learndash_courseinfo( $attr ) {
 				$sum += $score;
 			}
 
-			$return = number_format( $sum, $decimals );
+			$return = number_format( $sum, $shortcode_atts['decimals'] );
 
 			if ( $field == 'timespent' ) {
-				return apply_filters( 'learndash_courseinfo', learndash_seconds_to_time( $return ), $show );
+				return apply_filters( 'learndash_courseinfo', learndash_seconds_to_time( $return ), $shortcode_atts['show'] );
 			} else {
 				return apply_filters( 'learndash_courseinfo', $return, $shortcode_atts );
 			}
 
 		case 'completed_on':
-			$completed_on = get_user_meta( $user_id, 'course_completed_' . $course_id, true );
+			$completed_on = get_user_meta( $shortcode_atts['user_id'], 'course_completed_' . $shortcode_atts['course_id'], true );
 
 			if ( empty( $completed_on) ) {
-				return apply_filters( 'learndash_courseinfo', '-', $shortcode_atts );
+				$completed_on = learndash_user_get_course_completed_date( $shortcode_atts['user_id'], $shortcode_atts['course_id'] );
+				if ( empty( $completed_on) ) {
+					return apply_filters( 'learndash_courseinfo', '-', $shortcode_atts );
+				}
 			}
 
 			date_default_timezone_set( get_option( 'timezone_string' ) );
-			return apply_filters( 'learndash_courseinfo', date_i18n( $format, $completed_on ), $shortcode_atts );
+			return apply_filters( 'learndash_courseinfo', date_i18n( $shortcode_atts['format'], $completed_on ), $shortcode_atts );
+
+
+		case 'course_points':
+			$course_points = learndash_get_course_points( $shortcode_atts['course_id'] );
+			$course_points = number_format( $course_points, $shortcode_atts['decimals'] );
+			return apply_filters( 'learndash_courseinfo', $course_points, $shortcode_atts );
+
+			break;
+			
+		case 'user_course_points':
+			$user_course_points = learndash_get_user_course_points( $shortcode_atts['user_id'] );
+			$user_course_points = number_format( $user_course_points, $shortcode_atts['decimals'] );
+			return apply_filters( 'learndash_courseinfo', $user_course_points, $shortcode_atts );
+
+			break;
 
 		default:
 			return apply_filters( 'learndash_courseinfo', '', $shortcode_atts );
