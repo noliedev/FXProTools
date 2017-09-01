@@ -36,7 +36,7 @@
 								</div>
 								<div class="actions">
 									<span class="small">2 days ago</span>
-									<a href="<?php bloginfo('url');?>/marketing/contact/user" class="btn btn-default btn-sm m-l-sm">Edit</a>
+									<a href="<?php bloginfo('url');?>/marketing/contacts/user" class="btn btn-default btn-sm m-l-sm">View</a>
 								</div>
 							</div>
 						</div>
@@ -53,7 +53,7 @@
 								</div>
 								<div class="actions">
 									<span class="small">2 days ago</span>
-									<a href="<?php bloginfo('url');?>/marketing/contact/user" class="btn btn-default btn-sm m-l-sm">Edit</a>
+									<a href="<?php bloginfo('url');?>/marketing/contacts/user" class="btn btn-default btn-sm m-l-sm">View</a>
 								</div>
 							</div>
 						</div>
@@ -70,7 +70,7 @@
 								</div>
 								<div class="actions">
 									<span class="small">2 days ago</span>
-									<a href="<?php bloginfo('url');?>/marketing/contact/user" class="btn btn-default btn-sm m-l-sm">Edit</a>
+									<a href="<?php bloginfo('url');?>/marketing/contacts/user" class="btn btn-default btn-sm m-l-sm">View</a>
 								</div>
 							</div>
 						</div>
@@ -87,7 +87,7 @@
 								</div>
 								<div class="actions">
 									<span class="small">2 days ago</span>
-									<a href="<?php bloginfo('url');?>/marketing/contact/user" class="btn btn-default btn-sm m-l-sm">Edit</a>
+									<a href="<?php bloginfo('url');?>/marketing/contacts/user" class="btn btn-default btn-sm m-l-sm">View</a>
 								</div>
 							</div>
 						</div>
@@ -104,7 +104,7 @@
 								</div>
 								<div class="actions">
 									<span class="small">2 days ago</span>
-									<a href="<?php bloginfo('url');?>/marketing/contact/user" class="btn btn-default btn-sm m-l-sm">Edit</a>
+									<a href="<?php bloginfo('url');?>/marketing/contacts/user" class="btn btn-default btn-sm m-l-sm">View</a>
 								</div>
 							</div>
 						</div>

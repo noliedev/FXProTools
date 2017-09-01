@@ -1,3 +1,6 @@
+<?php
+$checklist = get_user_checklist();
+?>
 <?php get_header(); ?>
 
 	<?php get_template_part('inc/templates/nav-dashboard'); ?>
@@ -19,14 +22,35 @@
 						<span>Onboard Checklist</span>
 					</div>
 					<ul class="fx-board-list">
-						<?php $lists = ['Verify your e-mail', 'Update/Verify Profile (SMS #)', 'Schedule For Webinar',	'Access your product', 'Get your free shirt',	'Share Video', 'Refer A Friend']; ?>
-						<?php foreach ($lists as $key => $list): ?>
 						<li>
-							<span class="fx-checkbox <?php echo $key == 0 ? 'checked': ''; ?>"></span>
-							<span class="fx-text"><?php echo $list; ?></span>
+							<span class="fx-checkbox <?php echo $checklist['verified_email'] ? 'checked' : '';?>"></span>
+							<span class="fx-text">Verify your e-mail</span>
 						</li>
-						<?php endforeach; ?>
-						<li><a href="" class="btn btn-danger btn-lg fx-btn block">I'm ready for the next step</a></li>
+						<li>
+							<span class="fx-checkbox <?php echo $checklist['verified_profile'] ? 'checked' : '';?>"></span>
+							<span class="fx-text">Update/Verify Profile (SMS #)</span>
+						</li>
+						<li>
+							<span class="fx-checkbox <?php echo $checklist['scheduled_webinar'] ? 'checked' : '';?>"></span>
+							<span class="fx-text">Schedule For Webinar</span>
+						</li>
+						<li>
+							<span class="fx-checkbox <?php echo $checklist['accessed_products'] ? 'checked' : '';?>"></span>
+							<span class="fx-text">Access your product</span>
+						</li>
+						<li>
+							<span class="fx-checkbox <?php echo $checklist['got_shirt'] ? 'checked' : '';?>"></span>
+							<span class="fx-text">Get your free shirt</span>
+						</li>
+						<li>
+							<span class="fx-checkbox <?php echo $checklist['shared_video'] ? 'checked' : '';?>"></span>
+							<span class="fx-text">Share Video</span>
+						</li>
+						<li>
+							<span class="fx-checkbox <?php echo $checklist['referred_friend'] ? 'checked' : '';?>"></span>
+							<span class="fx-text">Refer A Friend</span>
+						</li>
+						<li><a href="<?php echo get_checklist_next_step_url();?>" class="btn btn-danger btn-lg fx-btn block">I'm ready for the next step</a></li>
 					</ul>
 				</div>
 			</div>

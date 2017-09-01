@@ -146,3 +146,50 @@ function get_funnel_stats($funnel_id){
 					);
 	return !$stats ? $sample_stats : $course;
 }
+
+function get_user_checklist(){
+	$checklist = get_user_meta(get_current_user_id(), '_onboard_checklist', true);
+
+	if( is_array($checklist) ){
+		return $checklist;
+	}
+
+	else{
+		ThemeSettings::register_user_checklist(get_current_user_id());
+	}
+}
+
+function get_checklist_next_step_url(){
+	$checklist = get_user_checklist();
+	$url = '#';
+
+	foreach($checklist as $key => $value){
+		if( empty($value) ){
+			switch($key){
+				case 0:
+					$url = home_url() . '/verify-email/';
+					break;
+				case 1:
+					$url = home_url() . '/profile/';
+					break;
+				case 2:
+					$url = home_url() . '/coaching/';
+					break;
+				case 3:
+					$url = home_url() . '/access-products/';
+					break;
+				case 4:
+					$url = home_url() . '/free-shirt/';
+					break;
+				case 5:
+					$url = home_url() . '/share-video/';
+					break;
+				case 6:
+					$url = home_url() . '/refer-a-friend/';
+					break;
+			}
+		}
+	}
+
+	return $url;
+}

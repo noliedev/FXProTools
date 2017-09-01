@@ -22,6 +22,7 @@ if(!class_exists('ThemeSettings')){
 			add_action('template_redirect',  array($this, 'course_category_template'));
 			add_filter('query_vars',  array($this,'course_category_vars'));
 			add_action('init', array($this, 'register_funnel_post_type'));
+			add_action('user_register', array($this, 'register_user_checklist'));
 
 		}
 
@@ -219,6 +220,18 @@ if(!class_exists('ThemeSettings')){
 				'capability_type'       => 'page',
 			);
 			register_post_type( 'fx_funnel', $args );
+		}
+
+		public function register_user_checklist($user_id){
+			$checklist = array( 'verified_email' 	=> false, 
+								'verified_profile'	=> false,
+								'scheduled_webinar'	=> false,
+								'accessed_products' => false,
+								'got_shirt'			=> false,
+								'shared_video'		=> false,
+								'referred_friend'	=> false,
+						);
+			add_user_meta( $user_id, '_onboard_checklist', $checklist);
 		}
 	}
 }
