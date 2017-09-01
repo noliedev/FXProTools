@@ -161,11 +161,7 @@ function get_funnel_stats($funnel_id)
 function get_user_checklist()
 {
 	$checklist = get_user_meta(get_current_user_id(), '_onboard_checklist', true);
-	if( is_array($checklist) ){
-		return $checklist;
-	} else {
-		ThemeSettings::register_user_checklist(get_current_user_id());
-	}
+	return is_array($checklist) ? $checklist : ThemeSettings::register_user_checklist(get_current_user_id());
 }
 
 function get_checklist_next_step_url()
