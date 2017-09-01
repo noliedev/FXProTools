@@ -19,3 +19,9 @@ body {
 html {
     font-size: 100%;
 }
+
+// Bootstrap Overriding Colors
+.btn-danger {
+    background-color: $red;
+    border-color: $red;
+}
