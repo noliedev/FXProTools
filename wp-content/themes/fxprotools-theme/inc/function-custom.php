@@ -16,14 +16,16 @@
 // }
 
 add_action('init', 'block_users_wp');
-function block_users_wp(){
+function block_users_wp()
+{
 	if(is_admin() && ! current_user_can('administrator') && !(defined('DOING_AJAX') && DOING_AJAX)){
 		wp_redirect(home_url());
 		exit;
 	}
 }
 
-function get_courses_by_product_id($product_id){
+function get_courses_by_product_id($product_id)
+{
 	$courses_ids = get_post_meta($product_id , '_related_course'); 
 	$courses     = array();
 	if($courses_ids){
@@ -34,7 +36,8 @@ function get_courses_by_product_id($product_id){
 	return $courses;
 }
 
-function get_courses_by_category_id($category_id){
+function get_courses_by_category_id($category_id)
+{
 	$args = array(
 			'posts_per_page'   => -1,
 			'orderby'          => 'menu_order',
@@ -53,17 +56,20 @@ function get_courses_by_category_id($category_id){
 	return !$courses ? false : $courses;
 }
 
-function get_course_metadata($course_id){
+function get_course_metadata($course_id)
+{
 	return get_post_meta( $course_id, '_sfwd-courses', true );
 }
 
-function get_course_price_by_id($course_id){
+function get_course_price_by_id($course_id)
+{
 	$course_data = get_course_metadata($course_id);
 	$price = $course_data['sfwd-courses_course_price'];
 	return is_numeric($price) ? $price : 0;
 }
 
-function get_lessons_by_course_id($course_id){
+function get_lessons_by_course_id($course_id)
+{
 	$args = array(
 			'posts_per_page'   => -1,
 			'orderby'          => 'menu_order',
@@ -82,7 +88,8 @@ function get_lessons_by_course_id($course_id){
 	return !$lessons ? false : $lessons;
 }
 
-function get_user_progress(){
+function get_user_progress()
+{
 	if(!is_user_logged_in()) return false;
 	$current_user    = wp_get_current_user();
 	$user_id         = $current_user->ID;
@@ -90,19 +97,22 @@ function get_user_progress(){
 	return !$course_progress ? false : $course_progress;
 }
 
-function get_course_lesson_progress($course_id, $lesson_id){
+function get_course_lesson_progress($course_id, $lesson_id)
+{
 	if(!$course_id || !$lesson_id) return false;
 	$course_progress = get_user_progress();
 	return $course_progress[$course_id]['lessons'][$lesson_id];
 }
 
-function get_lesson_parent_course($lesson_id){
+function get_lesson_parent_course($lesson_id)
+{
 	$course_id = get_post_meta($lesson_id , 'course_id',true); 
 	$course = get_post($course_id);
 	return !$course ? false : $course;
 }
 
-function get_course_category_children($course_cat_id){
+function get_course_category_children($course_cat_id)
+{
 	$children_ids = get_term_children($course_cat_id , 'ld_course_category');
 
 	if( !empty($children_ids) ){
@@ -112,13 +122,13 @@ function get_course_category_children($course_cat_id){
 		    'hide_empty' => false,
 		) ); 
 		return !$child_categories ? false: $child_categories;
-	}
-	else{
+	} else{
 		return false;
 	}
 }
 
-function get_funnels(){
+function get_funnels()
+{
 	$args = array(
 		'posts_per_page'   => -1,
 		'orderby'          => 'menu_order',
@@ -129,7 +139,8 @@ function get_funnels(){
 	return get_posts($args);
 }
 
-function get_funnel_stats($funnel_id){
+function get_funnel_stats($funnel_id)
+{
 	$stats = get_post_meta($funnel_id , 'course_id', true); 
 	$sample_stats = array( 'capture' => 
 							array( 'page_views' => array('all' 	 => 88, 'unique' => 61),
@@ -147,49 +158,32 @@ function get_funnel_stats($funnel_id){
 	return !$stats ? $sample_stats : $course;
 }
 
-function get_user_checklist(){
+function get_user_checklist()
+{
 	$checklist = get_user_meta(get_current_user_id(), '_onboard_checklist', true);
-
 	if( is_array($checklist) ){
 		return $checklist;
-	}
-
-	else{
+	} else {
 		ThemeSettings::register_user_checklist(get_current_user_id());
 	}
 }
 
-function get_checklist_next_step_url(){
+function get_checklist_next_step_url()
+{
 	$checklist = get_user_checklist();
 	$url = '#';
-
 	foreach($checklist as $key => $value){
 		if( empty($value) ){
 			switch($key){
-				case 0:
-					$url = home_url() . '/verify-email/';
-					break;
-				case 1:
-					$url = home_url() . '/profile/';
-					break;
-				case 2:
-					$url = home_url() . '/coaching/';
-					break;
-				case 3:
-					$url = home_url() . '/access-products/';
-					break;
-				case 4:
-					$url = home_url() . '/free-shirt/';
-					break;
-				case 5:
-					$url = home_url() . '/share-video/';
-					break;
-				case 6:
-					$url = home_url() . '/refer-a-friend/';
-					break;
+				case 0: $url = home_url() . '/verify-email/'; break;
+				case 1: $url = home_url() . '/profile/'; break;
+				case 2: $url = home_url() . '/coaching/'; break;
+				case 3: $url = home_url() . '/access-products/'; break;
+				case 4: $url = home_url() . '/free-shirt/'; break;
+				case 5: $url = home_url() . '/share-video/'; break;
+				case 6: $url = home_url() . '/refer-a-friend/'; break;
 			}
 		}
 	}
-
 	return $url;
 }

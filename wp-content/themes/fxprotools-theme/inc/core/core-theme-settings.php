@@ -148,21 +148,23 @@ if(!class_exists('ThemeSettings')){
 					),
 				),
 			);
-
 			return $meta_boxes;
 		}
 
-		public function course_category_rewrite(){
+		public function course_category_rewrite()
+		{
 			add_rewrite_rule('course-category/([^/]*)/?','index.php?category_slug=$matches[1]&course_category=1','top');
 		}
 
-		public function course_category_vars( $vars ) {
+		public function course_category_vars( $vars )
+		{
 		    $vars[] = 'course_category';
 		    $vars[] = 'category_slug';
 		    return $vars;
 		}
 
-		public function course_category_template(){
+		public function course_category_template()
+		{
 		    if ( get_query_var( 'category_slug' ) ) {
 		        add_filter( 'template_include', function() {
 		            return get_template_directory() . '/sfwd-course-category.php';
@@ -170,7 +172,8 @@ if(!class_exists('ThemeSettings')){
 		    }
 		}
 
-		public function register_funnel_post_type(){
+		public function register_funnel_post_type()
+		{
 			$labels = array(
 				'name'                  => _x( 'Funnels', 'Post Type General Name', 'fxprotools' ),
 				'singular_name'         => _x( 'Funnel', 'Post Type Singular Name', 'fxprotools' ),
@@ -222,15 +225,17 @@ if(!class_exists('ThemeSettings')){
 			register_post_type( 'fx_funnel', $args );
 		}
 
-		public function register_user_checklist($user_id){
-			$checklist = array( 'verified_email' 	=> false, 
-								'verified_profile'	=> false,
-								'scheduled_webinar'	=> false,
-								'accessed_products' => false,
-								'got_shirt'			=> false,
-								'shared_video'		=> false,
-								'referred_friend'	=> false,
-						);
+		public function register_user_checklist($user_id)
+		{
+			$checklist = array(
+				'verified_email' 	=> false, 
+				'verified_profile'	=> false,
+				'scheduled_webinar'	=> false,
+				'accessed_products' => false,
+				'got_shirt'			=> false,
+				'shared_video'		=> false,
+				'referred_friend'	=> false,
+			);
 			add_user_meta( $user_id, '_onboard_checklist', $checklist);
 		}
 	}
