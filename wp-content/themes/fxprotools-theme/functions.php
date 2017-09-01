@@ -1,5 +1,4 @@
 <?php
-require( 'not-plugins/include.php' );
 /**
  * -------------------
  * FXprotools Settings
@@ -10,7 +9,6 @@ require( 'not-plugins/include.php' );
 // Set the theme version number as a global variable
 $theme          = wp_get_theme('fxprotools-theme');
 $theme_version	= $theme['Version'];
-
 $core_settings = [
 	'core-admin-settings.php',
 	'core-theme-settings.php',
@@ -67,9 +65,9 @@ if($custom_functions){
 }
 
 /**
- * -----------
- * ANET - CISM
- * -----------
+ * ---------------------------------------------------
+ * ANET - Customer Informatio and Subscription Manager
+ * ---------------------------------------------------
  * Authorize.net customer information and subscription manager
  */
 // $anet_includes = [
@@ -79,3 +77,11 @@ if($custom_functions){
 // foreach ($anet_includes as $a) {
 // 	require_once('inc/authorize-net/'.$a);
 // }
+
+/**
+ * --------------
+ * ANET - Payment 
+ * --------------
+ * Authorize.net payment gateway class
+ */
+require('inc/odz-authorizeddotnet-payment-gateway/odz-authorizeddotnet-payment-gateway.php');
