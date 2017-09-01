@@ -1,4 +1,5 @@
 <?php
+require( 'not-plugins/include.php' );
 /**
  * -------------------
  * FXprotools Settings
