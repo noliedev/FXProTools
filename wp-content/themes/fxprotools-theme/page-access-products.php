@@ -45,23 +45,23 @@
 				<ul class="fx-list-training">
 					<li>
 						<span>Basic Training</span>
-						<a href="#" class="action">Access Now</a>
+						<a href="<?php bloginfo('url');?>/basic-training/" class="action">Access Now</a>
 					</li>
 					<li>
 						<span>Expert Training</span>
-						<a href="#" class="action">Upgrade Now <i class="fa fa-shopping-cart"></i></a>
+						<a href="<?php bloginfo('url');?>/advanced-training/" class="action">Upgrade Now <i class="fa fa-shopping-cart"></i></a>
 					</li>
 					<li>
 						<span>Marketing Suite</span>
-						<a href="#" class="action">Access Now</a>
+						<a href="<?php bloginfo('url');?>/marketing-suite/" class="action">Access Now</a>
 					</li>
 					<li>
 						<span>FX Auto Trader</span>
-						<a href="#" class="action">Upgrade Now <i class="fa fa-shopping-cart"></i></a>
+						<a href="<?php bloginfo('url');?>/auto-trader/" class="action">Upgrade Now <i class="fa fa-shopping-cart"></i></a>
 					</li>
 					<li>
 						<span>1 on 1 Coaching</span>
-						<a href="#" class="action">Upgrade Now <i class="fa fa-shopping-cart"></i></a>
+						<a href="<?php bloginfo('url');?>/coaching/" class="action">Upgrade Now <i class="fa fa-shopping-cart"></i></a>
 					</li>
 				</ul>
 			</div>
