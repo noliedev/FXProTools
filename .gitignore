@@ -4,7 +4,7 @@ wp-content/cache/*
 wp-content/upgrade/*
 wp-content/uploads/*
 node_modules/
-vendor/
+/vendor/
 sitemap.*
 wp-config.php
  
