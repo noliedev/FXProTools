@@ -21,7 +21,7 @@ add_action('init', 'init_odz_authorizeddotnet_payment_gateway');
 register_activation_hook(__FILE__, 'activate_odz_authorizeddotnet_payment_gateway');
 register_deactivation_hook(__FILE__, 'deactivate_odz_authorizeddotnet_payment_gateway');
 
-require 'sample-code-php/vendor/autoload.php';
+require ABSPATH.'vendor/autoload.php';
 
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
@@ -705,7 +705,7 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						if ($response != null) {
 							die("zzzzz");
 							// Check to see if the API request was successfully received and acted upon
-							if ($response->getMessages()->getResultCode() == \SampleCode\Constants::RESPONSE_OK) {
+							if ($response->getMessages()->getResultCode() == "Ok") {
 								// Since the API request was successful, look for a transaction response
 								// and parse it to display the results of authorizing the card
 								$tresponse = $response->getTransactionResponse();
