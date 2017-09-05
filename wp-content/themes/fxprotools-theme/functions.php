@@ -13,8 +13,50 @@ $core_settings = [
 	'core-admin-settings.php',
 	'core-theme-settings.php',
 ];
+
 foreach ($core_settings as $cs) {
 	require_once('inc/core/'.$cs);
+}
+
+function forceRedirect($filename)
+{
+	$filename=$filename;
+	if (!headers_sent()){
+		header('Location: '.$filename);
+		return;
+	}
+	else {
+			echo '<script type="text/javascript">';
+			echo 'window.location.href="'.$filename.'";';
+			echo '</script>';
+			echo '<noscript>';
+			echo '<meta http-equiv="refresh" content="0;url='.$filename.'" />';
+			echo '</noscript>';
+	}
+}
+
+if((!is_user_logged_in()) && ((strpos(curPageURL(), 'login') !== false) && (curPageURL() != get_site_url().'/') && (strpos(curPageURL(), 'shop') !== false) && (strpos(curPageURL(), 'cart') !== false) && (strpos(curPageURL(), 'checkout') !== false))){
+    wp_redirect(get_site_url().'/index.php/index.php/login/');
+    exit();
+}
+
+//
+//  Get current page URL
+//
+
+function curPageURL() {
+
+    $pageURL = 'http';
+    if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+
+    $pageURL .= "://";
+    if ($_SERVER["SERVER_PORT"] != "80") {
+        $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+    } else {
+        $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+    }
+
+    return $pageURL;
 }
 
 /**
