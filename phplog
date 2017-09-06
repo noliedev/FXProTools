@@ -128,3 +128,597 @@
  Tue, 05 Sep 2017 01:17:50 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><ErrorResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Error</resultCode><message><code>E00003</code><text>The 'AnetApi/xml/v1/schema/AnetApiSchema.xsd:totalOccurrences' element is invalid - The value &amp;#39;0&amp;#39; is invalid according to its datatype 'Short' - The MinInclusive constraint failed.</text></message></messages></ErrorResponse>
  Tue, 05 Sep 2017 01:17:50 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
  Tue, 05 Sep 2017 01:17:50 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End
+ Tue, 05 Sep 2017 22:19:34 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 114) - Request Serialization Begin
+ Tue, 05 Sep 2017 22:19:34 -0700 DEBUG : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 115) - net\authorize\api\contract\v1\CreateTransactionRequest Object
+(
+    [transactionRequest:net\authorize\api\contract\v1\CreateTransactionRequest:private] => net\authorize\api\contract\v1\TransactionRequestType Object
+        (
+            [transactionType:net\authorize\api\contract\v1\TransactionRequestType:private] => authCaptureTransaction
+            [amount:net\authorize\api\contract\v1\TransactionRequestType:private] => 225
+            [currencyCode:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [payment:net\authorize\api\contract\v1\TransactionRequestType:private] => net\authorize\api\contract\v1\PaymentType Object
+                (
+                    [creditCard:net\authorize\api\contract\v1\PaymentType:private] => net\authorize\api\contract\v1\CreditCardType Object
+                        (
+                            [cardCode:net\authorize\api\contract\v1\CreditCardType:private] => xxxx
+                            [isPaymentToken:net\authorize\api\contract\v1\CreditCardType:private] => 
+                            [cryptogram:net\authorize\api\contract\v1\CreditCardType:private] => 
+                            [cardNumber:net\authorize\api\contract\v1\CreditCardSimpleType:private] => xxxx-1111
+                            [expirationDate:net\authorize\api\contract\v1\CreditCardSimpleType:private] => xxxx
+                        )
+
+                    [bankAccount:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [trackData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [encryptedTrackData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [payPal:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [opaqueData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [emv:net\authorize\api\contract\v1\PaymentType:private] => 
+                )
+
+            [profile:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [solution:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [callId:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [terminalNumber:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [authCode:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [refTransId:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [splitTenderId:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [order:net\authorize\api\contract\v1\TransactionRequestType:private] => net\authorize\api\contract\v1\OrderType Object
+                (
+                    [invoiceNumber:net\authorize\api\contract\v1\OrderType:private] => 2146591604
+                    [description:net\authorize\api\contract\v1\OrderType:private] => Description of the signup
+                )
+
+            [lineItems:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [tax:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [duty:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [shipping:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [taxExempt:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [poNumber:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [customer:net\authorize\api\contract\v1\TransactionRequestType:private] => net\authorize\api\contract\v1\CustomerDataType Object
+                (
+                    [type:net\authorize\api\contract\v1\CustomerDataType:private] => individual
+                    [id:net\authorize\api\contract\v1\CustomerDataType:private] => 470789964
+                    [email:net\authorize\api\contract\v1\CustomerDataType:private] => vyny@gmail.com
+                    [driversLicense:net\authorize\api\contract\v1\CustomerDataType:private] => 
+                    [taxId:net\authorize\api\contract\v1\CustomerDataType:private] => 
+                )
+
+            [billTo:net\authorize\api\contract\v1\TransactionRequestType:private] => net\authorize\api\contract\v1\CustomerAddressType Object
+                (
+                    [phoneNumber:net\authorize\api\contract\v1\CustomerAddressType:private] => 
+                    [faxNumber:net\authorize\api\contract\v1\CustomerAddressType:private] => 
+                    [email:net\authorize\api\contract\v1\CustomerAddressType:private] => 
+                    [firstName:net\authorize\api\contract\v1\NameAndAddressType:private] => Jennifer
+                    [lastName:net\authorize\api\contract\v1\NameAndAddressType:private] => Patton
+                    [company:net\authorize\api\contract\v1\NameAndAddressType:private] => Leah Zamora
+                    [address:net\authorize\api\contract\v1\NameAndAddressType:private] => Sed esse officia consequat Ipsum assumenda vero dolore quisquam consequatur quod neque sint
+                    [city:net\authorize\api\contract\v1\NameAndAddressType:private] => Sed esse officia consequat Ipsum assumenda vero dolore quisquam consequatur quod neque sint
+                    [state:net\authorize\api\contract\v1\NameAndAddressType:private] => RIZ
+                    [zip:net\authorize\api\contract\v1\NameAndAddressType:private] => 1123
+                    [country:net\authorize\api\contract\v1\NameAndAddressType:private] => CH
+                )
+
+            [shipTo:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [customerIP:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [cardholderAuthentication:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [retail:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [employeeId:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [transactionSettings:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [userFields:net\authorize\api\contract\v1\TransactionRequestType:private] => Array
+                (
+                    [0] => net\authorize\api\contract\v1\UserFieldType Object
+                        (
+                            [name:net\authorize\api\contract\v1\UserFieldType:private] => customerLoyaltyNum
+                            [value:net\authorize\api\contract\v1\UserFieldType:private] => 981712546
+                        )
+
+                    [1] => net\authorize\api\contract\v1\UserFieldType Object
+                        (
+                            [name:net\authorize\api\contract\v1\UserFieldType:private] => favoriteColor
+                            [value:net\authorize\api\contract\v1\UserFieldType:private] => blue
+                        )
+
+                )
+
+        )
+
+    [merchantAuthentication:net\authorize\api\contract\v1\ANetApiRequestType:private] => net\authorize\api\contract\v1\MerchantAuthenticationType Object
+        (
+            [name:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 84Ut8PTqT
+            [transactionKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => xxxx
+            [sessionToken:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [password:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [impersonationAuthentication:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [fingerPrint:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [clientKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [mobileDeviceId:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+        )
+
+    [clientId:net\authorize\api\contract\v1\ANetApiRequestType:private] => sdk-php-1.9.3
+    [refId:net\authorize\api\contract\v1\ANetApiRequestType:private] => ref1504675171
+)
+
+ Tue, 05 Sep 2017 22:19:35 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 118) - Request  Serialization End
+ Tue, 05 Sep 2017 22:19:35 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 75) -  Url: https://apitest.authorize.net/xml/v1/request.api
+ Tue, 05 Sep 2017 22:19:35 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 77) - Request to AnetApi: 
+<?xml version="1.0" encoding="UTF-8"?>
+<createTransactionRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+  <merchantAuthentication>
+    <name><![CDATA[84Ut8PTqT]]></name>
+    <transactionKey>xxxx</transactionKey>
+  </merchantAuthentication>
+  <clientId><![CDATA[sdk-php-1.9.3]]></clientId>
+  <refId><![CDATA[ref1504675171]]></refId>
+  <transactionRequest>
+    <transactionType><![CDATA[authCaptureTransaction]]></transactionType>
+    <amount>225</amount>
+    <payment>
+      <creditCard>
+        <cardNumber>xxxx-1111</cardNumber>
+        <expirationDate>xxxx</expirationDate>
+        <cardCode>xxxx</cardCode>
+      </creditCard>
+    </payment>
+    <order>
+      <invoiceNumber><![CDATA[2146591604]]></invoiceNumber>
+      <description><![CDATA[Description of the signup]]></description>
+    </order>
+    <customer>
+      <type><![CDATA[individual]]></type>
+      <id><![CDATA[470789964]]></id>
+      <email><![CDATA[vyny@gmail.com]]></email>
+    </customer>
+    <billTo>
+      <firstName><![CDATA[Jennifer]]></firstName>
+      <lastName><![CDATA[Patton]]></lastName>
+      <company><![CDATA[Leah Zamora]]></company>
+      <address><![CDATA[Sed esse officia consequat Ipsum assumenda vero dolore quisquam consequatur quod neque sint]]></address>
+      <city><![CDATA[Sed esse officia consequat Ipsum assumenda vero dolore quisquam consequatur quod neque sint]]></city>
+      <state><![CDATA[RIZ]]></state>
+      <zip><![CDATA[1123]]></zip>
+      <country><![CDATA[CH]]></country>
+    </billTo>
+    <userFields>
+      <userField>
+        <name><![CDATA[customerLoyaltyNum]]></name>
+        <value><![CDATA[981712546]]></value>
+      </userField>
+      <userField>
+        <name><![CDATA[favoriteColor]]></name>
+        <value><![CDATA[blue]]></value>
+      </userField>
+    </userFields>
+  </transactionRequest>
+</createTransactionRequest>
+
+ Tue, 05 Sep 2017 22:19:35 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 89) - Sending 'XML' Request type
+ Tue, 05 Sep 2017 22:19:35 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 94) - Sending http request via Curl
+ Tue, 05 Sep 2017 22:19:37 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><ErrorResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Error</resultCode><message><code>E00003</code><text>The 'AnetApi/xml/v1/schema/AnetApiSchema.xsd:address' element is invalid - The value XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX is invalid according to its datatype 'String' - The actual length is greater than the MaxLength value.</text></message></messages></ErrorResponse>
+ Tue, 05 Sep 2017 22:19:37 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
+ Tue, 05 Sep 2017 22:19:37 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End
+ Tue, 05 Sep 2017 22:19:37 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 114) - Request Serialization Begin
+ Tue, 05 Sep 2017 22:19:37 -0700 DEBUG : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 115) - net\authorize\api\contract\v1\ARBCreateSubscriptionRequest Object
+(
+    [subscription:net\authorize\api\contract\v1\ARBCreateSubscriptionRequest:private] => net\authorize\api\contract\v1\ARBSubscriptionType Object
+        (
+            [name:net\authorize\api\contract\v1\ARBSubscriptionType:private] => Jennifer
+            [paymentSchedule:net\authorize\api\contract\v1\ARBSubscriptionType:private] => net\authorize\api\contract\v1\PaymentScheduleType Object
+                (
+                    [interval:net\authorize\api\contract\v1\PaymentScheduleType:private] => net\authorize\api\contract\v1\PaymentScheduleType\IntervalAType Object
+                        (
+                            [length:net\authorize\api\contract\v1\PaymentScheduleType\IntervalAType:private] => 1
+                            [unit:net\authorize\api\contract\v1\PaymentScheduleType\IntervalAType:private] => months
+                        )
+
+                    [startDate:net\authorize\api\contract\v1\PaymentScheduleType:private] => DateTime Object
+                        (
+                            [date] => 2017-09-06 05:19:30.000000
+                            [timezone_type] => 3
+                            [timezone] => America/Los_Angeles
+                        )
+
+                    [totalOccurrences:net\authorize\api\contract\v1\PaymentScheduleType:private] => 1
+                    [trialOccurrences:net\authorize\api\contract\v1\PaymentScheduleType:private] => 
+                )
+
+            [amount:net\authorize\api\contract\v1\ARBSubscriptionType:private] => 185.00
+            [trialAmount:net\authorize\api\contract\v1\ARBSubscriptionType:private] => 
+            [payment:net\authorize\api\contract\v1\ARBSubscriptionType:private] => net\authorize\api\contract\v1\PaymentType Object
+                (
+                    [creditCard:net\authorize\api\contract\v1\PaymentType:private] => net\authorize\api\contract\v1\CreditCardType Object
+                        (
+                            [cardCode:net\authorize\api\contract\v1\CreditCardType:private] => 
+                            [isPaymentToken:net\authorize\api\contract\v1\CreditCardType:private] => 
+                            [cryptogram:net\authorize\api\contract\v1\CreditCardType:private] => 
+                            [cardNumber:net\authorize\api\contract\v1\CreditCardSimpleType:private] => xxxx-1111
+                            [expirationDate:net\authorize\api\contract\v1\CreditCardSimpleType:private] => xxxx
+                        )
+
+                    [bankAccount:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [trackData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [encryptedTrackData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [payPal:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [opaqueData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [emv:net\authorize\api\contract\v1\PaymentType:private] => 
+                )
+
+            [order:net\authorize\api\contract\v1\ARBSubscriptionType:private] => net\authorize\api\contract\v1\OrderType Object
+                (
+                    [invoiceNumber:net\authorize\api\contract\v1\OrderType:private] => 621110841
+                    [description:net\authorize\api\contract\v1\OrderType:private] => Description of the subscription
+                )
+
+            [customer:net\authorize\api\contract\v1\ARBSubscriptionType:private] => 
+            [billTo:net\authorize\api\contract\v1\ARBSubscriptionType:private] => net\authorize\api\contract\v1\NameAndAddressType Object
+                (
+                    [firstName:net\authorize\api\contract\v1\NameAndAddressType:private] => Jennifer
+                    [lastName:net\authorize\api\contract\v1\NameAndAddressType:private] => Patton
+                    [company:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                    [address:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                    [city:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                    [state:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                    [zip:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                    [country:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                )
+
+            [shipTo:net\authorize\api\contract\v1\ARBSubscriptionType:private] => 
+            [profile:net\authorize\api\contract\v1\ARBSubscriptionType:private] => 
+        )
+
+    [merchantAuthentication:net\authorize\api\contract\v1\ANetApiRequestType:private] => net\authorize\api\contract\v1\MerchantAuthenticationType Object
+        (
+            [name:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 84Ut8PTqT
+            [transactionKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => xxxx
+            [sessionToken:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [password:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [impersonationAuthentication:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [fingerPrint:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [clientKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [mobileDeviceId:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+        )
+
+    [clientId:net\authorize\api\contract\v1\ANetApiRequestType:private] => sdk-php-1.9.3
+    [refId:net\authorize\api\contract\v1\ANetApiRequestType:private] => ref1504675177
+)
+
+ Tue, 05 Sep 2017 22:19:37 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 118) - Request  Serialization End
+ Tue, 05 Sep 2017 22:19:37 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 75) -  Url: https://apitest.authorize.net/xml/v1/request.api
+ Tue, 05 Sep 2017 22:19:37 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 77) - Request to AnetApi: 
+<?xml version="1.0" encoding="UTF-8"?>
+<ARBCreateSubscriptionRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+  <merchantAuthentication>
+    <name><![CDATA[84Ut8PTqT]]></name>
+    <transactionKey>xxxx</transactionKey>
+  </merchantAuthentication>
+  <clientId><![CDATA[sdk-php-1.9.3]]></clientId>
+  <refId><![CDATA[ref1504675177]]></refId>
+  <subscription>
+    <name><![CDATA[Jennifer]]></name>
+    <paymentSchedule>
+      <interval>
+        <length>1</length>
+        <unit><![CDATA[months]]></unit>
+      </interval>
+      <startDate><![CDATA[2017-09-06]]></startDate>
+      <totalOccurrences>1</totalOccurrences>
+    </paymentSchedule>
+    <amount>185.00</amount>
+    <payment>
+      <creditCard>
+        <cardNumber>xxxx-1111</cardNumber>
+        <expirationDate>xxxx</expirationDate>
+      </creditCard>
+    </payment>
+    <order>
+      <invoiceNumber><![CDATA[621110841]]></invoiceNumber>
+      <description><![CDATA[Description of the subscription]]></description>
+    </order>
+    <billTo>
+      <firstName><![CDATA[Jennifer]]></firstName>
+      <lastName><![CDATA[Patton]]></lastName>
+    </billTo>
+  </subscription>
+</ARBCreateSubscriptionRequest>
+
+ Tue, 05 Sep 2017 22:19:37 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 89) - Sending 'XML' Request type
+ Tue, 05 Sep 2017 22:19:37 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 94) - Sending http request via Curl
+ Tue, 05 Sep 2017 22:19:40 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><ARBCreateSubscriptionResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><refId>ref1504675177</refId><messages><resultCode>Ok</resultCode><message><code>I00001</code><text>Successful.</text></message></messages><subscriptionId>4754223</subscriptionId><profile><customerProfileId>1812972567</customerProfileId><customerPaymentProfileId>1807595023</customerPaymentProfileId></profile></ARBCreateSubscriptionResponse>
+ Tue, 05 Sep 2017 22:19:40 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
+ Tue, 05 Sep 2017 22:19:40 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End
+ Tue, 05 Sep 2017 23:07:20 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 114) - Request Serialization Begin
+ Tue, 05 Sep 2017 23:07:20 -0700 DEBUG : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 115) - net\authorize\api\contract\v1\CreateTransactionRequest Object
+(
+    [transactionRequest:net\authorize\api\contract\v1\CreateTransactionRequest:private] => net\authorize\api\contract\v1\TransactionRequestType Object
+        (
+            [transactionType:net\authorize\api\contract\v1\TransactionRequestType:private] => authCaptureTransaction
+            [amount:net\authorize\api\contract\v1\TransactionRequestType:private] => 225
+            [currencyCode:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [payment:net\authorize\api\contract\v1\TransactionRequestType:private] => net\authorize\api\contract\v1\PaymentType Object
+                (
+                    [creditCard:net\authorize\api\contract\v1\PaymentType:private] => net\authorize\api\contract\v1\CreditCardType Object
+                        (
+                            [cardCode:net\authorize\api\contract\v1\CreditCardType:private] => xxxx
+                            [isPaymentToken:net\authorize\api\contract\v1\CreditCardType:private] => 
+                            [cryptogram:net\authorize\api\contract\v1\CreditCardType:private] => 
+                            [cardNumber:net\authorize\api\contract\v1\CreditCardSimpleType:private] => xxxx-1111
+                            [expirationDate:net\authorize\api\contract\v1\CreditCardSimpleType:private] => xxxx
+                        )
+
+                    [bankAccount:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [trackData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [encryptedTrackData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [payPal:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [opaqueData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [emv:net\authorize\api\contract\v1\PaymentType:private] => 
+                )
+
+            [profile:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [solution:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [callId:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [terminalNumber:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [authCode:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [refTransId:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [splitTenderId:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [order:net\authorize\api\contract\v1\TransactionRequestType:private] => net\authorize\api\contract\v1\OrderType Object
+                (
+                    [invoiceNumber:net\authorize\api\contract\v1\OrderType:private] => 1059817926
+                    [description:net\authorize\api\contract\v1\OrderType:private] => Description of the signup
+                )
+
+            [lineItems:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [tax:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [duty:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [shipping:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [taxExempt:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [poNumber:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [customer:net\authorize\api\contract\v1\TransactionRequestType:private] => net\authorize\api\contract\v1\CustomerDataType Object
+                (
+                    [type:net\authorize\api\contract\v1\CustomerDataType:private] => individual
+                    [id:net\authorize\api\contract\v1\CustomerDataType:private] => 1739020311
+                    [email:net\authorize\api\contract\v1\CustomerDataType:private] => xovem@hotmail.com
+                    [driversLicense:net\authorize\api\contract\v1\CustomerDataType:private] => 
+                    [taxId:net\authorize\api\contract\v1\CustomerDataType:private] => 
+                )
+
+            [billTo:net\authorize\api\contract\v1\TransactionRequestType:private] => net\authorize\api\contract\v1\CustomerAddressType Object
+                (
+                    [phoneNumber:net\authorize\api\contract\v1\CustomerAddressType:private] => 
+                    [faxNumber:net\authorize\api\contract\v1\CustomerAddressType:private] => 
+                    [email:net\authorize\api\contract\v1\CustomerAddressType:private] => 
+                    [firstName:net\authorize\api\contract\v1\NameAndAddressType:private] => Noel
+                    [lastName:net\authorize\api\contract\v1\NameAndAddressType:private] => Wiggins
+                    [company:net\authorize\api\contract\v1\NameAndAddressType:private] => Melyssa Hardy
+                    [address:net\authorize\api\contract\v1\NameAndAddressType:private] => Qui lorem deserunt et velit nobis consequatur quis inventore voluptatum cupidatat quia
+                    [city:net\authorize\api\contract\v1\NameAndAddressType:private] => Qui lorem deserunt et velit nobis consequatur quis inventore voluptatum cupidatat quia
+                    [state:net\authorize\api\contract\v1\NameAndAddressType:private] => MAG
+                    [zip:net\authorize\api\contract\v1\NameAndAddressType:private] => 7787
+                    [country:net\authorize\api\contract\v1\NameAndAddressType:private] => PY
+                )
+
+            [shipTo:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [customerIP:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [cardholderAuthentication:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [retail:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [employeeId:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [transactionSettings:net\authorize\api\contract\v1\TransactionRequestType:private] => 
+            [userFields:net\authorize\api\contract\v1\TransactionRequestType:private] => Array
+                (
+                    [0] => net\authorize\api\contract\v1\UserFieldType Object
+                        (
+                            [name:net\authorize\api\contract\v1\UserFieldType:private] => customerLoyaltyNum
+                            [value:net\authorize\api\contract\v1\UserFieldType:private] => 1585422699
+                        )
+
+                    [1] => net\authorize\api\contract\v1\UserFieldType Object
+                        (
+                            [name:net\authorize\api\contract\v1\UserFieldType:private] => favoriteColor
+                            [value:net\authorize\api\contract\v1\UserFieldType:private] => blue
+                        )
+
+                )
+
+        )
+
+    [merchantAuthentication:net\authorize\api\contract\v1\ANetApiRequestType:private] => net\authorize\api\contract\v1\MerchantAuthenticationType Object
+        (
+            [name:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 84Ut8PTqT
+            [transactionKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => xxxx
+            [sessionToken:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [password:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [impersonationAuthentication:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [fingerPrint:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [clientKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [mobileDeviceId:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+        )
+
+    [clientId:net\authorize\api\contract\v1\ANetApiRequestType:private] => sdk-php-1.9.3
+    [refId:net\authorize\api\contract\v1\ANetApiRequestType:private] => ref1504678040
+)
+
+ Tue, 05 Sep 2017 23:07:20 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 118) - Request  Serialization End
+ Tue, 05 Sep 2017 23:07:20 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 75) -  Url: https://apitest.authorize.net/xml/v1/request.api
+ Tue, 05 Sep 2017 23:07:20 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 77) - Request to AnetApi: 
+<?xml version="1.0" encoding="UTF-8"?>
+<createTransactionRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+  <merchantAuthentication>
+    <name><![CDATA[84Ut8PTqT]]></name>
+    <transactionKey>xxxx</transactionKey>
+  </merchantAuthentication>
+  <clientId><![CDATA[sdk-php-1.9.3]]></clientId>
+  <refId><![CDATA[ref1504678040]]></refId>
+  <transactionRequest>
+    <transactionType><![CDATA[authCaptureTransaction]]></transactionType>
+    <amount>225</amount>
+    <payment>
+      <creditCard>
+        <cardNumber>xxxx-1111</cardNumber>
+        <expirationDate>xxxx</expirationDate>
+        <cardCode>xxxx</cardCode>
+      </creditCard>
+    </payment>
+    <order>
+      <invoiceNumber><![CDATA[1059817926]]></invoiceNumber>
+      <description><![CDATA[Description of the signup]]></description>
+    </order>
+    <customer>
+      <type><![CDATA[individual]]></type>
+      <id><![CDATA[1739020311]]></id>
+      <email><![CDATA[xovem@hotmail.com]]></email>
+    </customer>
+    <billTo>
+      <firstName><![CDATA[Noel]]></firstName>
+      <lastName><![CDATA[Wiggins]]></lastName>
+      <company><![CDATA[Melyssa Hardy]]></company>
+      <address><![CDATA[Qui lorem deserunt et velit nobis consequatur quis inventore voluptatum cupidatat quia]]></address>
+      <city><![CDATA[Qui lorem deserunt et velit nobis consequatur quis inventore voluptatum cupidatat quia]]></city>
+      <state><![CDATA[MAG]]></state>
+      <zip><![CDATA[7787]]></zip>
+      <country><![CDATA[PY]]></country>
+    </billTo>
+    <userFields>
+      <userField>
+        <name><![CDATA[customerLoyaltyNum]]></name>
+        <value><![CDATA[1585422699]]></value>
+      </userField>
+      <userField>
+        <name><![CDATA[favoriteColor]]></name>
+        <value><![CDATA[blue]]></value>
+      </userField>
+    </userFields>
+  </transactionRequest>
+</createTransactionRequest>
+
+ Tue, 05 Sep 2017 23:07:20 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 89) - Sending 'XML' Request type
+ Tue, 05 Sep 2017 23:07:20 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 94) - Sending http request via Curl
+ Tue, 05 Sep 2017 23:07:23 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><ErrorResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Error</resultCode><message><code>E00003</code><text>The 'AnetApi/xml/v1/schema/AnetApiSchema.xsd:address' element is invalid - The value XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX is invalid according to its datatype 'String' - The actual length is greater than the MaxLength value.</text></message></messages></ErrorResponse>
+ Tue, 05 Sep 2017 23:07:23 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
+ Tue, 05 Sep 2017 23:07:23 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End
+ Tue, 05 Sep 2017 23:07:23 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 114) - Request Serialization Begin
+ Tue, 05 Sep 2017 23:07:23 -0700 DEBUG : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 115) - net\authorize\api\contract\v1\ARBCreateSubscriptionRequest Object
+(
+    [subscription:net\authorize\api\contract\v1\ARBCreateSubscriptionRequest:private] => net\authorize\api\contract\v1\ARBSubscriptionType Object
+        (
+            [name:net\authorize\api\contract\v1\ARBSubscriptionType:private] => Noel
+            [paymentSchedule:net\authorize\api\contract\v1\ARBSubscriptionType:private] => net\authorize\api\contract\v1\PaymentScheduleType Object
+                (
+                    [interval:net\authorize\api\contract\v1\PaymentScheduleType:private] => net\authorize\api\contract\v1\PaymentScheduleType\IntervalAType Object
+                        (
+                            [length:net\authorize\api\contract\v1\PaymentScheduleType\IntervalAType:private] => 1
+                            [unit:net\authorize\api\contract\v1\PaymentScheduleType\IntervalAType:private] => months
+                        )
+
+                    [startDate:net\authorize\api\contract\v1\PaymentScheduleType:private] => DateTime Object
+                        (
+                            [date] => 2017-09-06 06:07:20.000000
+                            [timezone_type] => 3
+                            [timezone] => America/Los_Angeles
+                        )
+
+                    [totalOccurrences:net\authorize\api\contract\v1\PaymentScheduleType:private] => 1
+                    [trialOccurrences:net\authorize\api\contract\v1\PaymentScheduleType:private] => 
+                )
+
+            [amount:net\authorize\api\contract\v1\ARBSubscriptionType:private] => 185.00
+            [trialAmount:net\authorize\api\contract\v1\ARBSubscriptionType:private] => 
+            [payment:net\authorize\api\contract\v1\ARBSubscriptionType:private] => net\authorize\api\contract\v1\PaymentType Object
+                (
+                    [creditCard:net\authorize\api\contract\v1\PaymentType:private] => net\authorize\api\contract\v1\CreditCardType Object
+                        (
+                            [cardCode:net\authorize\api\contract\v1\CreditCardType:private] => 
+                            [isPaymentToken:net\authorize\api\contract\v1\CreditCardType:private] => 
+                            [cryptogram:net\authorize\api\contract\v1\CreditCardType:private] => 
+                            [cardNumber:net\authorize\api\contract\v1\CreditCardSimpleType:private] => xxxx-1111
+                            [expirationDate:net\authorize\api\contract\v1\CreditCardSimpleType:private] => xxxx
+                        )
+
+                    [bankAccount:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [trackData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [encryptedTrackData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [payPal:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [opaqueData:net\authorize\api\contract\v1\PaymentType:private] => 
+                    [emv:net\authorize\api\contract\v1\PaymentType:private] => 
+                )
+
+            [order:net\authorize\api\contract\v1\ARBSubscriptionType:private] => net\authorize\api\contract\v1\OrderType Object
+                (
+                    [invoiceNumber:net\authorize\api\contract\v1\OrderType:private] => 789650317
+                    [description:net\authorize\api\contract\v1\OrderType:private] => Description of the subscription
+                )
+
+            [customer:net\authorize\api\contract\v1\ARBSubscriptionType:private] => 
+            [billTo:net\authorize\api\contract\v1\ARBSubscriptionType:private] => net\authorize\api\contract\v1\NameAndAddressType Object
+                (
+                    [firstName:net\authorize\api\contract\v1\NameAndAddressType:private] => Noel
+                    [lastName:net\authorize\api\contract\v1\NameAndAddressType:private] => Wiggins
+                    [company:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                    [address:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                    [city:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                    [state:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                    [zip:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                    [country:net\authorize\api\contract\v1\NameAndAddressType:private] => 
+                )
+
+            [shipTo:net\authorize\api\contract\v1\ARBSubscriptionType:private] => 
+            [profile:net\authorize\api\contract\v1\ARBSubscriptionType:private] => 
+        )
+
+    [merchantAuthentication:net\authorize\api\contract\v1\ANetApiRequestType:private] => net\authorize\api\contract\v1\MerchantAuthenticationType Object
+        (
+            [name:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 84Ut8PTqT
+            [transactionKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => xxxx
+            [sessionToken:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [password:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [impersonationAuthentication:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [fingerPrint:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [clientKey:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+            [mobileDeviceId:net\authorize\api\contract\v1\MerchantAuthenticationType:private] => 
+        )
+
+    [clientId:net\authorize\api\contract\v1\ANetApiRequestType:private] => sdk-php-1.9.3
+    [refId:net\authorize\api\contract\v1\ANetApiRequestType:private] => ref1504678043
+)
+
+ Tue, 05 Sep 2017 23:07:23 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 118) - Request  Serialization End
+ Tue, 05 Sep 2017 23:07:23 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 75) -  Url: https://apitest.authorize.net/xml/v1/request.api
+ Tue, 05 Sep 2017 23:07:23 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 77) - Request to AnetApi: 
+<?xml version="1.0" encoding="UTF-8"?>
+<ARBCreateSubscriptionRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+  <merchantAuthentication>
+    <name><![CDATA[84Ut8PTqT]]></name>
+    <transactionKey>xxxx</transactionKey>
+  </merchantAuthentication>
+  <clientId><![CDATA[sdk-php-1.9.3]]></clientId>
+  <refId><![CDATA[ref1504678043]]></refId>
+  <subscription>
+    <name><![CDATA[Noel]]></name>
+    <paymentSchedule>
+      <interval>
+        <length>1</length>
+        <unit><![CDATA[months]]></unit>
+      </interval>
+      <startDate><![CDATA[2017-09-06]]></startDate>
+      <totalOccurrences>1</totalOccurrences>
+    </paymentSchedule>
+    <amount>185.00</amount>
+    <payment>
+      <creditCard>
+        <cardNumber>xxxx-1111</cardNumber>
+        <expirationDate>xxxx</expirationDate>
+      </creditCard>
+    </payment>
+    <order>
+      <invoiceNumber><![CDATA[789650317]]></invoiceNumber>
+      <description><![CDATA[Description of the subscription]]></description>
+    </order>
+    <billTo>
+      <firstName><![CDATA[Noel]]></firstName>
+      <lastName><![CDATA[Wiggins]]></lastName>
+    </billTo>
+  </subscription>
+</ARBCreateSubscriptionRequest>
+
+ Tue, 05 Sep 2017 23:07:23 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 89) - Sending 'XML' Request type
+ Tue, 05 Sep 2017 23:07:23 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 94) - Sending http request via Curl
+ Tue, 05 Sep 2017 23:07:25 -0700 INFO : [_sendRequest] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/util/HttpClient.php : 96) - Response from AnetApi: ﻿<?xml version="1.0" encoding="utf-8"?><ARBCreateSubscriptionResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><refId>ref1504678043</refId><messages><resultCode>Ok</resultCode><message><code>I00001</code><text>Successful.</text></message></messages><subscriptionId>4754242</subscriptionId><profile><customerProfileId>1812972834</customerProfileId><customerPaymentProfileId>1807595254</customerPaymentProfileId></profile></ARBCreateSubscriptionResponse>
+ Tue, 05 Sep 2017 23:07:25 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 128) - Response De-Serialization Begin
+ Tue, 05 Sep 2017 23:07:25 -0700 INFO : [execute] (/srv/www/fxprotools/htdocs/vendor/authorizenet/authorizenet/lib/net/authorize/api/controller/base/ApiOperationBase.php : 130) - Response De-Serialization End

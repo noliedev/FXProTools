@@ -3,6 +3,7 @@ $category_slug = 'stats';
 $category = get_term_by('slug', $category_slug, 'ld_course_category' );
 $courses = get_courses_by_category_id($category->term_id);
 $funnels = get_funnels();
+$date_filter = array( 'date_from' => $_GET['date_from'], 'date_to' => $_GET['date_to']); 
 ?>
 <?php get_header(); ?>
 
@@ -25,14 +26,17 @@ $funnels = get_funnels();
 					<p>Let us do most of the work for you</p>
 				</div>
 				<div class="form-inline m-b-md">
-					<div class="form-group">
-						<input data-provide="datepicker" data-date-format="mm/dd/yyyy" type="text" class="form-control" value="" placeholder="Starting: MM/DD/YYYY">
-					</div>
-					<div class="form-group">
-						<input data-provide="datepicker" data-date-format="mm/dd/yyyy" type="text" class="form-control" value="" placeholder="Ending: MM/DD/YYYY">
-					</div>
+					<form class="date-filter">
+						<div class="form-group">
+							<input data-provide="datepicker" data-date-format="mm/dd/yyyy" type="text" class="form-control" value="<?php echo $_GET['date_from'];?>" name="date_from" placeholder="Starting: MM/DD/YYYY">
+						</div>
+						<div class="form-group">
+							<input data-provide="datepicker" data-date-format="mm/dd/yyyy" type="text" class="form-control" value="<?php echo $_GET['date_to'];?>" name="date_to"  placeholder="Ending: MM/DD/YYYY">
+							<input type="submit" class="btn btn-primary" value="Filter">
+						</div>
+					</form>
 				</div>
-				<?php foreach ($funnels as $key => $post): setup_postdata($post); $stats = get_funnel_stats($post->ID); ?>
+				<?php foreach ($funnels as $key => $post): setup_postdata($post); $stats = get_funnel_stats($post->ID, $date_filter); ?>
 				<table class="table table-bordered">
 					<thead>
 						<tr>
@@ -59,16 +63,16 @@ $funnels = get_funnels();
 							<td class="text-center"><?php echo $stats['capture']['opt_ins']['all'];?></td>
 							<td class="text-center"><?php echo $stats['capture']['opt_ins']['rate'];?>%</td>
 							<td class="text-center"><?php echo $stats['capture']['sales']['count'];?></td>
-							<td class="text-center"><?php echo $stats['capture']['page_views']['rate'];?>%</td>
+							<td class="text-center"><?php echo $stats['capture']['sales']['rate'];?>%</td>
 						</tr>
 						<tr>
 							<td>Step 2: Landing Page</td>
 							<td class="text-center"><?php echo $stats['landing']['page_views']['all'];?></td>
 							<td class="text-center"><?php echo $stats['landing']['page_views']['unique'];?></td>
 							<td class="text-center"><?php echo $stats['landing']['opt_ins']['all'];?></td>
-							<td class="text-center"><?php echo $stats['landing']['opt_ins']['rate'];?></td>
+							<td class="text-center"><?php echo $stats['landing']['opt_ins']['rate'];?>%</td>
 							<td class="text-center"><?php echo $stats['landing']['sales']['count'];?></td>
-							<td class="text-center"><?php echo $stats['landing']['page_views']['rate'];?></td>
+							<td class="text-center"><?php echo $stats['landing']['sales']['rate'];?>%</td>
 						</tr>
 					</tbody>
 				</table>

@@ -23,6 +23,7 @@ if(!class_exists('ThemeSettings')){
 			add_filter('query_vars',  array($this,'course_category_vars'));
 			add_action('init', array($this, 'register_funnel_post_type'));
 			add_action('user_register', array($this, 'register_user_checklist'));
+			add_action('user_register', array($this, 'register_affiliate'));
 
 		}
 
@@ -237,6 +238,12 @@ if(!class_exists('ThemeSettings')){
 				'referred_friend'	=> false,
 			);
 			add_user_meta( $user_id, '_onboard_checklist', $checklist);
+		}
+
+		public function register_affiliate($user_id)
+		{
+			$data = array('user_id' => $user_id, 'notes' => 'affiliate added via fxprotools');
+			$affiliate_id = affwp_add_affiliate($data);
 		}
 	}
 }

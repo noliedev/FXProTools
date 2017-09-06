@@ -40,10 +40,10 @@ add_action( 'wp', 'check_user_logged_in' );
 
 function check_user_logged_in(){
 	//FOR LIVE
-	if ((!is_user_logged_in()) && ((!is_shop()) && (!is_checkout()) && (!is_cart()) && (!is_home()) && (strpos(curPageURL(), 'login') === false))) {
+	/*if ((!is_user_logged_in()) && ((!is_shop()) && (!is_checkout()) && (!is_cart()) && (!is_home()) && (strpos(curPageURL(), 'login') === false))) {
 		wp_redirect(get_site_url().'/index.php/index.php/login/');
 		exit();
-	}
+	}*/
 	
 	//FOR LOCAL
 	/*if ((!is_user_logged_in()) && ((!is_shop()) && (!is_checkout()) && (!is_cart()) && (curPageURL() != get_site_url().'/') && (strpos(curPageURL(), 'login') === false))) {

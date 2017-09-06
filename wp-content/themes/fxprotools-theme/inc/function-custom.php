@@ -139,23 +139,85 @@ function get_funnels()
 	return get_posts($args);
 }
 
-function get_funnel_stats($funnel_id)
+function property_occurence_count($array, $property, $value){
+	$count = 0;
+	foreach ($array as $object) {
+	    if ($object->{$property} == $value) $count++;
+	}
+	return $count;
+}
+
+function get_unique_property_count($array, $property, $url){
+	$count = 0;
+
+	foreach($array as $object){
+		if($object->url == $url){
+			$value = $object->{$property};
+			$occurrence = property_occurence_count($array, $property, $value);
+			if($occurrence == 1) $count += 1;
+		}
+	}
+	return $count;
+}
+
+function get_property_count($array, $property, $url){
+	$count = 0;
+
+	foreach($array as $object){
+		if($object->url == $url){
+			if($object->{$property} > 0) $count++;
+		}
+	}
+	return $count;
+}
+
+
+function date_is_in_range($date_from, $date_to, $date){
+	$start_ts = strtotime($date_from); 
+ 	$end_ts = strtotime($date_to); 
+	$ts = strtotime($date);
+
+
+ 	return (($ts >= $start_ts) && ($ts <= $end_ts));
+}
+
+function get_funnel_stats($funnel_id, $date_filter)
 {
-	$stats = get_post_meta($funnel_id , 'course_id', true); 
-	$sample_stats = array( 'capture' => 
-							array( 'page_views' => array('all' 	 => 88, 'unique' => 61),
-								   'opt_ins' 	=> array('all' 	 => 21, 'rate' 	 => 34.4),
-								   'sales' 		=> array('count' => 21, 'rate'	 => 34.4),
-							),
-							'landing' => 
-							array( 'page_views' => array('all' 	 => 88, 'unique' => 61),
-								   'opt_ins' 	=> array('all' 	 => '', 'rate' 	 => ''),
-								   'sales' 		=> array('count' => '', 'rate' 	 => ''),
-							),
-							'totals' =>
-							array( 'customer_sales' => 10, 'distributor_sales' => 11),
-					);
-	return !$stats ? $sample_stats : $course;
+	$visits = affiliate_wp()->visits->get_visits( array( 'affiliate_id' => affwp_get_affiliate_id( get_current_user_id()), 'order_by' => 'visit_id' ) );
+	foreach($visits as $key => $visit){
+		 if( !date_is_in_range($date_filter['date_from'], $date_filter['date_to'], date("m/d/Y", strtotime($visit->date))) ) unset($visits[$key]);
+	}
+	$funnel = array( 'cp_url' => rwmb_meta('capture_page_url', '', $funnel_id),
+		 			 'lp_url' => rwmb_meta('landing_page_url', '', $funnel_id)
+		 			);
+	$cp_stats = array( 'page_views' => array('all' 	 => 0, 'unique' => 0),
+					   'opt_ins' 	=> array('all' 	 => 0, 'rate' 	 => 0),
+					   'sales' 		=> array('count' => 0, 'rate'	 => 0),
+				);
+	$lp_stats = array( 'page_views' => array('all' 	 => 0, 'unique' => 0),
+					   'opt_ins' 	=> array('all' 	 => 0, 'rate' 	 => 0),
+					   'sales' 		=> array('count' => 0, 'rate' 	 => 0),
+				);
+	$sales_stats = array( 'customer_sales' => 0, 'distributor_sales' => 0);
+
+	//all
+	$cp_stats['page_views']['all'] = property_occurence_count($visits, 'url', $funnel['cp_url']);
+	$lp_stats['page_views']['all'] = property_occurence_count($visits, 'url', $funnel['lp_url']);
+
+	//unique
+	$cp_stats['page_views']['unique'] = get_unique_property_count($visits, 'ip', $funnel['cp_url']);
+	$lp_stats['page_views']['unique'] = get_unique_property_count($visits, 'ip', $funnel['lp_url']);
+
+	//sales
+	$lp_stats['sales']['count'] = get_property_count($visits, 'referral_id', $funnel['lp_url']);
+	$lp_stats['sales']['rate'] = $lp_stats['sales']['count'] < 1 ? 0 :  round( $lp_stats['sales']['count'] / $lp_stats['page_views']['all'] * 100, 2);
+	
+	$stats = array( 'capture' => $cp_stats,
+					'landing' => $lp_stats,
+					'totals' => $sales_stats,
+				);
+
+	return $stats;
 }
 
 function get_user_checklist()
