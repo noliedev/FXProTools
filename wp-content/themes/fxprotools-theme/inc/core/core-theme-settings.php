@@ -23,6 +23,7 @@ if(!class_exists('ThemeSettings')){
 			add_filter('query_vars',  array($this,'course_category_vars'));
 			add_action('init', array($this, 'register_funnel_post_type'));
 			add_action('user_register', array($this, 'register_user_checklist'));
+			add_action('user_register', array($this, 'send_email_verification'));
 			add_action('user_register', array($this, 'register_affiliate'));
 
 		}
@@ -238,6 +239,18 @@ if(!class_exists('ThemeSettings')){
 				'referred_friend'	=> false,
 			);
 			add_user_meta( $user_id, '_onboard_checklist', $checklist);
+		}
+
+		public function send_email_verification($user_id)
+		{
+			$user = get_user_by('id', $user_id);
+			$secret = "fxprotools-";
+			$hash = MD5( $secret . $user->data->user_email);
+			$to =  $user->data->user_email;
+			$subject = 'Please verify your Email Address';
+			$message = "Click <a href='" . home_url() . '/verify-email/?code=' . $hash . "' target='_blank'>here</a> to verify your email address.";
+			$headers = array('Content-Type: text/html; charset=UTF-8');
+			wp_mail( $to, $subject, $message, $headers );
 		}
 
 		public function register_affiliate($user_id)

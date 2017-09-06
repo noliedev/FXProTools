@@ -9,7 +9,7 @@
 // add_action('init', 'check_authentication');
 // function check_authentication(){
 // 	if(!is_user_logged_in()){
-// 		$url = get_site_url() . '/login/';
+// 		get_site_url() . '/login/';
 // 		// Force using of js to avoid too many redirect and header sent errors
 // 		// echo "<script>location.href = {$url};</script>";
 // 	}
@@ -229,19 +229,47 @@ function get_user_checklist()
 function get_checklist_next_step_url()
 {
 	$checklist = get_user_checklist();
-	$url = '#';
+	'#';
 	foreach($checklist as $key => $value){
 		if( empty($value) ){
 			switch($key){
-				case 0: $url = home_url() . '/verify-email/'; break;
-				case 1: $url = home_url() . '/profile/'; break;
-				case 2: $url = home_url() . '/coaching/'; break;
-				case 3: $url = home_url() . '/access-products/'; break;
-				case 4: $url = home_url() . '/free-shirt/'; break;
-				case 5: $url = home_url() . '/share-video/'; break;
-				case 6: $url = home_url() . '/refer-a-friend/'; break;
+				case 'verified_email': return home_url() . '/verify-email/';
+				case 'verified_profile': return home_url() . '/profile/';
+				case 'scheduled_webinar': return home_url() . '/coaching/';
+				case 'accessed_products': return home_url() . '/access-products/';
+				case 'got_shirt': return home_url() . '/free-shirt/';
+				case 'shared_video': return home_url() . '/share-video/';
+				case 'referred_friend': return home_url() . '/refer-a-friend/';
 			}
 		}
 	}
 	return $url;
+}
+
+function resend_email_verification(){
+	if( get_current_user_id() > 0)
+	{
+		ThemeSettings::send_email_verification(get_current_user_id());
+	}
+}
+
+function verify_email_address($verification_code)
+{
+	if( get_current_user_id() > 0)
+	{
+		$user = get_user_by('id', get_current_user_id() );
+		$secret = "fxprotools-";
+		$hash = MD5( $secret . $user->data->user_email);
+		if($hash == $verification_code)
+		{
+			$checklist = get_user_checklist();
+			$checklist['verified_email'] = true;
+			update_user_meta( get_current_user_id(), '_onboard_checklist', $checklist );
+			return true;
+		} else{
+			return false;
+		}
+	} else {
+		return false;
+	}
 }
