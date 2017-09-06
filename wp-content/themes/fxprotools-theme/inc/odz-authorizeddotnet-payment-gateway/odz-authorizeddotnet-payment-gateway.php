@@ -301,9 +301,6 @@ function init_odz_authorizeddotnet_payment_gateway() {
          * Initialise Gateway Settings Form Fields
          */
         public function init_form_fields() {
-
-
-
             $this->form_fields = array(
                 'enabled' => array(
                     'title' => __('Enable/Disable', 'odz-authorizeddotnet-payment-gateway'),
@@ -486,11 +483,72 @@ function init_odz_authorizeddotnet_payment_gateway() {
 			print_r($array);
 			echo "</pre>";
 		}
+		
+		
+		public function cancelSubscription($subscriptionId)
+		{
+			/* Create a merchantAuthenticationType object with authentication details
+			   retrieved from the constants file */
+			$merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+			$merchantAuthentication->setName($this->settings['sandbox_merchant_login_id']);
+			$merchantAuthentication->setTransactionKey($this->settings['sandbox_merchant_transaction_key']);
+			
+			// Set the transaction's refId
+			$refId = 'ref' . time();
+
+			$request = new AnetAPI\ARBCancelSubscriptionRequest();
+			$request->setMerchantAuthentication($merchantAuthentication);
+			$request->setRefId($refId);
+			$request->setSubscriptionId($subscriptionId);
+
+			$controller = new AnetController\ARBCancelSubscriptionController($request);
+
+			$response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+			if (($response != null) && ($response->getMessages()->getResultCode() == "Ok"))
+			{
+				$successMessages = $response->getMessages()->getMessage();
+				echo "SUCCESS : " . $successMessages[0]->getCode() . "  " .$successMessages[0]->getText() . "\n";
+				
+			 }
+			else
+			{
+				echo "ERROR :  Invalid response\n";
+				$errorMessages = $response->getMessages()->getMessage();
+				echo "Response : " . $errorMessages[0]->getCode() . "  " .$errorMessages[0]->getText() . "\n";
+				
+			}
+			return $response;
+		}
+		
+		
 
         /**
          * Process the payment
          */
         public function process_payment($order_id) {
+			$userLogined = wp_get_current_user();
+			$userLogined_id = $userLogined->data->ID;
+			$subs = wcs_get_users_subscriptions($userLogined_id);
+			
+			foreach($subs as $subscriptions => $data){
+				
+				/*echo "<br>";
+				echo $data->data['status'];
+				echo "<br>";*/
+				
+				if(count($data->meta_data) > 0){
+					$current_subs_id = $data->meta_data[0]->value;
+					$current_order_id = $data->id;
+					
+					if($data->data['status'] === 'active'){
+						$cancelSubscription = $this->cancelSubscription($current_subs_id);			// Cancel Authorize Subcription
+						$order = new WC_Order($current_order_id);									// Get Order To Cancel Subscription
+						$order->update_status('cancelled', 'order_status');							// Cancel Subscription
+					}
+				}
+				
+			}
 			
             global $woocommerce;
             $order = new WC_Order($order_id);
@@ -656,7 +714,7 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						$customerAddress->setFirstName(isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '');
 						$customerAddress->setLastName(isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '');
 						$customerAddress->setCompany(isset($_POST['billing_company']) ? $_POST['billing_company'] : '');
-						$customerAddress->setAddress(isset($_POST['billing_city']) ? $_POST['billing_city'] : '');								//DOUBT
+						$customerAddress->setAddress(isset($_POST['billing_city']) ? $_POST['billing_city'] : '');									//DOUBT
 						$customerAddress->setCity(isset($_POST['billing_city']) ? $_POST['billing_city'] : '');
 						$customerAddress->setState(isset($_POST['billing_state']) ? $_POST['billing_state'] : '');
 						$customerAddress->setZip(isset($_POST['billing_postcode']) ? $_POST['billing_postcode'] : '');
@@ -844,29 +902,33 @@ function init_odz_authorizeddotnet_payment_gateway() {
 				if ($response != null) {
 					// get subscription of order
 					$subscriptions_ids = wcs_get_subscriptions_for_order( $order_id );
+					
+					/*echo "<pre>";
+					print_r($response);
+					echo "</pre>";	
+					
+					echo "<pre>";
+					print_r($subscriptions_ids);
+					echo "</pre>";
+					
+					echo "<pre>";
+					echo "wc_authorizeddotnet_gateway_subscription_id: ".$response->getSubscriptionId();
+					echo "</pre>";
+					die("sd");*/
+					
 					foreach( $subscriptions_ids as $subscription_id => $subscription_obj ){
 						update_post_meta($subscription_id, 'wc_authorizeddotnet_gateway_subscription_id', $response->getSubscriptionId());
 						$subscription_obj->add_order_note(sprintf(__('%s authorizeddotnet Subscription ID: %s', 'woo-authorizeddotnet-payment-gateway'), $this->title, $response->getSubscriptionId()));
-					}
+					}					
+
+					// Payment complete
+					$trans_id = $response->getSubscriptionId();
+					$order->payment_complete($trans_id);
 					
-					if($signupFeeExists){
-						// Payment complete
-						$trans_id = $response->getSubscriptionId();
-						$order->payment_complete($trans_id);
-						
-						// Add order note
-						$order->add_order_note(sprintf(__('%s payment approved! Transaction ID: %s', 'woo-authorizeddotnet-payment-gateway'), $this->title, $response->getSubscriptionId()));
-						update_post_meta($order_id, 'wc_authorizeddotnet_gateway_transaction_id', $response->getSubscriptionId());
-					}
-					else{
-						// Payment complete
-						$trans_id = $response->getSubscriptionId();
-						$order->payment_complete($trans_id);
-						
-						// Add order note
-						$order->add_order_note(sprintf(__('%s payment approved! Subscription ID: %s', 'woo-authorizeddotnet-payment-gateway'), $this->title, $response->getSubscriptionId()));
-						update_post_meta($order_id, 'wc_authorizeddotnet_gateway_transaction_id', $response->getSubscriptionId());
-					}
+					// Add order note
+					$order->add_order_note(sprintf(__('%s payment approved! Subscription ID: %s', 'woo-authorizeddotnet-payment-gateway'), $this->title, $response->getSubscriptionId()));
+					//$order->add_order_note(sprintf(__('%s payment approved! Transaction ID: %s', 'woo-authorizeddotnet-payment-gateway'), $this->title, $response->getSubscriptionId()));
+					//update_post_meta($order_id, 'wc_authorizeddotnet_gateway_transaction_id', $response->getSubscriptionId());
 
 					$checkout_note = array(
 						'ID' => $order_id,
