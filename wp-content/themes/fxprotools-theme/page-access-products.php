@@ -1,3 +1,7 @@
+<?php 
+$auto_trader = WC_Subscriptions_Manager::user_has_subscription( '', 49, 'active');
+$market_scanner =  WC_Subscriptions_Manager::user_has_subscription( '', 47, 'active');
+?>
 <?php get_header(); ?>
 
 	<?php get_template_part('inc/templates/nav-dashboard'); ?>
@@ -49,15 +53,15 @@
 					</li>
 					<li>
 						<span>Expert Training</span>
-						<a href="<?php bloginfo('url');?>/advanced-training/" class="action">Upgrade Now <i class="fa fa-shopping-cart"></i></a>
+						<a href="<?php bloginfo('url');?>/advanced-training/" class="action">Access Now</a>
 					</li>
 					<li>
-						<span>Marketing Suite</span>
-						<a href="<?php bloginfo('url');?>/marketing-suite/" class="action">Access Now</a>
+						<span>Market Scanner</span>
+						<a href="<?php bloginfo('url');?>/scanner/" class="action"><?php echo $market_scanner ? 'Access Now' : 'Upgrade Now <i class="fa fa-shopping-cart"></i>';?></a>
 					</li>
 					<li>
 						<span>FX Auto Trader</span>
-						<a href="<?php bloginfo('url');?>/auto-trader/" class="action">Upgrade Now <i class="fa fa-shopping-cart"></i></a>
+						<a href="<?php bloginfo('url');?>/auto-trader/" class="action"><?php echo $auto_trader ? 'Access Now' : 'Upgrade Now <i class="fa fa-shopping-cart"></i>';?></a>
 					</li>
 					<li>
 						<span>1 on 1 Coaching</span>
