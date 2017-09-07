@@ -229,7 +229,6 @@ function get_user_checklist()
 function get_checklist_next_step_url()
 {
 	$checklist = get_user_checklist();
-	'#';
 	foreach($checklist as $key => $value){
 		if( empty($value) ){
 			switch($key){
