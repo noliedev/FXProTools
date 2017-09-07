@@ -147,9 +147,9 @@ function property_occurence_count($array, $property, $value){
 	return $count;
 }
 
-function get_unique_property_count($array, $property, $url){
+function get_unique_property_count($array, $property, $url)
+{
 	$count = 0;
-
 	foreach($array as $object){
 		if($object->url == $url){
 			$value = $object->{$property};
@@ -160,9 +160,9 @@ function get_unique_property_count($array, $property, $url){
 	return $count;
 }
 
-function get_property_count($array, $property, $url){
+function get_property_count($array, $property, $url)
+{
 	$count = 0;
-
 	foreach($array as $object){
 		if($object->url == $url){
 			if($object->{$property} > 0) $count++;
@@ -172,12 +172,11 @@ function get_property_count($array, $property, $url){
 }
 
 
-function date_is_in_range($date_from, $date_to, $date){
+function date_is_in_range($date_from, $date_to, $date)
+{
 	$start_ts = strtotime($date_from); 
  	$end_ts = strtotime($date_to); 
 	$ts = strtotime($date);
-
-
  	return (($ts >= $start_ts) && ($ts <= $end_ts));
 }
 
@@ -233,7 +232,7 @@ function get_checklist_next_step_url()
 		if( empty($value) ){
 			switch($key){
 				case 'verified_email': return home_url() . '/verify-email/';
-				case 'verified_profile': return home_url() . '/profile/';
+				case 'verified_profile': return home_url() . '/my-accunt/';
 				case 'scheduled_webinar': return home_url() . '/coaching/';
 				case 'accessed_products': return home_url() . '/access-products/';
 				case 'got_shirt': return home_url() . '/free-shirt/';
@@ -271,4 +270,16 @@ function verify_email_address($verification_code)
 	} else {
 		return false;
 	}
+}
+
+function get_user_referrals(){
+	if(get_current_user_id() > 0){
+		$affiliate_id = affwp_get_affiliate_id( get_current_user_id() );
+		$affiliate_referrals = affiliate_wp()->referrals->get_referrals( array(
+			'number'       => -1,
+			'affiliate_id' => $affiliate_id
+		) );
+		return $affiliate_referrals;
+	}
+	
 }

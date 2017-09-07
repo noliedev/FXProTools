@@ -1,3 +1,7 @@
+<?php
+$checklist = get_user_checklist();
+$referral_count = count(get_user_referrals());
+?>
 <?php get_header(); ?>
 
 	<?php get_template_part('inc/templates/nav-dashboard'); ?>
@@ -22,15 +26,15 @@
 					</div>
 					<ul class="fx-board-list">
 						<li>
-							<span class="fx-checkbox checked"></span>
+							<span class="fx-checkbox <?php echo $referral_count > 0 ? 'checked' : '';?>"></span>
 							<span class="fx-text">Refer First Friend</span>
 						</li>
 						<li>
-							<span class="fx-checkbox checked"></span>
+							<span class="fx-checkbox <?php echo $referral_count > 1 ? 'checked' : '';?>"></span>
 							<span class="fx-text">Refer Second Friend</span>
 						</li>
 						<li>
-							<span class="fx-checkbox"></span>
+							<span class="fx-checkbox <?php echo $referral_count > 2 ? 'checked' : '';?>"></span>
 							<span class="fx-text">Refer Third Friend</span>
 						</li>
 					</ul>
@@ -53,7 +57,7 @@
 								<div class="box">
 									Share your unique referral link
 									<div class="link">
-										(Dynamic to Highest %) http://url.com?ref=22
+										<?php bloginfo('url');?>?ref=<?php echo get_current_user_id();?>
 									</div>
 								</div>
 							</div>
@@ -68,7 +72,7 @@
 									<div class="text-center">
 										We provide you with all the Marketing Sales <br/>Funnels you need to explain FX Pro tools
 									</div>
-									<a href="#" class="btn btn-danger block padding-md">
+									<a href="<?php bloginfo('url');?>/markting/funnels" class="btn btn-danger block padding-md">
 										Access Your Sales Funnels
 									</a>
 								</div>
@@ -80,7 +84,7 @@
 			<div class="clearfix"></div>
 			<br/>
 			<div class="col-md-12">
-				<a href="#" class="btn btn-danger block padding-lg">Thanks For Letting Me Know.. Continue To Your Products</a>
+				<a href="<?php bloginfo('url');?>/product/professional" class="btn btn-danger block padding-lg">Thanks For Letting Me Know.. Continue To Your Products</a>
 			</div>
 		</div>
 	</div>
