@@ -1016,6 +1016,13 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						);
 					}
 					else{
+						//For Live
+						wp_redirect(get_site_url().'/dashboard/');
+						
+						//For Local
+						//wp_redirect(get_site_url().'/index.php/index.php/dashboard/');
+						
+						exit();
 					}
 					
 				}

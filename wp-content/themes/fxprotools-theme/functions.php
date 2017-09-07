@@ -100,7 +100,7 @@ add_action( 'wp', 'check_user_logged_in' );
 function check_user_logged_in(){
 	//FOR LIVE
 	if ((!is_user_logged_in()) && ((!is_shop()) && (!is_checkout()) && (!is_product()) && (!is_product_category()) && (!is_cart()) && (!is_home()) && (strpos(curPageURL(), 'login') === false))) {
-		wp_redirect(get_site_url().'/index.php/index.php/login/');
+		wp_redirect(get_site_url().'/login/');
 		exit();
 	}
 	
