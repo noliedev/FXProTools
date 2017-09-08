@@ -704,6 +704,19 @@
 	display: none;
 }
 
+// Account - Information
+.form-edit{
+	.list-info-fields{
+		li{
+			span{
+				display: inline-block;
+				vertical-align: middle;
+				min-width: 150px;
+			}
+		}
+	}
+}
+
 // Account - Inbox
 .fx-inbox-nav {
     display: inline-block;

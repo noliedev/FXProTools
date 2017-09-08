@@ -1,5 +1,14 @@
 <?php get_header(); ?>
 
+<?php  
+
+//update user meta
+foreach($_POST as $user_key => $user_value){
+	update_usermeta( get_current_user_id(), $user_key,  $user_value );
+}
+
+?>
+
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -46,47 +55,60 @@
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="a">
-								<div class="row">
-									<div class="col-md-6">
-										<p class="text-bold text-center">Customer Information</p>
-										<ul class="list-info">
-											<li><span>Business Name:</span> FX test</li>
-											<li><span>Street:</span> Sesame Street</li>
-											<li><span>City:</span> Star City</li>
-											<li><span>State:</span> Beef State</li>
-											<li><span>Zip Code:</span> 12345</li>
-										</ul>
+								<form action="<?php echo get_the_permalink(); ?>" method="POST" class="<?php echo ($_GET['action'] == 'edit' ? 'form-edit' : ''); ?>">
+									<div class="row">
+										<div class="col-md-6 m-b-lg">
+											<p class="text-bold text-center">General Information</p>
+											<ul class="list-info list-info-fields">
+												<li><span>Birthday:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="date" name="c_bday" id="c_bday" value="'. get_the_author_meta('c_bday', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('c_bday', get_current_user_id()) ); ?></li>
+												<li><span>Age:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" disabled="disabled" name="billing_postcode" id="billing_postcode" value="'. date_diff(date_create(get_the_author_meta('c_bday', get_current_user_id())), date_create('today'))->y .'" />' : ' ' . date_diff(date_create(get_the_author_meta('c_bday', get_current_user_id())), date_create('today'))->y ); ?></li>
+												<li><span>Gender:</span> 
+													<?php if($_GET['action'] == 'edit'){ ?>
+													<select name="c_gender" id="c_gender">
+														<option value="Male" <?php if(get_the_author_meta( 'c_gender', get_current_user_id() ) == "Male"){echo 'selected';} ?>>Male</option>
+														<option value="Female" <?php if(get_the_author_meta( 'c_gender', get_current_user_id() ) == "Female"){echo 'selected';} ?>>Female</option>
+													</select>
+													<?php 
+													}else{ 
+														echo get_the_author_meta('c_gender', get_current_user_id());
+													}
+													?>
+												</li>
+											</ul>
+										</div>
+										<div class="clearfix"></div>
+										<div class="col-md-6">
+											<p class="text-bold text-center">Billing Information</p>
+											<ul class="list-info list-info-fields">
+												<li><span>Business Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="bill_business_name" id="bill_business_name" value="'. get_the_author_meta('bill_business_name', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('bill_business_name', get_current_user_id()) ); ?></li>
+												<li><span>House # & Street Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_address_1" id="billing_address_1" value="'. get_the_author_meta('billing_address_1', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('billing_address_1', get_current_user_id()) ); ?></li>
+												<li><span>Apt.,suite,unit,etc.:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_address_2" id="billing_address_2" value="'. get_the_author_meta('billing_address_2', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('billing_address_2', get_current_user_id()) ); ?></li>
+												<li><span>City:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_city" id="billing_city" value="'. get_the_author_meta('billing_city', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('billing_city', get_current_user_id()) ); ?></li>
+												<li><span>State:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_state" id="billing_state" value="'. get_the_author_meta('billing_state', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('billing_state', get_current_user_id()) ); ?></li>
+												<li><span>Zip Code:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_postcode" id="billing_postcode" value="'. get_the_author_meta('billing_postcode', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('billing_postcode', get_current_user_id()) ); ?></li>
+											</ul>
+										</div>
+										<div class="col-md-6">
+											<p class="text-bold text-center">Shipping Information</p>
+											<ul class="list-info list-info-fields">
+												<li><span>Business Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="ship_business_name" id="ship_business_name" value="'. get_the_author_meta('ship_business_name', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('ship_business_name', get_current_user_id()) ); ?></li>
+												<li><span>House # & Street Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_address_1" id="shipping_address_1" value="'. get_the_author_meta('shipping_address_1', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('shipping_address_1', get_current_user_id()) ); ?></li>
+												<li><span>Apt.,suite,unit,etc.:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_address_2" id="shipping_address_2" value="'. get_the_author_meta('shipping_address_2', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('shipping_address_2', get_current_user_id()) ); ?></li>
+												<li><span>City:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_city" id="shipping_city" value="'. get_the_author_meta('shipping_city', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('shipping_city', get_current_user_id()) ); ?></li>
+												<li><span>State:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_state" id="shipping_state" value="'. get_the_author_meta('shipping_state', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('shipping_state', get_current_user_id()) ); ?></li>
+												<li><span>Zip Code:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_postcode" id="shipping_postcode" value="'. get_the_author_meta('shipping_postcode', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('shipping_postcode', get_current_user_id()) ); ?></li>
+											</ul>
+										</div>
 									</div>
-									<div class="col-md-6">
-										<p class="text-bold text-center">General Information</p>
-										<ul class="list-info">
-											<li><span>Birthday:</span> 07/20/1990</li>
-											<li><span>Age:</span> 28</li>
-											<li><span>Gender:</span> Male</li>
-										</ul>
+									<div class="btn-holder btn-right m-t-lg">
+										<?php if($_GET['action'] == 'edit'){ ?>
+											<a href="<?php echo get_the_permalink(); ?>" class="btn btn-default">Cancel</a>
+											<button type="submit" class="btn btn-default">Save</button>
+										<?php }else{ ?>
+											<a href="<?php echo get_the_permalink(); ?>/?action=edit" class="btn btn-default">Edit</a>
+										<?php } ?>
 									</div>
-									<div class="clearfix"></div>
-									<div class="col-md-6">
-										<p class="text-bold text-center">Billing Information</p>
-										<ul class="list-info">
-											<li><span>Business Name:</span> FX</li>
-											<li><span>Street:</span> Sesame Street</li>
-											<li><span>City:</span> Star City</li>
-											<li><span>State:</span> Beef State</li>
-											<li><span>Zip Code:</span> 12345</li>
-										</ul>
-									</div>
-									<div class="col-md-6">
-										<p class="text-bold text-center">Shipping Information</p>
-										<ul class="list-info">
-											<li><span>Business Name:</span> FX</li>
-											<li><span>Street:</span> Sesame Street</li>
-											<li><span>City:</span> Star City</li>
-											<li><span>State:</span> Beef State</li>
-											<li><span>Zip Code:</span> 12345</li>
-										</ul>
-									</div>
-								</div>
+								</form>
 							</div>
 							<div class="tab-pane fade" id="b">
 								<p class="text-bold">Edit Contact Section</p>
