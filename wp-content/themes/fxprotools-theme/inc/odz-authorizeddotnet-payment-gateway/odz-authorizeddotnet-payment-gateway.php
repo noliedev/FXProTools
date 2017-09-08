@@ -609,8 +609,26 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						$subscription_sign_up_fee = get_post_meta($product->id,'_subscription_sign_up_fee');
 						$subscription_length = get_post_meta($product->id,'_subscription_length');
 						
-						$interval_Unit = $subscription_period[0].'s';
-						$intervalLength = $subscription_period_interval[0];
+						if($subscription_period[0] == 'week'){
+							$interval_Unit = 'days';
+							$intervalLength = $subscription_period_interval[0] * 7;
+							$subscriptionLength = $subscription_length[0] * 7;
+						}
+						else{
+							$interval_Unit = $subscription_period[0].'s';
+							$intervalLength = $subscription_period_interval[0];
+							$subscriptionLength = $subscription_length[0];
+						}
+						
+						/*echo "<br>";
+						echo "subscription_period_interval : ".$subscription_period_interval[0];
+						echo "<br>";
+						echo "intervalLength : ".$intervalLength;
+						echo "<br>";
+						echo "subscriptionLength : ".$subscriptionLength;
+						echo "<br>";
+						die("sd");*/
+						
 						$startDate = $order->order_date;
  
 						$merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
@@ -631,8 +649,8 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						$paymentSchedule = new AnetAPI\PaymentScheduleType();
 						$paymentSchedule->setInterval($interval);
 						$paymentSchedule->setStartDate(new DateTime($startDate));
-						if($subscription_length[0] > 0){
-							$paymentSchedule->setTotalOccurrences($subscription_length[0]/$intervalLength);
+						if($subscriptionLength > 0){
+							$paymentSchedule->setTotalOccurrences($subscriptionLength/$intervalLength);
 						}
 						else{
 							$paymentSchedule->setTotalOccurrences("9999");
@@ -817,8 +835,26 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						$subscription_sign_up_fee = get_post_meta($product->id,'_subscription_sign_up_fee');
 						$subscription_length = get_post_meta($product->id,'_subscription_length');
 						
-						$interval_Unit = $subscription_period[0].'s';
-						$intervalLength = $subscription_period_interval[0];
+						if($subscription_period[0] == 'week'){
+							$interval_Unit = 'days';
+							$intervalLength = $subscription_period_interval[0] * 7;
+							$subscriptionLength = $subscription_length[0] * 7;
+						}
+						else{
+							$interval_Unit = $subscription_period[0].'s';
+							$intervalLength = $subscription_period_interval[0];
+							$subscriptionLength = $subscription_length[0];
+						}
+						
+						/*echo "<br>";
+						echo "subscription_period_interval : ".$subscription_period_interval[0];
+						echo "<br>";
+						echo "intervalLength : ".$intervalLength;
+						echo "<br>";
+						echo "subscriptionLength : ".$subscriptionLength;
+						echo "<br>";
+						die("sd");*/
+						
 						$startDate = $order->order_date;
  
 						$merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
@@ -839,8 +875,8 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						$paymentSchedule = new AnetAPI\PaymentScheduleType();
 						$paymentSchedule->setInterval($interval);
 						$paymentSchedule->setStartDate(new DateTime($startDate));
-						if($subscription_length[0] > 0){
-							$paymentSchedule->setTotalOccurrences($subscription_length[0]/$intervalLength);
+						if($subscriptionLength > 0){
+							$paymentSchedule->setTotalOccurrences($subscriptionLength/$intervalLength);
 						}
 						else{
 							$paymentSchedule->setTotalOccurrences("9999");
