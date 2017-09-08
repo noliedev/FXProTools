@@ -232,7 +232,7 @@ function get_checklist_next_step_url()
 		if( empty($value) ){
 			switch($key){
 				case 'verified_email': return home_url() . '/verify-email/';
-				case 'verified_profile': return home_url() . '/my-accunt/';
+				case 'verified_profile': return home_url() . '/my-account/';
 				case 'scheduled_webinar': return home_url() . '/coaching/';
 				case 'accessed_products': return home_url() . '/access-products/';
 				case 'got_shirt': return home_url() . '/free-shirt/';

@@ -19,14 +19,25 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-
+global $post;
 get_header( 'shop' ); ?>
 
 	<div class="container">
 
 		<?php while ( have_posts() ) : the_post(); ?>
+			<?php 
+				if($post->post_name == "free-shirt"){
+					if( wc_customer_bought_product('',get_current_user_id(),$post->ID) ){
+						echo "You already got your free T Shirt.";
+					} else {
+						wc_get_template_part( 'content', 'single-product' );
+					}
+				} else {
+					wc_get_template_part( 'content', 'single-product' );
+				}
+			 ?>
 
-			<?php wc_get_template_part( 'content', 'single-product' ); ?>
+			
 
 		<?php endwhile; // end of the loop. ?>
 
