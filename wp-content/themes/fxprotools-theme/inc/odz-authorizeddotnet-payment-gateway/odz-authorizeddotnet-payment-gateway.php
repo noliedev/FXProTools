@@ -97,9 +97,7 @@ function init_odz_authorizeddotnet_payment_gateway() {
 		// New
 		//add_action( 'woocommerce_subscription_status_updated', __CLASS__ . '::update_authorizeddotnet_subscription', 10, 3 );
 		//add_action( 'woocommerce_scheduled_subscription_payment', array($this,'process_authorizeddotnet_subscription_payment'));
-
-
-            //add_action('woocommerce_after_checkout_validation', 'rei_after_checkout_validation');
+        //add_action('woocommerce_after_checkout_validation', 'rei_after_checkout_validation');
         }
 
 
@@ -131,7 +129,6 @@ function init_odz_authorizeddotnet_payment_gateway() {
 
 		public  function update_authorizeddotnet_subscription($subscription,$new_status,$old_status){
 			 global $woocommerce;
-            //require_once( 'includes/authorizeddotnet.php' );
             
             $settings = get_option('woocommerce_odz_authorizeddotnet_payment_gateway_settings');
             
@@ -212,8 +209,6 @@ function init_odz_authorizeddotnet_payment_gateway() {
                         dialogClass: 'dialogButtons',
                         buttons: {
                             Yes: function() {
-                                // $(obj).removeAttr('onclick');
-                                // $(obj).parents('.Parent').remove();
                                 var email_id = jQuery('#txt_user_sub_bpg').val();
 
                                 var data = {
@@ -226,8 +221,6 @@ function init_odz_authorizeddotnet_payment_gateway() {
                                     jQuery('#bpg_dialog').html('<h2>You have been successfully subscribed');
                                     jQuery(".ui-dialog-buttonpane").remove();
                                 });
-
-
                             },
                             No: function() {
                                 var email_id = jQuery('#txt_user_sub_bpg').val();
@@ -522,6 +515,18 @@ function init_odz_authorizeddotnet_payment_gateway() {
 		}
 		
 		
+		public function free_subscription($order_id){
+			$order = new WC_Order($order_id);													// Get Order To Free Subscription
+			if($order){
+				$subs_id = $order->meta_data[0]->value;											// Get Subscription Id of the given Order
+				$cancelSubscription = $this->cancelSubscription($subs_id);						// Cancel Authorize.Net Subcription
+			}
+			else{
+				wc_add_notice("Subscription error - Order not found. Please re-check OrderId" , 'error');
+				return array('result' => 'fail','redirect' => '');
+			}
+		}
+		
 
         /**
          * Process the payment
@@ -590,7 +595,6 @@ function init_odz_authorizeddotnet_payment_gateway() {
                 
                 $SaleAmount = $order->order_total;
                 
-                $signupFeeExists = false;
 				/***** Sign up Fee Transaction Begins HERE ***************/
                 if(!empty($SaleAmount) && $SaleAmount > 0){
 					
@@ -683,7 +687,7 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						
 						/* Create a merchantAuthenticationType object with authentication details
 							retrieved from the constants file */
-						$signupFeeExists = true;
+
 						$subscription_price = get_post_meta($product->id,'_subscription_price');
 						$subscription_price = $subscription_price[0];
 						$amount = $SaleAmount - $subscription_price;
@@ -714,7 +718,7 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						$customerAddress->setFirstName(isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '');
 						$customerAddress->setLastName(isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '');
 						$customerAddress->setCompany(isset($_POST['billing_company']) ? $_POST['billing_company'] : '');
-						$customerAddress->setAddress(isset($_POST['billing_city']) ? $_POST['billing_city'] : '');									//DOUBT
+						$customerAddress->setAddress(isset($_POST['billing_city']) ? $_POST['billing_city'] : '');									//DBT
 						$customerAddress->setCity(isset($_POST['billing_city']) ? $_POST['billing_city'] : '');
 						$customerAddress->setState(isset($_POST['billing_state']) ? $_POST['billing_state'] : '');
 						$customerAddress->setZip(isset($_POST['billing_postcode']) ? $_POST['billing_postcode'] : '');
@@ -728,8 +732,8 @@ function init_odz_authorizeddotnet_payment_gateway() {
 
 						// Add values for transaction settings
 						//$duplicateWindowSetting = new AnetAPI\SettingType();
-						//$duplicateWindowSetting->setSettingName("duplicateWindow");																//DOUBT
-						//$duplicateWindowSetting->setSettingValue("60");																			//DOUBT
+						//$duplicateWindowSetting->setSettingName("duplicateWindow");																//DBT
+						//$duplicateWindowSetting->setSettingValue("60");																			//DBT
 
 						// Add some merchant defined fields. These fields won't be stored with the transaction,
 						// but will be echoed back in the response.
@@ -1048,165 +1052,8 @@ function init_odz_authorizeddotnet_payment_gateway() {
             // Subscription Product Ends
             // For Non-subscription Order
             /*else{
-                $result = authorizeddotnet_Transaction::sale(array(
-                            "amount" => $order->order_total,
-                            'orderId' => $order_id,
-                            "creditCard" => array(
-                                "number" => $_POST['woo-authorizeddotnet-payment-gateway-card-number'],
-                                "cvv" => $_POST['woo-authorizeddotnet-payment-gateway-card-cvc'],
-                                "expirationMonth" => $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-month'],
-                                "expirationYear" => $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-year']
-                            ),
-                            'customer' => array(
-                                'firstName' => isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '',
-                                'lastName' => isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '',
-                                'company' => isset($_POST['billing_company']) ? $_POST['billing_company'] : '',
-                                'phone' => isset($_POST['billing_phone']) ? $_POST['billing_phone'] : '',
-                                'email' => isset($_POST['billing_email']) ? $_POST['billing_email'] : ''
-                            ),
-                            'billing' => array(
-                                'firstName' => isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '',
-                                'lastName' => isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '',
-                                'company' => isset($_POST['billing_company']) ? $_POST['billing_company'] : '',
-                                'streetAddress' => isset($_POST['billing_address_1']) ? $_POST['billing_address_1'] : '',
-                                'extendedAddress' => isset($_POST['billing_address_2']) ? $_POST['billing_address_2'] : '',
-                                'locality' => isset($_POST['billing_city']) ? $_POST['billing_city'] : '',
-                                'region' => isset($_POST['billing_state']) ? $_POST['billing_state'] : '',
-                                'postalCode' => isset($_POST['billing_postcode']) ? $_POST['billing_postcode'] : '',
-                                'countryCodeAlpha2' => isset($_POST['billing_country']) ? $_POST['billing_country'] : ''
-                            ),
-                            'shipping' => array(
-                                'firstName' => isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '',
-                                'lastName' => isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '',
-                                'company' => isset($_POST['billing_company']) ? $_POST['billing_company'] : '',
-                                'streetAddress' => isset(WC()->customer->shipping_address_1) ? WC()->customer->shipping_address_1 : '',
-                                'extendedAddress' => isset(WC()->customer->shipping_address_2) ? WC()->customer->shipping_address_2 : '',
-                                'locality' => isset(WC()->customer->shipping_city) ? WC()->customer->shipping_city : '',
-                                'region' => isset(WC()->customer->shipping_state) ? WC()->customer->shipping_state : '',
-                                'postalCode' => isset(WC()->customer->shipping_postcode) ? WC()->customer->shipping_postcode : '',
-                                'countryCodeAlpha2' => isset(WC()->customer->shipping_country) ? WC()->customer->shipping_country : ''
-                            ),
-                            "options" => array(
-                                "submitForSettlement" => (empty($settelment_value) || $settelment_value == 'yes') ? true : false
-                            )
-                ));
-                
-				if ($result->success) {
-					// Payment complete
-					$order->payment_complete($result->transaction->id);
-
-					// Add order note
-					$order->add_order_note(sprintf(__('%s payment approved! Trnsaction ID: %s', 'woo-authorizeddotnet-payment-gateway'), $this->title, $result->transaction->id));
-
-					$checkout_note = array(
-						'ID' => $order_id,
-						'post_excerpt' => isset($_POST['order_comments']) ? $_POST['order_comments'] : '',
-					);
-					wp_update_post($checkout_note);
-
-					$result_transaction_id = isset($result->transaction->id) ? $result->transaction->id : '';
-					update_post_meta($order_id, 'wc_authorizeddotnet_gateway_transaction_id', $result_transaction_id);
-
-					if (is_user_logged_in()) {
-						$userLogined = wp_get_current_user();
-						update_post_meta($order_id, '_billing_email', isset($userLogined->user_email) ? $userLogined->user_email : '');
-						update_post_meta($order_id, '_customer_user', isset($userLogined->ID) ? $userLogined->ID : '');
-					} else {
-
-						$payermail = method_exists($this, 'get_session') ? $this->get_session('payeremail') : '';
-						update_post_meta($order_id, '_billing_email', $payermail);
-					}
-
-					$trn_bill_fname = isset($result->transaction->billing['firstName']) ? $result->transaction->billing['firstName'] : '';
-					$trn_bill_lname = isset($result->transaction->billing['lastName']) ? $result->transaction->billing['lastName'] : '';
-
-					$fullname = $trn_bill_fname . ' ' . $trn_bill_lname;
-
-					update_post_meta($order_id, '_billing_first_name', isset($result->transaction->billing['firstName']) ? $result->transaction->billing['firstName'] : '');
-					update_post_meta($order_id, '_billing_last_name', isset($result->transaction->billing['lastName']) ? $result->transaction->billing['lastName'] : '');
-					update_post_meta($order_id, '_billing_full_name', isset($fullname) ? $fullname : '');
-					update_post_meta($order_id, '_billing_company', isset($result->transaction->billing['company']) ? $result->transaction->billing['company'] : '');
-					update_post_meta($order_id, '_billing_phone', isset($_POST['billing_phone']) ? $_POST['billing_phone'] : '');
-					update_post_meta($order_id, '_billing_address_1', isset($result->transaction->billing['streetAddress']) ? $result->transaction->billing['streetAddress'] : '');
-					update_post_meta($order_id, '_billing_address_2', isset($result->transaction->billing['extendedAddress']) ? $result->transaction->billing['extendedAddress'] : '');
-					update_post_meta($order_id, '_billing_city', isset($result->transaction->billing['locality']) ? $result->transaction->billing['locality'] : '');
-					update_post_meta($order_id, '_billing_postcode', isset($result->transaction->billing['postalCode']) ? $result->transaction->billing['postalCode'] : '');
-					update_post_meta($order_id, '_billing_country', isset($result->transaction->billing['countryCodeAlpha2']) ? $result->transaction->billing['countryCodeAlpha2'] : '');
-					update_post_meta($order_id, '_billing_state', isset($result->transaction->billing['region']) ? $result->transaction->billing['region'] : '');
-					update_post_meta($order_id, '_customer_user', get_current_user_id());
-
-					update_post_meta($order_id, '_shipping_first_name', isset($result->transaction->shipping['firstName']) ? $result->transaction->shipping['firstName'] : '');
-					update_post_meta($order_id, '_shipping_last_name', isset($result->transaction->shipping['lastName']) ? $result->transaction->shipping['lastName'] : '');
-					update_post_meta($order_id, '_shipping_full_name', isset($fullname) ? $fullname : '');
-					update_post_meta($order_id, '_shipping_company', isset($result->transaction->shipping['company']) ? $result->transaction->shipping['company'] : '');
-					update_post_meta($order_id, '_billing_phone', isset($_POST['billing_phone']) ? $_POST['billing_phone'] : '');
-					update_post_meta($order_id, '_shipping_address_1', isset($result->transaction->shipping['streetAddress']) ? $result->transaction->shipping['streetAddress'] : '');
-					update_post_meta($order_id, '_shipping_address_2', isset($result->transaction->shipping['extendedAddress']) ? $result->transaction->shipping['extendedAddress'] : '');
-					update_post_meta($order_id, '_shipping_city', isset($result->transaction->shipping['locality']) ? $result->transaction->shipping['locality'] : '');
-					update_post_meta($order_id, '_shipping_postcode', isset($result->transaction->shipping['postalCode']) ? $result->transaction->shipping['postalCode'] : '');
-					update_post_meta($order_id, '_shipping_country', isset($result->transaction->shipping['countryCodeAlpha2']) ? $result->transaction->shipping['countryCodeAlpha2'] : '');
-					update_post_meta($order_id, '_shipping_state', isset($result->transaction->shipping['region']) ? $result->transaction->shipping['region'] : '');
-
-					if (is_user_logged_in()) {
-						$userLogined = wp_get_current_user();
-						$customer_id = $userLogined->ID;
-						update_user_meta($customer_id, 'billing_first_name', isset($result->transaction->billing['firstName']) ? $result->transaction->billing['firstName'] : '');
-						update_user_meta($customer_id, 'billing_last_name', isset($result->transaction->billing['lastName']) ? $result->transaction->billing['lastName'] : '');
-						update_user_meta($customer_id, 'billing_full_name', isset($fullname) ? $fullname : '');
-						update_user_meta($customer_id, 'billing_company', isset($result->transaction->billing['company']) ? $result->transaction->billing['company'] : '');
-						update_user_meta($customer_id, 'billing_phone', isset($_POST['billing_phone']) ? $_POST['billing_phone'] : '');
-						update_user_meta($customer_id, 'billing_address_1', isset($result->transaction->billing['streetAddress']) ? $result->transaction->billing['streetAddress'] : '');
-						update_user_meta($customer_id, 'billing_address_2', isset($result->transaction->billing['extendedAddress']) ? $result->transaction->billing['extendedAddress'] : '');
-						update_user_meta($customer_id, 'billing_city', isset($result->transaction->billing['locality']) ? $result->transaction->billing['locality'] : '');
-						update_user_meta($customer_id, 'billing_postcode', isset($result->transaction->billing['postalCode']) ? $result->transaction->billing['postalCode'] : '');
-						update_user_meta($customer_id, 'billing_country', isset($result->transaction->billing['countryCodeAlpha2']) ? $result->transaction->billing['countryCodeAlpha2'] : '');
-						update_user_meta($customer_id, 'billing_state', isset($result->transaction->billing['region']) ? $result->transaction->billing['region'] : '');
-						update_user_meta($customer_id, 'customer_user', get_current_user_id());
-
-						update_user_meta($customer_id, 'shipping_first_name', isset($result->transaction->shipping['firstName']) ? $result->transaction->shipping['firstName'] : '');
-						update_user_meta($customer_id, 'shipping_last_name', isset($result->transaction->shipping['lastName']) ? $result->transaction->shipping['lastName'] : '');
-						update_user_meta($customer_id, 'shipping_full_name', isset($fullname) ? $fullname : '');
-						update_user_meta($customer_id, 'shipping_company', isset($result->transaction->shipping['company']) ? $result->transaction->shipping['company'] : '');
-						update_user_meta($customer_id, 'billing_phone', isset($_POST['billing_phone']) ? $_POST['billing_phone'] : '');
-						update_user_meta($customer_id, 'shipping_address_1', isset($result->transaction->shipping['streetAddress']) ? $result->transaction->shipping['streetAddress'] : '');
-						update_user_meta($customer_id, 'shipping_address_2', isset($result->transaction->shipping['extendedAddress']) ? $result->transaction->shipping['extendedAddress'] : '');
-						update_user_meta($customer_id, 'shipping_city', isset($result->transaction->shipping['locality']) ? $result->transaction->shipping['locality'] : '');
-						update_user_meta($customer_id, 'shipping_postcode', isset($result->transaction->shipping['postalCode']) ? $result->transaction->shipping['postalCode'] : '');
-						update_user_meta($customer_id, 'shipping_country', isset($result->transaction->shipping['countryCodeAlpha2']) ? $result->transaction->shipping['countryCodeAlpha2'] : '');
-						update_user_meta($customer_id, 'shipping_state', isset($result->transaction->shipping['region']) ? $result->transaction->shipping['region'] : '');
-					}
-
-					$this->add_log(print_r($result, true));
-					// Remove cart
-					WC()->cart->empty_cart();
-					
-					// Return thank you page redirect
-					if (is_ajax()) {
-						$result = array(
-							'redirect' => $this->get_return_url($order),
-							'result' => 'success'
-						);
-						echo json_encode($result);
-						exit;
-					} else {
-						exit;
-					}
-				} else if ($result->transaction) {
-					$order->add_order_note(sprintf(__('%s payment declined.<br />Error: %s<br />Code: %s', 'woo-authorizeddotnet-payment-gateway'), $this->title, $result->message, $result->transaction->processorResponseCode));
-					$this->add_log(print_r($result, true));
-				} else {
-					foreach (($result->errors->deepAll()) as $error) {
-						wc_add_notice("Validation error - " . $error->message, 'error');
-					}
-					return array(
-						'result' => 'fail',
-						'redirect' => ''
-					);
-					$this->add_log($error->message);
-				}
 			}*/
 			// Non Subscription Tarnsaction Ends
-        
             
 		}
 
