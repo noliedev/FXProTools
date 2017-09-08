@@ -26,100 +26,44 @@
 			</div>
 		</div>
 		<div class="section-two">
-			<div class="image-background">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-12">
-							<p class="intro-note"><span>Start</span> trading forex</p>
-							<p class="intro-note">like a pro <span>right now!</span></p>
-							<div class="video"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="text-center">
+							<p class="intro-note">Shorten Your <strong>Forex Learning Curve</strong></p>
+							<p class="intro-note text-highlight-red">Become An Expert Market Trader!</p>
+							<p class="intro-note sm"> Discover More Profitabe Trades With Our Proven Strategies &amp; Technolgy</p>
+						</div>
+						<div class="video"></div>
+						<div class="text-center">
 							<a href="#" class="btn btn-danger btn-lg btn-create-account">
 								Create your Account Now!
 								<span>Sign up takes less than 60 seconds</span>
 							</a>
 						</div>
-						<div class="col-md-4">
-							<div class="item-info">
-								<i class="fa fa-circle icon"></i>
-								<p>Gain full Access to <br/> CopyProfitShare's training <br/> videos &amp; courses.</p>
-							</div>
+					</div>
+					<div class="col-md-4">
+						<div class="item-info">
+							<img src="<?php bloginfo('template_url'); ?>/assets/img/ico1.png" class="img-responsive icon">
+							<p>Gain full Access to <br/> CopyProfitShare's training <br/> videos &amp; courses.</p>
 						</div>
-						<div class="col-md-4">
-							<div class="item-info">
-								<i class="fa fa-circle icon"></i>
-								<p>Full Acess to CPS Forex &amp; <br/> Binary Rooms Live <br/> Signals 24 hours.</p>
-							</div>
+					</div>
+					<div class="col-md-4">
+						<div class="item-info">
+							<img src="<?php bloginfo('template_url'); ?>/assets/img/ico2.png" class="img-responsive icon">
+							<p>Full Acess to CPS Forex &amp; <br/> Binary Rooms Live <br/> Signals 24 hours.</p>
 						</div>
-						<div class="col-md-4">
-							<div class="item-info">
-								<i class="fa fa-circle icon"></i>
-								<p>Get access to trading <br/> webinars where you can <br/> copy trades live.</p>
-							</div>
+					</div>
+					<div class="col-md-4">
+						<div class="item-info">
+							<img src="<?php bloginfo('template_url'); ?>/assets/img/ico3.png" class="img-responsive icon">
+							<p>Get access to trading <br/> webinars where you can <br/> copy trades live.</p>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="section-three">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<p class="note text-center">Find out why we are the <br/> <span class="text-bold">#1 choice for traders</span> worldwide!</p>
-					</div>
-					<div class="clearfix"></div>
-					<div class="col-md-6">
-						<img src="<?php bloginfo('template_url'); ?>/assets/img/macbook.png" class="img-responsive centered-block">
-					</div>
-					<div class="col-md-6">
-						<ul class="list-features fa-ul">
-							<li><i class="fa fa-check fa-li"></i><p> Free Demo Account </p></li>
-							<li><i class="fa fa-check fa-li"></i><p> The platform is suitable for both professionals and beginners </p></li>
-							<li><i class="fa fa-check fa-li"></i><p> "Best" forex education in 2016 </p></li>
-							<li><i class="fa fa-check fa-li"></i><p> Availability on device </p></li>
-							<li><i class="fa fa-check fa-li"></i><p> Works for over 70+ assets </p></li>
-							<li><i class="fa fa-check fa-li"></i><p> A simple and reliable funds withdrawing system </p></li>
-						</ul>
-					</div>
-					<div class="clearfix"></div>
-					<div class="row row-item-stats">
-						<div class="col-md-3">
-							<div class="item-stats">
-								<span class="count">95%</span>
-								<span class="count-label">Win Ratio</span>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="item-stats">
-								<span class="count">10.5k</span>
-								<span class="count-label">Pips Caught</span>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="item-stats">
-								<span class="count">4 to 5</span>
-								<span class="count-label">Signals per day</span>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<div class="item-stats">
-								<span class="count">10+</span>
-								<span class="count-label">Hours of video</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="section-note">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<p>Everything you need to learn forex and binary from our expert traders!</p>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="section-four">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
@@ -219,25 +163,157 @@
 				</div>
 			</div>
 		</div>
+		<div class="section-four">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p class="note text-center">Find out why we are the <br/> <span class="text-bold">#1 choice for traders</span> worldwide!</p>
+					</div>
+					<div class="clearfix"></div>
+					<div class="col-md-6">
+						<img src="<?php bloginfo('template_url'); ?>/assets/img/macbook.png" class="img-responsive centered-block">
+					</div>
+					<div class="col-md-6">
+						<ul class="list-features fa-ul">
+							<li><i class="fa fa-check fa-li"></i><p> Free Demo Account </p></li>
+							<li><i class="fa fa-check fa-li"></i><p> The platform is suitable for both professionals and beginners </p></li>
+							<li><i class="fa fa-check fa-li"></i><p> "Best" forex education in 2016 </p></li>
+							<li><i class="fa fa-check fa-li"></i><p> Availability on device </p></li>
+							<li><i class="fa fa-check fa-li"></i><p> Works for over 70+ assets </p></li>
+							<li><i class="fa fa-check fa-li"></i><p> A simple and reliable funds withdrawing system </p></li>
+						</ul>
+					</div>
+					<div class="clearfix"></div>
+					<div class="row row-item-stats">
+						<div class="col-md-3">
+							<div class="item-stats">
+								<span class="count">95%</span>
+								<span class="count-label">Win Ratio</span>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="item-stats">
+								<span class="count">10.5k</span>
+								<span class="count-label">Pips Caught</span>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="item-stats">
+								<span class="count">4 to 5</span>
+								<span class="count-label">Signals per day</span>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="item-stats">
+								<span class="count">10+</span>
+								<span class="count-label">Hours of video</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="section-five">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
-						<div class="image-market-trading">
-							<div class="row">
-								<div class="col-md-10 col-md-offset-1">
-									<div class="content">
-										<h2 class="text-bold text-center text-heading">
-											<span class="bg-red-text">Cut The Amount Of Time, Stress & Anxiety</span><br/> and Suffering Behind A Keyboard So You Can Deal With What Actually Matters... 
-										</h2>
-										<div class="m-t-lg m-b-lg">
-											<img src="http://via.placeholder.com/960x500?text=Video" class="img-responsive centered-block m-b-sm">
+						<div class="panel">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="heading m-b-lg">
+											<h1>Let Us Show You Just How <span class="text-highlight-red">Simple</span> <br/>
+											It Is To Use Our Platform...
+											</h1>
+											<div class="m-t-md m-b-md">
+												<img src="http://via.placeholder.com/960x490" class="center-block img-responsive">
+											</div>
 										</div>
-										<div class="text-center">
-											<a href="#" class="btn btn-danger btn-lg btn-create-account">
-												Create Your Account Today!
-												<span>Sign up takes less than 60 seconds</span>
-											</a>
+									</div>
+									<div class="col-md-12">
+										<div class="step-item">
+											<div class="heading text-center">
+												<h1>Step #1</h1>
+												<span>Go Through The Academy</span>
+												<p class="text-heading-md">Place your trades with more confidence 
+												by letting our expert trade prediction software - guide your next move. </p>
+												<p class="text-heading-sm">Our Market Training is provides you with just enough information so that you can enter ANY market & trade any currency that you can imagine...</p>
+											</div>
+										</div>
+									</div>								
+									<div class="col-md-12">
+										<div class="step-item">
+											<div class="m-b-lg">
+												<h1><span class="text-highlight-red">Binary &amp; Forex</span> Training Courses</h1>
+											</div>
+											<div class="row">
+												<div class="col-md-4">
+													<p class="text-heading-sm">Forex A to Z, the Forex Mastery Course is the most powerful course of its kind.</p>
+													<p class="text-heading-sm">Learn everything you need to know to start trading today.for long-term success.</p>
+												</div>
+												<div class="col-md-8">
+													<img src="http://via.placeholder.com/700x350" class="center-block img-responsive">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="step-item">
+											<div class="m-b-lg">
+												<h1><span class="text-highlight-red">Live Trading</span> Webinars</h1>
+											</div>
+											<div class="row">
+												<div class="col-md-8">
+													<img src="http://via.placeholder.com/700x350" class="center-block img-responsive">
+												</div>
+												<div class="col-md-4">
+													<p class="text-heading-sm">When your just starting out. The “Learning Curve” can be a bit much. This is why you have our expert traders doing LIVE Webinars.</p>
+													<p class="text-heading-sm">Where we go over your questions, and make sure your always making progress.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="step-item">
+											<div class="heading m-b-lg text-center">
+												<h1>Step #2</h1>
+												<span>Apply Whay You Learned</span>
+												<p class="text-heading-md">Place your trades with more confidence by letting our expert trade prediction software - guide your next move.</p>
+												<p class="text-heading-sm">Our Market Training is provides you with just enough information so that you can enter ANY market & trade any currency that you can imagine...</p>
+												<p class="text-heading-sm">...If that wasn’t simple enough you can just plugin to our software. </p>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="step-item">
+											<div class="m-b-lg">
+												<h1><span class="text-highlight-red">Binary &amp; Forex</span> Trade Signals</h1>
+											</div>
+											<div class="row">
+												<div class="col-md-4">
+													<p class="text-heading-sm">Signals tell you exactly when to enter and when to exit a trade for maximum profits.</p>
+													<p class="text-heading-sm">Spend less time anyalzing the markets, or picking fake-outs. We do the hard work for you.</p>
+												</div>
+												<div class="col-md-8">
+													<img src="http://via.placeholder.com/700x350" class="center-block img-responsive">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="step-item">
+											<div class="m-b-lg">
+												<h1><span class="text-highlight-red">Binary &amp; Forex</span> Auto Trader</h1>
+											</div>
+											<div class="row">
+												<div class="col-md-8">
+													<img src="http://via.placeholder.com/700x350" class="center-block img-responsive">
+												</div>
+												<div class="col-md-4">
+													<p class="text-heading-sm">Put your feet up and let our algorithmic autotrader do the work for you. Set up is fast and easy.</p>
+													<p class="text-heading-sm">Place trades while you sleep and keep on top of the markets without ever lifting a finger.</p>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -247,6 +323,46 @@
 				</div>
 			</div>
 		</div>
+		<div class="section-six">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<!-- <div class="image-market-trading">
+							<div class="row">
+								<div class="col-md-10 col-md-offset-1">
+									
+								</div>
+							</div>
+						</div> -->
+						<div class="content">
+							<p class="text-heading text-highlight-red">Cut The Amount Of Time, Stress & Anxiety and </p>
+							<p class="text-heading">Suffering Behind A Keyboard So You </p>
+							<p class="text-heading">Can Deal With What Actually Matters... </p>
+							<p class="text-heading"><span class="text-highlight-green">Turning A Profiting</span> &amp; Growing Your Wallet</p>
+							<div class="m-t-lg m-b-lg">
+								<img src="http://via.placeholder.com/960x500?text=Video" class="img-responsive centered-block m-b-sm">
+							</div>
+							<div class="text-center">
+								<a href="#" class="btn btn-danger btn-lg btn-create-account">
+									Create Your Account Today!
+									<span>Sign up takes less than 60 seconds</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- <div class="section-note">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<p>Everything you need to learn forex and binary from our expert traders!</p>
+					</div>
+				</div>
+			</div>
+		</div> -->
+		
 	</div>
 
 <?php get_footer(); ?>
