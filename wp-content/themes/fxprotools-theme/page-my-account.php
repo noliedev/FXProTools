@@ -50,7 +50,7 @@
 									<div class="col-md-6">
 										<p class="text-bold text-center">Customer Information</p>
 										<ul class="list-info">
-											<li><span>Business Name:</span> FX</li>
+											<li><span>Business Name:</span> FX test</li>
 											<li><span>Street:</span> Sesame Street</li>
 											<li><span>City:</span> Star City</li>
 											<li><span>State:</span> Beef State</li>
