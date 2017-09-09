@@ -29,6 +29,10 @@ if(!class_exists('ThemeSettings')){
 			add_action( 'edit_user_profile', array($this, 'add_new_user_fields'));
 			add_action( 'personal_options_update', array($this, 'save_new_user_fields'));
 			add_action( 'edit_user_profile_update', array($this, 'save_new_user_fields'));
+			add_filter( 'woocommerce_checkout_fields', array($this, 'add_c_bday_checkout') );
+			add_filter( 'woocommerce_checkout_fields', array($this, 'add_c_gender_checkout') );
+			add_action( 'woocommerce_after_checkout_form', array($this, 'add_checkout_script') );
+			add_action( 'woocommerce_checkout_update_user_meta', array($this, 'save_custom_checkout_fields'), 10, 2 );
 
 		}
 
@@ -264,24 +268,6 @@ if(!class_exists('ThemeSettings')){
 		}
 
 		public function add_new_user_fields( $user ) { ?>
-			<h3>Customer Information</h3>
-			<table class="form-table">
-				<tr>
-					<th><label for="ship_business_name">Shipping Business Name</label></th>
-
-					<td>
-						<input type="text" name="ship_business_name" id="ship_business_name" value="<?php echo esc_attr( get_the_author_meta( 'ship_business_name', $user->ID ) ); ?>" class="regular-text" /><br />
-					</td>
-				</tr>
-				<tr>
-					<th><label for="bill_business_name">Billing Business Name</label></th>
-
-					<td>
-						<input type="text" name="bill_business_name" id="bill_business_name" value="<?php echo esc_attr( get_the_author_meta( 'bill_business_name', $user->ID ) ); ?>" class="regular-text" /><br />
-					</td>
-				</tr>
-			</table>
-
 			<h3>General Information</h3>
 			<table class="form-table">
 				<tr>
@@ -311,11 +297,49 @@ if(!class_exists('ThemeSettings')){
 		<?php }
 
 		function save_new_user_fields($user_id) {
-			update_usermeta( $user_id, 'ship_business_name', $_POST['ship_business_name'] );
-			update_usermeta( $user_id, 'bill_business_name', $_POST['bill_business_name'] );
 			update_usermeta( $user_id, 'c_bday', $_POST['c_bday'] );
 			update_usermeta( $user_id, 'c_gender', $_POST['c_gender'] );
 		}
+
+		function add_c_bday_checkout( $checkout_fields = array() ) {
+		    $checkout_fields['order']['c_bday'] = array(
+		        'type'          => 'text',
+		        'class'         => array('form-row form-row-wide'),
+		        'label'         => __('Date of Birth'),
+		        'required'      => true, 
+		        );
+		    return $checkout_fields;
+		}
+
+		function add_c_gender_checkout( $checkout_fields = array() ) {
+		    $checkout_fields['order']['c_gender'] = array(
+		        'type'          => 'select',
+				'required'	=> true,
+				'class'         => array('form-row', 'form-row-wide'),
+				'label'         => 'Gender',
+				'options'	=> array(
+					'Male'	=> 'Male',
+					'Female'	=> 'Female'
+				)
+		    );
+		    return $checkout_fields;
+		}
+
+		function add_checkout_script() {
+		    echo '<script> jQuery(function() { jQuery("#c_bday").attr("type","date"); }) </script>';
+		}
+
+		function save_custom_checkout_fields( $customer_id, $posted ) {
+		    if (isset($posted['c_bday'])) {
+		        $dob = sanitize_text_field( $posted['c_bday'] );
+		        update_user_meta( $customer_id, 'c_bday', $dob);
+		    }
+		    if (isset($posted['c_gender'])) {
+		        $dob = sanitize_text_field( $posted['c_gender'] );
+		        update_user_meta( $customer_id, 'c_gender', $dob);
+		    }
+		}
+
 	}
 }
 

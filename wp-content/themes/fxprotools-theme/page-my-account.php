@@ -24,11 +24,19 @@ foreach($_POST as $user_key => $user_value){
 						</div>
 						<div class="media-body">
 							<div class="info">
-								<h4 class="media-heading text-normal">John Benedict Doe</h4>
+								<h4 class="media-heading text-normal">
+									<?php  
+										if(get_the_author_meta('first_name', get_current_user_id())){
+											echo get_the_author_meta('first_name', get_current_user_id()) . ' ' . get_the_author_meta('last_name', get_current_user_id());
+										}else{
+											echo get_the_author_meta('user_login', get_current_user_id());
+										}
+									?>
+								</h4>
 								<ul class="info-list">
-									<li><i class="fa fa-envelope-o"></i> user-email@gmail.com</li>
-									<li><i class="fa fa-mobile"></i> (123) 456-7890</li>
-									<li><i class="fa fa-home"></i> City, State</li>
+									<li><i class="fa fa-envelope-o"></i> <?php echo get_the_author_meta('email', get_current_user_id()); ?></li>
+									<li><i class="fa fa-mobile"></i> <?php echo get_the_author_meta('billing_phone', get_current_user_id()); ?></li>
+									<li><i class="fa fa-home"></i> <?php echo get_the_author_meta('billing_city', get_current_user_id()); ?>, <?php echo get_the_author_meta('billing_state', get_current_user_id()); ?></li>
 								</ul>
 								<p>IP Address: 192.168.8.1</p>
 							</div>
@@ -80,7 +88,7 @@ foreach($_POST as $user_key => $user_value){
 										<div class="col-md-6">
 											<p class="text-bold text-center">Billing Information</p>
 											<ul class="list-info list-info-fields">
-												<li><span>Business Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="bill_business_name" id="bill_business_name" value="'. get_the_author_meta('bill_business_name', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('bill_business_name', get_current_user_id()) ); ?></li>
+												<li><span>Business Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_company" id="billing_company" value="'. get_the_author_meta('billing_company', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('billing_company', get_current_user_id()) ); ?></li>
 												<li><span>House # & Street Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_address_1" id="billing_address_1" value="'. get_the_author_meta('billing_address_1', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('billing_address_1', get_current_user_id()) ); ?></li>
 												<li><span>Apt.,suite,unit,etc.:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_address_2" id="billing_address_2" value="'. get_the_author_meta('billing_address_2', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('billing_address_2', get_current_user_id()) ); ?></li>
 												<li><span>City:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_city" id="billing_city" value="'. get_the_author_meta('billing_city', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('billing_city', get_current_user_id()) ); ?></li>
@@ -91,7 +99,7 @@ foreach($_POST as $user_key => $user_value){
 										<div class="col-md-6">
 											<p class="text-bold text-center">Shipping Information</p>
 											<ul class="list-info list-info-fields">
-												<li><span>Business Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="ship_business_name" id="ship_business_name" value="'. get_the_author_meta('ship_business_name', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('ship_business_name', get_current_user_id()) ); ?></li>
+												<li><span>Business Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_company" id="shipping_company" value="'. get_the_author_meta('shipping_company', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('shipping_company', get_current_user_id()) ); ?></li>
 												<li><span>House # & Street Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_address_1" id="shipping_address_1" value="'. get_the_author_meta('shipping_address_1', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('shipping_address_1', get_current_user_id()) ); ?></li>
 												<li><span>Apt.,suite,unit,etc.:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_address_2" id="shipping_address_2" value="'. get_the_author_meta('shipping_address_2', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('shipping_address_2', get_current_user_id()) ); ?></li>
 												<li><span>City:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_city" id="shipping_city" value="'. get_the_author_meta('shipping_city', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('shipping_city', get_current_user_id()) ); ?></li>
