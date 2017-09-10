@@ -571,6 +571,36 @@
 				</div>
 			</div>
 		</div>
+		<div class="section-ten">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="header-text">
+							<p class="text-white">Optional: Share With Others</p>
+							<h2 class="label-red inline-block m-t-none">Become Your Own Boss</h2>
+							<p class="white-sub m-b-xs"><span class="text-white text-bold">Earn While You Learn, Become an IBO</span> (Independent Business Owner)</p>
+							<p class="text-white text-bold">to unlock the following features:</p>
+						</div>
+						<div class="row m-t-lg">
+							<?php $ui_items = array('Recurring Commissions', 'Referral Bonuses', 'Marketing Tools', '7 Day Placement Holding Tank', 'Weekly Payouts', 'Complete Backoffice'); ?>
+							<?php 
+							$count = 1;
+							foreach ($ui_items as $key => $ui):
+							?>
+							<div class="col-md-4">
+								<div class="unlock-item">
+									<div class="icon">
+										<img src="<?php bloginfo('template_url'); ?>/assets/img/ui/ico-ui<?php echo $count.'.png'; ?>" class="img-responsive">
+									</div>
+									<span><?php echo $ui; ?></span>
+								</div>
+							</div>
+							<?php $count++; endforeach ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 <?php get_footer(); ?>

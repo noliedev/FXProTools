@@ -417,6 +417,47 @@
 			font-size: 15px;
 		}
 	}
+	.section-ten {
+		position: relative;
+		background-image: url('../img/splash2.png');
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
+		padding: 60px 0 20px 0;
+		border-bottom: 20px solid $red;
+		border-top: 20px solid $red;
+		&:before {
+			content: ' ';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0, 0, 0, 0.65);
+		}
+		.header-text {
+			text-align: center;
+			p.white-sub {
+				color: #c6c6c6;
+			}
+		}
+		.unlock-item {
+			position: relative;
+			text-align: center;
+			height: 200px;
+			.icon {
+				text-align: center;
+				img {
+					height: auto;
+					width: 100px;
+					margin: 0 auto 15px auto;
+				}
+			}
+			span {
+				color: $white;
+			}
+		}
+	}
 }
 
 // Login
