@@ -21,6 +21,8 @@ html {
 }
 body {
 	font-family: $font-lato!important;
+    color: $black;
+    font-size: 17px;
 }
 
 // Typography
@@ -29,8 +31,20 @@ h1, h2, h3, h4, h5, h6 {
   color: $black;
 }
 
-// Bootstrap Overriding Colors
+// Bootstrap Overriding Styles
+.btn {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+}
+
 .btn-danger {
     background-color: $red;
     border-color: $red;
+    border-bottom: 4px solid #940000;
+}
+
+.btn-success {
+    background-color: $green;
+    border-color: $green;
+    border-bottom: 4px solid #018e61;
 }

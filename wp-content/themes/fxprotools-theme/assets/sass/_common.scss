@@ -2,6 +2,24 @@
 /*== COMMON ==*/ 
 /*============*/
 
+// Label & Text
+.text-red {
+	color: $red;
+}
+.text-green {
+	color: $green;
+}
+.label-green {
+	background-color: $green;
+	color: $white;
+	padding: 4px 10px;
+}
+.label-red {
+	background-color: $red;
+	color: $white;
+	padding: 4px 10px;
+}
+
 // Wrapper
 .fx-wrapper {
 	position: relative;
