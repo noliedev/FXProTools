@@ -42,6 +42,9 @@
 							</a>
 						</div>
 					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="row row-item-stats">
 					<div class="col-md-4">
 						<div class="item-info">
 							<img src="<?php bloginfo('template_url'); ?>/assets/img/ico1.png" class="img-responsive icon">
