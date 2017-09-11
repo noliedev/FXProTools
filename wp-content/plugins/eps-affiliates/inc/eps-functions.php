@@ -17,7 +17,7 @@
 		$reg_obj->afl_join_member(
 									array(
 										'sponsor_uid' => $sponsor,
-										'uid'					=> $uid
+										'uid'					=> $uid,
 									)
 							);
 
@@ -49,12 +49,16 @@
 			if (!empty( $holding_data->remote_sponsor_mlmid)) {
 				$remote_sponsor_mlm_id = $holding_data->remote_sponsor_mlmid;
 			}
+			if (!empty( $holding_data->status)) {
+				$status = $holding_data->status;
+			}
 
 			$wpdb->update(
 				_table_name('afl_user_genealogy'),
 				array(
-					'remote_user_mlmid' => $remote_user_mlm_id,
-					'remote_sponsor_mlmid' => $remote_sponsor_mlm_id,
+					'remote_user_mlmid' 		=> $remote_user_mlm_id,
+					'remote_sponsor_mlmid' 	=> $remote_sponsor_mlm_id,
+					'status' 								=> $status,
 				),
 				array(
 					'uid' => $uid
@@ -73,7 +77,7 @@
 		$reg_obj->afl_join_customer(
 									array(
 										'sponsor_uid' => $sponsor,
-										'uid'					=> $uid
+										'uid'					=> $uid,
 									)
 							);
 	}
@@ -90,16 +94,39 @@
     $reg_obj->afl_add_to_holding_tank(
     							array(
 										'sponsor_uid' => $sponsor,
-										'uid'					=> $uid
+										'uid'					=> $uid,
 									)
 							);
  }
+/*
+ * -------------------------------------------------------
+ * Become distributor from customer
+ * -------------------------------------------------------
+*/
+	function eps_affiliates_become_distributor_from_customer_callback ($customer_uid = '') {
+		global $wpdb;
+		$reg_obj = new Eps_affiliates_registration;
+		//get current sponsor of customer
+		$sponsor = _get_current_customer_sponsor($customer_uid);
+		if ( $sponsor ) {
+			$reg_obj->afl_join_member(
+									array(
+										'sponsor_uid' => $sponsor,
+										'uid'					=> $customer_uid
+									)
+							);
+			//delete customer from customer table
+			$wpdb->delete(_table_name('afl_customer'), array('uid'=>$customer_uid));
+			//remove user role afl_customer
+			eps_add_role($customer_uid, 'afl_member');
+			eps_remove_role($customer_uid, 'afl_customer');
+		}
+	}
 /*
  * ---------------------------------------------------------
  * Commerce purchase complete
  * ---------------------------------------------------------
 */
-
 	function eps_commerce_purchase_complete($args = array()){
 	 	//need to save the details to purchases
 	 	$response = array();
@@ -200,6 +227,127 @@
 	  //to mbr transaction
 		afl_member_transaction($transaction, TRUE);
 
+	 	if (!$ins) {
+	 		$response['status'] 	= 0;
+	 		$response['response']	=	'Failure';
+	 		$response['error'][] 	= 'Un-expected error occured. Unable to insert to the purchase details.';
+	 	}
+	 		return $response;
+	}
+/*
+ * ---------------------------------------------------------
+ * Joining package purchase complete
+ * ---------------------------------------------------------
+*/
+	function eps_commerce_joining_package_purchase_complete($args = array()){
+	 	//need to save the details to purchases
+	 	$response = array();
+
+	 	$response['status'] 	= 1;
+	 	$response['response'] = 'success';
+
+	 	//check user id exists or not
+	 	if (empty($args['uid']) ){
+	 		$response['status'] 	= 0;
+	 		$response['response']	=	'Failure';
+	 		$response['error'][] 	= 'user id cannot be null';
+	 	}
+	 		//check associate user id exists or not
+	 	if (empty($args['associated_uid']) ){
+	 		$response['status'] 	= 0;
+	 		$response['response']	=	'Failure';
+	 		$response['error'][] 	= 'Associate user id cannot be null';
+	 	}
+	 	//check order_id exists
+	 	if (empty($args['order_id'])) {
+	 		$response['status'] 	= 0;
+	 		$response['response']	=	'Failure';
+	 		$response['error'][] 	= 'order id cannot be null';
+	 	}
+
+	 	//check amount paid exists or not
+	 	if (empty($args['amount_paid'])) {
+	 		$response['status'] 	= 0;
+	 		$response['response']	=	'Failure';
+	 		$response['error'][] 	= 'amount cannot be null';
+	 	}
+
+	 		//check afl_point exists or not
+	 	// if (empty($args['afl_point'])) {
+	 	// 	$response['status'] 	= 0;
+	 	// 	$response['response']	=	'Failure';
+	 	// 	$response['error'][] 	= 'Affiliate point cannot be null';
+	 	// }
+
+	 	//check user id field is an integer
+	 	if (!empty($args['uid']) && !is_numeric($args['uid'])){
+	 		$response['status'] 	= 0;
+	 		$response['response']	=	'Failure';
+	 		$response['error'][] 	= 'user id needs to be an integer number';
+	 	}
+	 	//check associate user id field is an integer
+	 	if (!empty($args['associated_uid']) && !is_numeric($args['associated_uid'])){
+	 		$response['status'] 	= 0;
+	 		$response['response']	=	'Failure';
+	 		$response['error'][] 	= 'associate user id needs to be an integer number';
+	 	}
+	 	//check order_id is integer
+	 	if (!empty($args['order_id']) && !is_numeric($args['order_id'])){
+	 		$response['status'] 	= 0;
+	 		$response['response']	=	'Failure';
+	 		$response['error'][] 	= 'Order id needs to be an integer number';
+	 	}
+
+	 	//check order_id is integer
+	 	if (!empty($args['amount_paid']) && !is_numeric($args['amount_paid'])){
+	 		$response['status'] 	= 0;
+	 		$response['response']	=	'Failure';
+	 		$response['error'][] 	= 'Amount needs to be an integer number';
+	 	}
+
+ 		// //check afl_point is integer
+	 	// if (!empty($args['afl_point']) && !is_numeric($args['afl_point'])){
+	 	// 	$response['status'] 	= 0;
+	 	// 	$response['response']	=	'Failure';
+	 	// 	$response['error'][] 	= 'Affiliate point needs to be an integer number';
+	 	// }
+
+	 	//details enter to the purchase table
+	 	//$ins = afl_purchase($args);
+
+	 	//calculate rank
+	 	// do_action('eps_affiliates_calculate_affiliate_rank', $args['uid']);
+
+		//calculte the rank of uplines
+		$refers_uids = afl_get_referrer_upline_uids($args['uid']);
+		foreach ($refers_uids as $uid) {
+			do_action('eps_affiliates_calculate_affiliate_rank', $uid);
+		}
+
+		//insert details into transactions table
+		$afl_date_splits = afl_date_splits(afl_date());
+	  $transaction = array();
+    $transaction['uid'] 								= $args['uid'];
+    $transaction['associated_user_id'] 	= $args['associated_uid'];
+    $transaction['currency_code'] 			= afl_currency();
+    $transaction['order_id'] 						= 1;
+    $transaction['int_payout'] 					= 0;
+    $transaction['hidden_transaction'] 	= 0;
+    $transaction['credit_status'] 			= 1;
+    $transaction['amount_paid'] 				= afl_commerce_amount($args['amount_paid']);
+    $transaction['category'] 						= 'Enrolment fee';
+    $transaction['notes'] 							= 'Enrolment fee';
+    $transaction['transaction_day'] 		= $afl_date_splits['d'];
+    $transaction['transaction_month'] 	= $afl_date_splits['m'];
+    $transaction['transaction_year'] 		= $afl_date_splits['y'];
+    
+    $transaction['transaction_week'] 		= $afl_date_splits['w'];
+    $transaction['transaction_date'] 		= afl_date_combined($afl_date_splits);
+    $transaction['created'] 						= afl_date();
+    $transaction['additional_notes'] 		= 'Enrolment joining Fee';
+	  //to mbr transaction
+		afl_business_transaction($transaction);
+		$ins = 1;
 	 	if (!$ins) {
 	 		$response['status'] 	= 0;
 	 		$response['response']	=	'Failure';

@@ -39,3 +39,14 @@
  			$unique_id)
  		);
  }
+/*
+ * ---------------------------------------------------------------
+ * update processed times
+ * ---------------------------------------------------------------
+*/
+ function processing_queue_processed_time_set ($unique_id = '', $processed_time = '') {
+ 		global $wpdb;
+ 		$res = $wpdb->query($wpdb->prepare('UPDATE '._table_name("afl_processing_queue").' SET runs = %d WHERE item_id = %d',
+ 			$processed_time,$unique_id)
+ 		);
+ }

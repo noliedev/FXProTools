@@ -16,14 +16,15 @@
 	$query['#where']	=	array(
 		'runs <='.$max_re_process_time,
 		'name="remote_users_embedd"',
-		'status != 1'
+		'status != 1',
+		'status != 3'
 	);
 	$query['#order_by'] = array(
 		'runs' => 'ASC'
 	);
-	$query['#limit'] = 1000;
+	$query['#limit'] = 500;
 	$queued_data = db_select($query, 'get_results');
-	
+	// pr($queued_data,1);
 	foreach ($queued_data as $key => $value) {
 		$unique_id = $value->item_id;
 		//update the status as processing
@@ -35,9 +36,13 @@
 
 		if ( $response > 0 ) {
 			//update the status as success
-			processing_queue_status_update($unique_id,1);
+			// processing_queue_status_update($unique_id,1);
 			afl_log('embedd_remote_user_cron','remote users embedd cron queue processed successfully',array('uid'=> $response ));
-			//remove the queue
+			
+			// file_put_contents(EPSAFFILIATE_PLUGIN_DIR.'inc/API/tmp/log1.txt', '--------------------------------------------------------------------------'.PHP_EOL,FILE_APPEND);
+			// file_put_contents(EPSAFFILIATE_PLUGIN_DIR.'inc/API/tmp/log1.txt', print_r($data, TRUE).PHP_EOL,FILE_APPEND);
+			// file_put_contents(EPSAFFILIATE_PLUGIN_DIR.'inc/API/tmp/log1.txt', '--------------------------------------------------------------------------'.PHP_EOL,FILE_APPEND);
+			//remove the queue data
 			processing_queue_remove($unique_id);
 			
 
@@ -46,14 +51,22 @@
 			if ( $response == -1 ) {
 				//delete the details
 				processing_queue_remove($unique_id);
+				afl_log('embedd_remote_user_cron','remote users embedd cron queue processed successfully',array('uid'=> $response ));
+			
+			// file_put_contents(EPSAFFILIATE_PLUGIN_DIR.'inc/API/tmp/log.txt', '--------------------------------------------------------------------------'.PHP_EOL,FILE_APPEND);
+			// file_put_contents(EPSAFFILIATE_PLUGIN_DIR.'inc/API/tmp/log.txt', print_r($data, TRUE).PHP_EOL,FILE_APPEND);
+			// file_put_contents(EPSAFFILIATE_PLUGIN_DIR.'inc/API/tmp/log.txt', '--------------------------------------------------------------------------'.PHP_EOL,FILE_APPEND);
+			//could not create the user
+			} else if ( $response == -100) {
+				processing_queue_processed_time_set($unique_id);
 			} else  {
-				//update the status as failed
+				//update the status as re-processed
 				processing_queue_status_update($unique_id,2);
 			}
 		}
 
 	 //increment the processing count
-		processing_queue_processed_increment($unique_id);
+		processing_queue_processed_increment($unique_id,($max_re_process_time+1));
 
 	 //update processed date
 		$wpdb->update(
@@ -149,7 +162,7 @@
  * ------------------------------------------------------------------
 */
  function _api_user_add_to_genealogy($user = '', $sponsor = '', $data =  array()	) {
-
+ 		$status = (!empty($data['status']) && $data['status'] == 'Active') ? 1 : 0;
    	do_action('eps_affiliates_place_user_under_sponsor',$user, $sponsor);
  	/*
  	 * ------------------------------------------------------------------- 
@@ -161,7 +174,8 @@
 				_table_name('afl_user_genealogy'),
 				array(
 					'remote_user_mlmid' 	 => $data['userMlmId'],
-					'remote_sponsor_mlmid' => $data['sponsor_mlmid']
+					'remote_sponsor_mlmid' => $data['sponsor_mlmid'],
+					'status' 							 => $status
 				),
 				array('uid' => $user)
 			);
@@ -172,6 +186,7 @@
  * ------------------------------------------------------------------
 */
  function _api_user_add_to_holding_tank($user = '', $sponsor = '', $data =  array()	) {
+ 		$status = (!empty($data['status']) && $data['status'] == 'Active') ? 1 : 0;
 		do_action('eps_affiliates_place_user_in_holding_tank',$user,afl_root_user());
 		//update the holding users remote user mlmid and remote sponsor mlm id
 
@@ -180,7 +195,8 @@
 				_table_name('afl_user_holding_tank'),
 				array(
 					'remote_user_mlmid' 	 => $data['userMlmId'],
-					'remote_sponsor_mlmid' => $data['sponsor_mlmid']
+					'remote_sponsor_mlmid' => $data['sponsor_mlmid'],
+					'status' 							 => $status
 				),
 				array('uid' => $user)
 			);
@@ -193,6 +209,7 @@
 */
   function _api_insert_user_($sponsor='', $data = array(), $processed_times = '') {
   	$response = 0;
+  	
   	if ( $sponsor ) {
 			$userdata = array(
       'user_login'    	=>   $data['name'],
@@ -208,13 +225,14 @@
  	 * Place the user under sponsor
  	 * ------------------------------------------------------------------- 
  	*/
-		 if ( $user ) {
+		 if ( $user && is_numeric( $user )) {
 		 	
 		 	_api_user_add_to_genealogy( $user, $sponsor, $data );
      	$response = $user;
 
 		 } else {
-		 	afl_log('embedd_remote_user_cron','remote users embedd cron queue failed.Cannot create the user',array('queue_data'=>$data),LOGS_ERROR);
+		 	afl_log('embedd_remote_user_cron','remote users embedd cron queue failed.Cannot create the user',array('queue_data'=>$data,),LOGS_ERROR);
+		 	$response = -100;
 		 }
 		} else {
 		/*
@@ -233,7 +251,7 @@
 	      );
 	      
 	      $user = wp_insert_user( $userdata );
-	      if ( $user ){
+	      if ( $user && is_numeric( $user )){
 	      _api_user_add_to_holding_tank( $user, afl_root_user(), $data);
         	$response = $user;
 	      }

@@ -19,7 +19,7 @@ function afl_admin_bwallet_summary_data_table_callback(){
 			$output['data'][] = [
 	   		$key+1,
 	     	ucfirst(strtolower($value->category)),
-	     	number_format($value->balance, 2, '.', ',')." " .$value->currency_code ,
+	     	afl_get_commerce_amount($value->balance),
    		];
 		}
 	echo json_encode($output);
@@ -164,7 +164,7 @@ function afl_admin_business_income_datatable_callback(){
 	   		$key+1,
 	     	ucfirst(strtolower($value->category)),
 	     	$value->display_name." (".$value->associated_user_id.")",
-	 			number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			number_format(afl_get_commerce_amount($value->amount_paid), 2, '.', ',')." " .$value->currency_code ,
 	     	$status,
 	     	$value->transaction_date,  	
 	     	$value->additional_notes
@@ -215,7 +215,7 @@ function afl_admin_business_expense_datatable_callback(){
 	   		$key+1,
 	     	ucfirst(strtolower($value->category)),
 	     	$value->display_name." (".$value->associated_user_id.")",
-	 			number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+	 			number_format(afl_get_commerce_amount($value->amount_paid), 2, '.', ',')." " .$value->currency_code ,
 	     	$status,
 	     	$value->transaction_date,  	
 	     	$value->additional_notes

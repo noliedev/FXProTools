@@ -50,18 +50,17 @@ function afl_generate_users_form () {
 				$theUser = new WP_User($user);
 				$theUser->add_role( 'afl_member' );
 				//add the Enrollment fee to the business vallet
-				$business_transactions['associated_user_id'] = $user;
+				$business_transactions['associated_uid'] = $user;
   			$business_transactions['uid'] = afl_root_user(); /*Business admin uid or root user id*/;
   			$business_transactions['credit_status'] = 1;
         $business_transactions['category'] 			= 'ENROLMENT FEE';
-  			$business_transactions['additional_notes'] 	= 'Enrolment joining Free';
-  			$business_transactions['amount_paid'] 			= afl_commerce_amount(100);
+  			$business_transactions['additional_notes'] 	= 'Enrolment joining Fee';
+  			$business_transactions['amount_paid'] 			= 100;
   			$business_transactions['notes'] 				= 'Enrolment Fee';
   			$business_transactions['currency_code'] = 'USD';
   			$business_transactions['order_id'] 			= 1;
        	
-       	$business_transaction = afl_business_transaction($business_transactions);
-
+       	$response = apply_filters('eps_commerce_joining_package_purchase_complete',$business_transactions);
 
 
         	$success_count+=1;

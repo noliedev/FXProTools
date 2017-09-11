@@ -203,6 +203,14 @@ $common_include = new Eps_affiliates_common();
 					}
 					$table_html .= '<tr>';
 				}
+			} else {
+				if ( !empty( $header )) {
+					$table_html .= '<tr>';
+					$table_html .= '<td colspan="'.count($header).'">';
+					$table_html .= 'No data found';
+					$table_html .= '</td>';
+					$table_html .= '</tr>';
+				}
 			}
 		/* -----------rendering rows :  End	----------*/
 		$table_html .= '</table>';
@@ -1945,6 +1953,30 @@ function afl_root_user() {
 			$theUser->add_role( 'afl_member' );
   	}
   }
+ /*
+  * ----------------------------------------------------------------------
+  * Add a role to uid
+  * ----------------------------------------------------------------------
+ */
+  if (!function_exists('eps_add_role')) {
+  	function eps_add_role ($uid = '', $role = '') {
+  		//add new role if he has this role
+    	$theUser = new WP_User($uid);
+			$theUser->add_role( $role );
+  	}
+  }
+ /*
+  * ----------------------------------------------------------------------
+  * Add a role to uid
+  * ----------------------------------------------------------------------
+ */
+  if (!function_exists('eps_remove_role')) {
+  	function eps_remove_role ($uid = '', $role = '') {
+  		//add new role if he has this role
+    	$theUser = new WP_User($uid);
+			$theUser->remove_role( $role );
+  	}
+  }
 /*
  * ----------------------------------------------------------------------
  * Afl product purchase details enter to db
@@ -2206,9 +2238,18 @@ function afl_get_payment_method_details($uid = 0, $method_name = ''){
 	  global $user, $base_root;
 	  
 	  // Prepare the fields to be logged
+	  $msg = '';
+	  if ( is_array( $message ) ) {
+	  	foreach ($message as $value) {
+	  		$msg .= $value;
+	  	}
+	  } else {
+	  	$msg = $message;
+	  }
+
 	  $log_message = array(
 	    'type' 			=> $type,
-	    'message' 	=> $message,
+	    'message' 	=> $msg,
 	    'variables' => maybe_serialize($variables),
 	    'severity' 	=> $severity,
 	    'link' 			=> $link,
@@ -2222,3 +2263,54 @@ function afl_get_payment_method_details($uid = 0, $method_name = ''){
 	 	$log_message
 	 );
 	}
+/*
+ * ---------------------------------------------------------------------
+ * Notice for could not change the values
+ * ---------------------------------------------------------------------
+*/
+ function _accurate_knowledge_notice () {
+ 	echo '
+
+ 	<div class="panel panel-primary">
+		<div class="panel-body text-danger">
+			<strong> Notice : </strong>Do not try to change what is given here without accurate knowledge. It will affect the entire system badly
+		</div>
+	</div>';
+ 	// 
+ }
+/*
+ * --------------------------------------------------------------------
+ * get the customer details from table
+ * --------------------------------------------------------------------
+*/
+	function afl_customer_node ($uid) {
+		if (empty($uid))
+			$uid = get_current_user_id();
+
+		$query = array();
+   	$query['#select'] = _table_name('afl_customer');
+  	$query['#join']  = array(
+      _table_name('users') => array(
+        '#condition' => '`'._table_name('users').'`.`ID`=`'._table_name('afl_customer').'`.`uid`'
+      )
+    );
+   	$query['#where'] = array(
+      '`'._table_name('afl_customer').'`.`uid`='.$uid.''
+    );
+    $result = db_select($query, 'get_row');
+    return $result;
+	}
+/*
+ * --------------------------------------------------------------------
+ * Get current sponsor of a customer
+ * --------------------------------------------------------------------
+*/
+ function _get_current_customer_sponsor( $customer_uid = '' ) {
+ 	$node = afl_customer_node($customer_uid);
+ 	if ( !empty($node)) {
+ 		if ( !empty( $node->referrer_uid)) {
+ 			return $node->referrer_uid;
+ 		}
+ 	}
+ 	return FALSE;
+ }

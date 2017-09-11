@@ -266,11 +266,15 @@
 			private function includes() {
 			/* 
 			 * -----------------------------------------------------------------------------------------------
-			 * Hereload library files
+			 * Here load library files
 			 * -----------------------------------------------------------------------------------------------
 			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'libraries/Pagination.php';
-				
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * Common plugin needed functions
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.common.php';
 
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-queue-processing-functions.php';
@@ -278,16 +282,28 @@
 				//common functions callback
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
 
-				//system permissions
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * custom permissions for menu access, this will listed in the custom permission table
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'eps-permissions.php';
 
-				//all the hooks
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * wordpress action hook
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-hooks.php';
 
 				//query variables
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-query.php';
+				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-query.php';
 
-				//required conditions when install
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * required conditions when install 
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/install.php';
 
 				//required conditions when un-install
@@ -297,15 +313,27 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/afl_payment_funs.php';
 
 				//route
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-route-url.php';
+				//require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-route-url.php';
 
-				//afl dashboard menus registration
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-dashboard-menus.php';
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * afl dashboard menus registration
+			 * -----------------------------------------------------------------------------------------------
+			*/
+				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-dashboard-menus.php';
 
-				//permissions
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * Wordpress permissions
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-capabilities.php';
 
-				//admin menus
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * admin menus
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/class-menu.php';
 
 			/* 
@@ -329,6 +357,7 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-business-profit-report.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-advanced-queue-conf.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-recent-log-messages.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/admin/menu_callback/menu-bonus-summary-report.php';
 			/* 
 			 * -----------------------------------------------------------------------------------------------
 			 * common files callback
@@ -336,18 +365,38 @@
 			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.common.php';
 
-				//install tables
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * install tables
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class.tables.php';
 
-				//eps-afl-dashboard menus templates
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * eps-afl-dashboard menus templates
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-template-functions.php';
 				//database 
 				
-				//page function
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * page function
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-page-functions.php';
-				//ajax callbacks
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * ajax callbacks
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-ajax-callbacks.php';
-				//member registration
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * member registration
+			 * -----------------------------------------------------------------------------------------------
+			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-registration.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-customer-registration.php';
 			/* 
@@ -390,7 +439,7 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
 
 				//integrations
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/integrations/class-woocommerce.php';
+				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/integrations/class-woocommerce.php';
 
 
 			/* 
@@ -442,12 +491,13 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/menu_callback/menu-user-remote-get.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/api-ajax-callbacks.php';
 				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/eps-remote-users-background-process.php';
-				
-				
 
-				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/api-remote-user-embedd-cron-callback.php';
-				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/example-plugin.php';
-				
+			/*
+			 * -----------------------------------------------------------------------------------------------
+			 * Individual status functions
+			 * -----------------------------------------------------------------------------------------------
+			*/
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-individual-status-functions.php';
 
 			}
 			

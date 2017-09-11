@@ -54,11 +54,15 @@
 			}
 
 			if ( is_object( $wp_roles ) ) {
-				/* ------ Site Admin Permission capabilities ------------*/
-
+				/*
+				 * -------------------------------------------------------
+				 * Give all custom permission to the administrator
+				 * -------------------------------------------------------
+				*/
 					$all_permissions = custom_permissions();
 					foreach ($all_permissions as $key => $value) {
 						$wp_roles->add_cap( 'administrator', $key);
+						afl_variable_set($permission_name.'_administrator');
 					}
 			}
 		}

@@ -721,12 +721,14 @@
 	 	$query['#select'] 		= _table_name('afl_user_downlines');
 	 	$query['#group_by'] 	= array('level');
 	 	$query['#where']    	= array(
-			'`uid` ='.$uid
+			'`uid` ='.$uid,
+			'`level`<='.$depth
 	 	);
 	 	$query['#expression'] = array(
 		 'COUNT(downline_user_id) as count',
 		 'POWER('.$width.', level) as total'
 	 	);
+
 	 	$res = db_select($query, 'get_results');
 
 		if (count($res)<$depth) {

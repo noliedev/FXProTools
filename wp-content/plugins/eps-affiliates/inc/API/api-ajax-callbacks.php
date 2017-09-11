@@ -1,94 +1,4 @@
 <?php
-
-/*
- * ------------------------------------------------------------
- * invoke get user and add to our system api call
- * ------------------------------------------------------------
-*/
- add_action('wp_ajax_api_embedd_remote_user', 'api_embedd_remote_user_callback');
- add_action('wp_ajax_nopriv_api_embedd_remote_user', 'api_embedd_remote_user_callback');
-
-	function api_embedd_remote_user_callback () {
-
-		// Start the session.
-		session_start();
-		// The example total processes.
-		$url 	= afl_variable_get('remote_user_get_url', '');
-		$url 	= 'http://localhost/test.php';
-		// $res = file_get_contents($url);
-	  $ch 	= curl_init($url);
-	  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	  $response = curl_exec($ch);
-	  $user 		= json_decode($response);
-
-		$count 		= count((array)$user);
-		curl_close($ch);
-		
-		//Get the list count of api users
-		$total = 5;
-
-
-
-		// The array for storing the progress.
-		$arr_content = array();
-		// Loop through process
-		for($i=1; $i<=$total; $i++){
-		  // Calculate the percentatage.
-		  $percent = intval($i/$total * 100);
-		  
-	  	// Put the progress percentage and message to array.
-		  $arr_content['percent'] = $percent;
-		  $arr_content['message'] = $i . " row(s) processed.";
-		  
-
-		// Write the progress into file and serialize the PHP array into JSON format.
-		  // The file name is the session id.
-		  file_put_contents(EPSAFFILIATE_PLUGIN_DIR."/inc/API/tmp/". session_id() . ".txt", json_encode($arr_content));
-		  
-
-		// Sleep one second so we can see the delay
-		  sleep(1);
-		}
-		die();
-	}
-/*
- * ------------------------------------------------------------
- * invoke get user and add to our system api call
- * ------------------------------------------------------------
-*/
- add_action('wp_ajax_api_embedd_remote_user_refresh', 'api_embedd_remote_user_refresh_callback');
- add_action('wp_ajax_nopriv_api_embedd_remote_user_refresh', 'api_embedd_remote_user_refresh_callback');
-
- function api_embedd_remote_user_refresh_callback () {
- 	// Start the session.
-		session_start();
- 	// The file has JSON type.
-	header('Content-Type: application/json');
-	// Prepare the file name from the query string.
-	// Don't use session_start here. Otherwise this file will be only executed after the process.php execution is done.
-	$file = str_replace(".", "", session_id());
-	$file = EPSAFFILIATE_PLUGIN_DIR."inc/API/tmp/" . session_id() . ".txt";
-	
-	// Make sure the file is exist.
-	if (file_exists($file)) {
-	  // Get the content and echo it.
-	  $text = file_get_contents($file);
-	  echo $text;
-	  
-
-	// Convert to JSON to read the status.
-	  $obj = json_decode($text);
-	  // If the process is finished, delete the file.
-	  if ($obj->percent == 100) {
-	    unlink($file);
-	  }
-	}
-	else {
-	  echo json_encode(array("percent" => null, "message" => null,"file"=>$file));
-	}
-	die();
- }
-
 /*
  * ------------------------------------------------------------
  * Get the users API
@@ -97,7 +7,9 @@
 	add_action('wp_ajax_api_embedd_remote_user_access', 'api_embedd_remote_user_access_callback');
 	add_action('wp_ajax_nopriv_api_embedd_remote_user_access', 'api_embedd_remote_user_access_callback');
 	function api_embedd_remote_user_access_callback () {
-	 		$url 	= afl_variable_get('remote_user_get_url', '');
+			$startId 	= afl_variable_get('remote_user_get_last_get_id', 1); 
+	 		$url 			= afl_variable_get('remote_user_get_url', '').'?startId='.$startId;
+
 			// $res = file_get_contents($url);
 		  $ch 	= curl_init($url);
 		  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -242,15 +154,29 @@
 		 	$queue_data['runs'] 			= 0;
 		 	
 		 	global $wpdb;
-		 	$wpdb->insert(
+		 	$insid = $wpdb->insert(
 		 		_table_name('afl_processing_queue'),
 		 		$queue_data
 		 	);
+		 	if ( $insid ) {
+		 		if ( !empty( $data['userDbId'] ) ){
+			 		afl_variable_set('remote_user_get_last_get_id', $data['userDbId']);
+		 		}
+			 	echo 'success';
+		 	} else {
+		 		echo 'Queue Insertion Error';
+		 	}
+
+		 	die();
 	 	}
 	 	
  	}
  }
-
+/*
+ * ------------------------------------------------------------
+ * Check already add the quey for the data unique id
+ * ------------------------------------------------------------
+*/
  function _check_queue_already_add ($data = array()	) {
  	$query = array();
  	$query['#select'] = _table_name('afl_processing_queue');

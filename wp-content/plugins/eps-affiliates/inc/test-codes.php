@@ -7,10 +7,7 @@ function afl_admin_test_codes(){
 }
 
 function afl_test_codes_callback () {
-  require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/API/api-remote-user-embedd-cron-callback.php';
-    if (function_exists('_process_embedd_users_queue')) {
-      _process_embedd_users_queue();
-    }
+ do_action('eps_affiliates_become_distributor_from_customer',21435);
 }
 
 

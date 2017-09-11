@@ -315,8 +315,11 @@ class Eps_affiliates_registration {
 					//get parent position 
 					$parent = $this->afl_get_relative_parent($relative_position,$level,$sponsor);
 					
-				 	//insert the genealogy details 
-				 	
+				/*
+			 	 * ---------------------------------------------------------------------- 
+			 	 * insert the genealogy details 
+			 	 * ---------------------------------------------------------------------- 
+			 	*/
 				 	$ins_data = array();
 				 	$ins_data['uid'] 								= $post_data['uid'];
 				 	$ins_data['referrer_uid'] 			= $post_data['sponsor_uid'];
@@ -336,8 +339,22 @@ class Eps_affiliates_registration {
 				 	$ins_id = $wpdb->insert($table_name, $ins_data);
 
 
-				 	//insert the position details to tree last insertion position
+				/*
+			 	 * ---------------------------------------------------------------------- 
+			 	 * insert the position details to tree last insertion position
+			 	 * ---------------------------------------------------------------------- 
+			 	*/
 				 	_update_inserted_positon($post_data['sponsor_uid'], $level, $newly_added_pos);
+
+			 	/*
+			 	 * ---------------------------------------------------------------------- 
+			 	 * calculate the fast start bonus
+			 	 * ---------------------------------------------------------------------- 
+			 	*/
+				 	require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/plan/matrix/fast-start-bonus-calc.php';
+				 	if ( function_exists('calculate_distributor_fast_start_bonus')) {
+				 		calculate_distributor_fast_start_bonus( $post_data['sponsor_uid'], $post_data['uid'] );
+				 	}
 
 				}
 			}

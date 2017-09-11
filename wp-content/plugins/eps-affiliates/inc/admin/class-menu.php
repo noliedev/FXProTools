@@ -69,7 +69,7 @@
 					'#parent'					=> 'affiliate-eps-system-configurations',
 					'#page_title'			=> __( 'Recent log messages', 'eps-affiliates' ), 
 					'#menu_title' 		=> __( 'Recent log messages', 'eps-affiliates' ), 
-					'#access_callback'=> 'system_settings', 
+					'#access_callback'=> 'recent_log_messages', 
 					'#menu_slug' 			=> 'affiliate-eps-recent-log-messages', 
 					'#page_callback' 	=> 'afl_admin_recent_log_messages', 
 				);
@@ -364,7 +364,7 @@
 					'#page_title'			=> __( 'Business', 'Business' ),
 					'#menu_title' 		=> __( 'Business Summary', 'Business Summary' ),
 					'#access_callback'=> 'business_transactions', 
-					'#menu_slug' 			=> 'affiliate-eps-business-summary', 
+					'#menu_slug' 			=> 'affiliate-eps-business', 
 					'#page_callback' 	=> 'afl_business_summary',
 				);
 				
@@ -663,6 +663,14 @@
 					'#menu_slug' 			=> 'affiliate-eps-team-purchases-reports', 
 					'#page_callback' 	=> 'afl_team_purchases_overview',
 					'#weight' 				=> 8, 
+				);
+				$menu['bonus_summary'] = array(
+					'#parent' 				=> 'affiliate-eps-reports',
+					'#page_title'			=> __( 'Bonus Summary', 'Bonus Summary' ),
+					'#menu_title' 		=> __( 'Bonus Summary', 'Bonus Summary' ),
+					'#access_callback'=> 'afl_bonus_summary_report', 
+					'#menu_slug' 			=> 'affiliate-eps-bonus-summary-report', 
+					'#page_callback' 	=> 'afl_bonus_summary_report',
 				);
 				afl_system_admin_menu($menu);
 		 }

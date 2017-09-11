@@ -1,8 +1,13 @@
 <?php 
    /* get all the downlines of this user */
+
    $uid = get_current_user_id();
    if ( eps_is_admin() ){
     $uid = afl_root_user();
+   }
+
+   if ( isset($_GET['uid'])){
+    $uid = $_GET['uid'];
    }
    // pr($uid);
    $query = array();
@@ -55,6 +60,7 @@
     ksort($this_user_downlines);
     
     $plan_width = afl_variable_get('matrix_plan_width',3);
+
 if (!empty($parent)) :
   ?>
 <section class="genealogy-hierarchy">
@@ -121,4 +127,10 @@ if (!empty($parent)) :
             </div>
         </div>
     </section>
+<?php else : ?>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        Unable to view genealogy.
+      </div>
+    </div>
 <?php endif;

@@ -3,144 +3,60 @@
 
 :focus {outline: none;}
 .row {margin-right: 0;margin-left: 0;}
+
 .side-menu {width: 300px;height: 100%;background-color: #f8f8f8;border-right: 1px solid #e7e7e7;}
 .side-menu .navbar {border: none;}
 .side-menu .navbar-header {width: 100%;border-bottom: 1px solid #e7e7e7;}
 .side-menu .navbar-nav .active a {background-color: transparent;margin-right: -1px;border-right: 5px solid #e7e7e7;}
 .side-menu .navbar-nav li {display: block;width: 100%;border-bottom: 1px solid #e7e7e7;}
-.side-menu .navbar-nav li a {
-  padding: 15px;
+.side-menu .navbar-nav li a {padding: 15px;}
+.side-menu .navbar-nav li a .glyphicon {padding-right: 10px;}
+.side-menu #dropdown {border: 0;margin-bottom: 0;border-radius: 0;background-color: transparent;box-shadow: none;}
+.side-menu #dropdown .caret {float: right;margin: 9px 5px 0;}
+.side-menu #dropdown .indicator {float: right;}
+.side-menu #dropdown > a {border-bottom: 1px solid #e7e7e7;}
+.side-menu #dropdown .panel-body {padding: 0;background-color: #f3f3f3;}
+.side-menu #dropdown .panel-body .navbar-nav {  width: 100%;}
+.side-menu #dropdown .panel-body .navbar-nav li {padding-left: 15px;border-bottom: 1px solid #e7e7e7;}
+.side-menu #dropdown .panel-body .navbar-nav li:last-child {border-bottom: none;}
+.side-menu #dropdown .panel-body .panel > a {margin-left: -20px; padding-left: 35px;}
+.side-menu #dropdown .panel-body .panel-body {margin-left: -15px;}
+.side-menu #dropdown .panel-body .panel-body li {padding-left: 30px;}
+.side-menu #dropdown .panel-body .panel-body li:last-child {border-bottom: 1px solid #e7e7e7;}
+.side-menu #search-trigger {background-color: #f3f3f3;border: 0;border-radius: 0;position: absolute;top: 0;right: 0;padding: 15px 18px;
 }
-.side-menu .navbar-nav li a .glyphicon {
-  padding-right: 10px;
-}
-.side-menu #dropdown {
-  border: 0;
-  margin-bottom: 0;
-  border-radius: 0;
-  background-color: transparent;
-  box-shadow: none;
-}
-.side-menu #dropdown .caret {
-  float: right;
-  margin: 9px 5px 0;
-}
-.side-menu #dropdown .indicator {
-  float: right;
-}
-.side-menu #dropdown > a {
-  border-bottom: 1px solid #e7e7e7;
-}
-.side-menu #dropdown .panel-body {
-  padding: 0;
-  background-color: #f3f3f3;
-}
-.side-menu #dropdown .panel-body .navbar-nav {
-  width: 100%;
-}
-.side-menu #dropdown .panel-body .navbar-nav li {
-  padding-left: 15px;
-  border-bottom: 1px solid #e7e7e7;
-}
-.side-menu #dropdown .panel-body .navbar-nav li:last-child {
-  border-bottom: none;
-}
-.side-menu #dropdown .panel-body .panel > a {
-  margin-left: -20px;
-  padding-left: 35px;
-}
-.side-menu #dropdown .panel-body .panel-body {
-  margin-left: -15px;
-}
-.side-menu #dropdown .panel-body .panel-body li {
-  padding-left: 30px;
-}
-.side-menu #dropdown .panel-body .panel-body li:last-child {
-  border-bottom: 1px solid #e7e7e7;
-}
-.side-menu #search-trigger {
-  background-color: #f3f3f3;
-  border: 0;
-  border-radius: 0;
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 15px 18px;
-}
-.side-menu .brand-name-wrapper {
-  min-height: 50px;
-}
-.side-menu .brand-name-wrapper .navbar-brand {
-  display: block;
-}
+.side-menu .brand-name-wrapper {min-height: 50px;}
+.side-menu .brand-name-wrapper .navbar-brand {  display: block;}
 
 /* Main body section */
-.side-body {
-  margin-left: 310px;
-}
+.side-body { margin-left: 310px;}
 
 .menu-dropdown-ul{width: 100%;}
 .side-menu nav{margin-bottom: 0px;}
-
-
-.label-style {
- font-weight: bold;
-}
-.bg-gray {
- background-color: #ccc;
-}
+.label-style { font-weight: bold;}
+.bg-gray { background-color: #ccc;}
 .region-title-extra > .block{display: inline-block;}
+
 /* ------------- Select box style ------------------ */
-.select-style {
-    border: 1px solid #ccc;
-    /* width: 120px; */
-    border-radius: 3px;
-    overflow: hidden;
-    background: #fafafa url("img/icon-select.png") no-repeat 90% 50%;
-}
+.select-style {border: 1px solid #ccc;/* width: 120px; */ border-radius: 3px; overflow: hidden;background: #fafafa url("img/icon-select.png") no-repeat 90% 50%;}
+.select-style select { padding: 5px 8px;/* width: 130%; */border: none;box-shadow: none;background: transparent;background-image: none;
+    -webkit-appearance: none;}
+.select-style select:focus {outline: none;}
 
-.select-style select {
-    padding: 5px 8px;
-    /* width: 130%; */
-    border: none;
-    box-shadow: none;
-    background: transparent;
-    background-image: none;
-    -webkit-appearance: none;
-}
-
-.select-style select:focus {
-    outline: none;
-}
 /* ------------------ Holding tanks ------------------------ */
 .holding-tank-profiles .person{min-height: 262px;}
 .holding-tank-profiles li{text-align: center;cursor: pointer; transition: box-shadow .3s;padding: 2px;}
 .holding-tank-profiles li:hover{box-shadow: 0 5px 15px rgba(0,0,0,0.3);transition: opacity 0.9s ease-in-out;}
-.holding-tank-profiles .person > img{
-  background-color: #ccc;
-    border: 5px solid #ccc;
-    border-radius: 50%;
-    /* height: 80px; */
-    overflow: hidden;
-}
+.holding-tank-profiles .person > img{background-color: #ccc; border: 5px solid #ccc;border-radius: 50%;/* height: 80px; */overflow: hidden;}
 .holding-tank-profiles .name{padding: 3px;border: 3px solid #ccc;margin: 11px 25%;}
 
 /* ---------------- Progress bar ------------------------- */
-.progress {
-      display: block;
-      text-align: center;
-      height: 3px;
-      background: red;
-      transition: width .3s;
-  }
-  .progress.hide {
-      opacity: 0;
-      transition: opacity 1.3s;
-  }
-  .table-responsive table thead{background: #e5e5e5;}
-  .my-table-center table thead tr th {text-align: center;}
-  .my-table-center th {text-align: center;}
-  .my-table-center tr {text-align: center;}
+.progress {display: block;text-align: center;height: 3px;background: red;transition: width .3s;}
+.progress.hide {opacity: 0;transition: opacity 1.3s;}
+.table-responsive table thead{background: #e5e5e5;}
+.my-table-center table thead tr th {text-align: center;}
+.my-table-center th {text-align: center;}
+.my-table-center tr {text-align: center;}
 
 /* ---------------- Progress bar ------------------------- */
 
@@ -201,7 +117,6 @@
 .user-level {background-color: rgba(0, 0, 0, 0.5);border-radius: 50% 50% 50% 50%;color: #FFFFFF;display: block;height: 70px;left: 3px;position: absolute;text-align: center;top: 3px;width: 70px;}
 .images_wrapper:hover .user-level {display:none;}
 .pop-up-content{ padding: 8px !important;}
-
 .no-bg:hover {background: none !important;}
 /*  ------------------ Tree user details tootip ------------------------------------ */
 
@@ -218,80 +133,27 @@
 /*  ------------------ e-wallet summary Over view ----------------------------------- */
 
 #afl-widgets-afl-dashboard-level-user-counts .afl-user-count-panel{border: 1px solid #23b7e5;} 
-.wp-list-table.affiliates tfoot{
-    display:none;
-}
+.wp-list-table.affiliates tfoot{display:none;}
+ #progress {width: 100%;border: 1px solid #aaa;height: 20px;/* border-radius: 20px; */padding: 1px;}
+#progress .bar {background-color: #ccc;height: 16px;border-radius: 20px;}
+.wp-list-table.epin-affiliates tfoot{display:none;}
+.bigger-lable{font-size: 100%;}
+  
 
- #progress {
-  width: 100%;
-  border: 1px solid #aaa;
-  height: 20px;
-  /* border-radius: 20px; */
-  padding: 1px;
-}
-#progress .bar {
-  background-color: #ccc;
-  height: 16px;
-  border-radius: 20px;
-}
-.wp-list-table.epin-affiliates tfoot{
-    display:none;
-}
-.bigger-lable{
-  font-size: 100%;
-}
   /* small screen */
 @media (max-width: 768px) {
-  .side-menu {
-    position: relative;
-    width: 100%;
-    height: 0;
-    border-right: 0;
-    border-bottom: 1px solid #e7e7e7;
-  }
-  .side-menu .brand-name-wrapper .navbar-brand {
-    display: inline-block;
-  }
+  .side-menu {position: relative;width: 100%;height: 0;border-right: 0; border-bottom: 1px solid #e7e7e7;}
+  .side-menu .brand-name-wrapper .navbar-brand {display: inline-block;}
  
-  /* Slide side menu*/
   /* Add .absolute-wrapper.slide-in for scrollable menu -> see top comment */
-  .side-menu-container > .navbar-nav.slide-in {
-    -moz-animation: slidein 300ms forwards;
-    -o-animation: slidein 300ms forwards;
-    -webkit-animation: slidein 300ms forwards;
-    animation: slidein 300ms forwards;
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-  }
-  .side-menu-container > .navbar-nav {
-    /* Add position:absolute for scrollable menu -> see top comment */
-    position: fixed;
-    left: -300px;
-    width: 300px;
-    top: 43px;
-    height: 100%;
-    border-right: 1px solid #e7e7e7;
-    background-color: #f8f8f8;
-    -moz-animation: slideout 300ms forwards;
-    -o-animation: slideout 300ms forwards;
-    -webkit-animation: slideout 300ms forwards;
-    animation: slideout 300ms forwards;
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-  }
+  .side-menu-container > .navbar-nav.slide-in {-moz-animation: slidein 300ms forwards;-o-animation: slidein 300ms forwards;-webkit-animation: slidein 300ms forwards;animation: slidein 300ms forwards;-webkit-transform-style: preserve-3d;transform-style: preserve-3d;}
+  .side-menu-container > .navbar-nav {/* Add position:absolute for scrollable menu -> see top comment */position: fixed;left: -300px;
+    width: 300px;top: 43px;height: 100%;border-right: 1px solid #e7e7e7;background-color: #f8f8f8;-moz-animation: slideout 300ms forwards;-o-animation: slideout 300ms forwards;-webkit-animation: slideout 300ms forwards;animation: slideout 300ms forwards;
+    -webkit-transform-style: preserve-3d;transform-style: preserve-3d;}
 
   /* Hamburger */
-  .navbar-toggle {
-    border: 0;
-    float: left;
-    padding: 18px;
-    margin: 0;
-    border-radius: 0;
-    background-color: #f3f3f3;
-  }
+  .navbar-toggle {border: 0;float: left;padding: 18px;margin: 0;border-radius: 0;background-color: #f3f3f3;}
 
   /* Dropdown tweek */
-  #dropdown .panel-body .navbar-nav {
-    margin: 0;
-  }
+  #dropdown .panel-body .navbar-nav {margin: 0;}
 }

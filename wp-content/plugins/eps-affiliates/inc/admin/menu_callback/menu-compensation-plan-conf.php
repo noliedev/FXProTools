@@ -17,14 +17,18 @@ function afl_admin_compensation_plan_configuration() {
  * ------------------------------------------------------------------
 */
 	function afl_admin_compensation_plan_config_tabs () {
-		$matrix_active = $basic_active = '';
+		$matrix_active = $basic_active = $fsb_active = '';
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'basic';  
+		
 		switch ($active_tab) {
 			case 'basic':
 					$basic_active  = 'active';
 			break;
 			case 'matrix-compensation':
 					$matrix_active  = 'active';
+			break;
+			case 'fast-start-bonus':
+					$fsb_active  = 'active';
 			break;
 		}
 		  //here render the tabs
@@ -37,6 +41,9 @@ function afl_admin_compensation_plan_configuration() {
 		  echo '<li class="'.$matrix_active.'">
 		            	<a href="?page=affiliate-eps-compensation-plan-configurations&tab=matrix-compensation" >Matrix Compensation</a>  
 		          </li>';
+		  echo '<li class="'.$fsb_active.'">
+		            	<a href="?page=affiliate-eps-compensation-plan-configurations&tab=fast-start-bonus" >Fast Start Bonus</a>  
+		          </li>';
 
 		  echo '</ul>';
 
@@ -46,6 +53,9 @@ function afl_admin_compensation_plan_configuration() {
 		  	break;
 		  	case 'matrix-compensation':
 		  		afl_admin_matrix_compensation_config_();
+		  	break;
+		  	case 'fast-start-bonus':
+		  		afl_admin_fsb_compensation_config_();
 		  	break;
 		  }
 
@@ -79,44 +89,59 @@ function afl_admin_compensation_plan_config_(){
 	$table['#header'] 		= array('Plan Configuration');
 
 	/*--------------------- Rows ---------------------*/
-
-	$rows[0]['label_2'] = array(
+	$i = 0;
+	$rows[$i]['label_2'] = array(
 		'#type' => 'label',
 		'#title'=> 'Width of matrix',
  	);
-	$rows[0]['matrix_plan_width'] = array(
+	$rows[$i]['matrix_plan_width'] = array(
 		'#type' 					=> 'select',
 		'#attributes'			=>array('form-select','select'),
 		'#options' 				=> afl_get_levels(),
 		'#default_value' 	=> afl_variable_get('matrix_plan_width',3),
  	);
- 	$rows[1]['label_3'] = array(
+ 	$i++;
+ 	$rows[$i]['label_3'] = array(
 		'#type' => 'label',
 		'#title'=> 'Height of matrix',
  	);
-	$rows[1]['matrix_plan_height'] = array(
+	$rows[$i]['matrix_plan_height'] = array(
 		'#type' 					=> 'select',
 		
 		'#options' 				=> afl_get_levels(),
 		'#default_value' 	=> afl_variable_get('matrix_plan_height',3),
  	);
-	$rows[2]['label_1'] = array(
+ 	$i++;
+	$rows[$i]['label_1'] = array(
 		'#type' => 'label',
 		'#title'=> 'Total number of ranks',
 	);
-	$rows[2]['number_of_ranks'] = array(
+	$rows[$i]['number_of_ranks'] = array(
 		'#type' 					=> 'select',
 		'#attributes'			=>array('form-select','select'),
 		'#options' 				=> afl_get_levels(),
 		'#default_value' 	=> afl_variable_get('number_of_ranks',1),
  	);
-
-	/*---- Holding tank exoiry days*/
- 	$rows[3]['label_1'] = array(
+	/* Enable Holding Expiry */
+ 	$i++;
+	$rows[$i]['label_1'] = array(
+		'#type' => 'label',
+		'#title'=> 'Holding tank Expiry Autoplace',
+	);
+	
+	$rows[$i]['holding_tank_expiry_autoplace'] = array(
+		'#type' 					=> 'checkbox',
+		// '#title'					=> 'Enable this, member will be automatically placed after expired',
+		'#default_value' 	=> afl_variable_get('holding_tank_expiry_autoplace',FALSE),
+		'#description'		=> 'Automatically place user after holding days expired'
+ 	);
+	/*---- Holding tank expiry days*/
+ 	$i++;
+ 	$rows[$i]['label_1'] = array(
 		'#type' => 'label',
 		'#title'=> 'Holding tank holding days',
 	);
-	$rows[3]['holding_tank_holding_days'] = array(
+	$rows[$i]['holding_tank_holding_days'] = array(
 		'#type' 					=> 'text',
 		'#default_value' 	=> afl_variable_get('holding_tank_holding_days',7),
  	);
@@ -160,9 +185,19 @@ function afl_admin_compensation_plan_form_validation($POST){
  * ----------------------------------------------------------------------------
 */
 function afl_admin_compensation_plan_form_submit($POST){
+	$checking_vars	 = array();
+	$checking_vars[] = 'holding_tank_expiry_autoplace';
+
 	foreach ($POST as $key => $value) {
-				afl_variable_set($key, maybe_serialize($value));
-			}
+		afl_variable_set($key, maybe_serialize($value));
+	}
+
+	foreach ($checking_vars as $key ) {
+		if ( !array_key_exists($key, $POST)) {
+			afl_variable_set($key, '');
+		}	
+	}
+
 	echo wp_set_message(__('Configuration has been saved successfully.'), 'success');
 
 	}
@@ -337,3 +372,92 @@ function afl_admin_compensation_plan_form_submit($POST){
 
  	echo wp_set_message('Configuration has been saved successfully', 'success');
  }
+
+
+
+
+
+
+
+
+
+/*
+ * ----------------------------------------------------------------------------
+ *  Fast start bonus configs
+ * ----------------------------------------------------------------------------
+*/
+ function afl_admin_fsb_compensation_config_ () {
+
+ 	if ( isset($_POST['submit'])) {
+ 		$post = $_POST;
+ 		unset($_POST['submit']);
+ 		if ( afl_admin_fsb_compensation_config_validation($_POST)) {
+ 			afl_admin_fsb_compensation_config_submit($_POST);
+ 		}
+ 	}
+
+ 	$form = array();
+	$form['#action'] = $_SERVER['REQUEST_URI'];
+ 	$form['#method'] = 'post';
+ 	$form['#prefix'] ='<div class="form-group row">';
+ 	$form['#suffix'] ='</div>';
+
+ 	$form['enable_fast_start_bonus'] = array(
+ 		'#title' 	=> 'Enable Fast start Bonus',
+ 		'#type'  	=> 'checkbox',
+ 		'#default_value'=> !empty($post['enable_fast_start_bonus']) ? $post['enable_fast_start_bonus'] : afl_variable_get('enable_fast_start_bonus',''),
+  );
+
+  $form['fast_start_bonus_amount'] = array(
+ 		'#title' 	=> 'Fast start Bonus Amount',
+ 		'#type'  	=> 'text',
+ 		'#default_value'=> !empty($post['fast_start_bonus_amount']) ? $post['fast_start_bonus_amount'] : afl_variable_get('fast_start_bonus_amount',''),
+ 		'#required'	=> TRUE
+  );
+
+  $form['submit'] = array(
+ 		'#type' => 'submit',
+ 		'#value' => 'Save configuration'
+ 	);
+ 	echo afl_render_form($form);
+ }
+/*
+ * ----------------------------------------------------------------------------
+ *  Fast start bonus configs validation
+ * ----------------------------------------------------------------------------
+*/
+	function afl_admin_fsb_compensation_config_validation($form_state = array()) {
+		$rules = array();
+		//create rules
+		$rules[] = array(
+	 		'value'=> $form_state['fast_start_bonus_amount'],
+	 		'name' =>'Fast start bonus amount',
+	 		'field' =>'fast_start_bonus_amount',
+	 		'rules' => array(
+	 			'rule_required',
+	 			'rule_is_numeric'
+	 		)
+	 	);
+	 	$resp  = set_form_validation_rule($rules);
+	 	return $resp;
+	}
+/*
+ * ----------------------------------------------------------------------------
+ *  Fast start bonus configs submit
+ * ----------------------------------------------------------------------------
+*/
+	function afl_admin_fsb_compensation_config_submit ( $form_state = array()) {
+		$checked_variables = array(
+			'enable_fast_start_bonus'
+		);
+		//check the checkbox set or not, if not unset the check boxes
+		foreach ($checked_variables as $key ) {
+			if ( !array_key_exists($key, $form_state)) {
+				afl_variable_set( $key, '' );
+			}
+		}
+		foreach ($form_state as $key => $value) {
+			afl_variable_set($key, $value);
+		}
+		wp_set_message('Configuration has been saved successfully', 'success');
+	}

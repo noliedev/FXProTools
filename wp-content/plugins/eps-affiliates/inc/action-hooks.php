@@ -79,19 +79,33 @@ function common_scripts_load(){
  * ------------------------------------------------------------
 */
 add_action( 'admin_notices', 'eps_affiliates_admin_notices' );
-function eps_affiliates_admin_notices () {
-	// if (!afl_variable_get('root_user')) {
-	// 	$class = 'notice notice-error';
-	// 	$message = __( 'Root user ! Currently you are not choose a root user.You need to select a root user for the system', 'sample-text-domain' );
-	// 	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message )  );
 
-	// }
-	// //notification for set the permissions
-	// if (!afl_variable_get('configure_role_and_permissions')) {
-	// 	$class = 'notice notice-info';
-	// 	$message = __( 'Roles and Permission : Please give the appropriate permission to each user based on their role', 'sample-text-domain' );
-	// 	printf( '<div class="%1$s"><p>%2$s<a href="%3$s"> Goto settings</a></p></div>', esc_attr( $class ), esc_html( $message ) ,'?page=affiliate-eps-role-config-settings' );
-	// }
+function eps_affiliates_admin_notices () {
+	/*
+	 * -----------------------------------------------------------
+	 * Check the root user has been set for the system
+	 * if not display an error message with root user set 
+	 * configuration  link
+	 * -----------------------------------------------------------
+	*/
+		if (!afl_variable_get('root_user')) {
+			$class = 'notice notice-error';
+			$message = __( 'Root user ! Currently you are not choose a root user.You need to select a root user for the system', 'sample-text-domain' );
+			printf( '<div class="%1$s"><p>%2$s<a href="%3$s"> Goto settings</a></p></div>', esc_attr( $class ), esc_html( $message ) ,admin_url('admin.php?page=affiliate-eps-genealogy-configurations' ));
+
+		}
+	/*
+	 * -----------------------------------------------------------
+	 * Check the permission give once, if not an error notification
+	 * message will be display with the permission configuration 
+	 * link
+	 * -----------------------------------------------------------
+	*/
+		if (!afl_variable_get('eps_afl_is_configur_permissions')) {
+			$class = 'notice notice-error';
+			$message = __( 'Roles and Permission : Please give the appropriate permission to each user based on their role', 'sample-text-domain' );
+			printf( '<div class="%1$s"><p>%2$s<a href="%3$s"> Goto settings</a></p></div>', esc_attr( $class ), esc_html( $message ) ,admin_url('admin.php?page=affiliate-eps-role-config-settings' ));
+		}
 }
 /*
  * ------------------------------------------------------------
@@ -355,6 +369,30 @@ function eps_affiliates_admin_notices () {
  		}
  	}
  }
+
+
+/*
+ * ------------------------------------------------------------
+ * Check user account is blocked or not
+ * ------------------------------------------------------------
+*/
+ add_filter('authenticate', 'eps_affiliates_user_authentication', 9999);
+ function eps_affiliates_user_authentication($user) {
+	  $status = get_class($user);
+
+	  if($status == 'WP_User') {
+			$node 	= afl_genealogy_node($user->data->ID);
+      $locking_data = !empty($node->status) ? $node->status : 1;
+      if( !$locking_data ) {
+          $message = Apply_Filters('account_lock_message', SPrintF('<strong>%s</strong> %s', 'Error:', 'Your account has been blocked.Could not access. '), $user);
+          return new \WP_Error('authentication_failed', $message);
+      } else {
+        return $user;
+      }
+	  }
+	  return $user;
+  }
+
 /*
  * ------------------------------------------------------------
  * Style Applied pages
@@ -413,6 +451,7 @@ function eps_affiliates_admin_notices () {
 			'affiliate-eps-team-purchases-reports',
 			'affiliate-eps-payout',
 			'affiliate-eps-payout-in-remittance',
+			'affiliate-eps-bonus-summary-report',
 			//manage members
 			'affiliate-eps-manage-members',
 			'affiliate-eps-blocked-members',

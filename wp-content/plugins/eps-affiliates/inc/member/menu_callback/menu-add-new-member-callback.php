@@ -10,8 +10,10 @@
 	 // $obj = new Eps_affiliates_registration;
 	 // $post = array('uid'=>50,'sponsor_uid'=>37);
 	 // $obj->afl_join_member($post);
- 	$post = array();
- 	if ( isset($_POST['submit'] ) ) {
+
+  try {
+  	$post = array();
+ 		if ( isset($_POST['submit'] ) ) {
         $rules = create_validation_rules($_POST);
 			 	$resp  = set_form_validation_rule($rules);
 			 	if (!$resp) {
@@ -60,20 +62,20 @@
 	        	preg_match_all('/\d+/', $sponsor, $matches);
     				$post_data['sponsor_uid'] = $matches[0];
 
-    			$business_transactions['associated_user_id'] = $user_uid;
-    			$business_transactions['uid'] = afl_root_user(); /*Business admin uid or root user id*/;
-    			$business_transactions['credit_status'] = 1;
-	        $business_transactions['category'] = 'ENROLMENT FEE';
-    			$business_transactions['additional_notes'] = 'Enrolment joining Free';
-    			$business_transactions['amount_paid'] = afl_commerce_amount($enrollment_amount);
-    			$business_transactions['notes'] = 'Enrolment Fee';
-    			$business_transactions['currency_code'] = 'USD';
-    			$business_transactions['order_id'] = 1;
+    			$business_transactions['associated_uid'] = $user_uid;
+    			$business_transactions['uid'] 					 = afl_root_user(); /*Business admin uid or root user id*/;
+    			$business_transactions['amount_paid'] 	 = $enrollment_amount;
+    			$business_transactions['order_id'] 			 = 1;
 	       	
-	       	$business_transaction = afl_business_transaction($business_transactions);
+	       	$response = apply_filters('eps_commerce_joining_package_purchase_complete',$business_transactions);
+	       	if ( !empty( $response['status']  )) {
+				 		echo wp_set_message('Member has been created successfully', 'success');
+	       	} else  {
+				 		echo wp_set_message('Unable to insert the detail to business', 'error');
+	       		afl_log('joining_package_purchase_complete',$response['error'],array('business_transactions'=>$business_transactions),LOGS_ERROR);
+	       	}
     			// $user_transaction 		= afl_member_transaction($business_transactions, TRUE);
 	         //user get the uid,if a uid get then insert to genealogy
-				 	echo wp_set_message('Member has been created successfully', 'success');
     			
 
     			//update the rank of sposnsor and uplines
@@ -81,6 +83,10 @@
 	      }
 			}
 		}
+  } catch (Exception $e) {
+  	pr($e);
+  }
+ 	
  	afl_add_new_member_form($post);
  }
 /*

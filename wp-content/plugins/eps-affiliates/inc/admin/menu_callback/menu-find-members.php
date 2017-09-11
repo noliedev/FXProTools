@@ -3,6 +3,7 @@
 	function afl_members_find () { 
 		echo afl_eps_page_header();
 		afl_content_wrapper_begin();
+		member_find_table();
 		$affiliates_table = new Eps_find_members_data_table();
 	?>
 		 
@@ -45,3 +46,49 @@
 		afl_content_wrapper_end();
 
 	}
+ function member_find_table () {
+ 	$pagination = new CI_Pagination;
+
+		$config['total_rows'] =  count(_get_members());
+		$config['base_url'] 	= '?page=affiliate-eps-recent-log-messages';
+		$config['per_page'] 	= 50;
+
+		
+		$index = !empty($_GET['page_count']) ? $_GET['page_count'] : 0;
+		$data  = _get_members($index, $config['per_page']);
+
+		$pagination->initialize($config);
+		$links = $pagination->create_links();
+
+		$table = array();
+		$table['#links']  = $links;
+		$table['#name'] 			= '';
+		$table['#title'] 			= '';
+		$table['#prefix'] 		= '';
+		$table['#suffix'] 		= '';
+		$table['#attributes'] = array(
+						'class' => array(
+								'table',
+								'table-bordered',
+								'my-table-center',
+							)
+						);
+
+		$table['#header'] = array(
+			__('#'),
+			__('Status'),
+			__('Type'),
+			__('Date'),
+			__('Message'),
+			__('Variables')		
+		);
+		$rows = array();
+		$table['#rows'] = $rows;
+
+	
+
+		echo apply_filters('afl_render_table',$table);
+ }
+  function _get_members ( $index = 0, $limit = '' ) {
+
+  }

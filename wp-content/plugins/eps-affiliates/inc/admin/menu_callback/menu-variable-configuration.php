@@ -32,6 +32,7 @@ function afl_admin_variable_configurations (){
  * ------------------------------------------------------------
 */
  function afl_admin_config_variable_form ($tabs) {
+ 		_accurate_knowledge_notice();
 	 	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'system_variables';  
 		  //here render the tabs
 		  echo '<ul class="tabs--primary nav nav-tabs">';
@@ -107,23 +108,24 @@ function afl_admin_variable_configurations (){
 	 	$editable_roles = apply_filters('editable_roles', $all_roles);
 	 	$roles_keys = '';
 	 	foreach ($editable_roles as $key => $value) {
-	  		$roles_keys .=' ,'.$key;
+	  		$roles_keys .=' | '.$key;
 	  }
  		$form['afl_var_permission_table_roles_markup'] = array(
 	 		'#type' 					=> 'markup',
-	 		'#markup' 				=> '<div class="alert alert-info" role="alert">
-  														<strong>System available Roles : </strong> 
-  														'.$roles_keys.'
-														</div>',
+	 		'#markup' 				=> '<div class="panel panel-primary">
+     													<div class="panel-body text-dark">
+     														<strong class="text-primary"> System Available Roles : </strong><strong>'.$roles_keys.'</strong>
+     													</div>
+     												</div>',
 	 	);
 	 	//Permission table roles
 	 	$form['afl_var_permission_table_roles'] = array(
 	 		'#type' 					=> 'text-area',
-	 		'#title' 					=> 'Permission Table Excluded Roles',
+	 		'#title' 					=> 'Permission Table Included Roles',
 	 		'#default_value' 	=> afl_variable_get('afl_var_permission_table_roles', ''),
 	 		'#prefix'					=> '<div class="form-group row">',
 	 		'#suffix' 				=> '</div>',
-	 		'#description'		=> __('these roles could not be displayed in the eps affiliates roles permission table')
+	 		'#description'		=> __('these roles could be displayed in the eps affiliates roles permission table')
 	 	);
 	 	$form['submit'] = array(
 	 		'#type' => 'submit',

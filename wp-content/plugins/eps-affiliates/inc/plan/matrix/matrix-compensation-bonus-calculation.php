@@ -86,7 +86,7 @@
 					   $transaction['credit_status'] 			= 1;
 					   $transaction['amount_paid'] 				= afl_commerce_amount($user_amount);
 					   $transaction['category'] 					= 'MATRIX COMPENSATION';
-					   $transaction['notes'] 							= 'Matrix compensation for '.$months_actived.' actived months having '.$count.' actived distributers';
+					   $transaction['notes'] 							= 'Matrix compensation for '.$months_actived.' actived months having '.$count.' actived distributors';
 
 					   //check already paid
 					   $query = array();

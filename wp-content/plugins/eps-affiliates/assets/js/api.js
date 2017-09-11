@@ -77,16 +77,16 @@ var i	= 0;
         timer = window.setInterval(progressBarIncrement, 1000);
       },
       success: function(data) {
-      
+       percent = parseInt((i/total_count)*100);
+       $("#progress").html('<div class="progress-bar" role="progressbar"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>');
+       $('.progress-bar').css('transition-duration','300ms');
+       $('.progress-bar').css( 'width' ,percent+'%');
+
+
       }
     });
 
-     percent = parseInt((i/total_count)*100);
-     $("#progress").html('<div class="progress-bar" role="progressbar"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>');
-     $('.progress-bar').css('transition-duration','300ms');
-     $('.progress-bar').css( 'width' ,percent+'%');
-
-
+   
   });
  }
 /*

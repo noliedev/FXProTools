@@ -49,7 +49,10 @@
 	 		$this->afl_processing_queue();
 	 		
 	 		$this->afl_log_messages();
-
+	 		
+	 		//tables for procedures
+	 		$this->tmp_table();
+	 		$this->tmp_table_down();
 
 	 	}
 	 	//downgrade the database version
@@ -64,7 +67,7 @@
 		private function afl_variables(){
 			$table_name = $this->tbl_prefix . 'afl_variable';
 
-			$sql = "CREATE TABLE IF NOT EXISTS `".$table_name."` (
+			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
 					  `name` varchar(250) NOT NULL DEFAULT 'default' COMMENT 'The name of the variable.',
 					  `merchant_id` varchar(250) NOT NULL DEFAULT 'default' COMMENT 'Merchant Id',
 					  `extra_params` varchar(250) NOT NULL DEFAULT '' COMMENT 'Extra Params',
@@ -972,8 +975,7 @@
 					  `deleted` int(10) unsigned DEFAULT '0' COMMENT 'Deleted Status',
 					  `merchant_id` varchar(250) DEFAULT 'default' COMMENT 'Merchant Id',
 					  `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
-					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name',
-					  `prefered_customer` int(11) NOT NULL DEFAULT '0' COMMENT '0 - No , 1- Yes'
+					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name'
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stores the cusomer details';";
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
@@ -992,7 +994,7 @@
  *  Processing Queue
  * -----------------------------------------------------------------------------------------------------------
 */
- 	private function afl_processing_queue(){
+ 		private function afl_processing_queue(){
 			$table_name = $this->tbl_prefix . 'afl_processing_queue';
 			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
 						  `item_id` int(10) unsigned NOT NULL COMMENT 'Primary Key: Unique item ID.',
@@ -1002,7 +1004,7 @@
 						  `data` longblob COMMENT 'The arbitrary data for the item.',
 						  `result` longblob COMMENT 'The arbitrary result for the item, only significant if advancedqueue.status <> 0',
 						  `expire` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp when the claim lease expires on the item.',
-						  `status` tinyint(4) NOT NULL DEFAULT '-1' COMMENT 'Indicates whether the item has been processed (-1 = queue, 0 = processing, 1 = successfully processed, 2 = failed).',
+						  `status` tinyint(4) NOT NULL DEFAULT '-1' COMMENT 'Indicates whether the item has been processed (-1 = queue, 0 = processing, 1 = successfully processed, 2 = re-process , 3 = Failed).',
 						  `created` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp when the item was created.',
 						  `processed` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp when the item was processed.',
 						  `runs` int(11) NOT NULL DEFAULT '0' COMMENT 'How many times the queue processed.'
@@ -1024,7 +1026,7 @@
  *  Processing Queue
  * -----------------------------------------------------------------------------------------------------------
 */
- 	private function afl_log_messages(){
+ 		private function afl_log_messages(){
 			$table_name = $this->tbl_prefix . 'afl_log_messages';
 			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
 						  `wid` int(11) NOT NULL COMMENT 'Primary Key: Unique log event ID.',
@@ -1051,4 +1053,59 @@
 			$wpdb->query( "ALTER TABLE `".$table_name."`
   				MODIFY `wid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key: Unique watchdog event ID.';" );
 		}	
+
+/*
+ * -----------------------------------------------------------------------------------------------------------
+ *  tmp table for Procedures
+ * -----------------------------------------------------------------------------------------------------------
+*/ 
+	private function tmp_table() {
+			$table_name = $this->tbl_prefix . 'tmp_table';
+			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+						  `id` int(11) NOT NULL COMMENT 'The primary identifier for the temp table.',
+						  `tid` text COMMENT 'Temp Id',
+						  `val` text COMMENT 'Temp Value',
+						  `level` int(10) unsigned DEFAULT '0' COMMENT 'Member Level',
+						  `board` int(10) unsigned DEFAULT '0' COMMENT 'Member Board'
+						) ENGINE=InnoDB AUTO_INCREMENT=761830 DEFAULT CHARSET=utf8 COMMENT='Temp Table.';";
+			
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+
+			global $wpdb;
+			//indexes
+			$wpdb->query('ALTER TABLE `'.$table_name.'`
+						  ADD PRIMARY KEY (`id`);');
+
+			//AUTO_INCREMENT
+			$wpdb->query( "ALTER TABLE `".$table_name."`
+  				MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The primary identifier for the temp table.';" );
+	}
+/*
+ * -----------------------------------------------------------------------------------------------------------
+ *  tmp table for Procedures
+ * -----------------------------------------------------------------------------------------------------------
+*/ 
+	private function tmp_table_down() {
+			$table_name = $this->tbl_prefix . 'tmp_table_down';
+			$sql = "CREATE TABLE IF NOT EXISTS `tmp_table_down` (
+						  `id` int(11) NOT NULL COMMENT 'The primary identifier for the temp table.',
+						  `tid` text COMMENT 'Temp Id',
+						  `val` text COMMENT 'Temp Value',
+						  `level` int(10) unsigned DEFAULT '0' COMMENT 'Member Level',
+						  `board` int(10) unsigned DEFAULT '0' COMMENT 'Member Board',
+						  `testField` text COMMENT 'Test Field'
+						) ENGINE=InnoDB AUTO_INCREMENT=174190 DEFAULT CHARSET=utf8 COMMENT='Temp Downline Table.';";
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+
+			global $wpdb;
+			//indexes
+			$wpdb->query('ALTER TABLE `'.$table_name.'`
+						  ADD PRIMARY KEY (`id`);');
+
+			//AUTO_INCREMENT
+			$wpdb->query( "ALTER TABLE `".$table_name."`
+  				MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The primary identifier for the temp table.';" );
+	}
 } //here closing the class

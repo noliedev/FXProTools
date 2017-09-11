@@ -31,16 +31,18 @@
 	  // 	'customer',
 	  // 	'shop_manager',
 	  // );
-	  $excluded_roles = list_extract_allowed_values(afl_variable_get('afl_var_permission_table_roles'),'list_text','');
+	  // $excluded_roles = list_extract_allowed_values(afl_variable_get('afl_var_permission_table_roles'),'list_text','');
+	  $included_roles = list_extract_allowed_values(afl_variable_get('afl_var_permission_table_roles'),'list_text','');
 	  
 	  $roles 					= array();
 
 	  foreach ($editable_roles as $key => $value) {
-	  	if (!in_array($key,$excluded_roles) ){
+	  	if (in_array($key,$included_roles) ){
 		  	$roles['name'][] 	= $value['name'];
 		  	$roles['key'][] 	= $key;
 	  	}
 	  }
+
 	  $count_roles 					= count($roles['name']);
 	  $table 								= array();
 		$table['#name'] 			= '';
@@ -145,13 +147,14 @@
 		);
 		
 		//exclude the admin 
-	  $excluded_roles = list_extract_allowed_values(afl_variable_get('afl_var_permission_table_roles'),'list_text','');
+	  // $excluded_roles = list_extract_allowed_values(afl_variable_get('afl_var_permission_table_roles'),'list_text','');
+	  $included_roles = list_extract_allowed_values(afl_variable_get('afl_var_permission_table_roles'),'list_text','');
 
 		//add capability to the role
 		foreach ($per_names['per_name_vs_role'] as $permission_name => $var) {
 			if (!array_key_exists($permission_name, $excluded_perm)) {
 				foreach ($var as $role) {
-					if (!in_array($role, $excluded_roles)) {
+					if (in_array($role, $included_roles)) {
 						if (array_key_exists($permission_name.'_'.$role,$val) && !empty($val[$permission_name.'_'.$role])) {
 							// $per_names['key'][$var] 	: Role name 
 							// $var 						 				: Permission name
@@ -170,5 +173,7 @@
 				}
 			}
 		}
-	echo wp_set_message(__('Configuration has been saved successfully.'), 'success');
+	//set the variable "eps_afl_is_configur_permissions"
+	afl_variable_set('eps_afl_is_configur_permissions',1);
+	wp_set_message(__('Configuration has been saved successfully.'), 'success');
 	}

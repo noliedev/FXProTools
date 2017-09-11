@@ -23,7 +23,8 @@
       '`wp_afl_user_holding_tank`.`referrer_uid`='.$uid.'',
     );
    	$query['#order_by'] = array(
-      '`level`' => 'ASC'
+      '`level`' => 'ASC',
+      // '`uid`'   => 'ASC'
     );
     
     $tank_users = db_select($query, 'get_results');
@@ -103,8 +104,6 @@ if ( $tank_users ) : ?>
     </div>
   </div>
 </div>
-
-
 
 <?php  else : ?>
 	<div class="panel panel-default">

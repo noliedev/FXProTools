@@ -80,6 +80,12 @@
 			'#title' 				=> __('AFL Team purchases Overview'),
 			'#description' 	=> 'affiliates team purchases overview '
 		);
+
+		//Bonus summary report
+		$permissions['afl_bonus_summary_report'] = array(
+			'#title' 				=> __('AFL Bonus Summary Overview'),
+			'#description' 	=> 'affiliates bonus summary overview '
+		);
 		//user payment method configuration
 		$permissions['user_payment_method_conf'] = array(
 			'#title' 				=> __('AFL User payment method configuration'),
@@ -138,7 +144,11 @@
 			'#title' 				=> __('Remote Services API'),
 			'#description' 	=> 'Remote api access'
 		);
-
+		//Remote api callback
+		$permissions['recent_log_messages'] = array(
+			'#title' 				=> __('Recent log Messages'),
+			'#description' 	=> 'Recent log messages'
+		);
 		$permissions = array_merge($perm,$permissions);
 		
 		return apply_filters('eps_affiliates_custom_permissions_table',$permissions);

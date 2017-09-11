@@ -4,27 +4,41 @@
  * Hook after purchase complete save details to eps backend
  * ------------------------------------------------------------
 */
- add_filter('eps_commerce_purchase_complete', 'eps_commerce_purchase_complete', 10, 1);
-
+ add_filter('eps_commerce_purchase_complete', 
+ 						'eps_commerce_purchase_complete', 10, 1);
+/*
+ * ------------------------------------------------------------
+ * Hook after joining package purchase complete save details 
+ * to eps backend
+ * ------------------------------------------------------------
+*/
+ add_filter('eps_commerce_joining_package_purchase_complete', 
+ 						'eps_commerce_joining_package_purchase_complete', 10, 1);
 /*
  * ------------------------------------------------------------
  * Hook calculate the rank of a user
  * ------------------------------------------------------------
 */
- add_action('eps_affiliates_calculate_affiliate_rank', 'eps_affiliates_calculate_affiliate_rank_callback', 10, 1);
+ add_action('eps_affiliates_calculate_affiliate_rank', 
+ 						'eps_affiliates_calculate_affiliate_rank_callback', 
+ 						 10, 1);
  // do_action('eps_affiliates_calculate_affiliate_rank',924);
 /*
  * ------------------------------------------------------------
  * Add a user to holding tank
  * ------------------------------------------------------------
 */
- add_action('eps_affiliates_place_user_in_holding_tank', 'eps_affiliates_place_user_in_holding_tank_callback', 10, 2);
+ add_action('eps_affiliates_place_user_in_holding_tank', 
+ 						'eps_affiliates_place_user_in_holding_tank_callback', 
+ 						10, 2);
 /*
  * ------------------------------------------------------------
  * Place user under a sponsor
  * ------------------------------------------------------------
 */
- add_action('eps_affiliates_place_user_under_sponsor', 'eps_affiliates_place_user_under_sponsor_callback', 10, 2);
+ add_action('eps_affiliates_place_user_under_sponsor', 
+ 						'eps_affiliates_place_user_under_sponsor_callback', 
+ 						10, 2);
 
 /*
  * ------------------------------------------------------------
@@ -32,7 +46,9 @@
  * expired
  * ------------------------------------------------------------
 */
- add_action('eps_affiliates_force_place_after_holding_expired', 'eps_affiliates_force_place_after_holding_expired_callback', 10, 2);
+ add_action('eps_affiliates_force_place_after_holding_expired', 
+ 						'eps_affiliates_force_place_after_holding_expired_callback', 
+ 						10, 2);
 
 /*
  * ------------------------------------------------------------
@@ -42,7 +58,8 @@
  * been blocked using this id
  * ------------------------------------------------------------
 */
- add_filter('eps_affiliates_block_member', 'eps_affiliates_block_member_callback', 10, 1);
+ add_filter('eps_affiliates_block_member', 
+ 						'eps_affiliates_block_member_callback', 10, 1);
 
 /*
  * ------------------------------------------------------------
@@ -52,7 +69,8 @@
  * been blocked using this id
  * ------------------------------------------------------------
 */
- add_filter('eps_affiliates_unblock_member', 'eps_affiliates_unblock_member_callback', 10, 1);
+ add_filter('eps_affiliates_unblock_member', 
+ 						'eps_affiliates_unblock_member_callback', 10, 1);
 
 /*
  * ------------------------------------------------------------
@@ -98,3 +116,11 @@
  add_action('eps_affiliates_place_customer_under_sponsor', 
  						'eps_affiliates_place_customer_under_sponsor_callback', 
  						 10, 2 );
+/*
+ * ------------------------------------------------------------
+ * Change the customer to distributor
+ * ------------------------------------------------------------
+*/
+ add_action('eps_affiliates_become_distributor_from_customer', 
+ 						'eps_affiliates_become_distributor_from_customer_callback', 
+ 						 10, 1 );
