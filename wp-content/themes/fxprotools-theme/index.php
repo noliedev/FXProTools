@@ -36,7 +36,7 @@
 						</div>
 						<div class="video"></div>
 						<div class="text-center">
-							<a href="#" class="btn btn-danger btn-lg btn-create-account">
+							<a href="#" class="btn btn-danger btn-lg btn-lg-w-text">
 								Create your Account Now!
 								<span>Sign up takes less than 60 seconds</span>
 							</a>
@@ -352,7 +352,7 @@
 								<img src="http://via.placeholder.com/960x500?text=Video" class="img-responsive centered-block m-b-sm">
 							</div>
 							<div class="text-center">
-								<a href="#" class="btn btn-danger btn-lg btn-create-account">
+								<a href="#" class="btn btn-danger btn-lg btn-lg-w-text">
 									Create Your Account Today!
 									<span>Sign up takes less than 60 seconds</span>
 								</a>
@@ -404,7 +404,7 @@
 											<h1 class="text-green text-lg m-b-md">$1.00</h1>
 										</div>
 										<div class="text-center">
-											<a href="#" class="btn btn-success btn-lg btn-create-account">
+											<a href="#" class="btn btn-success btn-lg btn-lg-w-text">
 												Get Your Access For $1.00 Trial Now!
 												<span>Sign up takes less than 60 seconds. Pick a plan to get started</span>
 											</a>
@@ -429,7 +429,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<div class="panel">
+						<div class="panel fx-package-item">
 							<div class="panel-body">
 								<div class="heading">
 									<h4 class="text-normal text-center">Get Started Now With Our Trial</h4>
@@ -437,7 +437,7 @@
 								</div>
 								<div class="text-center">
 									<h2 class="m-b-md">14 Day FREE Trial!</h2>
-									<a href="#" class="btn btn-danger btn-lg m-b-md btn-create-account">
+									<a href="#" class="btn btn-danger btn-lg m-b-md btn-lg-w-text">
 										Start Your Trial Now!
 										<span>Training + Forex & Binary Market Signals</span>
 									</a>
@@ -455,7 +455,7 @@
 								<p>Our Forex & Binary AI will track & backtest all the contracts that we go through and predict the market direction with up to a 90% accuracy rate - so you can let our software do the thinking for you.</p>
 								<hr/>
 								<div class="text-center">
-									<a href="#" class="btn btn-danger btn-lg m-b-md btn-create-account">
+									<a href="#" class="btn btn-danger btn-lg m-b-md btn-lg-w-text">
 										Start Your Trial Now!
 										<span>Training + Forex & Binary Market Signals</span>
 									</a>
@@ -465,7 +465,7 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<div class="panel active">
+						<div class="panel fx-package-item active">
 							<span class="sash">Best Value</span>
 							<div class="panel-body">
 								<div class="heading">
@@ -474,7 +474,7 @@
 								</div>
 								<div class="text-center">
 									<h2 class="m-b-md">14 Day FREE Trial!</h2>
-									<a href="#" class="btn btn-danger btn-lg m-b-md btn-create-account">
+									<a href="#" class="btn btn-danger btn-lg m-b-md btn-lg-w-text">
 										Start Your Trial Now!
 										<span>Training + Forex & Binary Market Signals</span>
 									</a>
@@ -493,14 +493,14 @@
 								<p>Start trading the markets today by taking advantage of our massive price reduction. </p>
 								<hr/>
 								<div class="text-center">
-									<a href="#" class="btn btn-danger btn-lg m-b-md btn-create-account">
+									<a href="#" class="btn btn-danger btn-lg m-b-md btn-lg-w-text">
 										Start Your Trial Now!
 										<span>Training + Forex & Binary Market Signals</span>
 									</a>
 									<p class="text-bold">After The Trial, Just $145 Month</p>
 								</div>
 							</div>
-						</div
+						</div>
 					</div>
 				</div>
 			</div>
@@ -561,7 +561,7 @@
 							</div>
 						</div>
 						<div class="text-center m-t-md">
-							<a href="#" class="btn btn-success btn-lg m-b-md btn-create-account">
+							<a href="#" class="btn btn-success btn-lg m-b-md btn-lg-w-text">
 								Get Your Access For $1.00 Trial Now!
 								<span>Sign-up takes less than 60 seconds. Pick a plan to get started!</span>
 							</a>
@@ -596,6 +596,188 @@
 								</div>
 							</div>
 							<?php $count++; endforeach ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="section-eleven">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2">
+						<p class="intro-note text-white text-center"><strong>Start A Business</strong> Of Your<br/> Own Using Our Platform</p>
+						<p class="text-white m-t-lg">To become an IBO, you must purchase our “Business Package” package and remain active to be eligible for certain commissions. See full compensation plan for details.</p>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="row m-t-lg m-b-lg">
+					<div class="col-md-3 col-md-offset-3">
+						<div class="dl-item text-center">
+							<img src="<?php bloginfo('template_url'); ?>/assets/img/ico-download.png" class="center-block img-responsive">
+							<span class="text-white block m-t-md">Compensation Plan</span>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="dl-item text-center">
+							<img src="<?php bloginfo('template_url'); ?>/assets/img/ico-download.png" class="center-block img-responsive">
+							<span class="text-white block m-t-md">Qualifying Bonuses</span>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="row row-package">
+					<div class="col-md-6 col-md-offset-3">
+						<div class="panel fx-package-item active">
+							<span class="sash">IBO Package</span>
+							<div class="panel-body">
+								<div class="heading">
+									<h4 class="text-normal text-center">Get Started Now With Our Trial</h4>
+									<h2>You Get Everything From Our “Professional” Package + Bonuses + Business Tools</h2>
+								</div>
+								<div class="text-center">
+									<h2 class="m-b-md">$160</h2>
+									<a href="#" class="btn btn-danger block btn-lg m-b-md btn-lg-w-text">
+										Start Your Business
+										<span>Training + Forex & Binary Market Signals</span>
+									</a>
+									<p class="text-bold">After The Trial, Just $160 Month</p>
+									<hr/>
+									<p class="small">*Disclaimer: Must have an active “Business / IBO” Membership to be eligiable for the compensation plan. To qualify and receive Bonus Incentives for your rank - you MUST hold that rank for at least 90 days consecutively.*</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="section-twelve section-w-panel">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-md-8 col-md-offset-2">
+										<div class="header-text">
+											<p class="text-heading"><span class="text-bold text-green">$8,404,681</span> Is How Much We<br/>
+											Paid Our Students In 2017</p>
+											<p class="text-heading sm label-green m-t-md">
+												<strong>YUP, That’s Right</strong>...We Pay Our Distrubtors Comissions 
+												For Any New Members. <strong>LEARN & EARN - TODAY!</strong>
+											</p>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+								</div>
+								<div class="row m-t-md">
+									<div class="col-md-4">
+										<div class="item-stats">
+											<span class="count text-bold">80+</span>
+											<span class="count-label">Available <br/> Countries</span>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="item-stats">
+											<span class="count text-bold">2,790</span>
+											<span class="count-label">Active <br/> Students</span>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="item-stats">
+											<span class="count text-bold">1091</span>
+											<span class="count-label">Affiliates Paid <br/> To Date</span>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<hr/>
+									</div>
+									<div class="col-md-10 col-md-offset-1">
+										<div class="header-text m-b-md">
+											<p class="text-center text-heading text-bold"><span class="text-red">VIDEO TESTIMONIALS!</span> Show Proof 
+											That “FX Pro Tools” Has ALREADY Dramatically Changed The Businesses And Lives Of Countless Others... 
+											People Around The World!  </p>
+										</div>
+										<p class="text-center">If You're Sick And Tired Of All The Hype, Scams And Claims You See Online Lately, Then Pay Attention To These Amazing Success Stories From Actual, Real Students...</p>
+									</div>
+								</div>
+								<div class="row m-t-md m-b-md">
+									<div class="col-md-6">
+										<div class="testimonial-item">
+											<img src="http://via.placeholder.com/500x250" class="img-responsive">
+											<span class="title">Eddie L. of Florida, USA</span>
+											<span class="small">"Retired Teacher"</span>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="testimonial-item">
+											<img src="http://via.placeholder.com/500x250" class="img-responsive">
+											<span class="title">Sol A. of Texas, USA</span>
+											<span class="small">"Rabbi"</span>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="testimonial-item">
+											<img src="http://via.placeholder.com/500x250" class="img-responsive">
+											<span class="title">Gerard F. of  Rio, Brazil</span>
+											<span class="small">"Electromechanical Engineer"</span>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="testimonial-item">
+											<img src="http://via.placeholder.com/500x250" class="img-responsive">
+											<span class="title">Tim F. of Ontario, CA</span>
+											<span class="small">"IT Professional"</span>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="testimonial-item">
+											<img src="http://via.placeholder.com/500x250" class="img-responsive">
+											<span class="title">John S. of New York, USA</span>
+											<span class="small">"Teacher"</span>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="testimonial-item">
+											<img src="http://via.placeholder.com/500x250" class="img-responsive">
+											<span class="title">Mark E. of California, USA</span>
+											<span class="small">"Ex Pizza Delivery Boy</span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-8 col-md-offset-2">
+										<a href="#" class="btn btn-success block btn-lg btn-lg-w-text">
+											Get Your Access For $1.00 Trial Now!
+											<span>Sign-up takes less than 60 seconds. Pick a plan to get started!</span>
+										</a>
+									</div>
+									<div class="clearfix"></div>
+									<div class="col-md-12">
+										<hr class="m-t-lg m-b-sm"/>
+									</div>
+									<div class="col-md-8 col-md-offset-2">
+										<div class="text-center">
+											<h3 class="text-normal">Our Binary & Forex Platform Has Already Helped Countless People Around The World...</h3>
+											<h1 class="text-red m-b-lg">The Only Question Left <br/>Asking Is, “Are YOU Next?"</h1>
+										</div>
+									</div>
+									<div class="col-md-10 col-md-offset-1">
+										<p><strong>P.S. In case you're one of those people</strong> (like me) who just skip to the end of the letter, here's the deal:</p>
+										<p>We're going to let you test drive FX Pro Tools AND Our Signals today... because we know that after you start using them, you'll wonder how your ever going to survive without them again! </p>
+										<p>There's not catch... no gimmicks... </p>
+										<p>If fact, if you don't love the our platform - We will even refund your and you don’t ever have to hear from us again!</p>
+										<p>So, Click the button below to get your DISCOUNTED access now.</p>
+										<p>You won't regret it.</p>
+									</div>
+									<div class="clearfix"></div>
+									<div class="col-md-8 col-md-offset-2">
+										<a href="#" class="btn btn-success block btn-lg btn-lg-w-text m-t-md">
+											Get Your Access For $1.00 Trial Now!
+											<span>Sign-up takes less than 60 seconds. Pick a plan to get started!</span>
+										</a>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
