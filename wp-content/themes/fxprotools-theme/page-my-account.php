@@ -20,7 +20,7 @@ foreach($_POST as $user_key => $user_value){
 				<div class="panel-body">
 					<div class="media">
 						<div class="media-left">
-							<img src="http://via.placeholder.com/100x100?text=Image" class="media-object">
+							<img src="<?php echo get_avatar_url(get_current_user_id()); ?>" class="media-object">
 						</div>
 						<div class="media-body">
 							<div class="info">
@@ -68,20 +68,12 @@ foreach($_POST as $user_key => $user_value){
 										<div class="col-md-6 m-b-lg">
 											<p class="text-bold text-center">General Information</p>
 											<ul class="list-info list-info-fields">
-												<li><span>Birthday:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="date" name="c_bday" id="c_bday" value="'. get_the_author_meta('c_bday', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('c_bday', get_current_user_id()) ); ?></li>
-												<li><span>Age:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" disabled="disabled" name="billing_postcode" id="billing_postcode" value="'. date_diff(date_create(get_the_author_meta('c_bday', get_current_user_id())), date_create('today'))->y .'" />' : ' ' . date_diff(date_create(get_the_author_meta('c_bday', get_current_user_id())), date_create('today'))->y ); ?></li>
-												<li><span>Gender:</span> 
-													<?php if($_GET['action'] == 'edit'){ ?>
-													<select name="c_gender" id="c_gender">
-														<option value="Male" <?php if(get_the_author_meta( 'c_gender', get_current_user_id() ) == "Male"){echo 'selected';} ?>>Male</option>
-														<option value="Female" <?php if(get_the_author_meta( 'c_gender', get_current_user_id() ) == "Female"){echo 'selected';} ?>>Female</option>
-													</select>
-													<?php 
-													}else{ 
-														echo get_the_author_meta('c_gender', get_current_user_id());
-													}
-													?>
-												</li>
+												<li><span>First Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="first_name" id="first_name" value="'. get_the_author_meta('first_name', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('first_name', get_current_user_id()) ); ?></li>
+												<li><span>Last Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="last_name" id="last_name" value="'. get_the_author_meta('last_name', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('last_name', get_current_user_id()) ); ?></li>
+												<li><span>Website:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="website" id="website" value="'. get_the_author_meta('website', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('website', get_current_user_id()) ); ?></li>
+												<li><span>Facebook:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="facebook" id="facebook" value="'. get_the_author_meta('facebook', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('facebook', get_current_user_id()) ); ?></li>
+												<li><span>Twitter:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="twitter" id="twitter" value="'. get_the_author_meta('twitter', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('twitter', get_current_user_id()) ); ?></li>
+												<li><span>Google Plus:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="googleplus" id="googleplus" value="'. get_the_author_meta('googleplus', get_current_user_id()) .'" />' : ' ' . get_the_author_meta('googleplus', get_current_user_id()) ); ?></li>
 											</ul>
 										</div>
 										<div class="clearfix"></div>

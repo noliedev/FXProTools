@@ -13,15 +13,23 @@
 					<div class="panel-body">
 						<div class="media">
 							<div class="media-left">
-								<img src="http://via.placeholder.com/100x100?text=Image" class="media-object">
+								<img src="<?php echo get_avatar_url($_GET['id']); ?>" class="media-object">
 							</div>
 							<div class="media-body">
 								<div class="info">
-									<h4 class="media-heading text-normal">Contact Name</h4>
+									<h4 class="media-heading text-normal">
+										<?php  
+											if(get_the_author_meta('first_name', $_GET['id'])){
+												echo get_the_author_meta('first_name', $_GET['id']) . ' ' . get_the_author_meta('last_name', $_GET['id']);
+											}else{
+												echo get_the_author_meta('user_login', $_GET['id']);
+											}
+										?>
+									</h4>
 									<ul class="info-list">
-										<li><i class="fa fa-envelope-o"></i> user-email@gmail.com</li>
-										<li><i class="fa fa-mobile"></i> (123) 456-7890</li>
-										<li><i class="fa fa-home"></i> City, State</li>
+										<li><i class="fa fa-envelope-o"></i> <?php echo get_the_author_meta('email', $_GET['id']); ?></li>
+										<li><i class="fa fa-mobile"></i> <?php echo get_the_author_meta('billing_phone', $_GET['id']); ?></li>
+										<li><i class="fa fa-home"></i> <?php echo get_the_author_meta('billing_city', $_GET['id']); ?>, <?php echo get_the_author_meta('billing_state', $_GET['id']); ?></li>
 									</ul>
 									<p>IP Address: 192.168.8.1</p>
 								</div>
@@ -48,47 +56,44 @@
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="a">
-									<div class="row">
-										<div class="col-md-6">
-											<p class="text-bold text-center">Customer Information</p>
-											<ul class="list-info">
-												<li><span>Business Name:</span> FX</li>
-												<li><span>Street:</span> Sesame Street</li>
-												<li><span>City:</span> Star City</li>
-												<li><span>State:</span> Beef State</li>
-												<li><span>Zip Code:</span> 12345</li>
-											</ul>
+									<form action="<?php echo get_the_permalink(); ?>" method="POST" class="<?php echo ($_GET['action'] == 'edit' ? 'form-edit' : ''); ?>">
+										<div class="row">
+											<div class="col-md-6 m-b-lg">
+												<p class="text-bold text-center">General Information</p>
+												<ul class="list-info list-info-fields">
+													<li><span>First Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="first_name" id="first_name" value="'. get_the_author_meta('first_name', $_GET['id']) .'" />' : ' ' . get_the_author_meta('first_name', $_GET['id']) ); ?></li>
+													<li><span>Last Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="last_name" id="last_name" value="'. get_the_author_meta('last_name', $_GET['id']) .'" />' : ' ' . get_the_author_meta('last_name', $_GET['id']) ); ?></li>
+													<li><span>Website:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="website" id="website" value="'. get_the_author_meta('website', $_GET['id']) .'" />' : ' ' . get_the_author_meta('website', $_GET['id']) ); ?></li>
+													<li><span>Facebook:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="facebook" id="facebook" value="'. get_the_author_meta('facebook', $_GET['id']) .'" />' : ' ' . get_the_author_meta('facebook', $_GET['id']) ); ?></li>
+													<li><span>Twitter:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="twitter" id="twitter" value="'. get_the_author_meta('twitter', $_GET['id']) .'" />' : ' ' . get_the_author_meta('twitter', $_GET['id']) ); ?></li>
+													<li><span>Google Plus:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="googleplus" id="googleplus" value="'. get_the_author_meta('googleplus', $_GET['id']) .'" />' : ' ' . get_the_author_meta('googleplus', $_GET['id']) ); ?></li>
+												</ul>
+											</div>
+											<div class="clearfix"></div>
+											<div class="col-md-6">
+												<p class="text-bold text-center">Billing Information</p>
+												<ul class="list-info list-info-fields">
+													<li><span>Business Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_company" id="billing_company" value="'. get_the_author_meta('billing_company', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_company', $_GET['id']) ); ?></li>
+													<li><span>House # & Street Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_address_1" id="billing_address_1" value="'. get_the_author_meta('billing_address_1', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_address_1', $_GET['id']) ); ?></li>
+													<li><span>Apt.,suite,unit,etc.:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_address_2" id="billing_address_2" value="'. get_the_author_meta('billing_address_2', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_address_2', $_GET['id']) ); ?></li>
+													<li><span>City:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_city" id="billing_city" value="'. get_the_author_meta('billing_city', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_city', $_GET['id']) ); ?></li>
+													<li><span>State:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_state" id="billing_state" value="'. get_the_author_meta('billing_state', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_state', $_GET['id']) ); ?></li>
+													<li><span>Zip Code:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_postcode" id="billing_postcode" value="'. get_the_author_meta('billing_postcode', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_postcode', $_GET['id']) ); ?></li>
+												</ul>
+											</div>
+											<div class="col-md-6">
+												<p class="text-bold text-center">Shipping Information</p>
+												<ul class="list-info list-info-fields">
+													<li><span>Business Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_company" id="shipping_company" value="'. get_the_author_meta('shipping_company', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_company', $_GET['id']) ); ?></li>
+													<li><span>House # & Street Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_address_1" id="shipping_address_1" value="'. get_the_author_meta('shipping_address_1', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_address_1', $_GET['id']) ); ?></li>
+													<li><span>Apt.,suite,unit,etc.:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_address_2" id="shipping_address_2" value="'. get_the_author_meta('shipping_address_2', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_address_2', $_GET['id']) ); ?></li>
+													<li><span>City:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_city" id="shipping_city" value="'. get_the_author_meta('shipping_city', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_city', $_GET['id']) ); ?></li>
+													<li><span>State:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_state" id="shipping_state" value="'. get_the_author_meta('shipping_state', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_state', $_GET['id']) ); ?></li>
+													<li><span>Zip Code:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_postcode" id="shipping_postcode" value="'. get_the_author_meta('shipping_postcode', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_postcode', $_GET['id']) ); ?></li>
+												</ul>
+											</div>
 										</div>
-										<div class="col-md-6">
-											<p class="text-bold text-center">General Information</p>
-											<ul class="list-info">
-												<li><span>Birthday:</span> 07/20/1990</li>
-												<li><span>Age:</span> 28</li>
-												<li><span>Gender:</span> Male</li>
-											</ul>
-										</div>
-										<div class="clearfix"></div>
-										<div class="col-md-6">
-											<p class="text-bold text-center">Billing Information</p>
-											<ul class="list-info">
-												<li><span>Business Name:</span> FX</li>
-												<li><span>Street:</span> Sesame Street</li>
-												<li><span>City:</span> Star City</li>
-												<li><span>State:</span> Beef State</li>
-												<li><span>Zip Code:</span> 12345</li>
-											</ul>
-										</div>
-										<div class="col-md-6">
-											<p class="text-bold text-center">Shipping Information</p>
-											<ul class="list-info">
-												<li><span>Business Name:</span> FX</li>
-												<li><span>Street:</span> Sesame Street</li>
-												<li><span>City:</span> Star City</li>
-												<li><span>State:</span> Beef State</li>
-												<li><span>Zip Code:</span> 12345</li>
-											</ul>
-										</div>
-									</div>
+									</form>
 								</div>
 								<div class="tab-pane fade" id="b">
 									<p class="text-bold">Edit Contact Section</p>

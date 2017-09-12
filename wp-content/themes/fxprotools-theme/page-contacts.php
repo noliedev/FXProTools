@@ -29,6 +29,11 @@
 				<ul class="fx-list-contacts">
 					<?php 
 						$referrals = get_user_referrals();
+						$user = wp_get_current_user();
+						if ( in_array( 'administrator', (array) $user->roles ) ) {
+							$referrals = affiliate_wp()->referrals->get_referrals( array('number' => -1,) );
+						}
+
 						$ref_count = 0;
 						$contacts = array();
 						$results = array();
@@ -61,8 +66,8 @@
 						    }
 						    $contacts = $search_results;
 						}
-
-						$per_page = 1;
+						//number of contact items to show on a page
+						$per_page = 10;
 						$total_rows = count($contacts);
 						$pages = ceil($total_rows / $per_page);
 						$current_page = isset($_GET['i']) ? $_GET['i'] : 1;
@@ -93,17 +98,16 @@
 									</div>
 									<div class="actions">
 										<span class="small"><?php echo $v['date']; ?></span>
-										<a href="<?php bloginfo('url');?>/marketing/contacts/user" class="btn btn-default btn-sm m-l-sm">View</a>
+										<a href="<?php bloginfo('url');?>/marketing/contacts/user?id=<?php echo $v['id'] ?>" class="btn btn-default btn-sm m-l-sm">View</a>
 									</div>
 								</div>
 							</div>
 						</li>
+					<?php } ?>
 				</ul>
 				<div class="text-center">
 					<ul class="pagination">
 						<?php
-							}
-
 							if ($pages > 0) {
 							    $counter = 1;
 							    while($counter <= $pages){

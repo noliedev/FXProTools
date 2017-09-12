@@ -25,15 +25,6 @@ if(!class_exists('ThemeSettings')){
 			add_action('user_register', array($this, 'register_user_checklist'));
 			add_action('user_register', array($this, 'send_email_verification'));
 			add_action('user_register', array($this, 'register_affiliate'));
-			add_action( 'show_user_profile', array($this, 'add_new_user_fields'));
-			add_action( 'edit_user_profile', array($this, 'add_new_user_fields'));
-			add_action( 'personal_options_update', array($this, 'save_new_user_fields'));
-			add_action( 'edit_user_profile_update', array($this, 'save_new_user_fields'));
-			add_filter( 'woocommerce_checkout_fields', array($this, 'add_c_bday_checkout') );
-			add_filter( 'woocommerce_checkout_fields', array($this, 'add_c_gender_checkout') );
-			add_action( 'woocommerce_after_checkout_form', array($this, 'add_checkout_script') );
-			add_action( 'woocommerce_checkout_update_user_meta', array($this, 'save_custom_checkout_fields'), 10, 2 );
-
 		}
 
 		// Theme assets
