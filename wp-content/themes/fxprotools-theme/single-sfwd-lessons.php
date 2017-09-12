@@ -1,10 +1,15 @@
 <?php
+global $post;
 $lesson_id = get_the_ID();
 $lesson = get_post($lesson_id);
 $course = get_lesson_parent_course( $lesson_id );
 $course_id = $course->ID;
 $lessons = get_lessons_by_course_id( $course->ID );
 $course_progress = get_user_progress();
+
+$course_video = Learndash_Course_Video::get_instance();
+$lesson_settings = learndash_get_setting( $post );
+$video = $course_video->add_video_to_content( '', $post, $lesson_settings );
 
 ?>
 
@@ -44,7 +49,9 @@ $course_progress = get_user_progress();
 						</div>
 					</div>
 					<div class="col-md-12">
-						<div class="fx-video-container"></div>
+						<div class="fx-video-container">
+							<?php echo $video; ?>
+						</div>
 						<br/>
 					</div>
 					<div class="clearfix"></div>
@@ -52,7 +59,7 @@ $course_progress = get_user_progress();
 						<div class="panel panel-default fx-course-outline">
 							<div class="panel-body">
 								<div class="content">
-									<?php echo $lesson->post_content; ?>
+									<?php echo wpautop($lesson->post_content); ?>
 								</div>
 								<br>
 								<?php if( get_course_lesson_progress($course_id, $lesson_id) != 1 ): ?>
