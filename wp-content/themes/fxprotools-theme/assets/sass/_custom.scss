@@ -609,28 +609,38 @@
 // Footer
 .fx-footer {
 	position: relative;
-	background: $black;
-	padding: 50px 0;
-	p {
-		font-weight: bold;
+	background: #2f2f2f;
+	padding: 60px 0;
+	span {
 		color: $white;
+		font-size: 13px;
+		display: inline-block;
 	}
-	.fx-nav-footer {
-		padding: 0;
+	.credit-cards {
+		width: 160px;
+		margin: 0 15px;
+	}
+	.footer-nav {
 		margin: 0;
+		padding: 0;
 		text-align: center;
 		li {
-			display: inline-block;
-			border-right: 1px solid #DDD;
-			padding: 0 15px;
-			&:last-child {
-				border-right: none;
-			}
+			display: block;
+			margin-bottom: 15px;
 			a {
-				font-size: 12px;
 				color: $white;
+				font-size: 15px;
 			}
 		}
+	}
+}
+.fx-disclosure {
+	background: $black;
+	padding: 30px 0;
+	p {
+		color: #a1a1a1;
+		font-size: 13px;
+		margin-bottom: 0;
 	}
 }
 
