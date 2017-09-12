@@ -2,6 +2,16 @@
 /*== COMMON ==*/ 
 /*============*/
 
+// Buttons {
+.btn-lg-w-text {
+	font-size: 25px;
+	padding: 10px 25px 10px 25px;
+	span {
+		font-size: 12px;
+		display: block;
+	}
+}
+
 // Label & Text
 .text-white {
 	color: $white;
@@ -389,5 +399,46 @@
 		width: 30px;
 		height: 30px;
 		text-align: center;
+	}
+}
+
+// Package Item
+.fx-package-item {
+	box-shadow: none;
+	border-radius: 0;
+	border: none;
+	border: 3px solid #DDD;
+	border: 3px solid #DDD;
+	position: relative;
+	&.active {
+		border-color: $green;
+		.sash {
+			display: block;
+		}
+	}
+	.panel-body {
+		padding: 25px 15px 15px 15px;
+		.heading {
+			border-bottom: 1px solid #DDD;
+			text-align: center;
+			padding-bottom: 15px;
+		}
+	}
+	.sash {
+		display: none;
+		background: $green;
+		color: $white;
+		text-align: center;
+		padding: 6px 10px;
+		width: 200px;
+		position: absolute;
+		top: -20px;
+		right: 0;
+		left: 0;
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+		text-transform: uppercase;
+		font-weight: bold;
 	}
 }

@@ -180,11 +180,13 @@ function date_is_in_range($date_from, $date_to, $date)
  	return (($ts >= $start_ts) && ($ts <= $end_ts));
 }
 
-function get_funnel_stats($funnel_id, $date_filter)
+function get_funnel_stats($funnel_id, $date_filter = array())
 {
 	$visits = affiliate_wp()->visits->get_visits( array( 'affiliate_id' => affwp_get_affiliate_id( get_current_user_id()), 'order_by' => 'visit_id' ) );
-	foreach($visits as $key => $visit){
-		 if( !date_is_in_range($date_filter['date_from'], $date_filter['date_to'], date("m/d/Y", strtotime($visit->date))) ) unset($visits[$key]);
+	if(sizeof($date_filter) > 0){
+		foreach($visits as $key => $visit){
+			 if( !date_is_in_range($date_filter['date_from'], $date_filter['date_to'], date("m/d/Y", strtotime($visit->date))) ) unset($visits[$key]);
+		}
 	}
 	$funnel = array( 'cp_url' => rwmb_meta('capture_page_url', '', $funnel_id),
 		 			 'lp_url' => rwmb_meta('landing_page_url', '', $funnel_id)

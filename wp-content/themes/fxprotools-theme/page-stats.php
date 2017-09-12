@@ -3,7 +3,7 @@ $category_slug = 'stats';
 $category = get_term_by('slug', $category_slug, 'ld_course_category' );
 $courses = get_courses_by_category_id($category->term_id);
 $funnels = get_funnels();
-$date_filter = array( 'date_from' => $_GET['date_from'], 'date_to' => $_GET['date_to']); 
+$date_filter = isset($_GET['date_from']) ? array( 'date_from' => $_GET['date_from'], 'date_to' => $_GET['date_to']) : array();  
 ?>
 <?php get_header(); ?>
 

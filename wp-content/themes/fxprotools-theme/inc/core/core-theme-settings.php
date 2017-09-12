@@ -55,7 +55,9 @@ if(!class_exists('ThemeSettings')){
 			wp_enqueue_script('script-jquery', get_stylesheet_directory_uri().'/vendors/jquery-3.2.1/jquery-3.2.1.min.js', $theme_version);
 			wp_enqueue_script('script-bootstrap', get_stylesheet_directory_uri().'/vendors/bootstrap-3.3.7/js/bootstrap.min.js', $theme_version);
 			wp_enqueue_script('script-bootstrap-datepicker', get_stylesheet_directory_uri().'/vendors/boostrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js', $theme_version);
+			wp_enqueue_script('script-clipboardjs', get_stylesheet_directory_uri().'/vendors/clipboard-js-1.7.1/js/clipboard.min.js', $theme_version);
 			// Scripts - Custom
+
 			// Include custom scripts here
 		}
 

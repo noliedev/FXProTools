@@ -3,6 +3,7 @@ $category_slug = 'funnels';
 $category = get_term_by('slug', $category_slug, 'ld_course_category' );
 $courses = get_courses_by_category_id($category->term_id);
 $funnels = get_funnels();
+$referral = "/?ref=" . affwp_get_affiliate_id( get_current_user_id() );
 ?>
 <?php get_header(); ?>
 
@@ -26,7 +27,7 @@ $funnels = get_funnels();
 				</div>
 				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 					<?php if($funnels): ?>
-						<?php $count = 0; foreach($funnels as $post): setup_postdata($post); $count++; ?>
+						<?php $count = 0; foreach($funnels as $post): setup_postdata($post); $count++; $stats = get_funnel_stats( get_the_ID() ); ?>
 						<div class="accordion-group panel-default">
 							<div class="panel-heading" role="tab" id="heading-<?php echo $count;?>">
 								<h4 class="panel-title">
@@ -61,7 +62,7 @@ $funnels = get_funnels();
 														<?php 
 														$thumbnail = reset(rwmb_meta('capture_page_thumbnail'));
 														$title = rwmb_meta('capture_page_title');
-														$page_url = rwmb_meta('capture_page_url');
+														$page_url = rwmb_meta('capture_page_url') . $referral;
 														?>
 														<div class="row">
 															<div class="col-md-9">
@@ -89,8 +90,8 @@ $funnels = get_funnels();
 																		<div class="form-group url-group two">
 																			<label>Share This URL:</label>
 																			<div class="clearfix"></div>
-																			<input type="text" class="form-control" value="<?php echo $page_url;?>">
-																			<a href="#" class="btn btn-default">Copy</a>
+																			<input type="text" class="form-control" id="cp-url-<?php echo $count;?>" value="<?php echo $page_url;?>">
+																			<button class="btn btn-default btn-copy" data-clipboard-target="#cp-url-<?php echo $count;?>">Copy</button>
 																			<a href="#" class="btn btn-default">Preview</a>
 																			<div class="clearfix"></div>
 																		</div>
@@ -142,11 +143,11 @@ $funnels = get_funnels();
 																			<tbody>
 																				<tr>
 																					<td>All</td>
-																					<td>1000</td>
+																					<td><?php echo $stats['capture']['page_views']['all'];?></td>
 																				</tr>
 																				<tr>
 																					<td>Uniques</td>
-																					<td>890</td>
+																					<td><?php echo $stats['capture']['page_views']['unique'];?></td>
 																				</tr>
 																			</tbody>
 																		</table>
@@ -160,7 +161,7 @@ $funnels = get_funnels();
 														<?php 
 														$thumbnail = reset(rwmb_meta('landing_page_thumbnail'));
 														$title = rwmb_meta('landing_page_title');
-														$page_url = rwmb_meta('landing_page_url');
+														$page_url = rwmb_meta('landing_page_url') . $referral;
 														?>
 														<div class="row">
 															<div class="col-md-9">
@@ -188,8 +189,8 @@ $funnels = get_funnels();
 																		<div class="form-group url-group two">
 																			<label>Share This URL:</label>
 																			<div class="clearfix"></div>
-																			<input type="text" class="form-control" value="<?php echo $page_url;?>">
-																			<a href="#" class="btn btn-default">Copy</a>
+																			<input type="text" class="form-control" id="lp-url-<?php echo $count;?>" value="<?php echo $page_url;?>">
+																			<button href="#" class="btn btn-default btn-copy" data-clipboard-target="#lp-url-<?php echo $count;?>">Copy</button>
 																			<a href="#" class="btn btn-default">Preview</a>
 																			<div class="clearfix"></div>
 																		</div>
@@ -241,11 +242,11 @@ $funnels = get_funnels();
 																			<tbody>
 																				<tr>
 																					<td>All</td>
-																					<td>1000</td>
+																					<td><?php echo $stats['landing']['page_views']['all'];?></td>
 																				</tr>
 																				<tr>
 																					<td>Uniques</td>
-																					<td>890</td>
+																					<td><?php echo $stats['landing']['page_views']['unique'];?></td>
 																				</tr>
 																			</tbody>
 																		</table>
@@ -271,5 +272,7 @@ $funnels = get_funnels();
 			</div>
 		</div>
 	</div>
-
+<script>
+    var clipboard = new Clipboard('.btn-copy');
+</script>
 <?php get_footer(); ?>
