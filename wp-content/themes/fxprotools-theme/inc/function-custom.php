@@ -70,10 +70,12 @@ function get_course_price_by_id($course_id)
 
 function get_lessons_by_course_id($course_id)
 {
+	$orderby = learndash_get_setting( $course_id, 'course_lesson_orderby' );
+	$order   = learndash_get_setting( $course_id, 'course_lesson_order' );
 	$args = array(
 			'posts_per_page'   => -1,
-			'orderby'          => 'menu_order',
-			'order'			   => 'ASC',
+			'orderby'          => $orderby,
+			'order'			   => $order,
 			'post_status'      => 'publish',
 			'post_type'		   => 'sfwd-lessons',
 			'meta_query' => array(
@@ -283,7 +285,6 @@ function get_user_referrals(){
 		) );
 		return $affiliate_referrals;
 	}
-	
 }
 
 function time_elapsed_string($datetime, $full = false) {
