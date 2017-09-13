@@ -977,4 +977,161 @@
 		}
 	}
 }
+.fx-course-navigation{
+	ul{
+		list-style: none;
+		margin: 20px 0 0 10px;
+		padding: 0;
+		li{
+			border-left: 2px solid #c4c8d2;
+			a{
+				position: relative;
+				padding-left: 22px;
+				display: block;
+				color: #444952;
+				padding-bottom: 20px;
+				&:before{
+					content: "";
+					display: block;
+					position: absolute;
+					top: 0;
+					left: -13px;
+					width: 25px;
+					height: 25px;
+					border: 2px solid #c4c8d2;
+					border-radius: 50%;
+					background: url('../img/red-triangle.png') no-repeat center center #fff;
+					background-size: 7px;
+				}
+			}
+			&:last-child{
+				border-left-color: transparent;
+				a{
+					padding-bottom: 0;
+				}
+			}
+		}
+	}
+}
 
+// Access Denied
+.fx-access-denied{
+	.fx-navbar-main{
+		display: none;
+	}
+	.fx-access-denied-top{
+		border-bottom: 2px solid #dedede;
+		padding: 15px 0;
+	}
+	.fx-denied-nav{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		li{
+			display: inline-block;
+			a{
+				display: block;
+			}
+		}
+	}
+	.fx-denied-left{
+		li{
+			font-size: 13px;
+			border-right: 1px solid #000;
+			margin-right: 10px;
+			padding-right: 10px;
+			line-height: 1;
+			a{
+				color: #000;
+			}
+		}
+	}
+	.fx-denied-right{
+		text-align: right;
+		li{
+			font-size: 13px;
+			margin-left: 15px;
+			line-height: 1;
+			a{
+				color: #000;
+			}
+			&.fx-nav-btn{
+				a{
+					background: $red;
+					color: #fff;
+					padding: 8px 12px;
+					border-radius: 4px;
+					border: 1px solid $red;
+					&:hover{
+						background: #fff;
+						color: $red;
+						text-decoration: none;
+					}
+				}
+			}
+		}
+	}
+	.section-one{
+		padding: 20px 0;
+		.logo{
+			font-weight: bold;
+		    text-transform: uppercase;
+		    color: #000;
+		    font-size: 18px;
+		    padding-top: 4px;
+		}
+		.fx-nav{
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			text-align: right;
+			li{
+				display: inline-block;
+				margin-left: 5px;
+				a{
+					display: block;
+					border: 1px solid $red;
+					border-radius: 4px;
+					padding: 3px 15px;
+					color: #000;
+					font-size: 14px;
+					&:hover{
+						background: $red;
+						text-decoration: none;
+						color: #fff;
+					}
+				}
+			}
+		}
+	}
+	.section-note{
+		background: #de1515;
+    	padding: 15px 0;
+    	text-align: center;
+    	margin-bottom: 20px;
+    	p{
+    		color: #fff;
+		    margin-bottom: 0;
+		    font-size: 18px;
+    	}
+	}
+	@media (max-width: 767px){
+		.fx-denied-nav{
+			text-align: center;
+			margin-bottom: 10px;
+		}
+		.section-one{
+			text-align: center;
+			.logo{
+				margin-bottom: 10px;
+				display: block;
+			}
+			.fx-nav{
+				text-align: center;
+				li{
+					margin: 5px 0;
+				}
+			}
+		}
+	}
+}
