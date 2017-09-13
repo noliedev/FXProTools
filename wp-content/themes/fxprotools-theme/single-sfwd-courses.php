@@ -3,13 +3,16 @@ $course_id = get_the_ID();
 $course = get_post( $course_id ); 
 $lessons = get_lessons_by_course_id( $course_id );
 $course_progress = get_user_progress();
+$course_prerequisites = learndash_get_course_prerequisites( $course_id );
 ?>
 
 <?php get_header(); ?>
 
 	<?php get_template_part('inc/templates/nav-products'); ?>
-
-	<?php if( !sfwd_lms_has_access_fn($course_id) ): ?>
+	
+	<?php if( !is_course_prerequities_completed($course_id) ): ?>
+		<?php get_template_part('inc/templates/course/prerequisites'); ?>
+	<?php elseif( !sfwd_lms_has_access_fn($course_id) ): ?>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
@@ -21,17 +24,13 @@ $course_progress = get_user_progress();
 				<div class="col-md-8 col-md-offset-2">
 					<div class="fx-video-container"></div>
 					<br/>
-
-					<?php if( !sfwd_lms_has_access_fn($course_id) ): ?>
 					<div class="learndash_join_button">
 						<form method="post">
 							<input type="hidden" value="<?php echo $course_id;?>" name="course_id" />
 							<input type="hidden" name="course_join" value="<?php echo wp_create_nonce( 'course_join_'. get_current_user_id() .'_'. $course_id  );?>" />
 							<input type="submit" value="Start This Course" class="btn btn-success block" style="width:100%;" />
-						</form></div>
-					<?php endif; ?>
-
-
+						</form>
+					</div>
 					<br/>
 				</div>
 				<div class="clearfix"></div>
@@ -168,6 +167,5 @@ $course_progress = get_user_progress();
 			</div>
 		</div>
 	<?php endif; ?>
-
 
 <?php get_footer(); ?>

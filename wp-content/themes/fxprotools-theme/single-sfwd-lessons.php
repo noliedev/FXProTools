@@ -44,7 +44,7 @@ $video = $course_video->add_video_to_content( '', $post, $lesson_settings );
 				<div class="row">
 					<div class="col-md-12">
 						<div class="fx-header-title">
-							<h3>Lesson #<?php echo $lesson->menu_order;?></h3>
+							<h3>Lesson #<?php echo intval(array_search($lesson, $lessons)) + 1;?></h3>
 							<h1><?php the_title();?></h1>
 						</div>
 					</div>
