@@ -10,13 +10,22 @@ $course_progress = get_user_progress();
 $course_video = Learndash_Course_Video::get_instance();
 $lesson_settings = learndash_get_setting( $post );
 $video = $course_video->add_video_to_content( '', $post, $lesson_settings );
-
+$progression_enabled = is_lesson_progression_enabled($course_id);
 ?>
 
 <?php get_header(); ?>
 
 	<?php get_template_part('inc/templates/nav-products'); ?>
 
+	<?php if ( $progression_enabled && !is_previous_complete( $lesson )): $previous_lesson = $lessons[intval(array_search($lesson, $lessons)-1)]; ?>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h4>You must finish the previous lesson first: <a href="<?php echo get_permalink($previous_lesson->ID);?>"><?php echo $previous_lesson->post_title;?></a></h4>
+				</div>
+			</div>
+		</div>
+	<?php else: ?>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-3">
@@ -76,14 +85,14 @@ $video = $course_video->add_video_to_content( '', $post, $lesson_settings );
 						</div>
 						<div class="fx-adjacent-lessons">
 							<?php echo learndash_next_post_link(); ?>
-							<?php echo learndash_previous_post_link(); ?>
+							<?php if ( learndash_is_lesson_complete (get_current_user_id(), $lesson_id) ): ?>
+								<?php echo learndash_previous_post_link(); ?>
+							<?php endif;?>
 						</div>
 					</div>
 				</div>
 			</div>	
 		</div>
 	</div>
-
-	
-
+	<?php endif;?>
 <?php get_footer(); ?>

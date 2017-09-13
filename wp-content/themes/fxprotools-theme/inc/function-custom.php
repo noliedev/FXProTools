@@ -276,7 +276,8 @@ function verify_email_address($verification_code)
 	}
 }
 
-function get_user_referrals(){
+function get_user_referrals()
+{
 	if(get_current_user_id() > 0){
 		$affiliate_id = affwp_get_affiliate_id( get_current_user_id() );
 		$affiliate_referrals = affiliate_wp()->referrals->get_referrals( array(
@@ -287,7 +288,8 @@ function get_user_referrals(){
 	}
 }
 
-function time_elapsed_string($datetime, $full = false) {
+function time_elapsed_string($datetime, $full = false) 
+{
     $now = new DateTime;
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);
@@ -314,4 +316,9 @@ function time_elapsed_string($datetime, $full = false) {
 
     if (!$full) $string = array_slice($string, 0, 1);
     return $string ? implode(', ', $string) . ' ago' : 'just now';
+}
+
+function is_lesson_progression_enabled($course_id) {
+	$meta = get_post_meta( $course_id, '_sfwd-courses' );
+	return empty( $meta[0]['sfwd-courses_course_disable_lesson_progression'] );
 }
