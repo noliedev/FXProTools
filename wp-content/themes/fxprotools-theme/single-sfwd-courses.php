@@ -41,7 +41,7 @@ $course_progress = get_user_progress();
 							<h3>Course Description</h3>
 							
 							<div class="content">
-								<?php echo $course->post_content; ?>
+								<?php echo wpautop($course->post_content); ?>
 							</div>
 							<hr/>
 							<h5 class="text-bold">Course Progress</h5>
