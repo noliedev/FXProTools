@@ -14,6 +14,14 @@ $core_settings = [
 	'core-theme-settings.php',
 ];
 
+
+	function my_enqueue($hook) {
+		wp_enqueue_script('custom_js_script', get_bloginfo('template_url').'/assets/js/custom_script.js', array('jquery'));
+	}
+
+	add_action('admin_enqueue_scripts', 'my_enqueue');
+	
+	
 foreach ($core_settings as $cs) {
 	require_once('inc/core/'.$cs);
 }
@@ -36,11 +44,6 @@ function active_subscription_list($from_date=null, $to_date=null) {
             ),
         ),
     ) );
-    
-    /*echo "<pre>";
-    print_r($subscriptions);
-    echo "</pre>";
-    die("sd");*/
     
     //return $subscriptions;
 
@@ -99,18 +102,10 @@ add_action( 'wp', 'check_user_logged_in' );
 
 function check_user_logged_in(){
 	//FOR LIVE
-	if ((!is_user_logged_in()) && ((!is_shop()) && (!is_checkout()) && (!is_product()) && (!is_product_category()) && (!is_cart()) && (!is_home()) && (strpos(curPageURL(), 'login') === false))) {
+	if ((!is_user_logged_in()) && ((!is_shop()) && (!is_checkout()) && (!is_cart()) && (!is_home()) && (strpos(curPageURL(), 'login') === false))) {
 		wp_redirect(get_site_url().'/login/');
 		exit();
 	}
-	
-	//$subs = wcs_get_users_subscriptions(1);
-	//$subs = active_subscription_list();
-	
-	/*echo "<pre>";
-	print_r($subs);
-	echo "</pre>";	
-	die("sd");*/
 	
 	//FOR LOCAL
 	/*if ((!is_user_logged_in()) && ((!is_shop()) && (!is_checkout()) && (!is_product()) && (!is_product_category()) && (!is_cart()) && (curPageURL() != get_site_url().'/') && (strpos(curPageURL(), 'login') === false))) {

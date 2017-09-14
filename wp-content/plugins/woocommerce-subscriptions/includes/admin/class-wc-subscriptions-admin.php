@@ -192,6 +192,7 @@ class WC_Subscriptions_Admin {
 
 		$chosen_price        = get_post_meta( $post->ID, '_subscription_price', true );
 		$chosen_interval     = get_post_meta( $post->ID, '_subscription_period_interval', true );
+		$chosen_trial_amount = get_post_meta( $post->ID, '_subscription_trial_amount', true );						//Trial Amount
 		$chosen_trial_length = WC_Subscriptions_Product::get_trial_length( $post->ID );
 		$chosen_trial_period = WC_Subscriptions_Product::get_trial_period( $post->ID );
 
@@ -255,8 +256,21 @@ class WC_Subscriptions_Admin {
 		) );
 
 		// Trial Length
-		?><p class="form-field _subscription_trial_length_field">
-			<label for="_subscription_trial_length"><?php esc_html_e( 'Free trial', 'woocommerce-subscriptions' ); ?></label>
+		?>
+		
+		<!-- Trial Amount -->
+		<p class="form-field _subscription_trial_amount_field">
+			<label for="_subscription_trial_amount"><?php printf( esc_html__( 'Trial Amount (%s)', 'woocommerce-subscriptions' ), esc_html( get_woocommerce_currency_symbol() ) ); ?></label>
+			<span class="wrap">
+				<input type="text" id="_subscription_trial_amount" name="_subscription_trial_amount" placeholder="<?php echo esc_attr_x( 'e.g. 1.00', 'example price', 'woocommerce-subscriptions' ); ?>" class="wc_input_subscription_trial_amount" value="<?php echo esc_attr( $chosen_trial_amount ); ?>" />
+				<label for="_subscription_trial_amount" class="wcs_hidden_label"><?php esc_html_e( 'Subscription Trial Amount', 'woocommerce-subscriptions' ); ?></label>
+			</span>
+			<?php echo wcs_help_tip( $trial_tooltip ); ?>
+		</p>
+		<!-- //Trial Amount -->
+		
+		<p class="form-field _subscription_trial_length_field">
+			<label for="_subscription_trial_length"><?php esc_html_e( 'Trial Length', 'woocommerce-subscriptions' ); ?></label>
 			<span class="wrap">
 				<input type="text" id="_subscription_trial_length" name="_subscription_trial_length" class="wc_input_subscription_trial_length" value="<?php echo esc_attr( $chosen_trial_length ); ?>" />
 				<label for="_subscription_trial_period" class="wcs_hidden_label"><?php esc_html_e( 'Subscription Trial Period', 'woocommerce-subscriptions' ); ?></label>
@@ -267,7 +281,10 @@ class WC_Subscriptions_Admin {
 				</select>
 			</span>
 			<?php echo wcs_help_tip( $trial_tooltip ); ?>
-		</p><?php
+		</p>
+		
+		
+		<?php
 
 		do_action( 'woocommerce_subscriptions_product_options_pricing' );
 
@@ -368,6 +385,11 @@ class WC_Subscriptions_Admin {
 	 * @since 1.0
 	 */
 	public static function save_subscription_meta( $post_id ) {
+		
+		/*echo "<pre>";
+		print_r($_POST);
+		echo "</pre>";
+		die("sd");*/
 
 		if ( self::$saved_product_meta || ( empty( $_POST['_wcsnonce'] ) || ! wp_verify_nonce( $_POST['_wcsnonce'], 'wcs_subscription_meta' ) || ! isset( $_POST['product-type'] ) || ! in_array( $_POST['product-type'], apply_filters( 'woocommerce_subscription_product_types', array( WC_Subscriptions::$name ) ) ) ) ) {
 			return;
@@ -415,6 +437,7 @@ class WC_Subscriptions_Admin {
 		}
 
 		update_post_meta( $post_id, '_subscription_trial_length', $_POST['_subscription_trial_length'] );
+		update_post_meta( $post_id, '_subscription_trial_amount', $_POST['_subscription_trial_amount'] );						//Trial Amount
 
 		$_REQUEST['_subscription_sign_up_fee']       = wc_format_decimal( $_REQUEST['_subscription_sign_up_fee'] );
 		$_REQUEST['_subscription_one_time_shipping'] = isset( $_REQUEST['_subscription_one_time_shipping'] ) ? 'yes' : 'no';
@@ -637,6 +660,7 @@ class WC_Subscriptions_Admin {
 			'_subscription_period',
 			'_subscription_period_interval',
 			'_subscription_length',
+			'_subscription_trial_amount',											//Trial Amount
 			'_subscription_trial_period',
 			'_subscription_trial_length',
 		);
