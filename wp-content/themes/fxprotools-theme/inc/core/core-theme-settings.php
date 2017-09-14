@@ -211,6 +211,7 @@ if(!class_exists('ThemeSettings')){
 				'description'           => __( 'Post Type Description', 'fxprotools' ),
 				'labels'                => $labels,
 				'supports'              => array( 'title', 'thumbnail', 'page-attributes'),
+				'taxonomies'			=> array( 'category' ),
 				'hierarchical'          => false,
 				'public'                => true,
 				'show_ui'               => true,
