@@ -3,14 +3,14 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-6">
-					<ul class="fx-denied-left fx-denied-nav">
+					<ul class="fx-missing-left fx-missing-nav">
 						<li><a href="mailto:support@fxprotools.com">support@fxprotools.com</a></li>
 						<li><a href="tel:+1 800 781 0187">+1 800 781 0187</a></li>
 						<li>Mon-Fri 10am-10pm EST</li>
 					</ul>
 				</div>
 				<div class="col-sm-6">
-					<ul class="fx-denied-right fx-denied-nav">
+					<ul class="fx-missing-right fx-missing-nav">
 						<li><a href="#" class="btn-flag">English</a></li>
 						<li class="fx-nav-btn"><a href="<?php echo get_option('home'); ?>/login">Members Login</a></li>
 					</ul>

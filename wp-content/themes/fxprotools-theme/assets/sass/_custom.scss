@@ -1015,15 +1015,15 @@
 }
 
 // Access Denied
-.fx-access-denied{
+.fx-access-denied, .fx-404{
 	.fx-navbar-main{
 		display: none;
 	}
-	.fx-access-denied-top{
+	.fx-access-denied-top, .fx-404-top{
 		border-bottom: 2px solid #dedede;
 		padding: 15px 0;
 	}
-	.fx-denied-nav{
+	.fx-missing-nav{
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -1034,7 +1034,7 @@
 			}
 		}
 	}
-	.fx-denied-left{
+	.fx-missing-left{
 		li{
 			font-size: 13px;
 			border-right: 1px solid #000;
@@ -1049,7 +1049,7 @@
 			}
 		}
 	}
-	.fx-denied-right{
+	.fx-missing-right{
 		text-align: right;
 		li{
 			font-size: 13px;
@@ -1090,6 +1090,14 @@
 					}
 				}
 			}
+		}
+	}
+	.fx-header-title{
+		h1{
+			font-size: 32px;
+		}
+		p{
+			font-size: 20px;
 		}
 	}
 	.section-one{
@@ -1136,8 +1144,67 @@
 		    font-size: 18px;
     	}
 	}
+	.note{
+		.btn{
+			border: 1px solid #940000;
+			font-size: 18px;
+			padding: 15px 25px 15px 25px;
+			max-width: 72%;
+			margin: 0 auto;
+			border-radius: 3px;
+			background: #fe1111;
+			background: -moz-linear-gradient(top, #fe1111 0%, #e10101 100%);
+			background: -webkit-linear-gradient(top, #fe1111 0%,#e10101 100%);
+			background: linear-gradient(to bottom, #fe1111 0%,#e10101 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fe1111', endColorstr='#e10101',GradientType=0 );
+			&:hover{
+				background: #e10101;
+			}
+		}
+	}
+	.note-gray{
+		background: #f9f9f9;
+		padding: 40px;
+		margin-bottom: 25px;
+		p{
+			margin-bottom: 20px;
+			&:last-child{
+				margin: 0;
+			}
+		}
+		a{
+			color: #000;
+			text-decoration: none;
+			border-bottom: 1px solid #8A8A8A;
+		}
+		.numbered-bullets{
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			li{
+				margin-bottom: 15px;
+				padding-left: 42px;
+				position: relative;
+				span{
+					background: $red;
+					display: inline-block;
+					color: #fff;
+					width: 30px;
+					height: 30px;
+					border-radius: 50%;
+					text-align: center;
+					line-height: 30px;
+					font-size: 16px;
+					position: absolute;
+					top: 50%;
+					left: 0;
+					margin-top: -15px;
+				}
+			}
+		}
+	}
 	@media (max-width: 767px){
-		.fx-denied-nav{
+		.fx-missing-nav{
 			text-align: center;
 			margin-bottom: 10px;
 		}
