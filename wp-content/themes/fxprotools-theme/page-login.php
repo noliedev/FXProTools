@@ -25,7 +25,7 @@
 			<p class="small">You can sign into your account by using the username or email and password used during registration process</p>
 			<form action="<?php echo site_url('wp-login.php?action=login', 'login_post') ?>" method="post">
 				<div class="form-group">
-					<input type="email" class="form-control no-border-radius" id="email" name="log">
+					<input type="text" class="form-control no-border-radius" id="email" name="log">
 				</div>
 				<div class="form-group">
 					<input type="password" class="form-control no-border-radius" id="pwd" name="pwd" >

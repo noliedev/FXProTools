@@ -16,6 +16,7 @@ if(!class_exists('ThemeSettings')){
 		
 		public function __construct()
 		{
+			add_action('wp', array($this, 'enforce_page_access'));
 			add_action('wp_enqueue_scripts', array($this, 'enqueue_theme_assets'));
 			add_filter('rwmb_meta_boxes',  array($this, 'initialize_meta_boxes'));
 			add_action('init', array($this, 'course_category_rewrite'));
@@ -25,6 +26,22 @@ if(!class_exists('ThemeSettings')){
 			add_action('user_register', array($this, 'register_user_checklist'));
 			add_action('user_register', array($this, 'send_email_verification'));
 			add_action('user_register', array($this, 'register_affiliate'));
+		}
+
+		public function enforce_page_access()
+		{
+			global $post;
+    		$slug = $post->post_name;
+    		$guest_allowed_post_type = array( 'product' );
+			$guest_allowed_pages = array( 'login', 'forgot-password', 'verify-email', 'funnels');
+
+			if( is_user_logged_in() ) return 0;
+			if( !is_product() && !is_cart() && !is_checkout() && !is_shop() && !is_404() ) {
+				if( !in_array($slug, $guest_allowed_pages) ){
+					wp_redirect( home_url() . '/login');
+					exit;
+				}
+			}
 		}
 
 		// Theme assets

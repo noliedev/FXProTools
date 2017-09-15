@@ -80,56 +80,7 @@ function active_subscription_list($from_date=null, $to_date=null) {
     echo '</table>';
 }
 
-function forceRedirect($filename)
-{
-	$filename=$filename;
-	if (!headers_sent()){
-		header('Location: '.$filename);
-		return;
-	}
-	else {
-			echo '<script type="text/javascript">';
-			echo 'window.location.href="'.$filename.'";';
-			echo '</script>';
-			echo '<noscript>';
-			echo '<meta http-equiv="refresh" content="0;url='.$filename.'" />';
-			echo '</noscript>';
-	}
-}
 
-//add_action('wp_head','check_user_logged_in');
-add_action( 'wp', 'check_user_logged_in' );
-
-function check_user_logged_in(){
-	//FOR LIVE
-	if ((!is_user_logged_in()) && ((!is_shop()) && (!is_checkout()) && (!is_cart()) && (!is_home()) && (strpos(curPageURL(), 'login') === false))) {
-		wp_redirect(get_site_url().'/login/');
-		exit();
-	}
-	
-	//FOR LOCAL
-	/*if ((!is_user_logged_in()) && ((!is_shop()) && (!is_checkout()) && (!is_product()) && (!is_product_category()) && (!is_cart()) && (curPageURL() != get_site_url().'/') && (strpos(curPageURL(), 'login') === false))) {
-		wp_redirect(get_site_url().'/index.php/index.php/login/');
-		exit();
-	}*/
-}
-
-//
-//  Get current page URL
-//
-
-function curPageURL() {
-    $pageURL = 'http';
-    if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
-
-    $pageURL .= "://";
-    if ($_SERVER["SERVER_PORT"] != "80") {
-        $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-    } else {
-        $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-    }
-    return $pageURL;
-}
 
 /**
  * -------------------

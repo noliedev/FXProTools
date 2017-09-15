@@ -1,3 +1,7 @@
+<?php
+$product_id = 48; //business package
+if ( !WC_Subscriptions_Manager::user_has_subscription( '', $product_id, 'active') ) wp_redirect( home_url() . '/dashboard/');
+?>
 <?php get_header(); ?>
 
 	<?php get_template_part('inc/templates/nav-marketing'); ?>
