@@ -593,20 +593,120 @@ function init_odz_authorizeddotnet_payment_gateway() {
                 }
                 
                 $OrderTotal = $order->order_total;
-                
-				/***** Sign up Fee Transaction Begins HERE ***************/
-                if(!empty($OrderTotal) && $OrderTotal > 0){
+
+				/***** PAYMENT Process Begins HERE ***************/
+                //if(!empty($OrderTotal) && $OrderTotal > 0){
 					
-					if(!$signup_fee){			// Recurring Payment
-					
-						/* Create a merchantAuthenticationType object with authentication details
-						   retrieved from the constants file */
-						$subscription_price = get_post_meta($product->id,'_subscription_price');
+					if(!$signup_fee){			// No Signup Fee, Just Subscription
 						$subscription_period = get_post_meta($product->id,'_subscription_period');
 						$subscription_period_interval = get_post_meta($product->id,'_subscription_period_interval');
-						$subscription_trial_period = get_post_meta($product->id,'_subscription_trial_period');
-						$subscription_sign_up_fee = get_post_meta($product->id,'_subscription_sign_up_fee');
 						$subscription_length = get_post_meta($product->id,'_subscription_length');
+						$subscription_price = get_post_meta($product->id,'_subscription_price');
+						
+						$subscription_trial_period = get_post_meta($product->id,'_subscription_trial_period');				//Trial Period
+						$subscription_trial_length = get_post_meta($product->id,'_subscription_trial_length');				//Trial Length
+						$subscription_trial_amount = get_post_meta($product->id,'_subscription_trial_amount');				//Trial Amount
+						
+						
+						$subscription_trial = false;
+						if($subscription_trial_length[0] > 0)
+							$subscription_trial = true;
+							
+						if($subscription_trial){
+							//If Trial Amount exists? Then it will get deducted at the time of Transcation
+							if($subscription_trial_amount[0] > 0){
+								/********************************************************
+								**************** Trial Amount Deduction *****************
+								********************************************************/
+								
+								$card_no = $_POST['woo-authorizeddotnet-payment-gateway-card-number'];
+								$card_exp_yr = $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-year'];
+								$card_exp_mnth = $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-month'];
+								$card_cod = $_POST['woo-authorizeddotnet-payment-gateway-card-cvc'];
+								
+								$set_desc = "Description of the Trial Amount";
+								
+								$set_first_name = isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '';
+								$set_last_name = isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '';
+								$set_company = isset($_POST['billing_company']) ? $_POST['billing_company'] : '';
+								$set_city = isset($_POST['billing_city']) ? $_POST['billing_city'] : '';
+								$set_address = isset($_POST['billing_city']) ? $_POST['billing_city'] : '';
+								$set_state = isset($_POST['billing_state']) ? $_POST['billing_state'] : '';
+								$set_postcode = isset($_POST['billing_postcode']) ? $_POST['billing_postcode'] : '';
+								$set_country = isset($_POST['billing_country']) ? $_POST['billing_country'] : '';
+								
+								$set_email = isset($_POST['billing_email']) ? $_POST['billing_email'] : '';
+								
+								$set_amt = $subscription_trial_amount[0];			// Trial Amount
+								
+								/* One Time Payment */
+								$response = $this->create_one_time_payment($card_no,$card_exp_yr,$card_exp_mnth,$card_cod,$set_desc,$set_first_name,$set_last_name,$set_company,$set_city,$set_address,$set_state,$set_postcode,$set_country,$set_email,$set_amt);
+
+								if ($response != null) {
+									// Check to see if the API request was successfully received and acted upon
+									if ($response->getMessages()->getResultCode() == "Ok") {
+										// Since the API request was successful, look for a transaction response
+										// and parse it to display the results of authorizing the card
+										$tresponse = $response->getTransactionResponse();
+										if ($tresponse != null && $tresponse->getMessages() != null) {
+											echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
+											echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
+											echo " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
+											echo " Auth Code: " . $tresponse->getAuthCode() . "\n";
+											echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
+										} else {
+											echo "Transaction Failed \n";
+											if ($tresponse->getErrors() != null) {
+												echo " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+												echo " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+											}
+										}
+										// Or, print errors if the API request wasn't successful
+									} else {
+										echo "Transaction Failed \n";
+										$tresponse = $response->getTransactionResponse();
+									
+										if ($tresponse != null && $tresponse->getErrors() != null) {
+											echo " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+											echo " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+										} else {
+											echo " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
+											echo " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
+										}
+									}
+								} else {
+									echo  "No response returned \n";
+								}
+								
+								/********************************************************
+								*************** //Trial Amount Deduction ****************
+								********************************************************/
+							}
+						}
+						
+						/********************************************************
+						************ Recurring After Trial(If There) ************
+						********************************************************/
+						
+						$set_first_name = isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '';
+						$set_last_name = isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '';
+						$set_start_date= new DateTime($order->order_date);
+						
+						if($subscription_trial){
+							if($subscription_trial_period[0]=='day'){
+								$trial_days = $subscription_trial_length[0]; 
+							}
+							elseif($subscription_trial_period[0]=='week'){
+								$trial_days = $subscription_trial_length[0]*7;
+							}
+							elseif($subscription_trial_period[0]=='month'){
+								$trial_days = $subscription_trial_length[0]*30;
+							}
+							elseif($subscription_trial_period[0]=='year'){
+								$trial_days = $subscription_trial_length[0]*365;
+							}
+							$set_start_date= new DateTime(Date('Y-m-d h:i:s', strtotime($trial_days." days")));
+						}
 						
 						if($subscription_period[0] == 'week'){
 							$interval_Unit = 'days';
@@ -619,74 +719,25 @@ function init_odz_authorizeddotnet_payment_gateway() {
 							$subscriptionLength = $subscription_length[0];
 						}
 						
-						/*echo "<br>";
-						echo "subscription_period_interval : ".$subscription_period_interval[0];
-						echo "<br>";
-						echo "intervalLength : ".$intervalLength;
-						echo "<br>";
-						echo "subscriptionLength : ".$subscriptionLength;
-						echo "<br>";
-						die("sd");*/
-						
-						$startDate = $order->order_date;
- 
-						$merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-						$merchantAuthentication->setName($this->settings['sandbox_merchant_login_id']);
-						$merchantAuthentication->setTransactionKey($this->settings['sandbox_merchant_transaction_key']);
-						
-						// Set the transaction's refId
-						$refId = 'ref' . time();
-
-						// Subscription Type Info
-						$subscription = new AnetAPI\ARBSubscriptionType();
-						$subscription->setName(isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '');
-
-						$interval = new AnetAPI\PaymentScheduleType\IntervalAType();
-						$interval->setLength($intervalLength);
-						$interval->setUnit($interval_Unit);
-
-						$paymentSchedule = new AnetAPI\PaymentScheduleType();
-						$paymentSchedule->setInterval($interval);
-						$paymentSchedule->setStartDate(new DateTime($startDate));
 						if($subscriptionLength > 0){
-							$paymentSchedule->setTotalOccurrences($subscriptionLength/$intervalLength);
+							$set_total_occurrences = $subscriptionLength/$intervalLength;
 						}
 						else{
-							$paymentSchedule->setTotalOccurrences("9999");
+							$set_total_occurrences = "9999";
 						}
 						
-						$subscription->setPaymentSchedule($paymentSchedule);
-						$subscription->setAmount($subscription_price[0]);
+						$set_amount = $subscription_price[0];
 						
-						//$subscription->setTrialAmount("0.00");
+						$card_no = $_POST['woo-authorizeddotnet-payment-gateway-card-number'];
+						$card_exp_yr = $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-year'];
+						$card_exp_mnth = $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-month'];
 						
-						$creditCard = new AnetAPI\CreditCardType();
-						$creditCard->setCardNumber($_POST['woo-authorizeddotnet-payment-gateway-card-number']);
-						$creditCard->setExpirationDate($_POST['woo-authorizeddotnet-payment-gateway-card-expiry-year']."-".$_POST['woo-authorizeddotnet-payment-gateway-card-expiry-month']);
-
-						$payment = new AnetAPI\PaymentType();
-						$payment->setCreditCard($creditCard);
-						$subscription->setPayment($payment);
-
-						$order_Anet = new AnetAPI\OrderType();
-						$order_Anet->setInvoiceNumber(rand());        
-						$order_Anet->setDescription("Description of the subscription"); 
-						$subscription->setOrder($order_Anet); 
+						$set_desc = "Description of the Subscription";
 						
-						$billTo = new AnetAPI\NameAndAddressType();
-						$billTo->setFirstName(isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '');
-						$billTo->setLastName(isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '');
-
-						$subscription->setBillTo($billTo);
-
-						$request = new AnetAPI\ARBCreateSubscriptionRequest();
-						$request->setmerchantAuthentication($merchantAuthentication);
-						$request->setRefId($refId);
-						$request->setSubscription($subscription);
-						$controller = new AnetController\ARBCreateSubscriptionController($request);
-
-						$response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
+						$signup_amount = "";      //NOTE: Because there is not signup fee, so there will be no extra deduction after the end of Trial Period.
 						
+						/* Create Subscription */
+						$response = $this->create_subscription($set_first_name,$set_last_name,$intervalLength,$interval_Unit,$set_start_date,$set_total_occurrences,$set_amount,$signup_amount,$card_no,$card_exp_yr,$card_exp_mnth,$set_desc,$subscription_trial);
 						
 						if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") )
 						{
@@ -698,119 +749,126 @@ function init_odz_authorizeddotnet_payment_gateway() {
 							$errorMessages = $response->getMessages()->getMessage();
 							echo "Response : " . $errorMessages[0]->getCode() . "  " .$errorMessages[0]->getText() . "\n";
 						}
+						
+						/********************************************************
+						*********** //Recurring After Trial(If There) ***********
+						********************************************************/
 					
 					}
-					else{				// One Time  Payment
+					else{				// With Trial/Signup Fee and Subscription
 						
-						/* Create a merchantAuthenticationType object with authentication details
-							retrieved from the constants file */
-
-						$subscription_price = get_post_meta($product->id,'_subscription_price');
-						$subscription_period = get_post_meta($product->id,'_subscription_period');
-						$subscription_period_interval = get_post_meta($product->id,'_subscription_period_interval');
-						$subscription_trial_period = get_post_meta($product->id,'_subscription_trial_period');				//Trial Period
 						$subscription_trial_length = get_post_meta($product->id,'_subscription_trial_length');				//Trial Length
 						$subscription_trial_amount = get_post_meta($product->id,'_subscription_trial_amount');				//Trial Amount
 						
+						$subscription_price = get_post_meta($product->id,'_subscription_price');
+						$signup_amount = $OrderTotal - $subscription_price[0];												//Signup Fee Only
+						
 						$subscription_trial = false;
-						if($subscription_trial_length[0] > 0){
+						if($subscription_trial_length[0] > 0)
 							$subscription_trial = true;
-						}
 						
 						if($subscription_trial){
-							$amount = $OrderTotal;
+							//No Signup Deduction at the time of Transaction
+							//But if Trial Amount exists? Then it will get deducted at the time of Transcation
+							if($subscription_trial_amount[0] > 0){
+								
+								/********************************************************
+								**************** Trial Amount Deduction *****************
+								********************************************************/
+								
+								$card_no = $_POST['woo-authorizeddotnet-payment-gateway-card-number'];
+								$card_exp_yr = $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-year'];
+								$card_exp_mnth = $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-month'];
+								$card_cod = $_POST['woo-authorizeddotnet-payment-gateway-card-cvc'];
+								
+								$set_desc = "Description of the Trial Amount";
+								
+								$set_first_name = isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '';
+								$set_last_name = isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '';
+								$set_company = isset($_POST['billing_company']) ? $_POST['billing_company'] : '';
+								$set_city = isset($_POST['billing_city']) ? $_POST['billing_city'] : '';
+								$set_address = isset($_POST['billing_city']) ? $_POST['billing_city'] : '';
+								$set_state = isset($_POST['billing_state']) ? $_POST['billing_state'] : '';
+								$set_postcode = isset($_POST['billing_postcode']) ? $_POST['billing_postcode'] : '';
+								$set_country = isset($_POST['billing_country']) ? $_POST['billing_country'] : '';
+								
+								$set_email = isset($_POST['billing_email']) ? $_POST['billing_email'] : '';
+								
+								$set_amt = $subscription_trial_amount[0];			// Trial Amount
+								
+								/* One Time Payment */
+								$response = $this->create_one_time_payment($card_no,$card_exp_yr,$card_exp_mnth,$card_cod,$set_desc,$set_first_name,$set_last_name,$set_company,$set_city,$set_address,$set_state,$set_postcode,$set_country,$set_email,$set_amt);
+								
+
+								if ($response != null) {
+									// Check to see if the API request was successfully received and acted upon
+									if ($response->getMessages()->getResultCode() == "Ok") {
+										// Since the API request was successful, look for a transaction response
+										// and parse it to display the results of authorizing the card
+										$tresponse = $response->getTransactionResponse();
+										if ($tresponse != null && $tresponse->getMessages() != null) {
+											echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
+											echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
+											echo " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
+											echo " Auth Code: " . $tresponse->getAuthCode() . "\n";
+											echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
+										} else {
+											echo "Transaction Failed \n";
+											if ($tresponse->getErrors() != null) {
+												echo " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+												echo " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+											}
+										}
+										// Or, print errors if the API request wasn't successful
+									} else {
+										echo "Transaction Failed \n";
+										$tresponse = $response->getTransactionResponse();
+									
+										if ($tresponse != null && $tresponse->getErrors() != null) {
+											echo " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+											echo " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+										} else {
+											echo " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
+											echo " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
+										}
+									}
+								} else {
+									echo  "No response returned \n";
+								}
+								
+								/********************************************************
+								*************** //Trial Amount Deduction ****************
+								********************************************************/
+							}
 						}
 						else{
-							$amount = $OrderTotal - $subscription_price[0];
-						}
-						
-						/*echo "OrderTotal: ".$OrderTotal;
-						echo "<br>";
-						echo "subscription_price: ".$subscription_price[0];
-						echo "<br>";
-						echo "amount: ".$amount;
-						echo "<br>";
-						die("sd");*/
-						
-						if($subscription_trial){
-							//No AIM Deduction
-						}
-						else{						
-							$merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-							$merchantAuthentication->setName($this->settings['sandbox_merchant_login_id']);
-							$merchantAuthentication->setTransactionKey($this->settings['sandbox_merchant_transaction_key']);
 							
-							// Set the transaction's refId
-							$refId = 'ref' . time();
-
-							// Create the payment data for a credit card
-							$creditCard = new AnetAPI\CreditCardType();
-							$creditCard->setCardNumber($_POST['woo-authorizeddotnet-payment-gateway-card-number']);
-							$creditCard->setExpirationDate($_POST['woo-authorizeddotnet-payment-gateway-card-expiry-year']."-".$_POST['woo-authorizeddotnet-payment-gateway-card-expiry-month']);
-							$creditCard->setCardCode($_POST['woo-authorizeddotnet-payment-gateway-card-cvc']);
-
-							// Add the payment data to a paymentType object
-							$paymentOne = new AnetAPI\PaymentType();
-							$paymentOne->setCreditCard($creditCard);
-
-							// Create order information
-							$order_Anet = new AnetAPI\OrderType();
-							$order_Anet->setInvoiceNumber(rand());
-							$order_Anet->setDescription("Description of the signup");
-
-							// Set the customer's Bill To address
-							$customerAddress = new AnetAPI\CustomerAddressType();
-							$customerAddress->setFirstName(isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '');
-							$customerAddress->setLastName(isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '');
-							$customerAddress->setCompany(isset($_POST['billing_company']) ? $_POST['billing_company'] : '');
-							$customerAddress->setAddress(isset($_POST['billing_city']) ? $_POST['billing_city'] : '');									//DBT
-							$customerAddress->setCity(isset($_POST['billing_city']) ? $_POST['billing_city'] : '');
-							$customerAddress->setState(isset($_POST['billing_state']) ? $_POST['billing_state'] : '');
-							$customerAddress->setZip(isset($_POST['billing_postcode']) ? $_POST['billing_postcode'] : '');
-							$customerAddress->setCountry(isset($_POST['billing_country']) ? $_POST['billing_country'] : '');
-
-							// Set the customer's identifying information
-							$customerData = new AnetAPI\CustomerDataType();
-							$customerData->setType("individual");
-							$customerData->setId(rand());
-							$customerData->setEmail(isset($_POST['billing_email']) ? $_POST['billing_email'] : '');
-
-							// Add values for transaction settings
-							//$duplicateWindowSetting = new AnetAPI\SettingType();
-							//$duplicateWindowSetting->setSettingName("duplicateWindow");																//DBT
-							//$duplicateWindowSetting->setSettingValue("60");																			//DBT
-
-							// Add some merchant defined fields. These fields won't be stored with the transaction,
-							// but will be echoed back in the response.
-							$merchantDefinedField1 = new AnetAPI\UserFieldType();
-							$merchantDefinedField1->setName("customerLoyaltyNum");
-							$merchantDefinedField1->setValue(rand());
-
-							$merchantDefinedField2 = new AnetAPI\UserFieldType();
-							$merchantDefinedField2->setName("favoriteColor");
-							$merchantDefinedField2->setValue("blue");
-
-							// Create a TransactionRequestType object and add the previous objects to it
-							$transactionRequestType = new AnetAPI\TransactionRequestType();
-							$transactionRequestType->setTransactionType("authCaptureTransaction");
-							$transactionRequestType->setAmount($amount);
-							$transactionRequestType->setOrder($order_Anet);
-							$transactionRequestType->setPayment($paymentOne);
-							$transactionRequestType->setBillTo($customerAddress);
-							$transactionRequestType->setCustomer($customerData);
-							//$transactionRequestType->addToTransactionSettings($duplicateWindowSetting);
-							$transactionRequestType->addToUserFields($merchantDefinedField1);
-							$transactionRequestType->addToUserFields($merchantDefinedField2);
-
-							// Assemble the complete transaction request
-							$request = new AnetAPI\CreateTransactionRequest();
-							$request->setMerchantAuthentication($merchantAuthentication);
-							$request->setRefId($refId);
-							$request->setTransactionRequest($transactionRequestType);
-
-							// Create the controller and get the response
-							$controller = new AnetController\CreateTransactionController($request);
-							$response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+							/********************************************************
+							***************** Signup Fee Deduction ******************
+							********************************************************/
+							
+							$card_no = $_POST['woo-authorizeddotnet-payment-gateway-card-number'];
+							$card_exp_yr = $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-year'];
+							$card_exp_mnth = $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-month'];
+							$card_cod = $_POST['woo-authorizeddotnet-payment-gateway-card-cvc'];
+							
+							$set_desc = "Description of the Signup Fee";
+							
+							$set_first_name = isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '';
+							$set_last_name = isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '';
+							$set_company = isset($_POST['billing_company']) ? $_POST['billing_company'] : '';
+							$set_city = isset($_POST['billing_city']) ? $_POST['billing_city'] : '';
+							$set_address = isset($_POST['billing_city']) ? $_POST['billing_city'] : '';
+							$set_state = isset($_POST['billing_state']) ? $_POST['billing_state'] : '';
+							$set_postcode = isset($_POST['billing_postcode']) ? $_POST['billing_postcode'] : '';
+							$set_country = isset($_POST['billing_country']) ? $_POST['billing_country'] : '';
+							
+							$set_email = isset($_POST['billing_email']) ? $_POST['billing_email'] : '';
+							
+							$set_amt = $signup_amount;			//Singup Fee
+							
+							/* One Time Payment */
+							$response = $this->create_one_time_payment($card_no,$card_exp_yr,$card_exp_mnth,$card_cod,$set_desc,$set_first_name,$set_last_name,$set_company,$set_city,$set_address,$set_state,$set_postcode,$set_country,$set_email,$set_amt);
 
 							if ($response != null) {
 								// Check to see if the API request was successfully received and acted upon
@@ -818,7 +876,6 @@ function init_odz_authorizeddotnet_payment_gateway() {
 									// Since the API request was successful, look for a transaction response
 									// and parse it to display the results of authorizing the card
 									$tresponse = $response->getTransactionResponse();
-								
 									if ($tresponse != null && $tresponse->getMessages() != null) {
 										echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
 										echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
@@ -848,23 +905,24 @@ function init_odz_authorizeddotnet_payment_gateway() {
 							} else {
 								echo  "No response returned \n";
 							}
+							
+							/********************************************************
+							***************** //Signup Fee Deduction ******************
+							********************************************************/
 						}
 						
 						/********************************************************
-						**************** Recurring After Signup *****************
+						************* Recurring After Trial/Signup **************
 						********************************************************/
 						
-						/* Create a merchantAuthenticationType object with authentication details
-						   retrieved from the constants file */
+						$subscription_period = get_post_meta($product->id,'_subscription_period');
+						$subscription_period_interval = get_post_meta($product->id,'_subscription_period_interval');
+						$subscription_length = get_post_meta($product->id,'_subscription_length');
+						$subscription_trial_period = get_post_meta($product->id,'_subscription_trial_period');				//Trial Period
 						
-						
-						/*echo "<br>";
-						echo "Subscription Trial Data: ";
-						echo "<br>";
-						$this->pr($subscription_trial_period);
-						$this->pr($subscription_trial_length);
-						$this->pr($subscription_trial_amount);
-						die("sd");*/
+						$set_first_name = isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '';
+						$set_last_name = isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '';
+						$set_start_date= new DateTime($order->order_date);
 						
 						if($subscription_trial){
 							if($subscription_trial_period[0]=='day'){
@@ -879,11 +937,8 @@ function init_odz_authorizeddotnet_payment_gateway() {
 							elseif($subscription_trial_period[0]=='year'){
 								$trial_days = $subscription_trial_length[0]*365;
 							}
-							$subscription_start_date = Date('Y-m-d h:i:s', strtotime($trial_days." days"));
+							$set_start_date= new DateTime(Date('Y-m-d h:i:s', strtotime($trial_days." days")));
 						}
-						
-						$subscription_sign_up_fee = get_post_meta($product->id,'_subscription_sign_up_fee');
-						$subscription_length = get_post_meta($product->id,'_subscription_length');
 						
 						if($subscription_period[0] == 'week'){
 							$interval_Unit = 'days';
@@ -896,87 +951,27 @@ function init_odz_authorizeddotnet_payment_gateway() {
 							$subscriptionLength = $subscription_length[0];
 						}
 						
-						/*echo "<br>";
-						echo "subscription_period_interval : ".$subscription_period_interval[0];
-						echo "<br>";
-						echo "intervalLength : ".$intervalLength;
-						echo "<br>";
-						echo "subscriptionLength : ".$subscriptionLength;
-						echo "<br>";
-						die("sd");*/
-						
-						$startDate = $order->order_date;
- 
-						$merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-						$merchantAuthentication->setName($this->settings['sandbox_merchant_login_id']);
-						$merchantAuthentication->setTransactionKey($this->settings['sandbox_merchant_transaction_key']);
-						
-						// Set the transaction's refId
-						$refId = 'ref' . time();
-
-						// Subscription Type Info
-						$subscription = new AnetAPI\ARBSubscriptionType();
-						$subscription->setName(isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '');
-
-						$interval = new AnetAPI\PaymentScheduleType\IntervalAType();
-						$interval->setLength($intervalLength);
-						$interval->setUnit($interval_Unit);
-
-						$paymentSchedule = new AnetAPI\PaymentScheduleType();
-						$paymentSchedule->setInterval($interval);
-						
-						if($subscription_trial){
-							$paymentSchedule->setStartDate(new DateTime($subscription_start_date));
-						}
-						else{
-							$paymentSchedule->setStartDate(new DateTime($startDate));
-						}
-						
 						if($subscriptionLength > 0){
-							$paymentSchedule->setTotalOccurrences($subscriptionLength/$intervalLength);
+							$set_total_occurrences = $subscriptionLength/$intervalLength;
 						}
 						else{
-							$paymentSchedule->setTotalOccurrences("9999");
+							$set_total_occurrences = "9999";
 						}
+						
+						$set_amount = $subscription_price[0];
 						
 						if($subscription_trial){
-							$paymentSchedule->setTrialOccurrences($trial_days);
+							$signup_amount = $OrderTotal;										//Because in this case Order Total will not contain Subscription Fee
 						}
 						
-						$subscription->setPaymentSchedule($paymentSchedule);
-						$subscription->setAmount($subscription_price[0]);
+						$card_no = $_POST['woo-authorizeddotnet-payment-gateway-card-number'];
+						$card_exp_yr = $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-year'];
+						$card_exp_mnth = $_POST['woo-authorizeddotnet-payment-gateway-card-expiry-month'];
 						
-						if($subscription_trial){
-							$subscription->setTrialAmount($subscription_trial_amount[0]);
-						}
+						$set_desc = "Description of the Subscription";
 						
-						$creditCard = new AnetAPI\CreditCardType();
-						$creditCard->setCardNumber($_POST['woo-authorizeddotnet-payment-gateway-card-number']);
-						$creditCard->setExpirationDate($_POST['woo-authorizeddotnet-payment-gateway-card-expiry-year']."-".$_POST['woo-authorizeddotnet-payment-gateway-card-expiry-month']);
-
-						$payment = new AnetAPI\PaymentType();
-						$payment->setCreditCard($creditCard);
-						$subscription->setPayment($payment);
-
-						$order_Anet = new AnetAPI\OrderType();
-						$order_Anet->setInvoiceNumber(rand());        
-						$order_Anet->setDescription("Description of the subscription"); 
-						$subscription->setOrder($order_Anet); 
-						
-						$billTo = new AnetAPI\NameAndAddressType();
-						$billTo->setFirstName(isset($_POST['billing_first_name']) ? $_POST['billing_first_name'] : '');
-						$billTo->setLastName(isset($_POST['billing_last_name']) ? $_POST['billing_last_name'] : '');
-
-						$subscription->setBillTo($billTo);
-
-						$request = new AnetAPI\ARBCreateSubscriptionRequest();
-						$request->setmerchantAuthentication($merchantAuthentication);
-						$request->setRefId($refId);
-						$request->setSubscription($subscription);
-						$controller = new AnetController\ARBCreateSubscriptionController($request);
-
-						$response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
-						
+						/* Create Subscription */
+						$response = $this->create_subscription($set_first_name,$set_last_name,$intervalLength,$interval_Unit,$set_start_date,$set_total_occurrences,$set_amount,$signup_amount,$card_no,$card_exp_yr,$card_exp_mnth,$set_desc,$subscription_trial);
 						
 						if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") )
 						{
@@ -990,16 +985,16 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						}
 						
 						//echo "<br>";
-						//die("HUAAAAAA");
+						//die("END");
 						
 						/********************************************************
-						*************** //Recurring After Signup ****************
+						************ //Recurring After Trial/Signup *************
 						********************************************************/
 						
 					}
                 
-				}
-				/***** Sign up Fee Transaction Ends HERE ***************/
+				//}
+				/***** //PAYMENT Process Ends HERE ***************/
 
                 
               
@@ -1008,19 +1003,6 @@ function init_odz_authorizeddotnet_payment_gateway() {
 				if ($response != null) {
 					// get subscription of order
 					$subscriptions_ids = wcs_get_subscriptions_for_order( $order_id );
-					
-					/*echo "<pre>";
-					print_r($response);
-					echo "</pre>";	
-					
-					echo "<pre>";
-					print_r($subscriptions_ids);
-					echo "</pre>";
-					
-					echo "<pre>";
-					echo "wc_authorizeddotnet_gateway_subscription_id: ".$response->getSubscriptionId();
-					echo "</pre>";
-					die("sd");*/
 					
 					foreach( $subscriptions_ids as $subscription_id => $subscription_obj ){
 						update_post_meta($subscription_id, 'wc_authorizeddotnet_gateway_subscription_id', $response->getSubscriptionId());
@@ -1149,7 +1131,6 @@ function init_odz_authorizeddotnet_payment_gateway() {
 				/* ******** Result Handeling Ends ***********/
                 
                 
-                
             }
             // Subscription Product Ends
             // For Non-subscription Order
@@ -1157,6 +1138,143 @@ function init_odz_authorizeddotnet_payment_gateway() {
 			}*/
 			// Non Subscription Tarnsaction Ends
             
+		}
+		
+		public function create_one_time_payment($card_no,$card_exp_yr,$card_exp_mnth,$card_cod,$set_desc,$set_first_name,$set_last_name,$set_company,$set_city,$set_address,$set_state,$set_postcode,$set_country,$set_email,$set_amt){
+			
+			/* Create a merchantAuthenticationType object with authentication details */
+			$merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+			$merchantAuthentication->setName($this->settings['sandbox_merchant_login_id']);
+			$merchantAuthentication->setTransactionKey($this->settings['sandbox_merchant_transaction_key']);
+			
+			// Create the payment data for a credit card
+			$creditCard = new AnetAPI\CreditCardType();
+			$creditCard->setCardNumber($card_no);
+			$creditCard->setExpirationDate($card_exp_yr."-".$card_exp_mnth);
+			$creditCard->setCardCode($card_cod);
+			
+			// Add the payment data to a paymentType object
+			$paymentOne = new AnetAPI\PaymentType();
+			$paymentOne->setCreditCard($creditCard);
+			
+			// Set the transaction's refId
+			$refId = 'ref' . time();
+			
+			// Create order information
+			$order_Anet = new AnetAPI\OrderType();
+			$order_Anet->setInvoiceNumber(rand());
+			$order_Anet->setDescription($set_desc);
+			
+			// Set the customer's Bill To address
+			$customerAddress = new AnetAPI\CustomerAddressType();
+			$customerAddress->setFirstName($set_first_name);
+			$customerAddress->setLastName($set_last_name);
+			$customerAddress->setCompany($set_company);
+			$customerAddress->setCity($set_city);
+			$customerAddress->setAddress($set_address);									//DBT
+			$customerAddress->setState($set_state);
+			$customerAddress->setZip($set_postcode);
+			$customerAddress->setCountry($set_country);
+			
+			// Set the customer's identifying information
+			$customerData = new AnetAPI\CustomerDataType();
+			$customerData->setType("individual");
+			$customerData->setId(rand());
+			$customerData->setEmail($set_email);
+			
+			// Add some merchant defined fields. These fields won't be stored with the transaction,
+			// but will be echoed back in the response.
+			$merchantDefinedField1 = new AnetAPI\UserFieldType();
+			$merchantDefinedField1->setName("customerLoyaltyNum");
+			$merchantDefinedField1->setValue(rand());
+
+			$merchantDefinedField2 = new AnetAPI\UserFieldType();
+			$merchantDefinedField2->setName("favoriteColor");
+			$merchantDefinedField2->setValue("blue");
+			
+			// Create a TransactionRequestType object and add the previous objects to it
+			$transactionRequestType = new AnetAPI\TransactionRequestType();
+			$transactionRequestType->setTransactionType("authCaptureTransaction");
+			$transactionRequestType->setAmount($set_amt);										//Trial Amount
+			$transactionRequestType->setOrder($order_Anet);
+			$transactionRequestType->setPayment($paymentOne);
+			$transactionRequestType->setBillTo($customerAddress);
+			$transactionRequestType->setCustomer($customerData);
+			$transactionRequestType->addToUserFields($merchantDefinedField1);
+			$transactionRequestType->addToUserFields($merchantDefinedField2);
+			
+			// Assemble the complete transaction request
+			$request = new AnetAPI\CreateTransactionRequest();
+			$request->setMerchantAuthentication($merchantAuthentication);
+			$request->setRefId($refId);
+			$request->setTransactionRequest($transactionRequestType);
+			
+			// Create the controller and get the response
+			$controller = new AnetController\CreateTransactionController($request);
+			return $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+		}
+		
+		public function create_subscription($set_first_name,$set_last_name,$intervalLength,$interval_Unit,$set_start_date,$set_total_occurrences,$set_amount,$signup_amount,$card_no,$card_exp_yr,$card_exp_mnth,$set_desc,$subscription_trial){
+			/* Create a merchantAuthenticationType object with authentication details */
+			$merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+			$merchantAuthentication->setName($this->settings['sandbox_merchant_login_id']);
+			$merchantAuthentication->setTransactionKey($this->settings['sandbox_merchant_transaction_key']);
+			
+			// Set the transaction's refId
+			$refId = 'ref' . time();
+
+			// Subscription Type Info
+			$subscription = new AnetAPI\ARBSubscriptionType($intervalLength);
+			$subscription->setName($set_first_name);
+			
+			$interval = new AnetAPI\PaymentScheduleType\IntervalAType();
+			$interval->setLength($intervalLength);				//Exp: 1
+			$interval->setUnit($interval_Unit);					//Exp: months
+
+			$paymentSchedule = new AnetAPI\PaymentScheduleType();
+			$paymentSchedule->setInterval($interval);
+			
+			$paymentSchedule->setStartDate($set_start_date);
+			$paymentSchedule->setTotalOccurrences($set_total_occurrences);
+			
+			if($subscription_trial && $signup_amount){
+				$paymentSchedule->setTrialOccurrences("1");							//i.e. it will charge only once for Trial Period
+				$subscription->setTrialAmount($signup_amount);						//It is actually the Signup Fee, which will got deducted after the end of Trial Period
+			}
+			
+			$subscription->setPaymentSchedule($paymentSchedule);
+			$subscription->setAmount($set_amount);
+			
+			// Create the payment data for a credit card
+			$creditCard = new AnetAPI\CreditCardType();
+			$creditCard->setCardNumber($card_no);
+			$creditCard->setExpirationDate($card_exp_yr."-".$card_exp_mnth);
+			
+			// Add the payment data to a paymentType object
+			$payment = new AnetAPI\PaymentType();
+			$payment->setCreditCard($creditCard);
+			$subscription->setPayment($payment);
+			
+			// Create order information
+			$order_Anet = new AnetAPI\OrderType();
+			$order_Anet->setInvoiceNumber(rand());        
+			$order_Anet->setDescription($set_desc); 
+			$subscription->setOrder($order_Anet);
+			
+			$billTo = new AnetAPI\NameAndAddressType();
+			$billTo->setFirstName($set_first_name);
+			$billTo->setLastName($set_last_name);
+			$subscription->setBillTo($billTo);
+			
+			// Assemble the complete transaction request
+			$request = new AnetAPI\ARBCreateSubscriptionRequest();
+			$request->setmerchantAuthentication($merchantAuthentication);
+			$request->setRefId($refId);
+			$request->setSubscription($subscription);
+			
+			// Create the controller and get the responses
+			$controller = new AnetController\ARBCreateSubscriptionController($request);
+			return $response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
 		}
 
         //  Process a refund if supported
