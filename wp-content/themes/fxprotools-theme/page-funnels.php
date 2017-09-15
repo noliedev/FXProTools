@@ -4,11 +4,16 @@ $category = get_term_by('slug', $category_slug, 'ld_course_category' );
 $courses = get_courses_by_category_id($category->term_id);
 $funnels = get_funnels();
 $referral = "/?ref=" . affwp_get_affiliate_id( get_current_user_id() );
+$product_id = 48; 
+$wp_query->query_vars['_prod_id'] = $product_id;
+$_product = wc_get_product( $product_id );
+$wp_query->query_vars['_prod_data'] = $_product;
 ?>
+
 <?php get_header(); ?>
 
+	<?php if ( WC_Subscriptions_Manager::user_has_subscription( '', $product_id, 'active') ) : ?>
 	<?php get_template_part('inc/templates/nav-marketing'); ?>
-
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -272,6 +277,10 @@ $referral = "/?ref=" . affwp_get_affiliate_id( get_current_user_id() );
 			</div>
 		</div>
 	</div>
+	<?php else: ?>
+		<?php get_template_part('inc/templates/no-access'); ?>
+	<?php endif; ?>
+
 <script>
     var clipboard = new Clipboard('.btn-copy');
 </script>
