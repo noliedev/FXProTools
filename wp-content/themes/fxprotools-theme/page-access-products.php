@@ -1,6 +1,9 @@
 <?php 
-$auto_trader = WC_Subscriptions_Manager::user_has_subscription( '', 49, 'active');
+$trial = 14;
 $market_scanner =  WC_Subscriptions_Manager::user_has_subscription( '', 47, 'active');
+$distributor_package =  WC_Subscriptions_Manager::user_has_subscription( '', 48, 'active');
+$auto_trader = WC_Subscriptions_Manager::user_has_subscription( '', 49, 'active');
+$coaching = wc_customer_bought_product( '', get_current_user_id(), 50);
 ?>
 <?php get_header(); ?>
 
@@ -26,10 +29,10 @@ $market_scanner =  WC_Subscriptions_Manager::user_has_subscription( '', 47, 'act
 					</div>
 					<div class="fx-board-content">
 						<ol>
-							<li>Free Trial(14 Days / Active)</li>
-							<li>Distributor Package(Active)</li>
-							<li>FX Auto Trader(Upgrade)</li>
-							<li>Coaching(Upgrade)</li>
+							<li>Free Trial (<?php echo $trial; ?> Days / Active)</li>
+							<li>Distributor Package (<?php echo $distributor_package ? 'Active' : 'Upgrade'; ?>)</li>
+							<li>FX Auto Trader (<?php echo $auto_trader ? 'Active' : 'Upgrade'; ?>)</li>
+							<li>Coaching (<?php echo $coaching ? 'Active' : 'Upgrade'; ?>)</li>
 						</ol>
 					</div>
 				</div>

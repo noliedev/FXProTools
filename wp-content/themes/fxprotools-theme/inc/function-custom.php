@@ -318,7 +318,48 @@ function time_elapsed_string($datetime, $full = false)
     return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
 
-function is_lesson_progression_enabled($course_id) {
+function is_lesson_progression_enabled($course_id) 
+{
 	$meta = get_post_meta( $course_id, '_sfwd-courses' );
 	return empty( $meta[0]['sfwd-courses_course_disable_lesson_progression'] );
+}
+
+function forced_lesson_time()
+{
+	$timeval = learndash_forced_lesson_time();
+
+	if ( ! empty( $timeval ) ) {
+		$time_sections = explode( ' ', $timeval );
+		$h = $m = $s = 0;
+
+		foreach ( $time_sections as $k => $v ) {
+			$value = trim( $v );
+
+			if ( strpos( $value, 'h' ) ) {
+				$h = intVal( $value );
+			} else if ( strpos( $value, 'm' ) ) {
+				$m = intVal( $value );
+			} else if ( strpos( $value, 's' ) ) {
+				$s = intVal( $value );
+			}
+		}
+
+		$time = $h * 60 * 60 + $m * 60 + $s;
+
+		if ( $time == 0 ) {
+			$time = (int)$timeval;
+		}
+	}
+	
+	if ( !empty( $time ) ) {
+		$button_disabled = " disabled='disabled' ";
+		echo '<script>
+				var learndash_forced_lesson_time = ' . $time . ' ;
+				var learndash_timer_var = setInterval(function(){learndash_timer()},1000);
+			</script>
+			<style>
+				input#learndash_mark_complete_button[disabled] {     color: #333;    background: #ccc;    border-color: #ccc;}
+			</style>';
+		return $button_disabled;
+	} 
 }

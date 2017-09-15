@@ -1,4 +1,7 @@
 <?php
+$product_id = 48; //business package
+if ( !WC_Subscriptions_Manager::user_has_subscription( '', $product_id, 'active') ) wp_redirect( home_url() . '/dashboard/');
+
 $category_slug = 'funnels';
 $category = get_term_by('slug', $category_slug, 'ld_course_category' );
 $courses = get_courses_by_category_id($category->term_id);

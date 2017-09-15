@@ -72,12 +72,13 @@ $progression_enabled = is_lesson_progression_enabled($course_id);
 								</div>
 								<br>
 								<?php if( get_course_lesson_progress($course_id, $lesson_id) != 1 ): ?>
+									<?php $disabled_complete = forced_lesson_time(); ?>
 									<div class="mark-complete">
 										<form id="sfwd-mark-complete" method="post" action="">
 											<input type="hidden" value="<?php echo $lesson_id;?>" name="post" />
 											<input type="hidden" value="<?php echo wp_create_nonce( 'sfwd_mark_complete_'. get_current_user_id() .'_'. $lesson_id );?>" name="sfwd_mark_complete" />
-											<input type="submit" value="Mark Complete" class="btn btn-success block" style="width:100%;" id="learndash_mark_complete_button"/>
-
+											<input <?php $disabled_complete ? $disabled_complete : '';?> type="submit" value="Mark Complete" class="btn btn-success block" style="width:100%;" id="learndash_mark_complete_button"/>
+											<span id="learndash_timer" class="hidden"></span>
 										</form>
 									</div>
 								<?php endif; ?>

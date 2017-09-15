@@ -16,6 +16,7 @@ if(!class_exists('ThemeSettings')){
 		
 		public function __construct()
 		{
+			add_action('wp', array($this, 'enforce_page_access'));
 			add_action('wp_enqueue_scripts', array($this, 'enqueue_theme_assets'));
 			add_filter('rwmb_meta_boxes',  array($this, 'initialize_meta_boxes'));
 			add_action('init', array($this, 'course_category_rewrite'));
@@ -25,6 +26,22 @@ if(!class_exists('ThemeSettings')){
 			add_action('user_register', array($this, 'register_user_checklist'));
 			add_action('user_register', array($this, 'send_email_verification'));
 			add_action('user_register', array($this, 'register_affiliate'));
+		}
+
+		public function enforce_page_access()
+		{
+			global $post;
+    		$slug = $post->post_name;
+    		$guest_allowed_post_type = array( 'product' );
+			$guest_allowed_pages = array( 'login', 'forgot-password', 'verify-email', 'funnels');
+
+			if( is_user_logged_in() ) return 0;
+			if( !is_product() && !is_cart() && !is_checkout() && !is_shop() && !is_404() ) {
+				if( !in_array($slug, $guest_allowed_pages) ){
+					wp_redirect( home_url() . '/login');
+					exit;
+				}
+			}
 		}
 
 		// Theme assets
@@ -44,7 +61,7 @@ if(!class_exists('ThemeSettings')){
 			// Styles - Custom
 			wp_enqueue_style('theme-style', get_template_directory_uri().'/assets/css/theme.css', $theme_version);
 			// Scripts - Core
-			wp_enqueue_script('script-jquery', get_stylesheet_directory_uri().'/vendors/jquery-3.2.1/jquery-3.2.1.min.js', $theme_version);
+			wp_enqueue_script('jquery', get_stylesheet_directory_uri().'/vendors/jquery-3.2.1/jquery-3.2.1.min.js', $theme_version);
 			wp_enqueue_script('script-bootstrap', get_stylesheet_directory_uri().'/vendors/bootstrap-3.3.7/js/bootstrap.min.js', $theme_version);
 			wp_enqueue_script('script-bootstrap-datepicker', get_stylesheet_directory_uri().'/vendors/boostrap-datepicker-1.7.1/js/bootstrap-datepicker.min.js', $theme_version);
 			wp_enqueue_script('script-clipboardjs', get_stylesheet_directory_uri().'/vendors/clipboard-js-1.7.1/js/clipboard.min.js', $theme_version);
@@ -215,6 +232,7 @@ if(!class_exists('ThemeSettings')){
 				'description'           => __( 'Post Type Description', 'fxprotools' ),
 				'labels'                => $labels,
 				'supports'              => array( 'title', 'thumbnail', 'page-attributes'),
+				'taxonomies'			=> array( 'category' ),
 				'hierarchical'          => false,
 				'public'                => true,
 				'show_ui'               => true,

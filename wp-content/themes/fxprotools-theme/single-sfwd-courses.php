@@ -72,7 +72,6 @@ $course_prerequisites = learndash_get_course_prerequisites( $course_id );
 										</tr>
 									<?php endforeach; wp_reset_query();?>
 								<?php endif;?>
-
 								</tbody>
 							</table>
 						</div>
@@ -124,7 +123,7 @@ $course_prerequisites = learndash_get_course_prerequisites( $course_id );
 								<div class="panel-body">
 									<h3>Course Description</h3>
 									<div class="content">
-										<?php echo $course->post_content; ?>
+										<?php echo wpautop($course->post_content); ?>
 									</div>
 								</div>
 							</div>
