@@ -25,7 +25,7 @@
 								<input type="email" class="form-control" placeholder="E-mail ...">
 							</div>
 							<div class="text-center m-t-md">
-								<a href="#" class="btn btn-danger">Click To Get Access</a>
+								<a href="#" class="btn btn-danger btn-lg">Click To Get Access</a>
 							</div>
 						</div>
 					</div>
