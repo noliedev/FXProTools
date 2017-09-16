@@ -1,6 +1,7 @@
 <?php get_header(); ?>
 	
 	<div class="fx-landing">
+		<?php if( !is_user_logged_in() ): ?>
 		<div class="section-one">
 			<div class="container">
 				<div class="row">
@@ -16,6 +17,7 @@
 				</div>
 			</div>
 		</div>
+		<?php endif; ?>
 		<div class="fx-red-note">
 			<div class="container">
 				<div class="row">
