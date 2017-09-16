@@ -1,3 +1,5 @@
+	</div><!-- /fx-wrapper -->
+	
 	<?php if(!is_page(array('login', 'forgot-password')) ): ?>
 	<div class="fx-footer">
 		<div class="container">
@@ -48,7 +50,7 @@
 	</div>
 	<?php endif; ?>
 
-</div><!-- /fx-wrapper -->
+
 <?php wp_footer(); ?>
 
 </body>
