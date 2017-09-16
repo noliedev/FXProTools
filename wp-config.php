@@ -18,6 +18,8 @@
 * @package WordPress
 */
 
+define('IS_LOCAL', false);
+
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define('DB_NAME', 'fxprotools');
@@ -28,7 +30,10 @@ define('DB_USER', 'root');
 
 
 /** MySQL database password */
-define('DB_PASSWORD', 'root');
+if(IS_LOCAL)
+	define('DB_PASSWORD', 'ourdesignz');
+else
+	define('DB_PASSWORD', 'root');
 
 
 /** MySQL hostname */

@@ -14,17 +14,42 @@ $core_settings = [
 	'core-theme-settings.php',
 ];
 
+function my_enqueue($hook) {
+	wp_enqueue_script('custom_js_script', get_bloginfo('template_url').'/assets/js/custom_script.js', array('jquery'));
+}
 
-	function my_enqueue($hook) {
-		wp_enqueue_script('custom_js_script', get_bloginfo('template_url').'/assets/js/custom_script.js', array('jquery'));
-	}
-
-	add_action('admin_enqueue_scripts', 'my_enqueue');
+add_action('admin_enqueue_scripts', 'my_enqueue');
 	
 	
 foreach ($core_settings as $cs) {
 	require_once('inc/core/'.$cs);
 }
+
+function my_login_redirect( $url, $request, $user ){
+    if( $user && is_object( $user ) && is_a( $user, 'WP_User' ) ) {
+        if( $user->has_cap( 'administrator' ) ) {
+            $url = admin_url();
+        } else {
+			if(IS_LOCAL)
+				$url = home_url('/index.php/dashboard/');
+			else
+				$url = home_url('/dashboard/');
+        }
+    }
+    return $url;
+}
+
+add_filter('login_redirect', 'my_login_redirect', 10, 3 );
+
+function redirect_login_page() {
+
+    if( is_page( 'login' ) && is_user_logged_in() ) {
+        wp_redirect( home_url() );
+        exit;
+    }
+
+}
+add_action( 'template_redirect', 'redirect_login_page' );
 
 function active_subscription_list($from_date=null, $to_date=null) {
 
@@ -80,8 +105,6 @@ function active_subscription_list($from_date=null, $to_date=null) {
     echo '</table>';
 }
 
-
-
 /**
  * -------------------
  * Metabox Extesntions
@@ -128,6 +151,7 @@ if($custom_functions){
 		require_once('inc/'.$cf);
 	}
 }
+
 
 /**
  * ---------------------------------------------------
