@@ -99,6 +99,9 @@
 			&.sm {
 				font-size: 22px;
 			}
+			&.lg {
+				font-size: 48px;
+			}
 		}
 		.video {
 			border: 5px solid #313030;
@@ -453,6 +456,50 @@
 					font-weight: bold;
 					margin-top: 10px;
 				}
+			}
+		}
+	}
+	// Signals
+	&.signals {
+		.section-two {
+			height: 550px;
+			border-bottom: none;
+			&:before {
+				background-image: url('../img/splash-signals.png');
+			}
+		}
+		.section-three {
+			.n-t-xl {
+				margin-top: -200px;
+			}
+			.header-text {
+				text-align: center;
+				position: relative;
+				width: 500px;
+				margin-left: auto;
+				margin-right: auto;
+				display: block;
+				.arrow-left, .arrow-right {
+					position: absolute;
+					bottom: -25px;
+					width: 90px;
+					height: auto;
+				}
+				.arrow-left {
+					left: 0;
+				}
+				.arrow-right {
+					right: 0;
+				}
+				h2 {
+					color: $white;
+				}
+
+			}
+			.signals-disclosure {
+				text-align: center;
+				font-size: 14px;
+				color: #333;
 			}
 		}
 	}
