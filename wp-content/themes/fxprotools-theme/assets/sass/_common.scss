@@ -99,6 +99,7 @@
 .fx-board {
 	position: relative;
 	border: 1px solid #DDD;
+	background-color: $white;
 	.fx-board-title {
 		padding: 15px;
 		span {
@@ -153,6 +154,51 @@
 					}
 				}
 			}
+			.fx-radio-group {
+				input[type="radio"] {
+					display: none;
+					+ .fx-radio {
+						border: 1px solid #DDD;
+						height: 25px;
+						width: 25px;
+						display: inline-block;
+						vertical-align: middle;
+						margin-right: 5px;
+						border-radius: 50%;
+						position: relative;
+						overflow: hidden;
+						transition: 0.2s all;
+						&:before {
+							transition: 0.2s all;
+							content: "";
+							background: $white;
+							position: absolute;
+							top: 0;
+							bottom: 0;
+							left: 0;
+							right: 0;
+							text-align: center;
+							height: 20px;
+							width: 20px;
+							margin: auto;
+							border-radius: 50%;
+							height: 1px;
+    						width: 1px;
+						}
+					}
+					&:checked + .fx-radio {
+						border-color: $green;
+						&:before {
+							background: $green;
+							height: 17px;
+    						width: 17px;
+						}
+					}
+				}
+				.fx-text {
+					font-size: 15px;
+				}
+			}
 		}
 	}
 	// List Only
@@ -160,6 +206,7 @@
 		padding: 0;
 		margin: 0;
 		list-style: none;
+		// w/ Radio box
 	}
 	// Board Content
 	.fx-board-content {

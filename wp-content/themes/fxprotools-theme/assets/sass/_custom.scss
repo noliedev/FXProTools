@@ -555,6 +555,10 @@
 		height: auto;
 	}
 }
+.logged-in .fx-navbar-main {
+	margin-bottom: 0;
+}
+
 
 // Sub Navigation
 .fx-navbar-sub {
@@ -1718,6 +1722,66 @@
 					display: block;
 					margin-top: 5px;
 				}
+			}
+		}
+	}
+	// Funnel 2
+	&.f2 {
+		.section-one {
+			background-color: $black;
+			position: relative;
+			padding: 30px 0 50px 0;
+			&:before {
+				content: ' ';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				width: 100%;
+				height: 100%;
+				background-image: url('../img/splash.png');
+				background-repeat: no-repeat;
+				background-position: top center;
+				background-size: cover;
+			}
+			.intro-note {
+				color: $white;
+				font-size: 35px;
+				line-height: 1.2;
+				text-transform: uppercase;
+				margin-bottom: 0;
+				span {
+					color: $yellow;
+					font-weight: bold;
+				}
+				&.sm {
+					font-size: 22px;
+					font-weight: 300;
+				}
+			}
+			.row-video {
+				margin-top: 35px;
+			}
+			.video-disclaimer {
+				color: #c6c6c6;
+				margin-bottom: 0;
+				text-align: center;
+				margin-top: 15px;
+				font-size: 14px;
+			}
+			.video {
+				border: 5px solid #313030;
+				background: $black;
+				height: 430px;
+				width: 100%;
+			}
+		}
+		.section-two {
+			padding: 50px 0;
+			background: $white;
+			p {
+				font-size: 22px;
 			}
 		}
 	}
