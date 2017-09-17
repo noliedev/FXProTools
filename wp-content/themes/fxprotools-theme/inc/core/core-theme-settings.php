@@ -68,7 +68,7 @@ if(!class_exists('ThemeSettings')){
 			wp_enqueue_script('script-noty', get_stylesheet_directory_uri().'/vendors/noty-3.1.1/js/noty.min.js', $theme_version);
 			wp_enqueue_script('script-jquery-cookie', get_stylesheet_directory_uri().'/vendors/jquery-cookie-1.4.1/jquery.cookie.js', $theme_version);
 			// Scripts - Custom
-
+			wp_enqueue_script('custom_js_script', get_bloginfo('template_url').'/assets/js/custom_script.js', $theme_version);
 			// Include custom scripts here
 
 		}
