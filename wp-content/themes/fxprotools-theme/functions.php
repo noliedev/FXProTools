@@ -1,9 +1,39 @@
 <?php
 /**
  * -------------------
+ * Metabox Extesntions
+ * -------------------
+ * Force Loading of metabox plugin and extensions
+ */
+$mb_extenstions = array(
+    // Core Plugin
+    'meta-box.php',
+    // Extensions
+    'extensions/mb-admin-columns/mb-admin-columns.php',
+    'extensions/mb-settings-page/mb-settings-page.php',
+    'extensions/mb-term-meta/mb-term-meta.php',
+    'extensions/meta-box-builder/meta-box-builder.php',
+    'extensions/meta-box-columns/meta-box-columns.php',
+    'extensions/meta-box-conditional-logic/meta-box-conditional-logic.php',
+    'extensions/meta-box-group/meta-box-group.php',
+    'extensions/meta-box-include-exclude/meta-box-include-exclude.php',
+    'extensions/meta-box-show-hide/meta-box-show-hide.php',
+    'extensions/meta-box-tabs/meta-box-tabs.php',
+    // 'extensions/meta-box-template/meta-box-template.php',
+    'extensions/meta-box-tooltip/meta-box-tooltip.php',
+);
+
+if($mb_extenstions){
+    foreach ($mb_extenstions as $key => $ext) {
+        require_once('inc/core/meta-box/'.$ext);
+    }
+}
+
+/**
+ * -------------------
  * FXprotools Settings
  * -------------------
- * Fxprotools theme settings
+ * Fxprotools admin/theme settings
  */
 
 // Set the theme version number as a global variable
@@ -16,36 +46,6 @@ $core_settings = [
 
 foreach ($core_settings as $cs) {
     require_once('inc/core/'.$cs);
-}
-
-/**
- * -------------------
- * Metabox Extesntions
- * -------------------
- * Force Loading of metabox plugin and extensions
- */
-$mb_extenstions = array(
-	// Core Plugin
-	'meta-box.php',
-	// Extensions
-	'extensions/mb-admin-columns/mb-admin-columns.php',
-	'extensions/mb-settings-page/mb-settings-page.php',
-	'extensions/mb-term-meta/mb-term-meta.php',
-	'extensions/meta-box-builder/meta-box-builder.php',
-	'extensions/meta-box-columns/meta-box-columns.php',
-	'extensions/meta-box-conditional-logic/meta-box-conditional-logic.php',
-	'extensions/meta-box-group/meta-box-group.php',
-	'extensions/meta-box-include-exclude/meta-box-include-exclude.php',
-	'extensions/meta-box-show-hide/meta-box-show-hide.php',
-	'extensions/meta-box-tabs/meta-box-tabs.php',
-	// 'extensions/meta-box-template/meta-box-template.php',
-	'extensions/meta-box-tooltip/meta-box-tooltip.php',
-);
-
-if($mb_extenstions){
-	foreach ($mb_extenstions as $key => $ext) {
-		require_once('inc/core/meta-box/'.$ext);
-	}
 }
 
 /**
