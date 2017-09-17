@@ -639,7 +639,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="section-twelve section-w-panel">
+		<div class="section-testimonials section-w-panel">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">

@@ -416,7 +416,7 @@
 			padding-top: 30px;
 		}
 	}
-	.section-twelve {
+	.section-testimonials {
 		position: relative;
 		.header-text {
 			text-align: center;
@@ -500,6 +500,33 @@
 				text-align: center;
 				font-size: 14px;
 				color: #333;
+			}
+		}
+		.section-testimonials {
+			background-image: url('../img/splash2.png');
+			background-position: top center;
+			background-color: $black;
+			.intro-note {
+				color: $white;
+				font-size: 35px;
+				line-height: 1.2;
+				font-weight: normal;
+				&.text-highlight-red {
+					display: inline-block;
+				}
+				&.sm {
+					font-size: 22px;
+				}
+				&.lg {
+					font-size: 48px;
+				}
+			}
+		}
+		.section-four {
+			background: #f0f0f0;
+			border: none;
+			&:before {
+				display: none;
 			}
 		}
 	}

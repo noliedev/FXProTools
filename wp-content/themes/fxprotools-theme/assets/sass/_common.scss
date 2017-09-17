@@ -515,6 +515,31 @@
 	}
 }
 
+// Red Banner Icons
+.fx-red-banner-icons {
+	background: $red;
+	padding: 25px 0;
+	.item {
+		position: relative;
+		img {
+			float: left;
+			margin-right: 20px;
+			vertical-align: top;
+		}
+		span {
+			color: $yellow;
+			text-transform: uppercase;
+			display: block;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+		p {
+			color: $white;
+			margin-bottom: 0;
+		}
+	}
+}
+
 // Red Note
 .fx-red-note {
 	background: $red;
