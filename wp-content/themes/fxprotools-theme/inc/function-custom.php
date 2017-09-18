@@ -442,3 +442,18 @@ function active_subscription_list($from_date=null, $to_date=null)
     }
     echo '</table>';
 }
+
+function get_customer_orders($user_id){
+	$order_statuses = array('wc-on-hold', 'wc-processing', 'wc-completed', 'wc-pending', 'wc-cancelled', 'wc-refunded', 'wc-failed');
+	$customer_user_id = $user_id;
+
+	$customer_orders=get_posts( array(
+	        'meta_key' => '_customer_user',
+	        'meta_value' => $customer_user_id,
+	        'post_type' => 'shop_order', 
+	        'post_status' => $order_statuses,
+	        'numberposts' => -1
+	) );
+
+	return $customer_orders;
+}

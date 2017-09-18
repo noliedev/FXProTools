@@ -1,5 +1,11 @@
 <?php get_header(); ?>
-
+<?php  
+foreach($_POST as $user_key => $user_value)
+{
+	update_usermeta( $_GET['id'], $user_key,  $user_value );
+}
+?>test
+<?php print_r( get_the_author_meta('track_user_history', get_current_user_id()) ); ?>
 	<?php get_template_part('inc/templates/nav-marketing'); ?>
 
 	<div class="container">
@@ -61,42 +67,82 @@
 											<div class="col-md-6 m-b-lg">
 												<p class="text-bold text-center">General Information</p>
 												<ul class="list-info list-info-fields">
-													<li><span>First Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="first_name" id="first_name" value="'. get_the_author_meta('first_name', $_GET['id']) .'" />' : ' ' . get_the_author_meta('first_name', $_GET['id']) ); ?></li>
-													<li><span>Last Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="last_name" id="last_name" value="'. get_the_author_meta('last_name', $_GET['id']) .'" />' : ' ' . get_the_author_meta('last_name', $_GET['id']) ); ?></li>
-													<li><span>Website:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="website" id="website" value="'. get_the_author_meta('website', $_GET['id']) .'" />' : ' ' . get_the_author_meta('website', $_GET['id']) ); ?></li>
-													<li><span>Facebook:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="facebook" id="facebook" value="'. get_the_author_meta('facebook', $_GET['id']) .'" />' : ' ' . get_the_author_meta('facebook', $_GET['id']) ); ?></li>
-													<li><span>Twitter:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="twitter" id="twitter" value="'. get_the_author_meta('twitter', $_GET['id']) .'" />' : ' ' . get_the_author_meta('twitter', $_GET['id']) ); ?></li>
-													<li><span>Google Plus:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="googleplus" id="googleplus" value="'. get_the_author_meta('googleplus', $_GET['id']) .'" />' : ' ' . get_the_author_meta('googleplus', $_GET['id']) ); ?></li>
+													<li><span>First Name:</span> <?php echo get_the_author_meta('first_name', $_GET['id']) ?></li>
+													<li><span>Last Name:</span> <?php echo get_the_author_meta('last_name', $_GET['id']); ?></li>
+													<li><span>Website:</span> <?php echo get_the_author_meta('website', $_GET['id']) ?></li>
+													<li><span>Facebook:</span> <?php echo get_the_author_meta('facebook', $_GET['id']); ?></li>
+													<li><span>Twitter:</span> <?php echo get_the_author_meta('twitter', $_GET['id']); ?></li>
+													<li><span>Google Plus:</span> <?php echo get_the_author_meta('googleplus', $_GET['id']); ?></li>
 												</ul>
 											</div>
 											<div class="clearfix"></div>
 											<div class="col-md-6">
 												<p class="text-bold text-center">Billing Information</p>
 												<ul class="list-info list-info-fields">
-													<li><span>Business Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_company" id="billing_company" value="'. get_the_author_meta('billing_company', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_company', $_GET['id']) ); ?></li>
-													<li><span>House # & Street Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_address_1" id="billing_address_1" value="'. get_the_author_meta('billing_address_1', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_address_1', $_GET['id']) ); ?></li>
-													<li><span>Apt.,suite,unit,etc.:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_address_2" id="billing_address_2" value="'. get_the_author_meta('billing_address_2', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_address_2', $_GET['id']) ); ?></li>
-													<li><span>City:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_city" id="billing_city" value="'. get_the_author_meta('billing_city', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_city', $_GET['id']) ); ?></li>
-													<li><span>State:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_state" id="billing_state" value="'. get_the_author_meta('billing_state', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_state', $_GET['id']) ); ?></li>
-													<li><span>Zip Code:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="billing_postcode" id="billing_postcode" value="'. get_the_author_meta('billing_postcode', $_GET['id']) .'" />' : ' ' . get_the_author_meta('billing_postcode', $_GET['id']) ); ?></li>
+													<li><span>Business Name:</span> <?php echo get_the_author_meta('billing_company', $_GET['id']) ?></li>
+													<li><span>House # & Street Name:</span> <?php echo get_the_author_meta('billing_address_1', $_GET['id']) ?></li>
+													<li><span>Apt.,suite,unit,etc.:</span> <?php echo get_the_author_meta('billing_address_2', $_GET['id']) ?></li>
+													<li><span>City:</span> <?php echo get_the_author_meta('billing_city', $_GET['id']) ?></li>
+													<li><span>State:</span> <?php echo get_the_author_meta('billing_state', $_GET['id']) ?></li>
+													<li><span>Zip Code:</span> <?php echo get_the_author_meta('billing_postcode', $_GET['id']) ?></li>
 												</ul>
 											</div>
 											<div class="col-md-6">
 												<p class="text-bold text-center">Shipping Information</p>
 												<ul class="list-info list-info-fields">
-													<li><span>Business Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_company" id="shipping_company" value="'. get_the_author_meta('shipping_company', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_company', $_GET['id']) ); ?></li>
-													<li><span>House # & Street Name:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_address_1" id="shipping_address_1" value="'. get_the_author_meta('shipping_address_1', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_address_1', $_GET['id']) ); ?></li>
-													<li><span>Apt.,suite,unit,etc.:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_address_2" id="shipping_address_2" value="'. get_the_author_meta('shipping_address_2', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_address_2', $_GET['id']) ); ?></li>
-													<li><span>City:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_city" id="shipping_city" value="'. get_the_author_meta('shipping_city', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_city', $_GET['id']) ); ?></li>
-													<li><span>State:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_state" id="shipping_state" value="'. get_the_author_meta('shipping_state', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_state', $_GET['id']) ); ?></li>
-													<li><span>Zip Code:</span> <?php echo ($_GET['action'] == 'edit' ? '<input type="text" name="shipping_postcode" id="shipping_postcode" value="'. get_the_author_meta('shipping_postcode', $_GET['id']) .'" />' : ' ' . get_the_author_meta('shipping_postcode', $_GET['id']) ); ?></li>
+													<li><span>Business Name:</span> <?php echo get_the_author_meta('shipping_company', $_GET['id']) ?></li>
+													<li><span>House # & Street Name:</span> <?php echo get_the_author_meta('shipping_address_1', $_GET['id']) ?></li>
+													<li><span>Apt.,suite,unit,etc.:</span> <?php echo get_the_author_meta('shipping_address_2', $_GET['id']) ?></li>
+													<li><span>City:</span> <?php echo get_the_author_meta('shipping_city', $_GET['id']) ?></li>
+													<li><span>State:</span> <?php echo get_the_author_meta('shipping_state', $_GET['id']) ?></li>
+													<li><span>Zip Code:</span> <?php echo get_the_author_meta('shipping_postcode', $_GET['id']) ?></li>
 												</ul>
 											</div>
 										</div>
 									</form>
 								</div>
 								<div class="tab-pane fade" id="b">
-									<p class="text-bold">Edit Contact Section</p>
+									<form action="<?php echo get_the_permalink(); ?>/?id=<?php echo $_GET['id']; ?>" method="POST" class="form-edit">
+										<div class="row">
+											<div class="col-md-6 m-b-lg">
+												<p class="text-bold text-center">General Information</p>
+												<ul class="list-info list-info-fields">
+													<li><span>First Name:</span> <input type="text" name="first_name" id="first_name" value="<?php echo get_the_author_meta('first_name', $_GET['id']) ?>" /></li>
+													<li><span>Last Name:</span> <input type="text" name="last_name" id="last_name" value="<?php echo get_the_author_meta('last_name', $_GET['id']) ?>" /></li>
+													<li><span>Website:</span> <input type="text" name="website" id="website" value="<?php echo get_the_author_meta('website', $_GET['id']) ?>" /></li>
+													<li><span>Facebook:</span> <input type="text" name="facebook" id="facebook" value="<?php echo get_the_author_meta('facebook', $_GET['id']) ?>" /></li>
+													<li><span>Twitter:</span> <input type="text" name="twitter" id="twitter" value="<?php echo get_the_author_meta('twitter', $_GET['id']) ?>" /></li>
+													<li><span>Google Plus:</span> <input type="text" name="googleplus" id="googleplus" value="<?php echo get_the_author_meta('googleplus', $_GET['id']) ?>" /></li>
+												</ul>
+											</div>
+											<div class="clearfix"></div>
+											<div class="col-md-6">
+												<p class="text-bold text-center">Billing Information</p>
+												<ul class="list-info list-info-fields">
+													<li><span>Business Name:</span> <input type="text" name="billing_company" id="billing_company" value="<?php echo get_the_author_meta('billing_company', $_GET['id']) ?>" /></li>
+													<li><span>House # & Street Name:</span> <input type="text" name="billing_address_1" id="billing_address_1" value="<?php echo get_the_author_meta('billing_address_1', $_GET['id']) ?>" /></li>
+													<li><span>Apt.,suite,unit,etc.:</span> <input type="text" name="billing_address_2" id="billing_address_2" value="<?php echo get_the_author_meta('billing_address_2', $_GET['id']) ?>" /></li>
+													<li><span>City:</span> <input type="text" name="billing_city" id="billing_city" value="<?php echo get_the_author_meta('billing_city', $_GET['id']) ?>" /></li>
+													<li><span>State:</span> <input type="text" name="billing_state" id="billing_state" value="<?php echo get_the_author_meta('billing_state', $_GET['id']) ?>" /></li>
+													<li><span>Zip Code:</span> <input type="text" name="billing_postcode" id="billing_postcode" value="<?php echo get_the_author_meta('billing_postcode', $_GET['id']) ?>" /></li>
+												</ul>
+											</div>
+											<div class="col-md-6">
+												<p class="text-bold text-center">Shipping Information</p>
+												<ul class="list-info list-info-fields">
+													<li><span>Business Name:</span> <input type="text" name="shipping_company" id="shipping_company" value="<?php echo get_the_author_meta('shipping_company', $_GET['id']) ?>" /></li>
+													<li><span>House # & Street Name:</span> <input type="text" name="shipping_address_1" id="shipping_address_1" value="<?php echo get_the_author_meta('shipping_address_1', $_GET['id']) ?>" /></li>
+													<li><span>Apt.,suite,unit,etc.:</span> <input type="text" name="shipping_address_2" id="shipping_address_2" value="<?php echo get_the_author_meta('shipping_address_2', $_GET['id']) ?>" /></li>
+													<li><span>City:</span> <input type="text" name="shipping_city" id="shipping_city" value="<?php echo get_the_author_meta('shipping_city', $_GET['id']) ?>" /></li>
+													<li><span>State:</span> <input type="text" name="shipping_state" id="shipping_state" value="<?php echo get_the_author_meta('shipping_state', $_GET['id']) ?>" /></li>
+													<li><span>Zip Code:</span> <input type="text" name="shipping_postcode" id="shipping_postcode" value="<?php echo get_the_author_meta('shipping_postcode', $_GET['id']) ?>" /></li>
+												</ul>
+											</div>
+										</div>
+										<div class="btn-holder btn-right m-t-lg">
+											<button type="submit" class="btn btn-default">Save</button>
+										</div>
+									</form>
 								</div>
 								<div class="tab-pane fade" id="c">
 									<table id="table-purchases" class="table table-bordered table-hover">
@@ -110,34 +156,32 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
-												<td>15 Hours Ago</td>
-												<td>Trial</td>
-												<td>$1.00</td>
-												<td>Paid</td>
-												<td class="text-center"><a href="#" class="btn btn-default view-purchase-details">Details</a></td>
-											</tr>
-											<tr>
-												<td>15 Hours Ago</td>
-												<td>Basic Package</td>
-												<td>$1.00</td>
-												<td>Paid</td>
-												<td class="text-center"><a href="#" class="btn btn-default view-purchase-details">Details</a></td>
-											</tr>
-											<tr>
-												<td>15 Hours Ago</td>
-												<td>Basic Package</td>
-												<td>$1.00</td>
-												<td>Paid</td>
-												<td class="text-center"><a href="#" class="btn btn-default view-purchase-details">Details</a></td>
-											</tr>
-											<tr>
-												<td>15 Hours Ago</td>
-												<td>Trial</td>
-												<td>$1.00</td>
-												<td>Paid</td>
-												<td class="text-center"><a href="#" class="btn btn-default view-purchase-details">Details</a></td>
-											</tr>
+											<?php 
+												$customer_orders = get_customer_orders($_GET['id']);
+												foreach($customer_orders as $customer_order){
+												?>
+													<tr>
+														<td><?php echo time_elapsed_string($customer_order->post_date); ?></td>
+														<?php  
+															$order = new WC_Order( $customer_order->ID );
+
+													        $product_list = '';
+													        $order_item = $order->get_items();
+
+													        foreach( $order_item as $product ) {
+													    ?>
+													    		<td><?php echo $product['name'] ?></td>
+																<td>$<?php echo $product['total']; ?></td>
+													    <?php
+													        }
+														?>
+														
+														<td><?php echo wc_get_order_statuses()[$customer_order->post_status]; ?></td>
+														<td class="text-center"><a href="#" class="btn btn-default view-purchase-details">Details</a></td>
+													</tr>
+											<?php
+												}
+											?>
 										</tbody>
 									</table>
 									<div id="view-purchase-details">

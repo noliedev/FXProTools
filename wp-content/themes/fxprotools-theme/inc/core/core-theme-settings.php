@@ -17,6 +17,7 @@ if(!class_exists('ThemeSettings')){
 		public function __construct()
 		{
 			add_action('wp', array($this, 'enforce_page_access'));
+			add_action('wp', array($this, 'track_user_history'));
 			add_action('wp_enqueue_scripts', array($this, 'enqueue_theme_assets'));
 			add_filter('rwmb_meta_boxes',  array($this, 'initialize_meta_boxes'));
 			add_action('init', array($this, 'course_category_rewrite'));
@@ -353,6 +354,11 @@ if(!class_exists('ThemeSettings')){
 		        $dob = sanitize_text_field( $posted['c_gender'] );
 		        update_user_meta( $customer_id, 'c_gender', $dob);
 		    }
+		}
+
+		function track_user_history() {
+		    //$track_user_history = get_user_meta( get_current_user_id(), "track_user_history" );
+			//array_push( $track_user_history, get_the_permalink() );
 		}
 
 	}
