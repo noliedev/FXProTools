@@ -8,7 +8,7 @@ $wp_query->query_vars['_prod_data'] = $_product;
 
 	<?php get_template_part('inc/templates/nav-marketing'); ?>
 
-	<?php if ( WC_Subscriptions_Manager::user_has_subscription( '', $product_id, 'active') || is_admin() ): ?>
+	<?php if ( WC_Subscriptions_Manager::user_has_subscription( '', $product_id, 'active') || current_user_can('administrator')  ): ?>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">

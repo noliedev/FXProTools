@@ -15,14 +15,6 @@
 // 	}
 // }
 
-add_action('init', 'block_users_wp');
-function block_users_wp()
-{
-	if(is_admin() && ! current_user_can('administrator') && !(defined('DOING_AJAX') && DOING_AJAX)){
-		wp_redirect(home_url());
-		exit;
-	}
-}
 
 function get_courses_by_product_id($product_id)
 {
@@ -293,10 +285,8 @@ function time_elapsed_string($datetime, $full = false)
     $now = new DateTime;
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);
-
     $diff->w = floor($diff->d / 7);
     $diff->d -= $diff->w * 7;
-
     $string = array(
         'y' => 'year',
         'm' => 'month',
@@ -362,30 +352,6 @@ function forced_lesson_time()
 			</style>';
 		return $button_disabled;
 	} 
-}
-
-add_filter('login_redirect', 'my_login_redirect', 10, 3 );
-function my_login_redirect( $url, $request, $user )
-{
-    if( $user && is_object( $user ) && is_a( $user, 'WP_User' ) ) {
-        if( $user->has_cap( 'administrator' ) ) {
-            $url = admin_url();
-        } else {
-			if(IS_LOCAL)
-				$url = home_url('/index.php/dashboard/');
-			else
-				$url = home_url('/dashboard/');
-        }
-    }
-    return $url;
-}
-
-add_action( 'template_redirect', 'redirect_login_page' );
-function redirect_login_page() {
-    if( is_page( 'login' ) && is_user_logged_in() ) {
-        wp_redirect( home_url() );
-        exit;
-    }
 }
 
 function active_subscription_list($from_date=null, $to_date=null)

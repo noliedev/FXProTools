@@ -110,15 +110,13 @@ if(!class_exists('AdminSettings')){
 		// 	}
 		// }
 
-
-
 		function lms_previous_lesson_complete() {
 			$user_id = get_current_user_id();
 			$lesson_id = $_POST['lesson_id'];
-			
+			$lesson = get_post($lesson_id);
+
 			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) { 
-				update_post_meta( $_POST['post_id'], 'post_love', $love );
-				echo $love;
+				return is_previous_complete( $lesson );
 			}
 			die();
 		}
