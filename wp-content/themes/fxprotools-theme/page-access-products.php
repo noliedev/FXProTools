@@ -30,9 +30,9 @@ $coaching = wc_customer_bought_product( '', get_current_user_id(), 50);
 					<div class="fx-board-content">
 						<ol>
 							<li>Free Trial (<?php echo $trial; ?> Days / Active)</li>
-							<li>Distributor Package (<?php echo $distributor_package ? 'Active' : 'Upgrade'; ?>)</li>
-							<li>FX Auto Trader (<?php echo $auto_trader ? 'Active' : 'Upgrade'; ?>)</li>
-							<li>Coaching (<?php echo $coaching ? 'Active' : 'Upgrade'; ?>)</li>
+							<li>Distributor Package (<?php echo $distributor_package  || current_user_can('administrator') ? 'Active' : 'Upgrade'; ?>)</li>
+							<li>FX Auto Trader (<?php echo $auto_trader || current_user_can('administrator')  ? 'Active' : 'Upgrade'; ?>)</li>
+							<li>Coaching (<?php echo $coaching || current_user_can('administrator')  ? 'Active' : 'Upgrade'; ?>)</li>
 						</ol>
 					</div>
 				</div>
@@ -60,15 +60,15 @@ $coaching = wc_customer_bought_product( '', get_current_user_id(), 50);
 					</li>
 					<li>
 						<span>Market Scanner</span>
-						<a href="<?php bloginfo('url');?>/scanner/" class="action"><?php echo $market_scanner ? 'Access Now' : 'Upgrade Now <i class="fa fa-shopping-cart"></i>';?></a>
+						<a href="<?php bloginfo('url');?>/scanner/" class="action"><?php echo $market_scanner || current_user_can('administrator') ? 'Access Now' : 'Upgrade Now <i class="fa fa-shopping-cart"></i>';?></a>
 					</li>
 					<li>
 						<span>FX Auto Trader</span>
-						<a href="<?php bloginfo('url');?>/auto-trader/" class="action"><?php echo $auto_trader ? 'Access Now' : 'Upgrade Now <i class="fa fa-shopping-cart"></i>';?></a>
+						<a href="<?php bloginfo('url');?>/auto-trader/" class="action"><?php echo $auto_trader || current_user_can('administrator')  ? 'Access Now' : 'Upgrade Now <i class="fa fa-shopping-cart"></i>';?></a>
 					</li>
 					<li>
 						<span>1 on 1 Coaching</span>
-						<a href="<?php bloginfo('url');?>/coaching/" class="action"><?php echo $coaching ? 'Access Now' : 'Upgrade Now <i class="fa fa-shopping-cart"></i>';?></a>
+						<a href="<?php bloginfo('url');?>/coaching/" class="action"><?php echo $coaching || current_user_can('administrator')  ? 'Access Now' : 'Upgrade Now <i class="fa fa-shopping-cart"></i>';?></a>
 					</li>
 				</ul>
 			</div>
