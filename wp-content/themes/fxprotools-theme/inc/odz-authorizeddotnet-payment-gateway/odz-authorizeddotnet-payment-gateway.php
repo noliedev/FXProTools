@@ -501,7 +501,7 @@ function init_odz_authorizeddotnet_payment_gateway() {
 			if (($response != null) && ($response->getMessages()->getResultCode() == "Ok"))
 			{
 				$successMessages = $response->getMessages()->getMessage();
-				echo "SUCCESS : " . $successMessages[0]->getCode() . "  " .$successMessages[0]->getText() . "\n";
+				//echo "SUCCESS : " . $successMessages[0]->getCode() . "  " .$successMessages[0]->getText() . "\n";
 				
 			 }
 			else
@@ -615,6 +615,7 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						if($subscription_trial){
 							//If Trial Amount exists? Then it will get deducted at the time of Transcation
 							if($subscription_trial_amount[0] > 0){
+								die("XXXX");
 								/********************************************************
 								**************** Trial Amount Deduction *****************
 								********************************************************/
@@ -649,11 +650,11 @@ function init_odz_authorizeddotnet_payment_gateway() {
 										// and parse it to display the results of authorizing the card
 										$tresponse = $response->getTransactionResponse();
 										if ($tresponse != null && $tresponse->getMessages() != null) {
-											echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
+											/*echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
 											echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
 											echo " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
 											echo " Auth Code: " . $tresponse->getAuthCode() . "\n";
-											echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
+											echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";*/
 										} else {
 											echo "Transaction Failed \n";
 											if ($tresponse->getErrors() != null) {
@@ -741,7 +742,7 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						
 						if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") )
 						{
-							echo "SUCCESS: Subscription ID : " . $response->getSubscriptionId() . "\n";
+							//echo "SUCCESS: Subscription ID : " . $response->getSubscriptionId() . "\n";
 						}
 						else
 						{
@@ -807,11 +808,11 @@ function init_odz_authorizeddotnet_payment_gateway() {
 										// and parse it to display the results of authorizing the card
 										$tresponse = $response->getTransactionResponse();
 										if ($tresponse != null && $tresponse->getMessages() != null) {
-											echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
-											echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
+											//echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
+											/*echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
 											echo " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
 											echo " Auth Code: " . $tresponse->getAuthCode() . "\n";
-											echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
+											echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";*/
 										} else {
 											echo "Transaction Failed \n";
 											if ($tresponse->getErrors() != null) {
@@ -877,11 +878,11 @@ function init_odz_authorizeddotnet_payment_gateway() {
 									// and parse it to display the results of authorizing the card
 									$tresponse = $response->getTransactionResponse();
 									if ($tresponse != null && $tresponse->getMessages() != null) {
-										echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
+										/*echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
 										echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
 										echo " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
 										echo " Auth Code: " . $tresponse->getAuthCode() . "\n";
-										echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
+										echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";*/
 									} else {
 										echo "Transaction Failed \n";
 										if ($tresponse->getErrors() != null) {
@@ -975,7 +976,7 @@ function init_odz_authorizeddotnet_payment_gateway() {
 						
 						if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") )
 						{
-							echo "SUCCESS: Subscription ID : " . $response->getSubscriptionId() . "\n";
+							//echo "SUCCESS: Subscription ID : " . $response->getSubscriptionId() . "\n";
 						}
 						else
 						{
@@ -1098,17 +1099,19 @@ function init_odz_authorizeddotnet_payment_gateway() {
 					
 					// Return thank you page redirect
 					if(is_ajax()){
-						$result = array(
+						return $result = array(
 							'redirect' => $this->get_return_url($order),
 							'result' => 'success'
 						);
 					}
 					else{
-						//For Live
-						wp_redirect(get_site_url().'/dashboard/');
 						
-						//For Local
-						//wp_redirect(get_site_url().'/index.php/index.php/dashboard/');
+						if(IS_LOCAL){
+							wp_redirect(get_site_url().'/index.php/index.php/dashboard/');
+						}
+						else{
+							wp_redirect(get_site_url().'/dashboard/');
+						}
 						
 						exit();
 					}

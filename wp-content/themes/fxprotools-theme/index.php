@@ -1,22 +1,8 @@
 <?php get_header(); ?>
 	
-	<div class="fx-landing">
-		<div class="section-one">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-6">
-						<a href="<?php bloginfo('url'); ?>" class="logo">Fx Pro Tools</a>
-					</div>
-					<div class="col-md-6">
-						<ul class="fx-nav">
-							<li><a href="<?php bloginfo('url'); ?>/login">Members Login</a></li>
-							<li><a href="#">Support</a></li>
-						</ul>
-					</div>		
-				</div>
-			</div>
-		</div>
-		<div class="section-note">
+	<div class="fx-landing main">
+		<?php get_template_part('inc/nav-capture-page'); ?>
+		<div class="fx-red-note">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
@@ -508,72 +494,76 @@
 				</div>
 			</div>
 		</div>
-		<div class="section-nine">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<h2 class="m-t-none m-b-none">P.S. - Here Are A Few Other FAQs We Get A Lot</h2>
-						<h3 class="text-normal m-t-sm label-red inline-block">...if you have more questions, ask our live chat support desk!</h3>
-						<hr class="m-b-none"/>
-						<ul class="row faq-items">
-							<li class="col-md-6">
-								<div class="faq-item">
-									<span class="question"><i class="fa fa-question-circle"></i> Do I have to pay for updates?</span>
-									<div class="answer">No! We give constant updates to our software, we provide that to you for FREE. Because Our website is Hosted is on the cloud, when we make an update or add new feature, they automatically show up in your account everytime you log in.</div>
-								</div>
-							</li>
-							<li class="col-md-6">
-								<div class="faq-item">
-									<span class="question"><i class="fa fa-question-circle"></i> If I have a question about your website, can I talk to someone?</span>
-									<div class="answer">Yes! We have a first class support team who can answer your questions 24 hours a day, 7 days a week! Just click on the "support" link on the bottom of any of our pages.</div>
-								</div>
-							</li>
-							<li class="col-md-6">
-								<div class="faq-item">
-									<span class="question"><i class="fa fa-question-circle"></i> How long are your contracts?</span>
-									<div class="answer">There are NO long term contracts or commitments. You can use ClickFunnels month to month, and cancel at any time you'd like!</div>
-								</div>
-							</li>
-							<li class="col-md-6">
-								<div class="faq-item">
-									<span class="question"><i class="fa fa-question-circle"></i> If I’m not happy, how do I cancel my account?</span>
-									<div class="answer">Login to your account, click on your account settings and click "cancel my account". No need to call, email, or talk to anyone! </div>
-								</div>
-							</li>
-							<li class="col-md-6">
-								<div class="faq-item no-border">
-									<span class="question"><i class="fa fa-question-circle"></i> If I have a question about your website, can I talk to someone?</span>
-									<div class="answer">Yes! We have a first class support team who can answer your questions 24 hours a day, 7 days a week! Just click on the "support" link on the bottom of any of our pages or go to http://support.fxprotools.com </div>
-								</div>
-							</li>
-							<li class="col-md-6">
-								<div class="faq-item no-border">
-									<span class="question"><i class="fa fa-question-circle"></i> Do I have to install anything?</span>
-									<div class="answer">No! We created FX Pro Tools so you wouldn't have too. Just login, start clicking, and you can access your training & cloud hosted” softwares. </div>
-								</div>
-							</li>
-						</ul>
-						<hr class="m-t-none"/>
-						<div class="row">
-							<div class="col-md-8 col-md-offset-2">
-								<div class="text-center">
-									<h2 class="text-red m-t-none">This Is A Limited Time Offer</h2>
-									<h3 class="m-t-none m-b-md">Take advantage of our massive price reduction!</h3>
-									<p><span class="label-red">Start your journey in Forex.</span> Learn to master the markets, develop a lifelong skillset, and become your own boss.</p>
+		<div class="section-nine section-w-panel">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel">
+						<div class="panel-body">
+							<h2 class="m-t-none m-b-none">P.S. - Here Are A Few Other FAQs We Get A Lot</h2>
+							<h3 class="text-normal m-t-sm label-red inline-block">...if you have more questions, ask our live chat support desk!</h3>
+							<hr class="m-b-none"/>
+							<ul class="row faq-items">
+								<li class="col-md-6">
+									<div class="faq-item">
+										<span class="question"><i class="fa fa-question-circle"></i> Do I have to pay for updates?</span>
+										<div class="answer">No! We give constant updates to our software, we provide that to you for FREE. Because Our website is Hosted is on the cloud, when we make an update or add new feature, they automatically show up in your account everytime you log in.</div>
+									</div>
+								</li>
+								<li class="col-md-6">
+									<div class="faq-item">
+										<span class="question"><i class="fa fa-question-circle"></i> If I have a question about your website, can I talk to someone?</span>
+										<div class="answer">Yes! We have a first class support team who can answer your questions 24 hours a day, 7 days a week! Just click on the "support" link on the bottom of any of our pages.</div>
+									</div>
+								</li>
+								<li class="col-md-6">
+									<div class="faq-item">
+										<span class="question"><i class="fa fa-question-circle"></i> How long are your contracts?</span>
+										<div class="answer">There are NO long term contracts or commitments. You can use ClickFunnels month to month, and cancel at any time you'd like!</div>
+									</div>
+								</li>
+								<li class="col-md-6">
+									<div class="faq-item">
+										<span class="question"><i class="fa fa-question-circle"></i> If I’m not happy, how do I cancel my account?</span>
+										<div class="answer">Login to your account, click on your account settings and click "cancel my account". No need to call, email, or talk to anyone! </div>
+									</div>
+								</li>
+								<li class="col-md-6">
+									<div class="faq-item no-border">
+										<span class="question"><i class="fa fa-question-circle"></i> If I have a question about your website, can I talk to someone?</span>
+										<div class="answer">Yes! We have a first class support team who can answer your questions 24 hours a day, 7 days a week! Just click on the "support" link on the bottom of any of our pages or go to http://support.fxprotools.com </div>
+									</div>
+								</li>
+								<li class="col-md-6">
+									<div class="faq-item no-border">
+										<span class="question"><i class="fa fa-question-circle"></i> Do I have to install anything?</span>
+										<div class="answer">No! We created FX Pro Tools so you wouldn't have too. Just login, start clicking, and you can access your training & cloud hosted” softwares. </div>
+									</div>
+								</li>
+							</ul>
+							<hr class="m-t-none"/>
+							<div class="row">
+								<div class="col-md-8 col-md-offset-2">
+									<div class="text-center">
+										<h2 class="text-red m-t-none">This Is A Limited Time Offer</h2>
+										<h3 class="m-t-none m-b-md">Take advantage of our massive price reduction!</h3>
+										<p><span class="label-red">Start your journey in Forex.</span> Learn to master the markets, develop a lifelong skillset, and become your own boss.</p>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="text-center m-t-md">
-							<a href="#" class="btn btn-success btn-lg m-b-md btn-lg-w-text">
-								Get Your Access For $1.00 Trial Now!
-								<span>Sign-up takes less than 60 seconds. Pick a plan to get started!</span>
-							</a>
-							<p class="info">For information on becoming an IBO, please scroll down.</p>
+							<div class="text-center m-t-md">
+								<a href="#" class="btn btn-success btn-lg m-b-md btn-lg-w-text">
+									Get Your Access For $1.00 Trial Now!
+									<span>Sign-up takes less than 60 seconds. Pick a plan to get started!</span>
+								</a>
+								<p class="info">For information on becoming an IBO, please scroll down.</p>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 		<div class="section-ten">
 			<div class="container">
 				<div class="row">
@@ -653,7 +643,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="section-twelve section-w-panel">
+		<div class="section-testimonials section-w-panel">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">

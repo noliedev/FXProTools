@@ -248,9 +248,9 @@ function get_checklist_next_step_url()
 	return $url;
 }
 
-function resend_email_verification(){
-	if( get_current_user_id() > 0)
-	{
+function resend_email_verification()
+{
+	if( get_current_user_id() > 0){
 		ThemeSettings::send_email_verification(get_current_user_id());
 	}
 }
@@ -362,4 +362,83 @@ function forced_lesson_time()
 			</style>';
 		return $button_disabled;
 	} 
+}
+
+add_filter('login_redirect', 'my_login_redirect', 10, 3 );
+function my_login_redirect( $url, $request, $user )
+{
+    if( $user && is_object( $user ) && is_a( $user, 'WP_User' ) ) {
+        if( $user->has_cap( 'administrator' ) ) {
+            $url = admin_url();
+        } else {
+			if(IS_LOCAL)
+				$url = home_url('/index.php/dashboard/');
+			else
+				$url = home_url('/dashboard/');
+        }
+    }
+    return $url;
+}
+
+add_action( 'template_redirect', 'redirect_login_page' );
+function redirect_login_page() {
+    if( is_page( 'login' ) && is_user_logged_in() ) {
+        wp_redirect( home_url() );
+        exit;
+    }
+}
+
+function active_subscription_list($from_date=null, $to_date=null)
+{
+
+    // Get all customer orders
+    $subscriptions = get_posts( array(
+        'numberposts' => -1,
+        'post_type'   => 'shop_subscription', // Subscription post type
+        'post_status' => 'wc-in-active', // Active subscription
+        'post_author' => '2913', // by user_id
+        'orderby' => 'post_date', // ordered by date
+        'order' => 'ASC',
+        'date_query' => array( // Start & end date
+            array(
+                'after'     => $from_date,
+                'before'    => $to_date,
+                'inclusive' => true,
+            ),
+        ),
+    ) );
+    
+    //return $subscriptions;
+
+    // Styles (temporary, only for demo display) should be removed
+    echo "<style>
+        .subscription_list th, .subscription_list td{border:solid 1px #666; padding:2px 5px;}
+        .subscription_list th{font-weight:bold}
+        .subscription_list td{text-align:center}
+    </style>";
+
+    // Displaying list in an html table
+    echo "<table class='shop_table subscription_list'>
+        <tr>
+            <th>" . __( 'User ID', 'your_theme_domain' ) . "</th>
+            <th>" . __( 'User Name', 'your_theme_domain' ) . "</th>
+            <th>" . __( 'Subscription Id', 'your_theme_domain' ) . "</th>
+            <th>" . __( 'Date', 'your_theme_domain' ) . "</th>
+        </tr>
+            ";
+    // Going through each current customer orders
+    foreach ( $subscriptions as $subscription ) {
+        $subscription_date = array_shift( explode( ' ', $subscription->post_date ) ); // subscription date
+        $subscr_meta_data = get_post_meta($subscription->ID); // subscription meta data
+        $customer_id = $subscr_meta_data['_customer_user'][0]; // customer ID
+        $customer_name = $subscr_meta_data['_billing_first_name'][0] . ' ' . $subscr_meta_data['_billing_last_name'][0]; // customer name
+        $wc_authorizeddotnet_gateway_subscription_id = $subscr_meta_data['wc_authorizeddotnet_gateway_subscription_id'][0];	// subscription ID
+        echo "</tr>
+				<td>$customer_id</td>
+                <td>$customer_name</td>
+                <td>$wc_authorizeddotnet_gateway_subscription_id</td>
+                <td>$subscription_date</td>
+            </tr>";
+    }
+    echo '</table>';
 }
