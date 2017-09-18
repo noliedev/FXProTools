@@ -21,6 +21,8 @@ if(!class_exists('AdminSettings')){
 			add_filter('login_headerurl', array($this, 'login_logo_link'));
 			add_action('admin_menu',  array($this, 'remove_admin_menus'), 99);
 			add_action('admin_init', array($this, 'remove_dashboard_meta'));
+			add_action( 'wp_ajax_nopriv_lms_previous_lesson_complete', 'lms_previous_lesson_complete' );
+			add_action( 'wp_ajax_lms_previous_lesson_complete', 'lms_previous_lesson_complete' );
 			// add_action('admin_menu', array($this, 'page_anet'));
 		}
 
@@ -107,6 +109,19 @@ if(!class_exists('AdminSettings')){
 		// 		get_template_part('inc/templates/template-admin-anet');
 		// 	}
 		// }
+
+
+
+		function lms_previous_lesson_complete() {
+			$user_id = get_current_user_id();
+			$lesson_id = $_POST['lesson_id'];
+			
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) { 
+				update_post_meta( $_POST['post_id'], 'post_love', $love );
+				echo $love;
+			}
+			die();
+		}
 
 	}
 
