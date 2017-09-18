@@ -68,7 +68,7 @@ $coaching = wc_customer_bought_product( '', get_current_user_id(), 50);
 					</li>
 					<li>
 						<span>1 on 1 Coaching</span>
-						<a href="<?php bloginfo('url');?>/coaching/" class="action">Upgrade Now <i class="fa fa-shopping-cart"></i></a>
+						<a href="<?php bloginfo('url');?>/coaching/" class="action"><?php echo $coaching ? 'Access Now' : 'Upgrade Now <i class="fa fa-shopping-cart"></i>';?></a>
 					</li>
 				</ul>
 			</div>

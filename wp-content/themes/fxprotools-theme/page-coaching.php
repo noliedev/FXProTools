@@ -7,7 +7,7 @@
 
 <?php get_header(); ?>
 
-	<?php if ( WC_Subscriptions_Manager::user_has_subscription( '', $product_id, 'active') ) : ?>
+	<?php if ( WC_Subscriptions_Manager::user_has_subscription( '', $product_id, 'active') || is_admin() ) : ?>
 		<?php get_template_part('inc/templates/nav-products'); ?>
 		<div class="container">
 			<div class="row">
