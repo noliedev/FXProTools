@@ -1,12 +1,14 @@
 <?php
 global $post;
+$user_id = get_current_user_id();
 $lesson_id = get_the_ID();
 $lesson = get_post($lesson_id);
 $course = get_lesson_parent_course( $lesson_id );
 $course_id = $course->ID;
 $lessons = get_lessons_by_course_id( $course->ID );
 $course_progress = get_user_progress();
-
+$previous_lesson = $lessons[intval(array_search($lesson, $lessons)-1)];
+$next_lesson = $lessons[intval(array_search($lesson, $lessons)+1)];
 $course_video = Learndash_Course_Video::get_instance();
 $lesson_settings = learndash_get_setting( $post );
 $video = $course_video->add_video_to_content( '', $post, $lesson_settings );
@@ -17,7 +19,82 @@ $progression_enabled = is_lesson_progression_enabled($course_id);
 
 	<?php get_template_part('inc/templates/nav-products'); ?>
 
-	<?php if ( $progression_enabled && !is_previous_complete( $lesson )): $previous_lesson = $lessons[intval(array_search($lesson, $lessons)-1)]; ?>
+	<?php if ( !is_object($previous_lesson) || ( $progression_enabled && learndash_is_lesson_complete($user_id, $previous_lesson->ID)) ): ?>
+	
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<h5 class="text-bold">Course Progress</h5>
+							<?php get_template_part('inc/templates/course/progressbar'); ?>
+						</div>
+					</div>
+					<div class="panel panel-default fx-course-navigation">
+						<div class="panel-body">
+							<h5 class="text-bold">Lesson Navigation</h5>
+							<?php if( $lessons ) : ?>
+								<ul>
+								<?php $count = 0;  foreach($lessons as $key => $post): setup_postdata($post); $count++; ?>
+									<?php $is_complete = learndash_is_lesson_complete($user_id, $post->ID);?>
+									<li class="<?php echo  $is_complete ?  'completed' : '';?>" ><a href="<?php the_permalink();?>" data-previous-lesson-id="<?php echo $lessons[$key - 1]->ID;?>"><?php the_title();?></a></li>
+								<?php endforeach;  wp_reset_query(); ?>
+								</ul>
+							<?php endif;?>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="fx-header-title">
+								<h3>Lesson #<?php echo intval(array_search($lesson, $lessons)) + 1;?></h3>
+								<h1><?php the_title();?></h1>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="fx-video-container">
+								<?php echo $video; ?>
+							</div>
+							<br/>
+						</div>
+						<div class="clearfix"></div>
+						<div class="col-md-12">
+							<div class="panel panel-default fx-course-outline">
+								<div class="panel-body">
+									<div class="content">
+										<?php echo wpautop($lesson->post_content); ?>
+									</div>
+									<br>
+									<?php if( !learndash_is_lesson_complete($user_id, $lesson->ID) ): ?>
+										<?php $disabled_complete = forced_lesson_time(); ?>
+										<div class="mark-complete">
+											<form id="sfwd-mark-complete" method="post" action="">
+												<input type="hidden" value="<?php echo $lesson_id;?>" name="post" />
+												<input type="hidden" value="<?php echo wp_create_nonce( 'sfwd_mark_complete_'. $user_id .'_'. $lesson_id );?>" name="sfwd_mark_complete" />
+												<input <?php $disabled_complete ? $disabled_complete : '';?> type="submit" value="Mark Complete" class="btn btn-success block" style="width:100%;" id="learndash_mark_complete_button"/>
+												<span id="learndash_timer" class="hidden"></span>
+											</form>
+										</div>
+									<?php endif; ?>
+								</div>
+							</div>
+							<div class="fx-adjacent-lessons">
+								<?php if ( is_object($previous_lesson) ): ?>
+									<a href="<?php echo get_permalink($previous_lesson->ID);?>" class="prev-link" rel="prev"><span class="meta-nav">←</span> Previous Lesson</a>
+								<?php endif;?>
+
+								<?php if ( is_object($next_lesson) && learndash_is_lesson_complete($user_id, $lesson->ID) ): ?>
+									<a href="<?php echo get_permalink($next_lesson->ID);?>" class="prev-link" rel="prev"><span class="meta-nav">→</span> Next Lesson</a>
+								<?php endif;?>
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+
+	<?php else: ?>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
@@ -25,75 +102,5 @@ $progression_enabled = is_lesson_progression_enabled($course_id);
 				</div>
 			</div>
 		</div>
-	<?php else: ?>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<h5 class="text-bold">Course Progress</h5>
-						<?php get_template_part('inc/templates/course/progressbar'); ?>
-					</div>
-				</div>
-				<div class="panel panel-default fx-course-navigation">
-					<div class="panel-body">
-						<h5 class="text-bold">Lesson Navigation</h5>
-						<?php if( $lessons ) : ?>
-							<ul>
-							<?php $count = 0;  foreach($lessons as $post): setup_postdata($post); $count++; ?>
-								<?php $is_complete = get_course_lesson_progress($course_id, get_the_ID());?>
-								<li class="<?php echo  $is_complete ?  'completed' : '';?>"><a href="<?php the_permalink();?>"><?php the_title();?></a></li>
-							<?php endforeach;  wp_reset_query(); ?>
-							</ul>
-						<?php endif;?>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-9">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="fx-header-title">
-							<h3>Lesson #<?php echo intval(array_search($lesson, $lessons)) + 1;?></h3>
-							<h1><?php the_title();?></h1>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="fx-video-container">
-							<?php echo $video; ?>
-						</div>
-						<br/>
-					</div>
-					<div class="clearfix"></div>
-					<div class="col-md-12">
-						<div class="panel panel-default fx-course-outline">
-							<div class="panel-body">
-								<div class="content">
-									<?php echo wpautop($lesson->post_content); ?>
-								</div>
-								<br>
-								<?php if( get_course_lesson_progress($course_id, $lesson_id) != 1 ): ?>
-									<?php $disabled_complete = forced_lesson_time(); ?>
-									<div class="mark-complete">
-										<form id="sfwd-mark-complete" method="post" action="">
-											<input type="hidden" value="<?php echo $lesson_id;?>" name="post" />
-											<input type="hidden" value="<?php echo wp_create_nonce( 'sfwd_mark_complete_'. get_current_user_id() .'_'. $lesson_id );?>" name="sfwd_mark_complete" />
-											<input <?php $disabled_complete ? $disabled_complete : '';?> type="submit" value="Mark Complete" class="btn btn-success block" style="width:100%;" id="learndash_mark_complete_button"/>
-											<span id="learndash_timer" class="hidden"></span>
-										</form>
-									</div>
-								<?php endif; ?>
-							</div>
-						</div>
-						<div class="fx-adjacent-lessons">
-							<?php echo learndash_next_post_link(); ?>
-							<?php if ( learndash_is_lesson_complete (get_current_user_id(), $lesson_id) ): ?>
-								<?php echo learndash_previous_post_link(); ?>
-							<?php endif;?>
-						</div>
-					</div>
-				</div>
-			</div>	
-		</div>
-	</div>
 	<?php endif;?>
 <?php get_footer(); ?>

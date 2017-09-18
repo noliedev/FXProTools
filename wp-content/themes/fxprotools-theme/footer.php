@@ -50,7 +50,7 @@
 	</div>
 	<?php endif; ?>
 
-
+<?php get_sidebar('alert');?>
 <?php wp_footer(); ?>
 
 </body>

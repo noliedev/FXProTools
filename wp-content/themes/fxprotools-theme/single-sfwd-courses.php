@@ -1,4 +1,5 @@
 <?php
+$user_id = get_current_user_id();
 $course_id = get_the_ID();
 $course = get_post( $course_id ); 
 $lessons = get_lessons_by_course_id( $course_id );
@@ -27,7 +28,7 @@ $course_prerequisites = learndash_get_course_prerequisites( $course_id );
 					<div class="learndash_join_button">
 						<form method="post">
 							<input type="hidden" value="<?php echo $course_id;?>" name="course_id" />
-							<input type="hidden" name="course_join" value="<?php echo wp_create_nonce( 'course_join_'. get_current_user_id() .'_'. $course_id  );?>" />
+							<input type="hidden" name="course_join" value="<?php echo wp_create_nonce( 'course_join_'. $user_id .'_'. $course_id  );?>" />
 							<input type="submit" value="Start This Course" class="btn btn-success block" style="width:100%;" />
 						</form>
 					</div>
@@ -95,9 +96,9 @@ $course_prerequisites = learndash_get_course_prerequisites( $course_id );
 
 							<?php if( $lessons ) : ?>
 								<ul>
-								<?php $count = 0;  foreach($lessons as $post): setup_postdata($post); $count++; ?>
-									<?php $is_complete = get_course_lesson_progress($course_id, get_the_ID());?>
-									<li class="<?php echo  $is_complete ?  'completed' : '';?>"><a href="<?php the_permalink();?>"><?php the_title();?></a></li>
+								<?php $count = 0;  foreach($lessons as $key => $post): setup_postdata($post); $count++; ?>
+									<?php $is_complete = learndash_is_lesson_complete($user_id, $post->ID);?>
+									<li class="<?php echo  $is_complete ?  'completed' : '';?>" ><a href="<?php the_permalink();?>" data-previous-lesson-id="<?php echo $lessons[$key - 1]->ID;?>"><?php the_title();?></a></li>
 								<?php endforeach;  wp_reset_query(); ?>
 								</ul>
 							<?php endif;?>
@@ -143,12 +144,12 @@ $course_prerequisites = learndash_get_course_prerequisites( $course_id );
 										</thead>
 										<tbody>
 											<?php if( $lessons ) : ?>
-												<?php $count = 0;  foreach($lessons as $post): setup_postdata($post); $count++; ?>
-													<?php $is_complete = get_course_lesson_progress($course_id, get_the_ID());?>
+												<?php $count = 0;  foreach($lessons as $key => $post): setup_postdata($post); $count++; ?>
+													<?php $is_complete = learndash_is_lesson_complete($user_id, $post->ID);?>
 													<tr>
 														<td class="text-center number"><?php echo $count; ?></td>
 														<td>
-															<a href="<?php the_permalink();?>"><?php the_title();?></a>
+															<a href="<?php the_permalink();?>" data-previous-lesson-id="<?php echo $lessons[$key - 1]->ID;?>"><?php the_title();?></a>
 															<div class="status pull-right">
 																<i class="fa <?php echo  $is_complete ?  'fa-check text-success' : '';?>"></i>
 															</div>

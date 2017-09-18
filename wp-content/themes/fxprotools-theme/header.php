@@ -28,8 +28,8 @@
 							<li><a href="<?php bloginfo('url'); ?>/basic-training" title="Product Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
 							<?php  if ( WC_Subscriptions_Manager::user_has_subscription( '', 48, 'active') || current_user_can('administrator') ): ?>
 								<li><a href="<?php bloginfo('url'); ?>/marketing/funnels" title="Marketing Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
+								<li><a href="<?php bloginfo('url'); ?>/team" title="Team Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
 							<?php endif;?>
-							<li><a href="<?php bloginfo('url'); ?>/team" title="Team Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
 							<li><a href="<?php bloginfo('url'); ?>/wallet" title="Money Icon"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
 						</ul>
 					</div>

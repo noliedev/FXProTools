@@ -571,6 +571,7 @@ function learndash_can_attempt_again( $user_id, $quiz_id ) {
  */
 function is_previous_complete( $post ) {
 	$progress = learndash_get_course_progress( null, $post->ID );
+	dd($progress);
 
 	if ( empty( $progress ) ) {
 		return 1;
