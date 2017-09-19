@@ -751,6 +751,23 @@
 		border-bottom: 1px solid #DDD;
 		min-height: 500px;
 	}
+	.webinar-list{
+		padding: 0 15px;
+		.row{
+			padding: 15px;
+			&:nth-child(even){
+				background: #f8f8f8;
+			}
+		}
+		@media (max-width: 991px){
+			.webinar-sched{
+				margin-bottom: 10px;
+			}
+			.webinar-link{
+				padding-bottom: 10px;
+			}
+		}
+	}
 }
 
 // Marketing Funnels
