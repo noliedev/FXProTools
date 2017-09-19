@@ -598,7 +598,11 @@
 // Main Navigation
 .fx-navbar-main {
 	position: relative;
-	border-bottom: 1px solid #DDD;
+	border-radius: 0;
+	background-color: $red;
+	-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
 	.fx-nav-options {
 		list-style: none;
 		padding: 0;
@@ -608,19 +612,33 @@
 			margin-right: 10px;
 			&:last-child { margin-right: 0; }
 			a {
-				font-size: 20px;
 			    display: block;
 			    padding: 25px 10px;
 			    line-height: 30px;
 			    text-align: center;
+			    color: $white;
+			    .image {
+			    	border: 1px solid #DDD;
+			    	height: 50px;
+					img {
+						margin: 0 auto;
+					}
+			    }
+			    span {
+					font-size: 13px;
+					display: block;
+			    }
 			    &:hover, &:active, &:focus {
 			    	text-decoration: none;
 			    }
+			    .icon-inbox {
+			    	font-size: 44px;
+			    }
 			}
 			&.account {
-				padding-top: 15px;
+				padding-top: 40px;
 				a {
-					border: 1px solid #DDD;
+					background: #ba1213;
 					line-height: 5px;
 					padding: 20px 25px;
 					font-size: 13px;
@@ -630,12 +648,11 @@
 	}
 	.fx-navbar-header .navbar-brand {
 		height: auto;
+		img {
+			margin-top: 30px;
+		}
 	}
 }
-.logged-in .fx-navbar-main {
-	margin-bottom: 0;
-}
-
 
 // Sub Navigation
 .fx-navbar-sub {
@@ -750,23 +767,6 @@
 		border-right: 1px solid #DDD;
 		border-bottom: 1px solid #DDD;
 		min-height: 500px;
-	}
-	.webinar-list{
-		padding: 0 15px;
-		.row{
-			padding: 15px;
-			&:nth-child(even){
-				background: #f8f8f8;
-			}
-		}
-		@media (max-width: 991px){
-			.webinar-sched{
-				margin-bottom: 10px;
-			}
-			.webinar-link{
-				padding-bottom: 10px;
-			}
-		}
 	}
 }
 
