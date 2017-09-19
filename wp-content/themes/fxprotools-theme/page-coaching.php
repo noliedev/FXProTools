@@ -76,7 +76,7 @@
 								<?php
 								}
 								} else {
-								// no posts found
+									echo '<h4>No Sessions Scheduled</h4>';
 								}
 								/* Restore original Post Data */
 								wp_reset_postdata();
@@ -130,7 +130,7 @@
 								<?php
 								}
 								} else {
-								// no posts found
+									echo '<h4>No Sessions Scheduled</h4>';
 								}
 								/* Restore original Post Data */
 								wp_reset_postdata();
