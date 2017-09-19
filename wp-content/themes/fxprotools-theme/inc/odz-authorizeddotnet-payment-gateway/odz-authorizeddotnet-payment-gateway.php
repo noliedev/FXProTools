@@ -390,49 +390,73 @@ function init_odz_authorizeddotnet_payment_gateway() {
         /**
          * Initialise Credit Card Payment Form Fields
          */
-        public function payment_fields() {
-            ?>
-            <p><?php echo $this->description; ?></p>
-            <fieldset id="authorizeddotnet-cc-form">
-                <p class="form-row form-row-wide">
-                    <label for="authorizeddotnet-card-number"><?php echo __('Card Number', 'woo-authorizeddotnet-payment-gateway') ?> <span class="required">*</span></label>
-                    <input type="text" data-encrypted-name="authorizeddotnet-card-number" placeholder="" autocomplete="off" maxlength="20" class="input-text wc-credit-card-form-card-number" id="woo-authorizeddotnet-payment-gateway-card-number" name='woo-authorizeddotnet-payment-gateway-card-number'>
-                </p>
-
-                <p class="form-row form-row-first authorizeddotnet-card-expiry">
-                    <label for="authorizeddotnet-card-expiry-month"><?php echo __('Expiry', 'woo-authorizeddotnet-payment-gateway') ?> <span class="required">*</span></label>
-                    <select name="woo-authorizeddotnet-payment-gateway-card-expiry-month" id="woo-authorizeddotnet-payment-gateway-card-expiry-month" class="input-text">
-                        <option value=""><?php _e('Month', 'woo-authorizeddotnet-payment-gateway') ?></option>
-                        <option value='01'>01</option>
-                        <option value='02'>02</option>
-                        <option value='03'>03</option>
-                        <option value='04'>04</option>
-                        <option value='05'>05</option>
-                        <option value='06'>06</option>
-                        <option value='07'>07</option>
-                        <option value='08'>08</option>
-                        <option value='09'>09</option>
-                        <option value='10'>10</option>
-                        <option value='11'>11</option>
-                        <option value='12'>12</option>  
-                    </select>
-
-                    <select name="woo-authorizeddotnet-payment-gateway-card-expiry-year" id="woo-authorizeddotnet-payment-gateway-card-expiry-year" class="input-text">
-                        <option value=""><?php _e('Year', 'woo-authorizeddotnet-payment-gateway') ?></option><?php
-                        for ($iYear = date('Y'); $iYear < date('Y') + 21; $iYear++) {
-                            echo '<option value="' . $iYear . '">' . $iYear . '</option>';
-                        }
-                        ?>
-                    </select>
-                </p>
-
-                <p class="form-row form-row-last">
-                    <label for="authorizeddotnet-card-cvc"><?php echo __('Card Code', 'woo-authorizeddotnet-payment-gateway') ?> <span class="required">*</span></label>
-                    <input type="text" data-encrypted-name="authorizeddotnet-card-cvc" placeholder="CVC" autocomplete="off" class="input-text wc-credit-card-form-card-cvc" name ='woo-authorizeddotnet-payment-gateway-card-cvc' id="woo-authorizeddotnet-payment-gateway-card-cvc">
-                </p>
-            </fieldset>
-            <?php
-        }
+        public function payment_fields()
+        {
+        ?>
+            <div class="panel panel-default">
+				<div class="panel-heading">STEP 3: PAYMENT INFORMATION</div>
+				<div class="panel-body">
+					<p><?php //echo $this->description; ?></p>
+					<fieldset id="authorizeddotnet-cc-form">
+						<div class="panel-note">
+							<p>This website utilizes some of the most advanced techniques to protect your information including technical, administrative and even physical safeguards againts unauthorized access, misuse and improper disclosure.</p>
+						</div>
+						<p class="form-row form-row-wide">
+							<div class="col-md-3 text-right">
+								<label for="authorizeddotnet-card-number col-form-label"><?php echo __('Card Number', 'woo-authorizeddotnet-payment-gateway') ?> <span class="required">*</span></label>
+							</div>
+							<div class="col-md-5">
+								<input type="text" data-encrypted-name="authorizeddotnet-card-number" placeholder="" autocomplete="off" maxlength="20" class="input-text wc-credit-card-form-card-number" id="woo-authorizeddotnet-payment-gateway-card-number" name='woo-authorizeddotnet-payment-gateway-card-number'>
+							</div>
+							<div class="col-md-4">
+								<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/credit_cards_visa_mc.png">
+							</div>
+						</p>
+						<div class="form-group">
+							<div class="col-md-3 text-right">
+								<label for="authorizeddotnet-card-cvc"><?php echo __('Card Code', 'woo-authorizeddotnet-payment-gateway') ?> <span class="required">*</span></label>
+							</div>
+							<div class="col-md-9">
+								<div class="row">
+									<div class="col-md-4">
+										<input type="text" data-encrypted-name="authorizeddotnet-card-cvc" placeholder="CVC" autocomplete="off" class="input-text wc-credit-card-form-card-cvc" name ='woo-authorizeddotnet-payment-gateway-card-cvc' id="woo-authorizeddotnet-payment-gateway-card-cvc">
+									</div>
+									<label class="col-md-3 col-form-label label-pad" for="authorizeddotnet-card-expiry-month"><?php echo __('Expiry', 'woo-authorizeddotnet-payment-gateway') ?> <span class="required">*</span></label>
+									<div class="col-md-2 no-pad">
+										<select name="woo-authorizeddotnet-payment-gateway-card-expiry-month" id="woo-authorizeddotnet-payment-gateway-card-expiry-month" class="input-text">
+											<option value=""><?php _e('Month', 'woo-authorizeddotnet-payment-gateway') ?></option>
+											<option value='01'>01</option>
+											<option value='02'>02</option>
+											<option value='03'>03</option>
+											<option value='04'>04</option>
+											<option value='05'>05</option>
+											<option value='06'>06</option>
+											<option value='07'>07</option>
+											<option value='08'>08</option>
+											<option value='09'>09</option>
+											<option value='10'>10</option>
+											<option value='11'>11</option>
+											<option value='12'>12</option>  
+										</select>
+									</div>
+									<div class="col-md-3 authorizeddotnet-card-expiry">
+										<select name="woo-authorizeddotnet-payment-gateway-card-expiry-year" id="woo-authorizeddotnet-payment-gateway-card-expiry-year" class="input-text">
+										<option value=""><?php _e('Year', 'woo-authorizeddotnet-payment-gateway') ?></option><?php
+										for ($iYear = date('Y'); $iYear < date('Y') + 21; $iYear++) {
+											echo '<option value="' . $iYear . '">' . $iYear . '</option>';
+										}
+										?>
+									</select>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</fieldset>
+				</div>
+            </div>
+        <?php
+		}
 
         /**
          * Function is responsible for verify card type

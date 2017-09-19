@@ -30,4 +30,12 @@ jQuery(document).ready( function($) {
 		$('#alert-modal').modal('show');
 	}
 	
-})
+	$("#order_review_heading").appendTo(".col-1");
+	$("#order_review").appendTo(".col-1");
+	$(".checkout-sidebar").appendTo(".col-2");
+	$(".woocommerce").addClass("checkout-holder");
+	$(".woocommerce-billing-fields > h3").html("STEP 1: ENTER ACCOUNT DETAILS");
+	$("#mobile").val("324234234324423").hide();
+	$(".woocommerce-additional-fields").hide();
+	
+});

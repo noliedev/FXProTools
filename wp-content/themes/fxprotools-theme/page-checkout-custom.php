@@ -1,3 +1,4 @@
+<?php /* Template Name: Custom Checkout Page */ ?>
 <?php get_header(); ?>
 	<div class="checkout-holder">
 		<div class="container">
