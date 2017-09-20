@@ -56,7 +56,8 @@
 	        
 	        	//palce the user into the sposnosrs customer table
     				do_action('eps_affiliates_place_customer_under_sponsor',$post_data['uid'] ,$post_data['sponsor_uid'] );
-
+    				do_action('eps_affiliates_unilevel_place_user_in_holding_tank',$post_data['uid'] ,$post_data['sponsor_uid'] );
+    				
 	        	$post_data['uid'] = $user_uid;
 	        	//extract sponsor uid
 	        	preg_match_all('/\d+/', $sponsor, $matches);

@@ -4,7 +4,7 @@
  * Add new member
  * ---------------------------------------------
 */
- function afl_add_new_member () {
+ function afl_unilevel_add_new_member () {
 
  	echo afl_eps_page_header();
 	 // $obj = new Eps_affiliates_registration;
@@ -14,7 +14,7 @@
   try {
   	$post = array();
  		if ( isset($_POST['submit'] ) ) {
-        $rules = create_validation_rules($_POST);
+        $rules = unilevel_create_validation_rules($_POST);
 			 	$resp  = set_form_validation_rule($rules);
 			 	if (!$resp) {
 			 		$post = $_POST;
@@ -32,7 +32,7 @@
 	        // // call @function complete_registration to create the user
 	        // // only when no WP_error is found
 
-	        $user_uid = complete_registration(
+	        $user_uid = unilevel_complete_registration(
 		        $username,
 		        $password,
 		        $email,
@@ -69,6 +69,7 @@
     			$business_transactions['order_id'] 			 = 1;
 	       	
 	       	$response = apply_filters('eps_commerce_joining_package_purchase_complete',$business_transactions);
+
 	       	if ( !empty( $response['status']  )) {
 				 		echo wp_set_message('Member has been created successfully', 'success');
 	       	} else  {
@@ -88,14 +89,14 @@
   	pr($e);
   }
  	
- 	afl_add_new_member_form($post);
+ 	afl_unilevel_add_new_member_form($post);
  }
 /*
  * ---------------------------------------------
  * Add new member Form
  * ---------------------------------------------
 */
- function afl_add_new_member_form ($post) {
+ function afl_unilevel_add_new_member_form ($post) {
  	// pr(get_users());
  	afl_content_wrapper_begin();
 
@@ -250,7 +251,7 @@
  	afl_content_wrapper_end();
  }
 
-function complete_registration($username, $password, $email, $first_name, $sur_name, $sponsor) {
+function unilevel_complete_registration($username, $password, $email, $first_name, $sur_name, $sponsor) {
 	
     global $reg_errors;
     if ( 1 > count( $reg_errors->get_error_messages() ) ) {
@@ -270,7 +271,7 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
  * Create validation rules array
  * ---------------------------------------------
 */
-	function create_validation_rules ($POST) {
+	function unilevel_create_validation_rules ($POST) {
 		$rules = array();
 			 	$rules[] = array(
 			 		'value'=>$POST['user_name'],

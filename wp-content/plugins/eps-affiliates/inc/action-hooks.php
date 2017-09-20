@@ -40,6 +40,13 @@ function common_scripts_load(){
 	wp_enqueue_script( 'highchart-js' );
 
 
+	
+	wp_register_script( 'matrix-plan-bxslider-js',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/bxslider/jquery.bxslider.js');
+	wp_enqueue_script( 'matrix-plan-bxslider-js' );
+
+	wp_register_style( 'matrix-plan-bxslider-cs',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/bxslider/jquery.bxslider.css');
+	wp_enqueue_style( 'matrix-plan-bxslider-cs' );
+
 
 
 	wp_register_script( 'common-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/common.js');
@@ -139,6 +146,15 @@ function eps_affiliates_admin_notices () {
 */
  add_action('wp_ajax_users_auto_complete', 'users_auto_complete_callback');
  add_action('wp_ajax_nopriv_users_auto_complete', 'users_auto_complete_callback');
+
+ /*
+ * ------------------------------------------------------------
+ * customers autocomplete initialization
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_customers_auto_complete', 'customers_auto_complete_callback');
+ add_action('wp_ajax_nopriv_customers_auto_complete', 'customers_auto_complete_callback');
+
 /*
  * ------------------------------------------------------------
  * Auto complete under a particular user
@@ -193,7 +209,13 @@ function eps_affiliates_admin_notices () {
 */
 	add_action('wp_ajax_afl_user_expand_genealogy', 'afl_expand_user_genealogy_tree');
  	add_action('wp_ajax_nopriv_afl_user_expand_genealogy', 'afl_expand_user_genealogy_tree');
-
+/*
+ * ------------------------------------------------------------
+ * Genealogy tree expand
+ * ------------------------------------------------------------
+*/
+	add_action('wp_ajax_afl_unilevel_user_expand_genealogy', 'afl_unilevel_expand_user_genealogy_tree');
+ 	add_action('wp_ajax_nopriv_afl_unilevel_user_expand_genealogy', 'afl_unilevel_expand_user_genealogy_tree');
 /*
  * ------------------------------------------------------------
  * E wallet summary datatable
@@ -411,6 +433,16 @@ function eps_affiliates_admin_notices () {
 			'affiliate-eps-refered-members',
 			'affiliate-eps-add-new-customer',
 			'affiliate-eps-my-customers',
+
+			//unilevel network
+			'affiliate-eps-unilevel-user-network',
+			'affiliate-eps-unilevel-downline-members',
+			'affiliate-eps-unilevel-genealogy-tree',
+			'affiliate-eps-unilevel-holding-tank',
+			'affiliate-eps-unilevel-refered-members',
+			'affiliate-eps-unilevel-add-new-customer',
+			'affiliate-eps-unilevel-my-customers',
+
 			//e-wallet
 			'affiliate-eps-e-wallet-summary',
 			'affiliate-eps-e-wallet',

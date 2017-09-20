@@ -3,15 +3,15 @@
    if (isset($_POST['uid']))  {
      $uid = $_POST['uid'];
      $query = array();
-     $query['#select'] = 'wp_afl_user_downlines';
+     $query['#select'] = _table_name('afl_user_downlines');
      $query['#join']  = array(
         'wp_users' => array(
-          '#condition' => '`wp_users`.`ID`=`wp_afl_user_downlines`.`downline_user_id`'
+          '#condition' => '`wp_users`.`ID`=`'._table_name('afl_user_downlines').'`.`downline_user_id`'
         )
       );
      $query['#where'] = array(
-        '`wp_afl_user_downlines`.`uid`='.$uid.'',
-        '`wp_afl_user_downlines`.`level`=1',
+        '`'._table_name('afl_user_downlines').'`.`uid`='.$uid.'',
+        '`'._table_name('afl_user_downlines').'`.`level`=1',
       );
      $query['#order_by'] = array(
         '`level`' => 'ASC'
@@ -45,7 +45,7 @@
                       <p class="name">
                         <?= $tree[$level[$i]]->user_login.' ('.$tree[$level[$i]]->ID.')'; ?>
                       </p>
-                    <span class="expand-tree" data-user-id ="<?= $level[$i];?>" onclick="expandTree(this)">
+                    <span class="expand-tree" data-user-id ="<?= $level[$i];?>" onclick="expandMatrixTree(this)">
                       <i class="fa fa-plus-circle fa-2x"></i>
                     </span>
                   </div>
@@ -64,11 +64,41 @@
           <div class="hv-item">
                 <div class="">
                   <div class="person">
-                      <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
-                      <p class="name">
-                        No user
-                      </p>
-                  </div>
+                    <ul class="bxslider">
+                      <li>
+                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                        <p class="name">
+                         abc
+                        </p>
+                      </li>
+                      <li>
+                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                        <p class="name">
+                         abc
+                        </p>
+                      </li>
+                      <li>
+                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                        <p class="name">
+                         abc
+                        </p>
+                      </li>
+                    </ul>
+                    
+                    <script type="text/javascript">
+                    $(document).ready(function(){
+                      $('.bxslider').bxSlider({
+                        pager: false, // disables pager
+                        slideWidth: 200,
+                        // nextSelector: '.bxRight',
+                        // prevSelector: '.bxLeft',
+                        // mode: 'fade',
+                        // captions: true
+                      });
+                      
+                    });
+                    </script>      
+                   </div>
                 </div>
           </div>
       </div>

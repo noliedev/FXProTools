@@ -51,6 +51,49 @@
 	}
 
 
+
+/*
+ * -------------------------------------------------------------
+ * create a scheduled event (if it does not exist already)
+ * -------------------------------------------------------------
+*/
+	function eps_affiliates_unilevel_holding_tank_user_expiry_activation() {
+		if( !wp_next_scheduled( 'eps_affiliates_unilevel_holding_tank_user_expiry_scheduler' ) ) {  
+		   wp_schedule_event( time(), 'everyhour', 'eps_affiliates_unilevel_holding_tank_user_expiry_scheduler' );  
+		}
+	}
+
+/*
+ * -------------------------------------------------------------
+ * unschedule event upon plugin deactivation
+ * -------------------------------------------------------------
+*/
+	function eps_affiliates_unilevel_holding_tank_user_expiry_deactivate() {	
+		// find out when the last event was scheduled
+		$timestamp = wp_next_scheduled ('eps_affiliates_unilevel_holding_tank_user_expiry_scheduler');
+		// unschedule previous event if any
+		wp_unschedule_event ($timestamp, 'eps_affiliates_unilevel_holding_tank_user_expiry_scheduler');
+	} 
+/*
+ * -------------------------------------------------------------
+ * here's the function we'd like to call with our cron job
+ * -------------------------------------------------------------
+ * 
+ * set the users remaining days in the holding tank
+ *
+ * If the remaining day is 0, means he expires from the holding tank,
+ * get that user and frocelly place that user to the tree
+ *
+*/
+	function eps_affiliates_unilevel_holding_tank_user_expiry_cron_callback() {
+		require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/plan/unilevel/holding-tank-expiry-check.php';
+		if (function_exists('_unilevel_check_holding_tank_expiry')) {
+			_unilevel_check_holding_tank_expiry();
+		}
+	}
+
+
+
 /*
  * -------------------------------------------------------------
  * create a scheduled event (if it does not exist already)
@@ -207,6 +250,8 @@
 */
 	add_action('wp', 'eps_affiliates_holding_tank_user_expiry_activation');
 	
+	add_action('wp', 'eps_affiliates_unilevel_holding_tank_user_expiry_activation');
+	
 	add_action('wp', 'eps_affiliates_monthly_matrix_compensation_payout_activation');
 
 	add_action('wp', 'eps_affiliates_monthly_pool_bonus_payout_activation');
@@ -220,6 +265,7 @@
  * -------------------------------------------------------------
 */
 	register_deactivation_hook (__FILE__, 'eps_affiliates_holding_tank_user_expiry_deactivate');
+	register_deactivation_hook (__FILE__, 'eps_affiliates_unilevel_holding_tank_user_expiry_deactivate');
 	register_deactivation_hook (__FILE__, 'eps_affiliates_monthly_matrix_compensation_payout_deactivation');
 	register_deactivation_hook (__FILE__, 'eps_affiliates_monthly_pool_bonus_payout_deactivation');
 	register_deactivation_hook (__FILE__, 'eps_affiliates_remote_users_embedd_cron_deactivation');
@@ -234,6 +280,14 @@
 */
 	add_action ('eps_affiliates_holding_tank_user_expiry_scheduler', 'eps_affiliates_holding_tank_user_expiry_cron_callback');
 
+/*
+ * -------------------------------------------------------------
+ * hook that function into our scheduled event: 
+ * check the user expired from the holding tank, if yes auto place
+ * user under sponsor
+ * -------------------------------------------------------------
+*/
+	add_action ('eps_affiliates_unilevel_holding_tank_user_expiry_scheduler', 'eps_affiliates_unilevel_holding_tank_user_expiry_cron_callback');
 /*
  * -------------------------------------------------------------
  * hook that function into our scheduled event: 

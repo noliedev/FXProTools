@@ -140,6 +140,14 @@
 .bigger-lable{font-size: 100%;}
   
 
+.genealogy-hierarchy .person .bxslider li > img {height: 80px;border: 5px solid #ccc;border-radius: 50%;overflow: hidden;background-color: #ccc; 
+  margin: 0 22%;
+}
+.genealogy-hierarchy .person .bx-wrapper .bx-controls-direction .bx-next{right: 0px;}
+.genealogy-hierarchy .person .bx-wrapper .bx-controls-direction .bx-prev{left: 0px;}
+
+
+
   /* small screen */
 @media (max-width: 768px) {
   .side-menu {position: relative;width: 100%;height: 0;border-right: 0; border-bottom: 1px solid #e7e7e7;}

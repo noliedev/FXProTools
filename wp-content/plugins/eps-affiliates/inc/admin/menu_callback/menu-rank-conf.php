@@ -119,8 +119,26 @@
 	 	$form['field_'.$rank]['rank_'.$rank.'_gv'] = array(
 			'#type' 				=> 'text',
 			'#title'				=> 'Group Volume',
+			'#required'			=> TRUE,
+			'#default_value'=> isset($form_state['rank_'.$rank.'_gv']) ? $form_state['rank_'.$rank.'_gv'] : afl_variable_get('rank_'.$rank.'_gv'),
+			'#prefix'=>'<div class="form-group row">',
+	 		'#suffix' =>'</div>'
+		);
+
+	 	$form['field_'.$rank]['rank_'.$rank.'_max_gv_taken_1_leg'] = array(
+			'#type' 				=> 'text',
+			'#title'				=> 'Maximum Volume taken in 1 Leg',
 			'#required'=>TRUE,
-			'#default_value' 	=> isset($form_state['rank_'.$rank.'_gv']) ? $form_state['rank_'.$rank.'_gv'] : afl_variable_get('rank_'.$rank.'_gv'),
+			'#default_value' 	=> isset($form_state['rank_'.$rank.'_max_gv_taken_1_leg']) ? $form_state['rank_'.$rank.'_max_gv_taken_1_leg'] : afl_variable_get('rank_'.$rank.'_max_gv_taken_1_leg'),
+			'#prefix'=>'<div class="form-group row">',
+	 		'#suffix' =>'</div>'
+		);
+
+	 	$form['field_'.$rank]['rank_'.$rank.'_customer_rule_from_1_leg'] = array(
+			'#type' 				=> 'text',
+			'#title'				=> 'Customer Rule for 1 leg',
+			'#required'=>TRUE,
+			'#default_value' 	=> isset($form_state['rank_'.$rank.'_customer_rule_from_1_leg']) ? $form_state['rank_'.$rank.'_customer_rule_from_1_leg'] : afl_variable_get('rank_'.$rank.'_customer_rule_from_1_leg'),
 			'#prefix'=>'<div class="form-group row">',
 	 		'#suffix' =>'</div>'
 		);
@@ -316,7 +334,15 @@
 	 			'rule_is_numeric',
 	 		)
 	 	);
-
+	 	$rules[] = array(
+	 		'value'=>$_POST['rank_'.$rank.'_max_gv_taken_1_leg'],
+	 		'name' =>'Maximum group volume taken from 1 leg',
+	 		'field' =>'rank_'.$rank.'_max_gv_taken_1_leg',
+	 		'rules' => array(
+	 			'rule_required',
+	 			// 'rule_is_numeric',
+	 		)
+	 	);
 	 	$rules[] = array(
 	 		'value'=>$_POST['rank_'.$rank.'_no_of_distributors'],
 	 		'name' =>'Number of distributors',

@@ -4,10 +4,18 @@ $(document).ready(function(){
 
   $('[data-toggle="tooltip"]').tooltip();   
   
+   
+    
+
 });
 
 $(function () {
-
+     $('.bxslider').bxSlider({
+      pager: false, // disables pager
+      slideWidth: 150,
+    
+    });
+     
     toastr.options = {
       "closeButton": true,
       "debug": false,
@@ -46,6 +54,7 @@ $(function () {
 			   	type :'POST',
 			   	data : {
 			   		action:path,
+            tree_mode : $('#tree-mode').val(),
 			   	},
 			   	url:ajax_object.ajaxurl,
 			   	success: function(data){
@@ -340,9 +349,10 @@ if ($('.custom-business-expense-history-table').length) {
       $('.notification').css('color', 'red');
     } else {
       //load the availbale free spaces
-         var parent = $('#choose-parent').val();
-         var sponsor = $('#current-user-id').val();
-         var user_id = $('#seleted-user-id').val();
+         var parent     = $('#choose-parent').val();
+         var sponsor    = $('#current-user-id').val();
+         var user_id    = $('#seleted-user-id').val();
+         var tree_mode  = $('#tree-mode').val();
 
          if (user_id != '' && sponsor!= '' && parent!='' ){
           var position = $('input[name="free_space"]:checked').attr('id');
@@ -355,6 +365,7 @@ if ($('.custom-business-expense-history-table').length) {
                 sponsor:sponsor,
                 parent:parent,
                 position :position, 
+                tree_mode :tree_mode, 
               },
               url:ajax_object.ajaxurl,
               beforeSend:function(){
@@ -393,6 +404,8 @@ if ($('.custom-business-expense-history-table').length) {
           sponsor : $('#current-user-id').val(),
           uid     : $('#seleted-user-id').val(),
           parent  : $('#choose-parent').val(),
+          tree_mode : $('#tree-mode').val(),
+
         },
         url:ajax_object.ajaxurl,
         success: function(data){
@@ -420,7 +433,7 @@ if ($('.custom-business-expense-history-table').length) {
     var uid     = $('#seleted-user-id').val();
     var choose_sponsor  = $('#choose-parent').val();
     if ( choose_sponsor ) {
-      sponsor =choose_sponsor.match(/\((\d+)\)/)[1];
+      sponsor = choose_sponsor.match(/\((\d+)\)/)[1];
     }
     
     $.ajax({
@@ -429,10 +442,23 @@ if ($('.custom-business-expense-history-table').length) {
         action:'afl_auto_place_user_ajax',
         sponsor : sponsor,
         uid     : $('#seleted-user-id').val(),
+        tree_mode : $('#tree-mode').val(),
       },
       url:ajax_object.ajaxurl,
+      beforeSend:function(){
+          for(var i = 1; i <=100 ; i++){
+            $('.progress').css('width',i+'%');
+          }
+      },
+      complete:function(){
+        $('.progress').css('width','100%');
+
+      },
       success: function(data){
-          setTimeout(function() { window.location.reload(true); }, 500 );
+        $('.progress').css('width','100%');
+        $('.notification').html('Completed');
+
+        setTimeout(function() { window.location.reload(true); }, 500 );
       }
     });
 
@@ -447,7 +473,7 @@ if ($('.custom-business-expense-history-table').length) {
  * Expand genealogy tree on click  expense
  * -------------------------------------------------------------
 */
-function expandTree(obj) {
+function expandMatrixTree(obj) {
   $(obj).find('i').toggleClass('fa-times-circle fa-plus-circle');
     var $uid = $(obj).attr('data-user-id');
 
@@ -476,7 +502,40 @@ function expandTree(obj) {
       }
     }
 }
+/*
+ * -------------------------------------------------------------
+ * Expand genealogy tree on click  expense
+ * -------------------------------------------------------------
+*/
+function expandUnilevelTree(obj) {
+  $(obj).find('i').toggleClass('fa-times-circle fa-plus-circle');
+    var $uid = $(obj).attr('data-user-id');
 
+    if($(obj).find('i').hasClass('fa-plus-circle')){
+      $('.append-child-'+$uid).html('');
+      $(obj).parent().parent().removeClass('hv-item-parent');
+
+    } else{
+      $(obj).parent().parent().addClass('hv-item-parent');
+
+      if ($uid != undefined) {
+        $.ajax({
+          type :'POST',
+          data : {
+            action:'afl_unilevel_user_expand_genealogy',
+            uid:$uid,
+          },
+          url:ajax_object.ajaxurl,
+          success: function(data){
+            if (data.length) {
+              $(data).hide().appendTo('.append-child-'+$uid).fadeIn(1000);
+              // $('.append-child-'+$uid).append(data).fadeIn('slow');
+            }
+          }
+        });
+      }
+    }
+}
 /*
  * ----------------------------------------------------------------
  * Add error class

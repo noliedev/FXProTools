@@ -1,20 +1,20 @@
 <?php 
 /*
  * ---------------------------------------------
- * Add new member
+ * Add new customer
  * ---------------------------------------------
 */
- function afl_add_new_member () {
+ function afl_unilevel_add_new_customer () {
+ 	do_action('eps_affiliate_page_header');
+ 		afl_unilevel_add_new_customer_form();
+ 	do_action('afl_content_wrapper_begin');
+ 	do_action('afl_content_wrapper_end');
+ }
+ function afl_unilevel_add_new_customer_form () {
 
- 	echo afl_eps_page_header();
-	 // $obj = new Eps_affiliates_registration;
-	 // $post = array('uid'=>50,'sponsor_uid'=>37);
-	 // $obj->afl_join_member($post);
-
-  try {
-  	$post = array();
- 		if ( isset($_POST['submit'] ) ) {
-        $rules = create_validation_rules($_POST);
+ 	$post = array();
+ 	if ( isset($_POST['submit'] ) ) {
+        $rules = unilevel_create_customer_validation_rules($_POST);
 			 	$resp  = set_form_validation_rule($rules);
 			 	if (!$resp) {
 			 		$post = $_POST;
@@ -32,7 +32,7 @@
 	        // // call @function complete_registration to create the user
 	        // // only when no WP_error is found
 
-	        $user_uid = complete_registration(
+	        $user_uid = unilevel_complete_customer_registration(
 		        $username,
 		        $password,
 		        $email,
@@ -45,7 +45,7 @@
 
 	        	//add new role if he has this role
 	        	$theUser = new WP_User($user_uid);
- 						$theUser->add_role( 'afl_member' );
+ 						$theUser->add_role( 'afl_customer' );
 
 	        	$post_data['uid'] = $user_uid;
 	        	//extract sponsor uid
@@ -54,48 +54,29 @@
 
     				$post_data['sponsor_uid'] = $matches[1];
 	        
-	        	//user get the uid,if a uid get then insert to genealogy
-    				do_action('eps_affiliates_place_user_in_holding_tank',$post_data['uid'] ,$post_data['sponsor_uid'] );
+	        	//palce the user into the sposnosrs customer table
+    				do_action('eps_affiliates_place_customer_under_sponsor',$post_data['uid'] ,$post_data['sponsor_uid'] );
     				do_action('eps_affiliates_unilevel_place_user_in_holding_tank',$post_data['uid'] ,$post_data['sponsor_uid'] );
-
+    				
 	        	$post_data['uid'] = $user_uid;
 	        	//extract sponsor uid
 	        	preg_match_all('/\d+/', $sponsor, $matches);
     				$post_data['sponsor_uid'] = $matches[0];
 
-    			$business_transactions['associated_uid'] = $user_uid;
-    			$business_transactions['uid'] 					 = afl_root_user(); /*Business admin uid or root user id*/;
-    			$business_transactions['amount_paid'] 	 = $enrollment_amount;
-    			$business_transactions['order_id'] 			 = 1;
-	       	
-	       	$response = apply_filters('eps_commerce_joining_package_purchase_complete',$business_transactions);
-	       	if ( !empty( $response['status']  )) {
-				 		echo wp_set_message('Member has been created successfully', 'success');
-	       	} else  {
-				 		echo wp_set_message('Unable to insert the detail to business', 'error');
-	       		afl_log('joining_package_purchase_complete',$response['error'],array('business_transactions'=>$business_transactions),LOGS_ERROR);
-	       	}
-    			// $user_transaction 		= afl_member_transaction($business_transactions, TRUE);
-	         //user get the uid,if a uid get then insert to genealogy
-    			
 
-    			//update the rank of sposnsor and uplines
+				 	wp_set_message('Customer has been created successfully', 'success');
 
 	      }
 			}
 		}
-  } catch (Exception $e) {
-  	pr($e);
-  }
- 	
- 	afl_add_new_member_form($post);
+ 	afl_unilevel_add_new_customer_form_callback($post);
  }
 /*
  * ---------------------------------------------
  * Add new member Form
  * ---------------------------------------------
 */
- function afl_add_new_member_form ($post) {
+ function afl_unilevel_add_new_customer_form_callback ($post) {
  	// pr(get_users());
  	afl_content_wrapper_begin();
 
@@ -243,14 +224,10 @@
  		),
  		
  	);
- 	
-
-
  	echo afl_render_form($form);
- 	afl_content_wrapper_end();
  }
 
-function complete_registration($username, $password, $email, $first_name, $sur_name, $sponsor) {
+function unilevel_complete_customer_registration($username, $password, $email, $first_name, $sur_name, $sponsor) {
 	
     global $reg_errors;
     if ( 1 > count( $reg_errors->get_error_messages() ) ) {
@@ -270,7 +247,7 @@ function complete_registration($username, $password, $email, $first_name, $sur_n
  * Create validation rules array
  * ---------------------------------------------
 */
-	function create_validation_rules ($POST) {
+	function unilevel_create_customer_validation_rules ($POST) {
 		$rules = array();
 			 	$rules[] = array(
 			 		'value'=>$POST['user_name'],

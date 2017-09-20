@@ -164,6 +164,7 @@
  function _api_user_add_to_genealogy($user = '', $sponsor = '', $data =  array()	) {
  		$status = (!empty($data['status']) && $data['status'] == 'Active') ? 1 : 0;
    	do_action('eps_affiliates_place_user_under_sponsor',$user, $sponsor);
+   	do_action('eps_affiliates_unilevel_place_user_under_sponsor',$user, $sponsor);
  	/*
  	 * ------------------------------------------------------------------- 
  	 * set this user remote_user_mlmid && remote_sponsor_mlmid field
@@ -188,6 +189,7 @@
  function _api_user_add_to_holding_tank($user = '', $sponsor = '', $data =  array()	) {
  		$status = (!empty($data['status']) && $data['status'] == 'Active') ? 1 : 0;
 		do_action('eps_affiliates_place_user_in_holding_tank',$user,afl_root_user());
+		do_action('eps_affiliates_unilevel_place_user_in_holding_tank',$user,afl_root_user());
 		//update the holding users remote user mlmid and remote sponsor mlm id
 
 		global $wpdb;

@@ -23,6 +23,8 @@
  						'eps_affiliates_calculate_affiliate_rank_callback', 
  						 10, 1);
  // do_action('eps_affiliates_calculate_affiliate_rank',924);
+
+
 /*
  * ------------------------------------------------------------
  * Add a user to holding tank
@@ -31,6 +33,18 @@
  add_action('eps_affiliates_place_user_in_holding_tank', 
  						'eps_affiliates_place_user_in_holding_tank_callback', 
  						10, 2);
+
+/*
+ * ------------------------------------------------------------
+ * Add a unilevel  user to holding tank
+ * ------------------------------------------------------------
+*/
+ add_action('eps_affiliates_unilevel_place_user_in_holding_tank', 
+ 						'eps_affiliates_unilevel_place_user_in_holding_tank_callback', 
+ 						10, 2);
+
+
+
 /*
  * ------------------------------------------------------------
  * Place user under a sponsor
@@ -39,6 +53,17 @@
  add_action('eps_affiliates_place_user_under_sponsor', 
  						'eps_affiliates_place_user_under_sponsor_callback', 
  						10, 2);
+/*
+ * ------------------------------------------------------------
+ * Place unilevel user under a sponsor
+ * ------------------------------------------------------------
+*/
+ add_action('eps_affiliates_unilevel_place_user_under_sponsor', 
+ 						'eps_affiliates_unilevel_place_user_under_sponsor_callback', 
+ 						10, 2);
+
+
+
 
 /*
  * ------------------------------------------------------------
@@ -49,6 +74,20 @@
  add_action('eps_affiliates_force_place_after_holding_expired', 
  						'eps_affiliates_force_place_after_holding_expired_callback', 
  						10, 2);
+
+
+/*
+ * ------------------------------------------------------------
+ * Place unilevel user under a sponsor from the holding tank validity 
+ * expired
+ * ------------------------------------------------------------
+*/
+ add_action('eps_affiliates_unilevel_force_place_after_holding_expired', 
+ 						'eps_affiliates_unilevel_force_place_after_holding_expired_callback', 
+ 						10, 2);
+
+
+
 
 /*
  * ------------------------------------------------------------
@@ -124,3 +163,30 @@
  add_action('eps_affiliates_become_distributor_from_customer', 
  						'eps_affiliates_become_distributor_from_customer_callback', 
  						 10, 1 );
+/*
+ * -----------------------------------------------------------
+ * Get the user wallet balance amount
+ * -----------------------------------------------------------
+*/
+	add_filter('afl_user_e_wallet_balance',
+						 'afl_user_e_wallet_balance_callback',
+						 10,1);
+/*
+ * -----------------------------------------------------------
+ * Set the ewaalet transaction complete
+ * -----------------------------------------------------------
+*/
+	add_filter('afl_withdrawal_completed',
+						 'afl_withdrawal_completed_callback',
+						 10,1);
+/*
+ * -----------------------------------------------------------
+ * Set the ewaalet transaction complete
+ * -----------------------------------------------------------
+*/
+	add_filter('afl_withdrawal_fee_credited',
+						 'afl_withdrawal_fee_credited_callback',
+						 10,1);
+
+
+// pr(apply_filters('afl_withdrawal_completed', array('uid'=>22614,'associated_uid'=>22614, 'amount_paid' => 2,'order_id' => 1,'transaction_date'=>afl_date())),1);

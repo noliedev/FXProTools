@@ -12,7 +12,7 @@ function users_auto_complete_callback($search_key = '') {
 	$response = array();
 
 	global $wpdb;
-	$querystr = " SELECT * from `wp_users` WHERE `display_name` LIKE '%".$search_key."%' ;";
+	$querystr = " SELECT * from `"._table_name('users')."` WHERE `display_name` LIKE '%".$search_key."%' ;";
 
 
   $query = array();
@@ -27,14 +27,52 @@ function users_auto_complete_callback($search_key = '') {
   );
   $result = db_select($query, 'get_results');
   
-	// $result = $wpdb->get_results($querystr) or die(mysql_error());
-
 	foreach ($result as $key => $value) {
 		$response[] = array('name'=> ($value->user_login.' ('.$value->ID.')'));
 	}
 	echo json_encode($response);
 	die();
 }
+
+
+
+/*
+ * ------------------------------------------------
+ * Customers auto complete
+ * ------------------------------------------------
+*/
+function customers_auto_complete_callback($search_key = '') {
+  if (isset($_POST['search_key'])) {
+    $search_key = $_POST['search_key'];
+  }
+  $data     = afl_get_users();
+  $response = array();
+
+  global $wpdb;
+  $querystr = " SELECT * from `"._table_name('users')."` WHERE `display_name` LIKE '%".$search_key."%' ;";
+
+
+  $query = array();
+  $query['#select']  =_table_name('afl_customer');
+  $query['#join'] = array(
+    _table_name('users') => array(
+     '#condition'=> '`'._table_name('users').'`.`ID` = `'._table_name('afl_customer').'`.`uid` '
+    )
+  );
+  $query['#fields'] = array(
+    _table_name('users') => array('user_login', 'ID')
+  );
+  $result = db_select($query, 'get_results');
+  
+  foreach ($result as $key => $value) {
+    $response[] = array('name'=> ($value->user_login.' ('.$value->ID.')'));
+  }
+  echo json_encode($response);
+  die();
+}
+
+
+
 /*
  * ------------------------------------------------
  * get users name and id unser the currenlty 
@@ -53,22 +91,26 @@ function member_users_auto_complete_callback($search_key = '') {
   $response = array();
 
   global $wpdb;
-  $querystr = " SELECT * from `wp_users` WHERE `display_name` LIKE '%".$search_key."%' ;";
-
+  $querystr = " SELECT * from `"._table_name('users')."` WHERE `display_name` LIKE '%".$search_key."%' ;";
+  
+  $genealogy_tree = _table_name('afl_user_genealogy');
+  if ( !empty($_POST['tree_mode']) && $_POST['tree_mode'] == 'unilevel') {
+    $genealogy_tree = _table_name('afl_unilevel_user_genealogy');
+  }
 
   $query = array();
-  $query['#select']  =_table_name('afl_user_genealogy');
+  $query['#select']  = $genealogy_tree;
   $query['#join'] = array(
     _table_name('users') => array(
-     '#condition'=> '`'._table_name('users').'`.`ID` = `'._table_name('afl_user_genealogy').'`.`uid` '
+     '#condition'=> '`'._table_name('users').'`.`ID` = `'.$genealogy_tree.'`.`uid` '
     )
   );
   if (!eps_is_admin()) {
     $query['#where'] = array(
-      '`'._table_name('afl_user_genealogy').'`.`referrer_uid` = '.$uid
+      '`'.$genealogy_tree.'`.`referrer_uid` = '.$uid
     );
     $query['#where_or'] = array(
-      '`'._table_name('afl_user_genealogy').'`.`uid` = '.$uid
+      '`'.$genealogy_tree.'`.`uid` = '.$uid
     );
   }
   $query['#fields'] = array(
@@ -93,6 +135,12 @@ function member_users_auto_complete_callback($search_key = '') {
   if (eps_is_admin()) {
     $uid = afl_root_user();
   }
+
+  if (isset($_GET['uid'])) {
+    $uid = $_GET['uid'];
+  }
+
+
  	$input_valu = $_POST;
  	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
      $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
@@ -146,6 +194,11 @@ function member_users_auto_complete_callback($search_key = '') {
   if (eps_is_admin()) {
     $uid = afl_root_user();
   }
+  // if (isset($_GET['uid'])) {
+  //   $uid = $_GET['uid'];
+  // }
+
+
   $input_valu = $_POST;
   if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
      $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
@@ -196,6 +249,15 @@ function member_users_auto_complete_callback($search_key = '') {
   afl_get_template('plan/matrix/genealogy-tree-expanded.php');
  }
  /*
+ * -------------------------------------------------------------------------
+ * Expand Genealogy tree
+ * -------------------------------------------------------------------------
+*/
+ function afl_unilevel_expand_user_genealogy_tree () {
+  
+  afl_get_template('plan/unilevel/genealogy-tree-expanded.php');
+ }
+ /*
   * ------------------------------------------------------------------------
   * Get available spaces under a user
   * ------------------------------------------------------------------------
@@ -207,6 +269,17 @@ function member_users_auto_complete_callback($search_key = '') {
 
     if (!empty($_POST['sponsor']) && !empty($_POST['uid']) && $_POST['parent']) {
       $parent    = extract_sponsor_id($_POST['parent']);
+      $tree_mode = !empty($_POST['tree_mode']) ? $_POST['tree_mode'] : 'matrix'; 
+      
+      switch ($tree_mode) {
+        case 'unilevel':
+          $downline_table = _table_name('afl_unilevel_user_downlines');
+        break;
+        default:
+          $downline_table = _table_name('afl_user_downlines');
+        break;
+      }
+
       if ($parent) {
         $tree_width = afl_variable_get('matrix_plan_width',3);
         $positions  = array();
@@ -216,12 +289,12 @@ function member_users_auto_complete_callback($search_key = '') {
         }
         //get the filled positions of the selected parent
         $query = array();
-        $query['#select'] = 'wp_afl_user_downlines';
+        $query['#select'] = $downline_table;
         $query['#where']  = array(
-          '`wp_afl_user_downlines`.`uid`='.$parent
+          '`'.$downline_table.'`.`uid`='.$parent
         );
         $query['#fields'] = array(
-          'wp_afl_user_downlines'=>  array(
+          $downline_table=>  array(
                   'relative_position'
                 )
         );
@@ -283,11 +356,15 @@ function member_users_auto_complete_callback($search_key = '') {
         $theUser->add_role( 'afl_member' );
       }
 
-
+      $tree_mode = !empty($_POST['tree_mode']) ? $_POST['tree_mode'] : 'matrix'; 
     //insert user to genealogy
       $afl_date_splits = afl_date_splits(afl_date());
 
       $genealogy_table = $wpdb->prefix . 'afl_user_genealogy';
+      if ( $tree_mode == 'unilevel') {
+        $genealogy_table = $wpdb->prefix . 'afl_unilevel_user_genealogy';
+      }
+
       $ins_data = array();
       $ins_data['uid']                = $uid;
       $ins_data['referrer_uid']       = $sponsor;
@@ -309,6 +386,11 @@ function member_users_auto_complete_callback($search_key = '') {
       //insert the user to the downlines
 
       $downline_table = $wpdb->prefix . 'afl_user_downlines';
+      
+      if ( $tree_mode == 'unilevel') {
+        $downline_table = $wpdb->prefix . 'afl_unilevel_user_downlines';
+      }
+
       $downline_ins_data['uid']               = $parent;
       $downline_ins_data['downline_user_id']  = $uid;
       $downline_ins_data['level']             = 1;
@@ -341,7 +423,12 @@ function member_users_auto_complete_callback($search_key = '') {
 
       $downline_ins_id = $wpdb->insert($downline_table, $downline_ins_data, $data_format);
       //insert as the downlines of the uplines
-      $uplines  = afl_get_upline_uids($parent);
+      if ( $tree_mode == 'unilevel') {
+        $uplines  = afl_unilevel_get_upline_uids($parent);
+      } else {
+        $uplines  = afl_get_upline_uids($parent);
+      }
+
       $sp_level = 1;
 
       foreach ($uplines as $upline_uid) {
@@ -380,7 +467,11 @@ function member_users_auto_complete_callback($search_key = '') {
       }
 
       //remove user from tank
-      $wpdb->delete('wp_afl_user_holding_tank', array('uid'=>$uid));
+      if ( $tree_mode == 'unilevel') {
+        $wpdb->delete(_table_name('afl_unilevel_user_holding_tank'), array('uid'=>$uid));
+      } else {
+        $wpdb->delete(_table_name('afl_user_holding_tank'), array('uid'=>$uid));
+      }
 
       $response['status'] = 1;
       $response['msg']    = 'Member has been placed successfully';
@@ -406,7 +497,12 @@ function member_users_auto_complete_callback($search_key = '') {
 */
  function afl_auto_place_user_ajax_callback () {
   if ( isset($_POST['sponsor']) && isset($_POST['uid'])) {
-    do_action('eps_affiliates_force_place_after_holding_expired', $_POST['uid'], $_POST['sponsor']);
+    $tree_mode = !empty($_POST['tree_mode']) ? $_POST['tree_mode'] : 'matrix'; 
+    if ( $tree_mode == 'unilevel') {
+      do_action('eps_affiliates_unilevel_force_place_after_holding_expired', $_POST['uid'], $_POST['sponsor']);
+    } else {
+      do_action('eps_affiliates_force_place_after_holding_expired', $_POST['uid'], $_POST['sponsor']);
+    }
     wp_set_message('Success', 'success');
     die();
   }

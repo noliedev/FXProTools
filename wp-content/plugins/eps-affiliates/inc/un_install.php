@@ -70,10 +70,17 @@
 		  		$tbl_prefix.'afl_transactions',
 		  		$tbl_prefix.'afl_transactions_errors',
 		  		$tbl_prefix.'afl_transaction_authorization',
-		  		$tbl_prefix.'afl_user_downlines',
 		  		$tbl_prefix.'afl_user_fund',
+		  		
+		  		$tbl_prefix.'afl_user_downlines',
+		  		$tbl_prefix.'afl_unilevel_user_downlines',
+
 		  		$tbl_prefix.'afl_user_genealogy',
+		  		$tbl_prefix.'afl_unilevel_user_genealogy',
+
 		  		$tbl_prefix.'afl_user_holding_tank',
+		  		$tbl_prefix.'afl_unilevel_user_holding_tank',
+
 		  		$tbl_prefix.'afl_user_payment_methods',
 		  		$tbl_prefix.'afl_user_transactions',
 		  		$tbl_prefix.'afl_user_transactions_overview',

@@ -9,36 +9,37 @@
    if ( isset($_GET['uid'])){
     $uid = $_GET['uid'];
    }
-   // pr($uid);
+
+   $table_name = _table_name('afl_unilevel_user_downlines');
    $query = array();
-   $query['#select'] = 'wp_afl_user_downlines';
+   $query['#select'] = $table_name;
    $query['#join']  = array(
       'wp_users' => array(
-        '#condition' => '`wp_users`.`ID`=`wp_afl_user_downlines`.`downline_user_id`'
+        '#condition' => '`wp_users`.`ID`=`'._table_name('afl_unilevel_user_downlines').'`.`downline_user_id`'
       ),
-      'wp_afl_user_genealogy' => array(
-        '#condition' => '`wp_afl_user_genealogy`.`uid`=`wp_afl_user_downlines`.`downline_user_id`'
+      _table_name('afl_unilevel_user_genealogy') => array(
+        '#condition' => '`'._table_name('afl_unilevel_user_genealogy').'`.`uid`=`'._table_name('afl_unilevel_user_downlines').'`.`downline_user_id`'
       ),
     );
    $query['#fields']  = array(
-      'wp_users' => array(
+      _table_name('users') => array(
         'display_name',
         'user_login',
         'ID'
       ),
-      'wp_afl_user_downlines' => array(
+      _table_name('afl_unilevel_user_downlines') => array(
         'downline_user_id',
         'uid',
         'relative_position',
         'level'
       ),
-      'wp_afl_user_genealogy' => array(
+      _table_name('afl_unilevel_user_genealogy') => array(
         'parent_uid'
       )
     );
    $query['#where'] = array(
-      '`wp_afl_user_downlines`.`uid`='.$uid.'',
-      '`wp_afl_user_downlines`.`level`=1',
+      '`'._table_name('afl_unilevel_user_downlines').'`.`uid`='.$uid.'',
+      '`'._table_name('afl_unilevel_user_downlines').'`.`level`=1',
     );
    $query['#order_by'] = array(
       '`level`' => 'ASC'
@@ -54,8 +55,8 @@
       $level[$row->relative_position] = $row->downline_user_id;
       $positions[$row->parent_uid][$row->relative_position] = $row->downline_user_id;
     }
-    $parent = afl_genealogy_node($uid);
-    
+    $parent = afl_genealogy_node($uid,'unilevel');
+    // pr($parent);
     $this_user_downlines =  isset($positions[$uid])  ? $positions[$uid] : array();
     ksort($this_user_downlines);
     
@@ -89,11 +90,19 @@ if (!empty($parent)) :
                             <div class="hv-item">
                                   <div class="">
                                     <div class="person">
-                                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png'; ?>" alt="">
+                                        <?php 
+                                          $user_roles = afl_user_roles($tree[$level[$i]]->ID); 
+                                          if ( array_key_exists('afl_customer', $user_roles)) {
+                                            echo '<img src="'.EPSAFFILIATE_PLUGIN_ASSETS.'images/customer.png'.'" alt="">';
+                                          } else 
+                                            echo '<img src="'.EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png'.'" alt="">';
+                                        ?>
+                                        <!-- <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png'; ?>" alt=""> -->
+                                        
                                         <p class="name">
                                           <?= $tree[$level[$i]]->user_login.' ('.$tree[$level[$i]]->ID.')'; ?>
                                         </p>
-                                      <span class="expand-tree" data-user-id ="<?= $level[$i];?>" onclick="expandMatrixTree(this)">
+                                      <span class="expand-tree" data-user-id ="<?= $level[$i];?>" onclick="expandUnilevelTree(this)">
                                         <i class="fa fa-plus-circle fa-2x"></i>
                                       </span>
                                     </div>
@@ -111,42 +120,12 @@ if (!empty($parent)) :
 
                             <div class="hv-item">
                                   <div class="">
-                                     <div class="person">
-                    <ul class="bxslider">
-                      <li>
-                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
-                        <p class="name">
-                         abc
-                        </p>
-                      </li>
-                      <li>
-                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
-                        <p class="name">
-                         abc
-                        </p>
-                      </li>
-                      <li>
-                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
-                        <p class="name">
-                         abc
-                        </p>
-                      </li>
-                    </ul>
-                    
-                    <script type="text/javascript">
-                    // $(document).ready(function(){
-                    //   $('.bxslider').bxSlider({
-                    //     pager: false, // disables pager
-                    //     slideWidth: 150,
-                    //     // nextSelector: '.bxRight',
-                    //     // prevSelector: '.bxLeft',
-                    //     // mode: 'fade',
-                    //     // captions: true
-                    //   });
-                      
-                    // });
-                    </script>      
-                   </div>
+                                    <div class="person">
+                                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                                        <p class="name">
+                                          No user
+                                        </p>
+                                    </div>
                                   </div>
                             </div>
                         </div>

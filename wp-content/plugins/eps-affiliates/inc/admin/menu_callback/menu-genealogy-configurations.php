@@ -156,6 +156,13 @@ function afl_genealogy_configuration_form_submit ($form_state){
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_tree_last_insertion_positions')."`");
 
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_customer')."`");
+		
+		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_unilevel_user_downlines')."`");
+
+		$wpdb->query("DELETE FROM `"._table_name('afl_unilevel_user_genealogy')."` WHERE `uid` != ".afl_root_user()." ");
+		
+		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_unilevel_user_holding_tank')."`");
+		
 	}
 /*
  * ------------------------------------------------------------------------

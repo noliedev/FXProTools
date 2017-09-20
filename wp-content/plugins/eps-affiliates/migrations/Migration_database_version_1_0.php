@@ -54,6 +54,17 @@
 	 		$this->tmp_table();
 	 		$this->tmp_table_down();
 
+ 		/*
+ 		 * --------------------------------------------------
+ 		 * Unilevel network tables
+ 		 * --------------------------------------------------
+ 		*/
+	 		$this->afl_unilevel_user_downlines();
+	 		$this->afl_unilevel_user_genealogy();
+	 		$this->afl_unilevel_user_holding_tank();
+	 		$this->afl_unilevel_tree_last_insertion_positions();
+
+
 	 	}
 	 	//downgrade the database version
 	 	public function migration_downgrade() {
@@ -1108,4 +1119,178 @@
 			$wpdb->query( "ALTER TABLE `".$table_name."`
   				MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The primary identifier for the temp table.';" );
 	}
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
+	 * User downlines
+	 * -----------------------------------------------------------------------------------------------------------
+	*/
+		private function afl_unilevel_user_downlines (){
+			$table_name = $this->tbl_prefix . 'afl_unilevel_user_downlines';
+			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+					  `afl_user_downline_id` int(11) NOT NULL,
+					  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Registered user',
+					  `downline_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Down-line user',
+					  `level` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Level of down-line user',
+					  `created` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Created date',
+					  `status` tinyint(4) NOT NULL COMMENT 'Status',
+					  `position` varchar(100) DEFAULT NULL COMMENT 'Genealogy position',
+					  `relative_position` varchar(100) DEFAULT NULL COMMENT 'Genealogy position',
+					  `member_rank` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Rank',
+					  `rejoined_phase` int(10) unsigned DEFAULT '0' COMMENT 'Rejoined Phase',
+					  `amount_paid` int(10) unsigned NOT NULL DEFAULT '0',
+					  `order_id` int(10) unsigned NOT NULL DEFAULT '0',
+					  `enrolment_package_id` int(10) unsigned NOT NULL DEFAULT '0',
+					  `joined_day` int(10) unsigned NOT NULL DEFAULT '0',
+					  `joined_month` int(10) unsigned NOT NULL DEFAULT '0',
+					  `joined_year` int(10) unsigned NOT NULL DEFAULT '0',
+					  `joined_week` int(10) unsigned NOT NULL DEFAULT '0',
+					  `joined_date` varchar(100) DEFAULT NULL COMMENT 'Joined Date in format',
+					  `currency_code` varchar(100) DEFAULT NULL COMMENT 'Currency Code',
+					  `deleted` int(10) unsigned DEFAULT '0' COMMENT 'Deleted Status',
+					  `ini_payment` int(10) unsigned DEFAULT '0' COMMENT 'Initial Payments',
+					  `merchant_id` varchar(250) DEFAULT 'default' COMMENT 'Merchant Id',
+					  `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
+					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name'
+					) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COMMENT='Stores the user down-line information';";
+
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+
+			global $wpdb;
+
+			//indexes
+			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
+  							ADD PRIMARY KEY (`afl_user_downline_id`);' );
+
+			//AUTO_INCREMENT
+			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
+  							MODIFY `afl_user_downline_id` int(11) NOT NULL AUTO_INCREMENT;' );
+
+		}
+		/*
+	 * -----------------------------------------------------------------------------------------------------------
+	 * unilevel user Genealogy
+	 * -----------------------------------------------------------------------------------------------------------
+	*/
+		private function afl_unilevel_user_genealogy(){
+			$table_name = $this->tbl_prefix . 'afl_unilevel_user_genealogy';
+			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+					  `afl_user_genealogy_id` int(11) NOT NULL,
+					  `uid` int(10) unsigned NOT NULL COMMENT 'Registered user',
+					  `referrer_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Referrer user',
+					  `parent_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Parent user',
+					  `level` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Level',
+					  `left_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Left Child',
+					  `middle_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Middle Child',
+					  `right_child` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Right Child',
+					  `status` tinyint(4) NOT NULL COMMENT 'Status',
+					  `created` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Created',
+					  `modified` int(10) unsigned DEFAULT '0' COMMENT 'Modified',
+					  `member_rank` int(10) unsigned DEFAULT '0' COMMENT 'Rank',
+					  `position` varchar(100) DEFAULT NULL COMMENT 'Genealogy position',
+					  `relative_position` varchar(100) DEFAULT NULL COMMENT 'Genealogy relative position',
+					  `rejoined_phase` int(10) unsigned DEFAULT '0' COMMENT 'Rejoined Phase',
+					  `amount_paid` int(10) unsigned NOT NULL DEFAULT '0',
+					  `order_id` int(10) unsigned NOT NULL DEFAULT '0',
+					  `expiry_date` int(10) unsigned DEFAULT '0',
+					  `enrolment_package_id` int(10) unsigned NOT NULL DEFAULT '0',
+					  `joined_day` int(10) unsigned DEFAULT '0',
+					  `joined_month` int(10) unsigned DEFAULT '0',
+					  `joined_year` int(10) unsigned DEFAULT '0',
+					  `joined_week` int(10) unsigned DEFAULT '0',
+					  `joined_date` varchar(100) DEFAULT NULL COMMENT 'Joined Date',
+					  `currency_code` varchar(100) DEFAULT NULL COMMENT 'Currency Code',
+					  `extra_info` varchar(300) DEFAULT NULL COMMENT 'Extra Info',
+					  `deleted` int(10) unsigned DEFAULT '0' COMMENT 'Deleted Status',
+					  `merchant_id` varchar(250) DEFAULT 'default' COMMENT 'Merchant Id',
+					  `extra_params` varchar(250) DEFAULT '' COMMENT 'Extra Params',
+					  `project_name` varchar(250) DEFAULT 'default' COMMENT 'Project name',
+					  `actived_on` varchar(250) DEFAULT 'default' COMMENT 'Actived on',
+					  `deactived_on` varchar(250) DEFAULT 'default' COMMENT 'Deactived on',
+					  `remote_user_mlmid` int(10) unsigned DEFAULT '0' COMMENT 'Remote user mlm ID',
+					  `remote_sponsor_mlmid` int(10) unsigned DEFAULT '0' COMMENT 'Remote sponsor mlm ID'
+					) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='Stores the user genealogy information';";
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+
+			global $wpdb;
+
+			//indexes
+			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
+  						ADD PRIMARY KEY (`afl_user_genealogy_id`);' );
+
+			//AUTO_INCREMENT
+			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
+  							MODIFY `afl_user_genealogy_id` int(11) NOT NULL AUTO_INCREMENT;' );
+		}
+	/*
+	 * -----------------------------------------------------------------------------------------------------------
+	 * unilevel user Holding tank
+	 * -----------------------------------------------------------------------------------------------------------
+	*/
+		private function afl_unilevel_user_holding_tank(){
+			$table_name = $this->tbl_prefix . 'afl_unilevel_user_holding_tank';
+			$sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+					  `afl_user_holding_id` int(11) NOT NULL,
+					  `uid` int(10) unsigned NOT NULL COMMENT 'Registered user',
+					  `referrer_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Referrer user',
+					  `parent_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Parent user',
+					  `level` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Level',
+					  `status` tinyint(4) NOT NULL COMMENT 'Status',
+					  `created` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Created',
+					  `modified` int(10) unsigned DEFAULT '0' COMMENT 'Modified',
+					  `member_rank` int(10) unsigned DEFAULT '0' COMMENT 'Rank',
+					  `position` varchar(100) DEFAULT NULL COMMENT 'Genealogy position',
+					  `relative_position` varchar(100) DEFAULT NULL COMMENT 'Genealogy relative position',
+					  `rejoined_phase` int(10) unsigned DEFAULT '0' COMMENT 'Rejoined Phase',
+					  `amount_paid` int(10) unsigned NOT NULL DEFAULT '0',
+					  `order_id` int(10) unsigned NOT NULL DEFAULT '0',
+					  `expiry_date` int(10) unsigned DEFAULT '0',
+					  `joined_day` int(10) unsigned DEFAULT '0',
+					  `joined_month` int(10) unsigned DEFAULT '0',
+					  `joined_year` int(10) unsigned DEFAULT '0',
+					  `joined_week` int(10) unsigned DEFAULT '0',
+					  `joined_date` varchar(100) DEFAULT NULL COMMENT 'Joined Date',
+					  `day_remains` int(10) unsigned DEFAULT '0' COMMENT 'Day remains',
+					  `last_updated` int(10) unsigned DEFAULT '0' COMMENT 'Last updated date',
+					  `remote_user_mlmid` int(10) unsigned DEFAULT '0' COMMENT 'Remote user mlm ID',
+					  `remote_sponsor_mlmid` int(10) unsigned DEFAULT '0' COMMENT 'Remote sponsor mlm ID'
+					) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='Stores the user genealogy information';";
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+
+			global $wpdb;
+
+			//indexes
+			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
+  						ADD PRIMARY KEY (`afl_user_holding_id`);' );
+
+			//AUTO_INCREMENT
+			$wpdb->query( 'ALTER TABLE `'.$table_name.'`
+  							MODIFY `afl_user_holding_id` int(11) NOT NULL AUTO_INCREMENT;' );
+		}
+/*
+ * -----------------------------------------------------------------------------------------------------------
+ *  user last tree insertion position details
+ * -----------------------------------------------------------------------------------------------------------
+*/
+	 private function afl_unilevel_tree_last_insertion_positions () {
+	 	$table_name = $this->tbl_prefix . 'afl_unilevel_tree_last_insertion_positions';
+	    $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+						  `ins_id` int(11) NOT NULL,
+						  `uid` int(11) NOT NULL,
+						  `level` int(11) NOT NULL,
+						  `position` varchar(250) NOT NULL
+						) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+
+	    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	    dbDelta( $sql );
+	    global $wpdb;
+	  //indexes
+	    $wpdb->query( 'ALTER TABLE `'.$table_name.'`
+	                  ADD PRIMARY KEY (`ins_id`);' );
+	    //AUTO increment
+	    $wpdb->query( 'ALTER TABLE `'.$table_name.'`
+	                  MODIFY `ins_id` int(11) NOT NULL AUTO_INCREMENT;' );
+	 }
 } //here closing the class
