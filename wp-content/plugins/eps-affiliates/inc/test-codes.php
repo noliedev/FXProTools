@@ -7,7 +7,11 @@ function afl_admin_test_codes(){
 }
 
 function afl_test_codes_callback () {
- do_action('eps_affiliates_become_distributor_from_customer',21435);
+ pr(_check_required_pv_meets(22613,1));
+ pr(_check_required_gv_meets(22613,1));
+ pr(_check_required_distributors_meets(22613,1));
+ pr(_check_required_qualifications_meets(22613,1));
+ pr(_check_required_customer_rule(22613,1));
 }
 
 

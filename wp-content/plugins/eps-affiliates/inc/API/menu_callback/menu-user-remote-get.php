@@ -4,6 +4,7 @@
 		echo afl_eps_page_header();
 		afl_content_wrapper_begin();
 			afl_admin_user_remote_access_callback();
+			afl_reset_last_id_form();
 			afl_admin_get_remote_users();
 		afl_content_wrapper_end();
 	}
@@ -80,13 +81,17 @@
 */
  	function afl_admin_get_remote_users () {
 	 	$list_remote_url  = afl_variable_get('remote_user_get_url', '');
-
+	 	if ( !_check_remote_mlm_user_id_set()) {
+	 		_set_remote_mlm_id_root_user_form();
+	 	}
+	 	else
 	 	if ( !empty($list_remote_url)) {
 	 		$form1 = array();
 			$form1['#action'] = $_SERVER['REQUEST_URI'];
 		 	$form1['#method'] = 'post';
 		 	$form1['#prefix'] ='<div class="form-group row">';
 		 	$form1['#suffix'] ='</div>';
+
 
 	 		$form1['access'] = array(
 		 		'#name' => 'access',
@@ -106,9 +111,9 @@
 	 	}
 
 	 //if try access the url 
-	 	if ( isset($_POST['access'])) {
-	 		_remote_users_embedd_to_system();
-	 	}
+	 	// if ( isset($_POST['access'])) {
+	 	// 	_remote_users_embedd_to_system();
+	 	// }
 	}	
 /*
  * --------------------------------------------------------------------------------------
@@ -126,4 +131,144 @@
 	$count = count((array)$user);
 	curl_close($ch);
 
+ }
+/*
+ * -------------------------------------------------------------------------------------
+ * Check the user remote mlm id set
+ * -------------------------------------------------------------------------------------
+*/
+ 	function _check_remote_mlm_user_id_set(){
+ 		$flag = 0;
+ 		$root_user  = afl_root_user();
+ 		
+ 		$query = array();
+ 		$query['#select'] = _table_name('afl_user_genealogy');
+ 		$query['#where'] 	= array(
+ 			'uid='.$root_user
+ 		);
+ 		$query['#fields'] = array(
+ 			_table_name('afl_user_genealogy') => array('remote_user_mlmid')
+ 		);
+
+ 		$result = db_select($query, 'get_row');
+
+ 		if ( !empty($result->remote_user_mlmid )) 
+ 			$f_flag = 1;
+ 		else 
+ 			$f_flag = 0;
+
+ 		$query = array();
+ 		$query['#select'] = _table_name('afl_unilevel_user_genealogy');
+ 		$query['#where'] 	= array(
+ 			'uid='.$root_user
+ 		);
+ 		$query['#fields'] = array(
+ 			_table_name('afl_unilevel_user_genealogy') => array('remote_user_mlmid')
+ 		);
+
+ 		$result = db_select($query, 'get_row');
+ 		if ( !empty($result->remote_user_mlmid )) 
+ 			$s_flag = 1;
+ 		else 
+ 			$s_flag = 0;
+
+ 		return $f_flag*$s_flag;
+ 	}
+ /*
+ 	* -------------------------------------------------------------------------------------
+  * set the remote user mlm id default
+ 	* -------------------------------------------------------------------------------------
+ */
+ 	 function _set_remote_mlm_id_root_user_form(){
+ 	 		if (isset($_POST['set_remote_mlm_id'])) {
+ 	 			unset($_POST['set_remote_mlm_id']);
+ 	 			_set_remote_mlm_id_root_user_form_submit($_POST);
+ 	 		}
+ 	 		$form1['#action'] = $_SERVER['REQUEST_URI'];
+		 	$form1['#method'] = 'post';
+		 	$form1['#prefix'] ='<div class="form-group row">';
+		 	$form1['#suffix'] ='</div>';
+
+		 	$form1['fieldset'] = array(
+		 		'#type'=>'fieldset',
+		 		'#title'=>'Set Roort user remote mlm id'
+		 	);
+		 	$form1['fieldset']['remote_mlm_id'] = array(
+		 		'#type'=>'textfield',
+		 		'#title'=>__('Root user remote mlm id')
+		 	);
+		 	$form1['fieldset']['set_remote_mlm_id'] = array(
+		 		'#name' => 'set_remote_mlm_id',
+		 		'#type' => 'submit',
+		 		'#value' => 'Submit',
+		 		'#attributes' => array(
+		 			'class' => array(
+		 				'btn','btn-primary'
+		 			)
+		 		),
+		 	);
+		 	echo afl_render_form($form1);
+
+ 	 }
+/*
+ * -------------------------------------------------------------------------------------
+ * Set remote usr mlm id of root user submit
+ * -------------------------------------------------------------------------------------
+*/
+  function _set_remote_mlm_id_root_user_form_submit($form_state = array()){
+  	global $wpdb;
+  	if (!empty($form_state['remote_mlm_id'])) {
+  		$root_user = afl_root_user();
+  		$updated = $wpdb->update(
+  			_table_name('afl_user_genealogy'),
+  			array(
+  				'remote_user_mlmid'=>$form_state['remote_mlm_id']
+  			),
+  			array(
+  				'uid' => $root_user
+  			)
+  		);
+  		$updated = $wpdb->update(
+  			_table_name('afl_unilevel_user_genealogy'),
+  			array(
+  				'remote_user_mlmid'=>$form_state['remote_mlm_id']
+  			),
+  			array(
+  				'uid' => $root_user
+  			)
+  		);
+  	}
+  }
+/*
+ * -------------------------------------------------------------------------------------
+ * 
+ * -------------------------------------------------------------------------------------
+*/ 
+ function afl_reset_last_id_form(){
+		if ( isset($_POST['reset_last_fetch_id'])) {
+			afl_variable_set('remote_user_get_last_get_id',1);
+			wp_set_message('Variable reset successfully');
+		}
+
+		$form1['#action'] = $_SERVER['REQUEST_URI'];
+	 	$form1['#method'] = 'post';
+	 	$form1['#prefix'] ='<div class="form-group row">';
+	 	$form1['#suffix'] ='</div>';
+
+	 	$form1['fieldset'] = array(
+	 		'#type'=>'fieldset',
+	 		'#title'=>'Reset last API Fetch ID'
+	 	);
+	 
+	 	$form1['fieldset']['reset_last_fetch_id'] = array(
+	 		'#name' => 'reset_last_fetch_id',
+	 		'#type' => 'submit',
+	 		'#value' => 'Reset',
+	 		'#attributes' => array(
+	 			'class' => array(
+	 				'btn','btn-primary'
+	 			)
+	 		),
+	 	);
+	 	echo afl_render_form($form1);
  }

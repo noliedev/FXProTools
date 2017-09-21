@@ -93,7 +93,7 @@ if (!empty($parent)) :
                                         <p class="name">
                                           <?= $tree[$level[$i]]->user_login.' ('.$tree[$level[$i]]->ID.')'; ?>
                                         </p>
-                                      <span class="expand-tree" data-user-id ="<?= $level[$i];?>" onclick="expandTree(this)">
+                                      <span class="expand-tree" data-user-id ="<?= $level[$i];?>" onclick="expandMatrixTree(this)">
                                         <i class="fa fa-plus-circle fa-2x"></i>
                                       </span>
                                     </div>
@@ -111,12 +111,42 @@ if (!empty($parent)) :
 
                             <div class="hv-item">
                                   <div class="">
-                                    <div class="person">
-                                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
-                                        <p class="name">
-                                          No user
-                                        </p>
-                                    </div>
+                                     <div class="person">
+                    <ul class="bxslider">
+                      <li>
+                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                        <p class="name">
+                         abc
+                        </p>
+                      </li>
+                      <li>
+                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                        <p class="name">
+                         abc
+                        </p>
+                      </li>
+                      <li>
+                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                        <p class="name">
+                         abc
+                        </p>
+                      </li>
+                    </ul>
+                    
+                    <script type="text/javascript">
+                    // $(document).ready(function(){
+                    //   $('.bxslider').bxSlider({
+                    //     pager: false, // disables pager
+                    //     slideWidth: 150,
+                    //     // nextSelector: '.bxRight',
+                    //     // prevSelector: '.bxLeft',
+                    //     // mode: 'fade',
+                    //     // captions: true
+                    //   });
+                      
+                    // });
+                    </script>      
+                   </div>
                                   </div>
                             </div>
                         </div>

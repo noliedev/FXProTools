@@ -14,6 +14,7 @@
 
 				add_action( 'admin_menu', array( $this , 'afl_network_menus' ) );
 				add_action( 'admin_menu', array( $this , 'afl_ewallet_menus') );
+				add_action( 'admin_menu', array( $this , 'afl_unilevel_network_menus' ) );
 				// add_action( 'admin_menu', array( $this , 'afl_epin_menus') );
 				add_action( 'admin_menu', array( $this , 'afl_business_menus') );
 				add_action( 'admin_menu', array( $this , 'afl_manage_members_menus') );
@@ -170,7 +171,7 @@
 		
 		/*
 		 * -------------------------------------------------------------------------
-		 * Network menus callback
+		 * Matrix Network menus callback
 		 * -------------------------------------------------------------------------
 		 *
 		 * -------------------------------------------------------------------------
@@ -178,8 +179,8 @@
 			public function afl_network_menus(){
 				$menu = array();
 				$menu['network'] = array(
-					'#page_title'			=> __( 'Network', 'network' ), 
-					'#menu_title' 		=> __( 'Network', 'network' ), 
+					'#page_title'			=> __( 'Matrix Network', 'network' ), 
+					'#menu_title' 		=> __( 'Matrix Network', 'network' ), 
 					'#access_callback'=> 'afl_add_new_member', 
 					'#menu_slug' 			=> 'affiliate-eps-user-network', 
 					'#page_callback' 	=> 'afl_add_new_member', 
@@ -187,7 +188,7 @@
 				);
 				$menu['add_new_member'] = array(
 					'#parent'					=> 'affiliate-eps-user-network',
-					'#page_title'			=> __( 'Add new member', 'Add new Member' ), 
+					'#page_title'			=> __( 'Add new member-Matrix', 'Add new Member-Matrix' ), 
 					'#menu_title' 		=> __( 'Add new member', 'Add new Member' ), 
 					'#access_callback'=> 'afl_add_new_member', 
 					'#menu_slug' 			=> 'affiliate-eps-user-network', 
@@ -196,7 +197,7 @@
 
 				$menu['add_new_customer'] = array(
 					'#parent'					=> 'affiliate-eps-user-network',
-					'#page_title'			=> __( 'Add new customer', 'Add new customer' ), 
+					'#page_title'			=> __( 'Add new customer-Matrix', 'Add new customer-Matrix' ), 
 					'#menu_title' 		=> __( 'Add new customer', 'Add new customer' ), 
 					'#access_callback'=> 'afl_add_new_customer', 
 					'#menu_slug' 			=> 'affiliate-eps-add-new-customer', 
@@ -205,7 +206,7 @@
 
 				$menu['network_explorer'] = array(
 					'#parent'					=> 'user-network',
-					'#page_title'			=> __( 'Network Explorer', 'Network Explorer' ),    
+					'#page_title'			=> __( 'Network Explorer-Matrix', 'Network Explorer-Matrix' ),    
 					'#menu_title' 		=> __( 'Network Explorer', 'Network Explorer' ),    
 					'#access_callback'=> 'afl_network_view', 
 					'#menu_slug' 			=> 'affiliate-eps-network-explorer', 
@@ -214,7 +215,7 @@
 
 				$menu['network_downlines'] = array(
 					'#parent'					=> 'affiliate-eps-user-network',
-					'#page_title'			=> __( 'Downline-members', 'Downline-members' ),    
+					'#page_title'			=> __( 'Downline-members-Matrix', 'Downline-members-Matrix' ),    
 					'#menu_title' 		=> __( 'Downline-members', 'Downline-members' ),    
 					'#access_callback'=> 'afl_network_view', 
 					'#menu_slug' 			=> 'affiliate-eps-downline-members', 
@@ -222,7 +223,7 @@
 				);
 				$menu['referal_downlines'] = array(
 					'#parent'					=> 'affiliate-eps-user-network',
-					'#page_title'			=> __( 'Refered-members', 'Refered-members' ),    
+					'#page_title'			=> __( 'Refered-members-Matrix', 'Refered-members-Matrix' ),    
 					'#menu_title' 		=> __( 'Refered-members', 'Refered-members' ),    
 					'#access_callback'=> 'afl_network_view', 
 					'#menu_slug' 			=> 'affiliate-eps-refered-members', 
@@ -231,7 +232,7 @@
 
 				$menu['network_genealogy'] = array(
 					'#parent'					=> 'affiliate-eps-user-network',
-					'#page_title'			=> __( 'Genealogy-tree', 'Genealogy-tree' ),    
+					'#page_title'			=> __( 'Genealogy-tree-Matrix', 'Genealogy-tree-Matrix' ),    
 					'#menu_title' 		=> __( 'Genealogy-tree', 'Genealogy-tree' ),    
 					'#access_callback'=> 'afl_network_view', 
 					'#menu_slug' 			=> 'affiliate-eps-genealogy-tree', 
@@ -240,7 +241,7 @@
 
 				$menu['holding_tank'] = array(
 					'#parent'					=> 'affiliate-eps-user-network',
-					'#page_title'			=> __( 'Holding tank', 'Holding tank' ),    
+					'#page_title'			=> __( 'Holding tank-Matrix', 'Holding tank-Matrix' ),    
 					'#menu_title' 		=> __( 'Holding tank', 'Holding tank' ),    
 					'#access_callback'=> 'afl_network_view', 
 					'#menu_slug' 			=> 'affiliate-eps-holding-tank', 
@@ -249,7 +250,7 @@
 
 				$menu['my_customers'] = array(
 					'#parent'					=> 'affiliate-eps-user-network',
-					'#page_title'			=> __( 'My Customers', 'My Customers' ),    
+					'#page_title'			=> __( 'My Customers-Matrix', 'My Customers-Matrix' ),    
 					'#menu_title' 		=> __( 'My Customers', 'My Customers' ),    
 					'#access_callback'=> 'afl_add_new_customer', 
 					'#menu_slug' 			=> 'affiliate-eps-my-customers', 
@@ -259,7 +260,96 @@
 
 			}
 
+		/*
+		 * -------------------------------------------------------------------------
+		 * Unilevel Network menus callback
+		 * -------------------------------------------------------------------------
+		 *
+		 * -------------------------------------------------------------------------
+		*/
+			public function afl_unilevel_network_menus(){
+				$menu = array();
+				$menu['network'] = array(
+					'#page_title'			=> __( 'Unilevel Network', 'network' ), 
+					'#menu_title' 		=> __( 'Unilevel Network', 'network' ), 
+					'#access_callback'=> 'afl_unilevel_add_new_member', 
+					'#menu_slug' 			=> 'affiliate-eps-unilevel-user-network', 
+					'#page_callback' 	=> 'afl_unilevel_add_new_member', 
+					'#weight'					=> 2
+				);
+				$menu['add_new_member'] = array(
+					'#parent'					=> 'affiliate-eps-unilevel-user-network',
+					'#page_title'			=> __( 'Add new member-Unilevel', 'Add new Member-Unilevel' ), 
+					'#menu_title' 		=> __( 'Add new member', 'Add new Member' ), 
+					'#access_callback'=> 'afl_unilevel_add_new_member', 
+					'#menu_slug' 			=> 'affiliate-eps-unilevel-user-network', 
+					'#page_callback' 	=> 'afl_unilevel_add_new_member', 
+				);
 
+				$menu['add_new_customer'] = array(
+					'#parent'					=> 'affiliate-eps-unilevel-user-network',
+					'#page_title'			=> __( 'Add new customer-Unilevel', 'Add new customer-Unilevel' ), 
+					'#menu_title' 		=> __( 'Add new customer', 'Add new customer' ), 
+					'#access_callback'=> 'afl_unilevel_add_new_customer', 
+					'#menu_slug' 			=> 'affiliate-eps-unilevel-add-new-customer', 
+					'#page_callback' 	=> 'afl_unilevel_add_new_customer', 
+				);
+
+				$menu['network_explorer'] = array(
+					'#parent'					=> 'user-network',
+					'#page_title'			=> __( 'Network Explorer-Unilevel', 'Network Explorer-Unilevel' ),    
+					'#menu_title' 		=> __( 'Network Explorer', 'Network Explorer' ),    
+					'#access_callback'=> 'afl_unilevel_network_view', 
+					'#menu_slug' 			=> 'affiliate-eps-unilevel-network-explorer', 
+					'#page_callback' 	=> 'afl_unilevel_network_explorer', 
+				);
+
+				$menu['network_downlines'] = array(
+					'#parent'					=> 'affiliate-eps-unilevel-user-network',
+					'#page_title'			=> __( 'Downline-members-unilevel', 'Downline-members-unilevel' ),    
+					'#menu_title' 		=> __( 'Downline-members', 'Downline-members' ),    
+					'#access_callback'=> 'afl_unilevel_network_view', 
+					'#menu_slug' 			=> 'affiliate-eps-unilevel-downline-members', 
+					'#page_callback' 	=> 'afl_unilevel_downline_members', 
+				);
+				$menu['referal_downlines'] = array(
+					'#parent'					=> 'affiliate-eps-unilevel-user-network',
+					'#page_title'			=> __( 'Refered-members-unilevel', 'Refered-members-unilevel' ),    
+					'#menu_title' 		=> __( 'Refered-members', 'Refered-members' ),    
+					'#access_callback'=> 'afl_unilevel_network_view', 
+					'#menu_slug' 			=> 'affiliate-eps-unilevel-refered-members', 
+					'#page_callback' 	=> 'afl_unilevel_refered_members', 
+				);
+
+				$menu['network_genealogy'] = array(
+					'#parent'					=> 'affiliate-eps-unilevel-user-network',
+					'#page_title'			=> __( 'Genealogy-tree-unilevel', 'Genealogy-tree-unilevel' ),    
+					'#menu_title' 		=> __( 'Genealogy-tree', 'Genealogy-tree' ),    
+					'#access_callback'=> 'afl_unilevel_network_view', 
+					'#menu_slug' 			=> 'affiliate-eps-unilevel-genealogy-tree', 
+					'#page_callback' 	=> 'afl_unilevel_genealogy_tree', 
+				);
+
+				$menu['holding_tank'] = array(
+					'#parent'					=> 'affiliate-eps-unilevel-user-network',
+					'#page_title'			=> __( 'Holding tank-unilevel', 'Holding tank-unilevel' ),    
+					'#menu_title' 		=> __( 'Holding tank', 'Holding tank' ),    
+					'#access_callback'=> 'afl_unilevel_network_view', 
+					'#menu_slug' 			=> 'affiliate-eps-unilevel-holding-tank', 
+					'#page_callback' 	=> 'afl_unilevel_network_holding_tank', 
+				);
+
+				$menu['my_customers'] = array(
+					'#parent'					=> 'affiliate-eps-unilevel-user-network',
+					'#page_title'			=> __( 'My Customers-unilevel', 'My Customers-unilevel' ),    
+					'#menu_title' 		=> __( 'My Customers', 'My Customers' ),    
+					'#access_callback'=> 'afl_unilevel_add_new_customer', 
+					'#menu_slug' 			=> 'affiliate-eps-unilevel-my-customers', 
+					'#page_callback' 	=> 'afl_unilevel_my_customers', 
+				);
+				afl_system_admin_menu($menu);
+
+			}
 		/*
 		 * -------------------------------------------------------------------------
 		 * E-wallet menus

@@ -15,6 +15,8 @@
  * @package 	WooCommerce/Templates
  * @version     2.3.0
  */
+ 
+get_header();
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,10 +31,55 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	echo apply_filters( 'woocommerce_checkout_must_be_logged_in_message', __( 'You must be logged in to checkout.', 'woocommerce' ) );
 	return;
 }
+ 
+add_filter( 'woocommerce_checkout_fields' , 'custom_override_checkout_fields1' );
+function custom_override_checkout_fields1( $fields ) {
+	unset($fields['order']['order_comments']);
+	unset($fields['billing']['billing_address_2']);
+	unset($fields['billing']['billing_company']);
+    return $fields;
+}
+
+/* WooCommerce: The Code Below Removes The Additional Information Tab */
+add_filter( 'woocommerce_product_tabs', 'woo_remove_product_tabs', 98 );
+function woo_remove_product_tabs( $tabs ) {
+	unset( $tabs['additional_information'] );
+	return $tabs;
+}
+
+add_filter('woocommerce_product_additional_information_heading', 'isa_product_additional_information_heading');
+function isa_product_additional_information_heading() {
+    echo '';
+}
+
+add_filter("woocommerce_checkout_fields", "custom_override_checkout_fields2", 1);
+function custom_override_checkout_fields2($fields) {
+    $fields['billing']['billing_first_name']['priority'] = 1;
+    $fields['billing']['billing_last_name']['priority'] = 2;
+    $fields['billing']['billing_email']['priority'] = 3;
+    $fields['billing']['billing_phone']['priority'] = 4;
+    $fields['billing']['billing_state']['priority'] = 5;
+    $fields['billing']['billing_address_1']['priority'] = 6;
+    $fields['billing']['billing_address_2']['priority'] = 7;
+    $fields['billing']['billing_city']['priority'] = 8;
+    $fields['billing']['billing_postcode']['priority'] = 9;
+    $fields['billing']['billing_company']['priority'] = 10;
+    $fields['billing']['billing_country']['priority'] = 11;
+    return $fields;
+}
+
+add_filter( 'woocommerce_default_address_fields', 'custom_override_default_locale_fields' );
+function custom_override_default_locale_fields( $fields ) {
+    $fields['email']['priority'] = 3;
+    $fields['address_1']['priority'] = 6;
+    $fields['address_2']['priority'] = 7;
+    return $fields;
+}
 
 ?>
 
-<form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data">
+
+<form name="checkout" method="post" class="checkout checkout_layout woocommerce-checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data">
 
 	<?php if ( $checkout->get_checkout_fields() ) : ?>
 
@@ -61,7 +108,84 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	</div>
 
 	<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
+	
+	<div class="checkout-sidebar">
+		<div class="checkout-sidebar-item">
+			<img src="https://forcefactor.me/assets/images/product/aspire.png">
+		</div>
+		<div class="checkout-sidebar-item">
+			<h3>What Our Members Are Saying...</h3>
+		</div>
+		<div class="checkout-sidebar-item">
+			<img src="https://forcefactor.me/assets/images/testimonial/checkout.jpg">
+		</div>
+		<div class="checkout-sidebar-item">
+			<h3>HERE'S WHAT YOU ARE GETTING...</h3>
+			<ul class="check-lit">
+				<li>Access to our private online membership site.</li>
+				<li>Eye-opening video success training that provides simple, step by step rules for getting your online business up and running.</li>
+				<li>Access to your own personal team of coaches who are ready to work one-on-one with you to help you achieve success.</li>
+				<li>Exceptional support. We care about your results, so we have provided live chat and email support so you can get the answers you need when you need them.</li>
+				<li>And more than a dozen other high-value online business resources that will provide the motivation, the tools and the know-how you need to get to the next level in your business.</li>
+			</ul>
+		</div>
+		<div class="checkout-sidebar-item">
+			<div class="checkout-icon-box checkout-icon-box-1">
+				<h4>100% MONEY BACK GUARANTEE</h4>
+				<p>If you decide that it's not for you, just let us know and you'll be issued a full and prompt refund, no questions asked.</p>
+			</div>
+		</div>
+		<div class="checkout-sidebar-item">
+			<div class="checkout-icon-box checkout-icon-box-2">
+				<h4>YOUR INFORMATION IS SAFE</h4>
+				<p>We will not sell, rent, or share your contact information for any reason.</p>
+			</div>
+		</div>
+		<div class="checkout-sidebar-item">
+			<div class="checkout-icon-box checkout-icon-box-3">
+				<h4>YOUR INFORMATION IS SAFE</h4>
+				<p>All information is encrypted and transmitted without risk using a SSL protocol.</p>
+			</div>
+		</div>
+	</div>
+
+	<div id="checkout-panel-3" class="panel panel-default panel-gray">
+		<div class="panel-body">
+			<h5>Order Summary <span>Price:</span></h5>
+			<div class="term-wrap row">
+				<div class="col-md-1 col-xs-1">
+					<input type="checkbox" value="1">
+				</div>
+				<div class="col-md-11 col-xs-11 no-pad-left">
+					<strong> <u>Yes, please don't let my access expire.</u></strong><br>
+					<span class="term-wrap-text">
+						After 30 days please keep my ASPIRE membership running (until I choose to cancel) for $37/month.
+						<br><span class="highlight">Includes Personal Coach.</span>
+					</span>
+				</div>
+				<br>
+				<div class="col-md-1 col-xs-1">
+					<input type="checkbox" value="1">
+				</div>
+				<div class="col-md-11 col-xs-11 no-pad-left">
+					<span class="term-wrap-text">
+						I agree with the
+						<a href="#" onclick="window.open('#', 'newwindow', 'width=500, height=700'); return false">Purchase Agreement</a>,
+						<a href="#" onclick="window.open('#', 'newwindow', 'width=500, height=700'); return false">Refund Policy</a>,
+						<a href="#" onclick="window.open('#', 'newwindow', 'width=500, height=700'); return false">Terms of Service</a>,
+						and <a href="#" onclick="window.open('#', 'newwindow', 'width=500, height=700'); return false">Privacy Policy</a>.
+					</span>
+				</div>
+			</div>
+			<div class="col-md-12 submit-btn-wrap">
+				<div class="text-center">
+					<button type="submit" id="submit-btn" class="btn btn-danger btn-lg m-b-md btn-lg-w-text">Finish My Order <span class="fa fa-angle-right"></span> </button>
+				</div>
+			</div>
+	 	</div>
+	 </div>
 
 </form>
 
 <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>
+

@@ -39,13 +39,29 @@ function afl_generate_users_form () {
         $user = wp_create_user( $name, $name, $name.'@eps.com' );
 
         if ($user) {
-        	$reg_object = new Eps_affiliates_registration;
-	        $reg_object->afl_join_member(
-	        	array(
-	        		'uid'=>$user,
-	        		'sponsor_uid' => $sponsor_uid
-	        		)
-	        );
+
+        	do_action('eps_affiliates_place_user_in_holding_tank',$user ,$sponsor_uid );
+    			do_action('eps_affiliates_unilevel_place_user_in_holding_tank',$user ,$sponsor_uid );
+
+
+
+        	// $reg_object = new Eps_affiliates_registration;
+	        // $reg_object->afl_join_member(
+	        // 	array(
+	        // 		'uid'=>$user,
+	        // 		'sponsor_uid' => $sponsor_uid
+	        // 		)
+	        // );
+
+	        // $reg_object = new Eps_affiliates_unilevel_registration;
+	        // $reg_object->afl_join_unilevel_member(
+	        // 	array(
+	        // 		'uid'=>$user,
+	        // 		'sponsor_uid' => $sponsor_uid
+	        // 		)
+	        // );
+
+
 				//add afl_member role to the user
 				$theUser = new WP_User($user);
 				$theUser->add_role( 'afl_member' );
@@ -185,6 +201,7 @@ function afl_generate_customers_form () {
 	        		'sponsor_uid' => $sponsor_uid
 	        		)
 	        );
+	        do_action('eps_affiliates_unilevel_place_user_in_holding_tank',$user ,$sponsor_uid );
 				//add afl_member role to the user
 				$theUser = new WP_User($user);
 				$theUser->add_role( 'afl_customer' );
@@ -492,87 +509,199 @@ function afl_test_purchses_form_submit () {
 	}
 
 }
-/* ---------- Generate Purchase --------------------------*/
+/* --------------------------------------------------- Generate Purchase --------------------------*/
 function afl_generate_purchase () {
 	echo afl_eps_page_header();
 
 	echo afl_content_wrapper_begin();
 		afl_generate_purchase_form();
+		afl_customer_generate_purchase_form();
 	echo afl_content_wrapper_end();
 }
-function afl_generate_purchase_form () {
-	if ( isset ( $_POST['submit'] ) ) {
-		$uid = extract_sponsor_id($_POST['user']);
-		$product = $_POST['package'];
-		$count 	 = !empty($_POST['count'] && is_numeric($_POST['count'])) ? $_POST['count'] : 1;
+/*
+ * ------------------------------------------------------
+ * Generate afl member purchase
+ * ------------------------------------------------------
+*/
+	function afl_generate_purchase_form () {
+		if ( isset ( $_POST['submit'] ) ) {
+			$uid = extract_sponsor_id($_POST['user']);
+			$product = $_POST['package'];
+			$count 	 = !empty($_POST['count'] && is_numeric($_POST['count'])) ? $_POST['count'] : 1;
 
-		$args = array();
-		$args['uid'] = $uid;
-		$args['order_id'] = 10;
-		$args['afl_point'] = 145 * $count;
+			$args = array();
+			$args['uid'] = $uid;
+			$args['order_id'] = 10;
+			$args['afl_point'] = 145 * $count;
 
-		switch ($product) {
-			case 'professional':
-				$args['amount_paid']	=	345 * $count;
-			break;
-			case 'business':
-				$args['amount_paid']	=	360 * $count;
-			break;
-			case 'auto-trader':
-				$args['amount_paid']	=	410 * $count;
-			break;
-			case 'advanced':
-				$args['amount_paid']	=	5185 * $count;
-			break;
+			switch ($product) {
+				case 'professional':
+					$args['amount_paid']	=	345 * $count;
+				break;
+				case 'business':
+					$args['amount_paid']	=	360 * $count;
+				break;
+				case 'auto-trader':
+					$args['amount_paid']	=	410 * $count;
+				break;
+				case 'advanced':
+					$args['amount_paid']	=	5185 * $count;
+				break;
+			}
+
+			$resp = apply_filters('eps_commerce_purchase_complete', $args);
+
+
+			if ($resp['status'] == 1) {
+				echo wp_set_message('Purchase product', 'success');
+			} else {
+				echo wp_set_message('Error occured', 'error');
+			}
+
 		}
-
-		$resp = apply_filters('eps_commerce_purchase_complete', $args);
-
-
-		if ($resp['status'] == 1) {
-			echo wp_set_message('Purchase product', 'success');
-		} else {
-			echo wp_set_message('Error occured', 'error');
-		}
-
+		afl_generate_purchase_form_callback();
 	}
-	afl_generate_purchase_form_callback();
-}
-function afl_generate_purchase_form_callback () {
-	$form = array();
-	$form['#method'] = 'post';
-	$form['#action'] = $_SERVER['REQUEST_URI'];
+/*
+ * ------------------------------------------------------
+ * Generate afl member purchase form callback
+ * ------------------------------------------------------
+*/
+	function afl_generate_purchase_form_callback () {
+		$form = array();
+		$form['#method'] = 'post';
+		$form['#action'] = $_SERVER['REQUEST_URI'];
 
-	$form['user'] = array(
-		'#type' =>'auto_complete',
-		'#title' =>'user',
-		'#auto_complete_path' => 'users_auto_complete',
+		$form['fieldset'] = array(
+			'#type' => 'fieldset',
+			'#title' =>'Member purchase'
+		);
 
-	);
-	$form['package'] = array(
-		'#type' =>'select',
-		'#title' =>'package',
-		'#options' => array(
-			'professional' 	=> 'Professional',
-			'business' 			=> 'Business',
-			'auto-trader'		=> 'Auto Trader',
-			'advanced'			=> 'Advanced'
-		)
+		$form['fieldset']['user'] = array(
+			'#type' =>'auto_complete',
+			'#title' =>'user',
+			'#auto_complete_path' => 'users_auto_complete',
 
-	);
+		);
+		$form['fieldset']['package'] = array(
+			'#type' =>'select',
+			'#title' =>'package',
+			'#options' => array(
+				'professional' 	=> 'Professional',
+				'business' 			=> 'Business',
+				'auto-trader'		=> 'Auto Trader',
+				'advanced'			=> 'Advanced'
+			)
 
-	$form['count'] = array(
-		'#type' =>'text',
-		'#title' =>'product count',
-	);
+		);
 
-	$form['submit'] = array(
-		'#type' =>'submit',
-		'#value' =>'Generate'
-	);
-	echo afl_render_form($form);
-}
+		$form['count'] = array(
+			'#type' =>'text',
+			'#title' =>'product count',
+		);
 
+		$form['submit'] = array(
+			'#type' =>'submit',
+			'#value' =>'Generate'
+		);
+		echo afl_render_form($form);
+	}
+/* --------------------------------------------------- Generate Purchase --------------------------*/
+
+
+
+
+/* ------------------------------------------ Customer ---- Generate Purchase ----------------------*/
+
+	
+/*
+ * ------------------------------------------------------
+ * Generate afl customer purchase form 
+ * ------------------------------------------------------
+*/
+	function afl_customer_generate_purchase_form () {
+		if ( isset ( $_POST['customer_purchase'] ) ) {
+			$uid = extract_sponsor_id($_POST['user']);
+			$product = $_POST['package'];
+			$count 	 = !empty($_POST['count'] && is_numeric($_POST['count'])) ? $_POST['count'] : 1;
+
+			$args = array();
+			$args['uid'] = $uid;
+			$args['order_id'] = 10;
+			$args['afl_point'] = 145 * $count;
+
+			switch ($product) {
+				case 'professional':
+					$args['amount_paid']	=	345 * $count;
+				break;
+				case 'business':
+					$args['amount_paid']	=	360 * $count;
+				break;
+				case 'auto-trader':
+					$args['amount_paid']	=	410 * $count;
+				break;
+				case 'advanced':
+					$args['amount_paid']	=	5185 * $count;
+				break;
+			}
+
+			$resp = apply_filters('eps_commerce_purchase_complete', $args);
+
+
+			if ($resp['status'] == 1) {
+				echo wp_set_message('customer Purchase product', 'success');
+			} else {
+				echo wp_set_message('Error occured', 'error');
+			}
+
+		}
+		afl_customer_generate_purchase_form_callback();
+	}
+/*
+ * ------------------------------------------------------
+ * Generate afl customer purchase form  callback
+ * ------------------------------------------------------
+*/
+	function afl_customer_generate_purchase_form_callback () {
+		$form = array();
+		$form['#method'] = 'post';
+		$form['#action'] = $_SERVER['REQUEST_URI'];
+
+		$form['fieldset'] = array(
+			'#type' => 'fieldset',
+			'#title' =>'customer purchase'
+		);
+		$form['fieldset']['user'] = array(
+			'#type' =>'auto_complete',
+			'#title' =>'user',
+			'#auto_complete_path' => 'customers_auto_complete',
+
+		);
+		$form['fieldset']['package'] = array(
+			'#type' =>'select',
+			'#title' =>'package',
+			'#options' => array(
+				'professional' 	=> 'Professional',
+				'business' 			=> 'Business',
+				'auto-trader'		=> 'Auto Trader',
+				'advanced'			=> 'Advanced'
+			)
+
+		);
+
+		$form['fieldset']['count'] = array(
+			'#type' =>'text',
+			'#title' =>'product count',
+		);
+
+		$form['submit'] = array(
+			'#type' =>'submit',
+			'#value' =>'Generate',
+			'#name' =>'customer_purchase'
+		);
+		echo afl_render_form($form);
+	}
+
+/* ------------------------------------------ Customer ---- Generate Purchase ----------------------*/
 
 function afl_admin_fund_deposit () {
 	echo afl_eps_page_header();

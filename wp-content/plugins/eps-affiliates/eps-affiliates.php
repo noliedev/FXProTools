@@ -289,12 +289,7 @@
 			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'eps-permissions.php';
 
-			/* 
-			 * -----------------------------------------------------------------------------------------------
-			 * wordpress action hook
-			 * -----------------------------------------------------------------------------------------------
-			*/
-				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-hooks.php';
+			
 
 				//query variables
 				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-query.php';
@@ -309,12 +304,19 @@
 				//required conditions when un-install
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/un_install.php';
 
-				//common Payment functios
+				//common Payment functions
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/afl_payment_funs.php';
 
 				//route
 				//require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-route-url.php';
 
+			/* 
+			 * -----------------------------------------------------------------------------------------------
+			 * wordpress action hook
+			 * -----------------------------------------------------------------------------------------------
+			*/
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-hooks.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/action-hooks-global-callbacks.php';
 			/* 
 			 * -----------------------------------------------------------------------------------------------
 			 * afl dashboard menus registration
@@ -398,6 +400,7 @@
 			 * -----------------------------------------------------------------------------------------------
 			*/
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-registration.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-unilevel-registration.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/class-eps-affiliates-customer-registration.php';
 			/* 
 			 * -----------------------------------------------------------------------------------------------
@@ -415,6 +418,15 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-team-purchases-overview.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-payment-methods-callback.php';
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/menu-my-customers.php';
+
+				//unilevel
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/unilevel/menu-add-new-member-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/unilevel/menu-add-new-customer-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/unilevel/menu-genealogy-tree-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/unilevel/menu-downline-members-callback.php';
+				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/unilevel/menu-network-exporer-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/unilevel/menu-network-holding-tank-callback.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/member/menu_callback/unilevel/menu-refered-members-callback.php';
 
 			/* 
 			 * -----------------------------------------------------------------------------------------------
@@ -437,6 +449,7 @@
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/b-wallet/menu-callback/menu-bwallet-callback.php';
 
 				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-functions.php';
+				require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/eps-customer-functions.php';
 
 				//integrations
 				// require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/integrations/class-woocommerce.php';

@@ -122,6 +122,8 @@ function eps_affiliates_install() {
 		//add this user to genealogy
 	  $afl_date_splits = afl_date_splits(afl_date());
 	 	$genealogy_table = $wpdb->prefix . 'afl_user_genealogy';
+	 	$unilevel_genealogy_table = $wpdb->prefix . 'afl_unilevel_user_genealogy';
+	 	
 	  $ins_data = array();
 	  $ins_data['uid']                = $user->ID;
 	  $ins_data['referrer_uid']       = 0;
@@ -139,6 +141,8 @@ function eps_affiliates_install() {
 
 	  
 	  $ins_id = $wpdb->insert($genealogy_table, $ins_data);
+	  
+	  $ins_id = $wpdb->insert($unilevel_genealogy_table, $ins_data);
 	}
 
 		//set role to user

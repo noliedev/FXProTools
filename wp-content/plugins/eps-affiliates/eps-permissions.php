@@ -17,23 +17,46 @@
 			'#title' 				=> __('Affiliates Dashboard'),
 			'#description' 	=> 'Eps affiliates dashboard'
 		);
-
+	/*
+	 * -----------------------------------------------------
+	 * Matrix network Permissions
+	 * -----------------------------------------------------
+	*/
 		//genealogy view
 		$permissions['afl_network_view'] = array(
-			'#title' 				=> __('AFL Network View'),
+			'#title' 				=> __('AFL Matrix Network View'),
 			'#description' 	=> 'View the affiliate network'
 		);
 		//new member
 		$permissions['afl_add_new_member'] = array(
-			'#title' 				=> __('AFL Add New Member'),
+			'#title' 				=> __('AFL Matrix Add New Member'),
 			'#description'	=> 'Add new affiliate under the user'
 		);
 		//new customer
 		$permissions['afl_add_new_customer'] = array(
-			'#title' 				=> __('AFL Add New customer'),
+			'#title' 				=> __('AFL Matrix Add New customer'),
 			'#description'	=> 'Add new affiliate customer under the user'
 		);
-
+  /*
+	 * -----------------------------------------------------
+	 * Unilevel network Permissions
+	 * -----------------------------------------------------
+	*/
+		//genealogy view
+		$permissions['afl_unilevel_network_view'] = array(
+			'#title' 				=> __('AFL Unilevel Network View'),
+			'#description' 	=> 'View the affiliate network'
+		);
+		//new member
+		$permissions['afl_unilevel_add_new_member'] = array(
+			'#title' 				=> __('AFL Unilevel Add New Member'),
+			'#description'	=> 'Add new affiliate under the user'
+		);
+		//new customer
+		$permissions['afl_unilevel_add_new_customer'] = array(
+			'#title' 				=> __('AFL Unilevel Add New customer'),
+			'#description'	=> 'Add new affiliate customer under the user'
+		);
 		//ewallet
 		$permissions['ewallet'] = array(
 			'#title' 				=> __('E-wallet'),

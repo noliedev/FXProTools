@@ -201,7 +201,8 @@ $common_include = new Eps_affiliates_common();
 							$table_html .= '</td>';
 						}
 					}
-					$table_html .= '<tr>';
+					$table_html .= '</tr>';
+					// $table_html .= '<tr><td colspan="'.count($header).'"></td></tr>';
 				}
 			} else {
 				if ( !empty( $header )) {
@@ -1179,6 +1180,71 @@ if(!function_exists('afl_get_rank_names')){
 	}
 /*
  * -----------------------------------------------------------------------------
+ * get the unilevel downlines details of uid
+ * -----------------------------------------------------------------------------
+*/
+	function afl_unilevel_get_user_downlines ($uid = '', $filter = array(), $count = false){
+
+		global $wpdb;
+
+		$query = array();
+		$query['#select'] = _table_name('afl_unilevel_user_downlines');
+
+		$query['#join'] 	= array(
+			_table_name('users') => array(
+				'#condition' => '`'._table_name('users').'`.`ID`=`'._table_name('afl_unilevel_user_downlines').'`.`downline_user_id`'
+			),
+			_table_name('afl_unilevel_user_genealogy') => array(
+				'#condition' => '`'._table_name('afl_unilevel_user_genealogy').'`.`uid`=`'._table_name('afl_unilevel_user_downlines').'`.`downline_user_id`'
+			)
+		);
+
+		$query['#where'] = array(
+			'`'._table_name('afl_unilevel_user_downlines').'`.`uid`='.$uid.''
+		);
+
+		$query['#order_by'] = array(
+			'`'._table_name('afl_unilevel_user_downlines').'`.`level`' => 'ASC',
+			'`'._table_name('afl_unilevel_user_downlines').'`.`relative_position`' => 'ASC',
+		);
+
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`'._table_name('afl_unilevel_user_downlines').'`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`'._table_name('afl_unilevel_user_downlines').'`.`member_rank`= '.$filter['member_rank'];
+		}
+		//if filter fields
+		if (isset($filter['fields'])) {
+			$query['fields'] = empty($query['fields']) ? array() : $query['fields'];
+			$fields = array_merge($query['fields'],$filter['fields']);
+			$query['#fields'] = $fields;
+		}
+		$limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+
+		if (!empty($filter['search_valu'])) {
+			$query['#like'] = array('`display_name`' => $filter['search_valu']);
+		}
+
+		$result = db_select($query, 'get_results');
+
+		// pr($result = db_select($query, 'get_results'),1);
+		if ($count)
+			return count($result);
+		return $result;
+	}
+/*
+ * -----------------------------------------------------------------------------
  * get the downlines uid details of uid
  * -----------------------------------------------------------------------------
 */
@@ -1208,6 +1274,63 @@ if(!function_exists('afl_get_rank_names')){
 		//if member rank
 		if (isset($filter['member_rank'])) {
 			$query['#where'][] = '`wp_afl_user_downlines`.`member_rank`= '.$filter['member_rank'];
+		}
+
+		$query['#order_by'] = array(
+			'`level`' => 'ASC'
+		);
+
+		$limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+
+		if (!empty($filter['search_valu'])) {
+			$query['#like'] = array('`display_name`' => $filter['search_valu']);
+		}
+		$result = db_select($query, 'get_results');
+
+		// pr($result = db_select($query, 'get_results'),1);
+		if ($count)
+			return count($result);
+		return $result;
+	}
+
+/*
+ * -----------------------------------------------------------------------------
+ * get the unilevel downlines uid details of uid
+ * -----------------------------------------------------------------------------
+*/
+	function afl_get_unilevel_user_downlines_uid ($uid = '', $filter = array(), $count = false){
+		global $wpdb;
+
+		$query = array();
+		$query['#select'] = _table_name('afl_unilevel_user_downlines');
+
+		$query['#join'] 	= array(
+			_table_name('users') => array(
+				'#condition' => '`'._table_name('users').'`.`ID`=`'._table_name('afl_unilevel_user_downlines').'`.`downline_user_id`'
+			)
+		);
+		$query['#fields'] = array(
+			_table_name('afl_unilevel_user_downlines') => array('downline_user_id')
+		);
+		$query['#where'] = array(
+			'`'._table_name('afl_unilevel_user_downlines').'`.`uid`='.$uid.''
+		);
+
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`'._table_name('afl_unilevel_user_downlines').'`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`'._table_name('afl_unilevel_user_downlines').'`.`member_rank`= '.$filter['member_rank'];
 		}
 
 		$query['#order_by'] = array(
@@ -1295,6 +1418,75 @@ if(!function_exists('afl_get_rank_names')){
 		return $result;
 
 	}
+
+/*
+	* -----------------------------------------------------------------------------
+  * User refered downlines
+	* -----------------------------------------------------------------------------
+*/
+	function afl_unilevel_get_user_refered_downlines ($uid = '',$filter = array(), $count = false) {
+		global $wpdb;
+
+		$query = array();
+		$query['#select'] = _table_name('afl_unilevel_user_genealogy');
+
+		$query['#join'] 	= array(
+			_table_name('users') => array(
+				'#condition' => '`wp_users`.`ID`=`'._table_name('afl_unilevel_user_genealogy').'`.`uid`'
+			)
+		);
+		// $query['#fields'] = array(
+		// 	_table_name('afl_user_genealogy') => array('uid')
+		// );
+		$query['#where'] = array(
+			'`'._table_name('afl_unilevel_user_genealogy').'`.`referrer_uid`='.$uid.''
+		);
+		$query['#order_by'] = array(
+			'`'._table_name('afl_unilevel_user_genealogy').'`.`level`' => 'ASC',
+			'`'._table_name('afl_unilevel_user_genealogy').'`.`relative_position`' => 'ASC'
+		);
+
+		//if level condition
+		if (isset($filter['level'])) {
+			$query['#where'][] = '`'._table_name('afl_unilevel_user_genealogy').'`.`level`= '.$filter['level'];
+		}
+
+		//if member rank
+		if (isset($filter['member_rank'])) {
+			$query['#where'][] = '`'._table_name('afl_unilevel_user_genealogy').'`.`member_rank`= '.$filter['member_rank'];
+		}
+		//if filter fields
+		if (isset($filter['fields'])) {
+			$query['fields'] = empty($query['fields']) ? array() : $query['fields'];
+			$fields = array_merge($query['fields'],$filter['fields']);
+			$query['#fields'] = $fields;
+		}
+		$limit = '';
+		if (isset($filter['start']) && isset($filter['length'])) {
+			$limit .= $filter['start'].','.$filter['length'];
+		}
+
+		if (!empty($limit)) {
+			$query['#limit'] = $limit;
+		}
+
+		if (!empty($filter['search_valu'])) {
+			$query['#like'] = array('`display_name`' => $filter['search_valu']);
+		}
+
+		$result = db_select($query, 'get_results');
+
+		// pr($result = db_select($query, 'get_results'),1);
+		if ($count)
+			return count($result);
+		return $result;
+
+	}
+
+
+
+
+
 /*
 	* -----------------------------------------------------------------------------
   * User refered downlines uids
@@ -1471,7 +1663,13 @@ if(!function_exists('afl_get_rank_names')){
 		//join
 		if (isset($data['#join']) ){
 			foreach ($data['#join'] as $table => $value) {
-					$sql .= ' JOIN `'.$table.'`'.'ON '.$value['#condition'].' ';
+					$sql .= ' JOIN `'.$table.'`'.' ON '.$value['#condition'].' ';
+			}
+		}
+		//multiple join
+		if (isset($data['#multi_join']) ){
+			foreach ($data['#multi_join'] as $key => $value) {
+				$sql .= 'INNER JOIN `'.$value['#table'].'` AS '.$value['#alias'].''.' ON '.$value['#condition'].' ';
 			}
 		}
 		//where condition
@@ -1626,19 +1824,24 @@ if(!function_exists('afl_get_rank_names')){
  * Genealogy Node details
  * -----------------------------------------------------------------------
 */
-	function afl_genealogy_node($uid = '') {
+	function afl_genealogy_node($uid = '', $type = '') {
 		if (empty($uid))
 			$uid = get_current_user_id();
+		$table = _table_name('afl_user_genealogy');
+
+		if ( $type == 'unilevel') {
+			$table = _table_name('afl_unilevel_user_genealogy');
+		}
 
 		$query = array();
-   	$query['#select'] = 'wp_afl_user_genealogy';
+   	$query['#select'] = $table;
   	$query['#join']  = array(
       'wp_users' => array(
-        '#condition' => '`wp_users`.`ID`=`wp_afl_user_genealogy`.`uid`'
+        '#condition' => '`'._table_name('users').'`.`ID`=`'.$table.'`.`uid`'
       )
     );
    	$query['#where'] = array(
-      '`wp_afl_user_genealogy`.`uid`='.$uid.''
+      '`'.$table.'`.`uid`='.$uid.''
     );
     $result = db_select($query, 'get_row');
     return $result;
@@ -1753,6 +1956,24 @@ function afl_get_payment_amount($amount = 0){
  		if ($node->parent_uid) {
  			$uids[] =  $node->parent_uid;
  			return afl_get_upline_uids($node->parent_uid,$uids);
+ 		}
+ 	}
+ 	return $uids;
+ }
+/*
+ * -----------------------------------------------------------------------
+ * get upline users IDS
+ * -----------------------------------------------------------------------
+*/
+ function afl_unilevel_get_upline_uids ($uid = '', $uids = array()) {
+ 	if (empty($uid))
+ 		$uid = get_current_user_id();
+
+ 	$node  = afl_genealogy_node($uid,'unilevel');
+ 	if ($node) {
+ 		if ($node->parent_uid) {
+ 			$uids[] =  $node->parent_uid;
+ 			return afl_unilevel_get_upline_uids($node->parent_uid,$uids);
  		}
  	}
  	return $uids;
@@ -2080,6 +2301,25 @@ if ( !function_exists('get_user_by') ){
 	}
 /*
  * ----------------------------------------------------------------------
+ * Get unilevel relative position from a user
+ * ----------------------------------------------------------------------
+*/
+  function get_unilevel_relative_position_from ($from = '', $uid = '') {
+		$query = array();
+		$query['#select'] = _table_name('afl_unilevel_user_downlines');
+		$query['#where'] = array(
+			'`'._table_name('afl_unilevel_user_downlines').'`.`uid`='.$from,
+			'`'._table_name('afl_unilevel_user_downlines').'`.`downline_user_id`='.$uid
+		);
+		$query['#fields'] = array(
+			_table_name('afl_unilevel_user_downlines') => array('relative_position')
+		);
+
+		$res = db_select($query, 'get_var');
+		return $res;
+	}
+/*
+ * ----------------------------------------------------------------------
  * Get last inserted position in tree
  * ----------------------------------------------------------------------
 */
@@ -2104,13 +2344,42 @@ if ( !function_exists('get_user_by') ){
 
  }
  /*
+ * ----------------------------------------------------------------------
+ * Get unilevel last inserted position in tree
+ * ----------------------------------------------------------------------
+*/
+ function _get_unilevel_last_inserted_positon ($uid = '', $level = '') {
+	 if (empty( $uid ))
+	 	$uid = afl_current_uid();
+
+	$query = array();
+	$query['#select'] = _table_name('afl_unilevel_tree_last_insertion_positions');
+	$query['#fields'] = array(
+		_table_name('afl_unilevel_tree_last_insertion_positions') => array('position')
+	);
+	$query['#where']  = array(
+		'`uid` = '.$uid,
+		'`level` = '.$level,
+
+	);
+	$position = db_select($query, 'get_var');
+
+	return $position;
+
+
+ }
+ /*
   * ----------------------------------------------------------------------
   * update the inserted position table
   * ----------------------------------------------------------------------
  */
-  function _update_inserted_positon ($uid = '', $level = '', $position = '') {
+  function _update_inserted_positon ($uid = '', $level = '', $position = '', $table_ = '') {
 		global $wpdb;
 		$table_name = _table_name('afl_tree_last_insertion_positions');
+		if ( !empty($table_)) {
+			$table_name = $table_;
+		}
+
 		$query 		= 'SELECT * FROM '.$table_name.' WHERE uid = %d AND level = %d';
 		$row 			= $wpdb->get_row(
 										$wpdb->prepare($query,$uid, $level)
@@ -2220,9 +2489,14 @@ function afl_get_payment_method_details($uid = 0, $method_name = ''){
  * Get the holding tank details of user
  * -----------------------------------------------------------------
 */
-	function _get_holding_tank_data ($uid = '') {
+	function _get_holding_tank_data ($uid = '', $table = '') {
 		$query = array();
 		$query['#select'] = _table_name('afl_user_holding_tank');
+		
+		if ( $table =='unilevel') {
+			$query['#select'] = _table_name('afl_unilevel_user_holding_tank');
+		}
+
 		$query['#where'] 	= array(
 			'uid ='.$uid
 		);
@@ -2313,4 +2587,89 @@ function afl_get_payment_method_details($uid = 0, $method_name = ''){
  		}
  	}
  	return FALSE;
+ }
+/*
+ * --------------------------------------------------------------------
+ * Get direct legs details
+ * --------------------------------------------------------------------
+*/
+	function _get_user_direct_legs( $uid = '', $return_uids = FALSE, $count = FALSE, $tree = 'matrix') {
+	 	$query = array();	
+	 	switch ($tree) {
+	 		case 'matrix':
+	 			$table = _table_name('afl_user_genealogy');
+			break;
+			case 'unilevel':
+	 			$table = _table_name('afl_unilevel_user_genealogy');
+			break;		
+	 	}
+
+	 	$query['#select']  = $table;
+	 	$query['#join'] = array(
+			_table_name('users') => array(
+	      '#condition' => '`'._table_name('users').'`.`ID`=`'.$table.'`.`uid`'
+	    )
+	 	);
+	 	$query['#where'] = array(
+	    '`'.$table.'`.`parent_uid`='.$uid.'',
+	    '`'.$table.'`.`level`=1'
+	 	);
+
+	 	if ( $return_uids ) {
+	 		$query['#fields'] = array(
+	 			$table => array('uid')
+	 		);
+
+	 	}
+	 	$result = db_select($query, 'get_results');
+	 	if ( $count ) {
+	 		return count($result);
+	 	}
+	 	return $result;
+ 	}
+
+/*
+ * --------------------------------------------------------------------
+ * Get direct legs group volume details
+ * --------------------------------------------------------------------
+*/
+	function _get_user_direct_legs_gv( $uid = '', $return_sum = FALSE, $tree = 'matrix') {
+		$gv_array = [];
+		$sum = 0;
+	 	$legs = _get_user_direct_legs($uid, TRUE, FALSE, $tree);
+	 	foreach ($legs as $key => $value) {
+	 		//group volume of user
+	 		$gv = _get_user_gv($value->uid);
+	 		//self volume
+	 		$pv = _get_user_pv($value->uid);
+	 		//customer sales
+	 		$leg_customer_sale = 0;
+	 		$leg_customer_sale 	= get_user_downline_customers_sales($value->uid,TRUE);
+			
+	 		$gv_array[$value->uid] = $gv + $pv + $leg_customer_sale; 
+	 		$sum = $sum + $gv;
+	 	}
+
+	 	if ( $return_sum ) {
+	 		return $sum;
+	 	}
+
+	 	return $gv_array;
+ 	}
+/*
+ * --------------------------------------------------------------------
+ * Create an array from the inout object array
+ * --------------------------------------------------------------------
+*/
+ function array_ret ($arr = array(), $index_key = ''){
+ 	$ret_arr = array();
+ 	if ( !empty($arr) ) {
+ 		if ( !empty($index_key)) {
+ 			foreach ($arr as $key => $value) {
+ 				$ret_arr[] = $value->$index_key;
+ 			}
+ 		}
+ 	}
+
+ 	return $ret_arr;
  }

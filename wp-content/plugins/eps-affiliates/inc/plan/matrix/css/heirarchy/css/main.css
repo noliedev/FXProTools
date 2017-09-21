@@ -57,6 +57,7 @@ p.simple-card {
   overflow: hidden;
   background-color: #ccc; 
 }
+  
 .genealogy-hierarchy .person .genealogy-user-name {
   background-color: #fff;
   padding: 5px 10px;
@@ -82,3 +83,4 @@ p.simple-card {
   transform: translateY(-100%); 
 }
 .genealogy-hierarchy{overflow: scroll;min-height: 800px;max-height: 800px;}
+

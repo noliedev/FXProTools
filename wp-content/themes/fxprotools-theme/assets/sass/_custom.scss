@@ -598,7 +598,11 @@
 // Main Navigation
 .fx-navbar-main {
 	position: relative;
-	border-bottom: 1px solid #DDD;
+	border-radius: 0;
+	background-color: $red;
+	-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
 	.fx-nav-options {
 		list-style: none;
 		padding: 0;
@@ -608,19 +612,33 @@
 			margin-right: 10px;
 			&:last-child { margin-right: 0; }
 			a {
-				font-size: 20px;
 			    display: block;
 			    padding: 25px 10px;
 			    line-height: 30px;
 			    text-align: center;
+			    color: $white;
+			    .image {
+			    	border: 1px solid #DDD;
+			    	height: 50px;
+					img {
+						margin: 0 auto;
+					}
+			    }
+			    span {
+					font-size: 13px;
+					display: block;
+			    }
 			    &:hover, &:active, &:focus {
 			    	text-decoration: none;
 			    }
+			    .icon-inbox {
+			    	font-size: 44px;
+			    }
 			}
 			&.account {
-				padding-top: 15px;
+				padding-top: 40px;
 				a {
-					border: 1px solid #DDD;
+					background: #ba1213;
 					line-height: 5px;
 					padding: 20px 25px;
 					font-size: 13px;
@@ -630,12 +648,11 @@
 	}
 	.fx-navbar-header .navbar-brand {
 		height: auto;
+		img {
+			margin-top: 30px;
+		}
 	}
 }
-.logged-in .fx-navbar-main {
-	margin-bottom: 0;
-}
-
 
 // Sub Navigation
 .fx-navbar-sub {
@@ -1296,6 +1313,20 @@
 
 // Checkout
 .checkout-holder{
+	.col2-set{
+		.col-1{
+			width: 66.66%;
+			padding-right: 15px;
+		}
+		.col-2{
+			width: 33.33%;
+			padding-left: 15px;
+		}
+		.form-group{
+			float: none;
+			width: auto;
+		}
+	}
 	.right-no-pad{
 		padding-right: 0;
 	}
@@ -1337,13 +1368,27 @@
 			background: $red;
 		}
 	}
+	.woocommerce-billing-fields{
+		& > h3{
+			display: none;
+		}
+	}
+	#order_review{
+		.woocommerce-checkout-review-order-table{
+			display: none;
+		}
+	}
+	#order_review_heading, label[for="payment_method_odz_authorizeddotnet_payment_gateway"]{
+		display: none;
+	}
+	.wc_payment_method.payment_method_odz_authorizeddotnet_payment_gateway{
+		list-style: none;
+	}
+
 	.panel{
 		font-size: 14px;
 		margin: 0;
 		border-radius: 0;
-		&:last-child{
-			margin-bottom: 40px;
-		}
 		.panel-heading{
 			background: $red;
 			color: #fff;
@@ -1354,9 +1399,13 @@
 		.panel-body{
 			padding-top: 30px; 
 		}
-		.form-control{
+		.form-control, .select2-selection{
 			height: 40px;
 			border-radius: 0;
+			border: 1px solid #ccc;
+			.select2-selection__rendered{
+				line-height: 40px;
+			}
 		}
 		.col-form-label{
 			text-align: right;
@@ -1377,6 +1426,27 @@
 				top: 50%;
 				margin-top: -14px;
 				right: 0;
+			}
+		}
+		.woocommerce-checkout-review-order-table{
+			thead, tfoot{
+				display: none;
+			}
+			.cart_item{
+				background: #fff;
+				td{
+					font-weight: bold;
+					border: 0;
+					font-size: 1.2em;
+					box-shadow: 0;
+					padding: 8px 12px;
+					&:last-child{
+						text-align: right;
+					}
+				}
+				&:nth-child(odd){
+					background: rgba(255,255,255,.8);
+				}
 			}
 		}
 		&.panel-gray{
@@ -1859,6 +1929,55 @@
 			background: $white;
 			p {
 				font-size: 22px;
+			}
+		}
+	}
+	// Funnel 3
+	&.f3 {
+		padding: 50px 0;
+		.text-heading {
+			text-align: center;
+			h2 {
+				line-height: 1.2;
+				margin: 0;
+			}
+		}
+		.tab-form {
+			background: url('../img/yellow-gradient.jpg') no-repeat center;
+			background-size: cover;
+			padding: 10px;
+			.nav-tabs>li.active>a,
+			.nav-tabs>li.active>a:focus,
+			.nav-tabs>li.active>a:hover {
+				background: transparent;
+				border: none;
+				color: $black;
+			}
+			.nav-tabs {
+				border: none;
+				li {
+					width: 33.33333333%;
+					text-align: center;
+					a {
+						border: none;
+						color: #999999;
+						padding: 5px 15px;
+						label {
+							display: block;
+							font-size: 24px;
+							margin-bottom: 0;
+						}
+						span {
+							font-size: 13px;
+							display: block;
+							line-height: 1.2;
+						}
+						&:hover, &:focus, &:active {
+							background: transparent;
+
+						}
+					}
+				}
 			}
 		}
 	}

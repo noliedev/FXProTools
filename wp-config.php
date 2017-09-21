@@ -22,7 +22,12 @@ define('IS_LOCAL', false);
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', 'fxprotools');
+
+
+if(IS_LOCAL)
+	define('DB_NAME', 'fxprotools2');
+else
+	define('DB_NAME', 'fxprotools');
 
 
 /** MySQL database username */
