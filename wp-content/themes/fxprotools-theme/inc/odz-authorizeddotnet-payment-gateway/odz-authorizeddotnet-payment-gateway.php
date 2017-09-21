@@ -393,10 +393,9 @@ function init_odz_authorizeddotnet_payment_gateway() {
         public function payment_fields()
         {
         ?>
-            <div class="panel panel-default">
+            <div id="panel-checkout-payment" class="panel panel-default">
 				<div class="panel-heading">STEP 3: PAYMENT INFORMATION</div>
 				<div class="panel-body">
-					<p><?php //echo $this->description; ?></p>
 					<fieldset id="authorizeddotnet-cc-form">
 						<div class="panel-note">
 							<p>This website utilizes some of the most advanced techniques to protect your information including technical, administrative and even physical safeguards againts unauthorized access, misuse and improper disclosure.</p>

@@ -34,8 +34,59 @@ jQuery(document).ready( function($) {
 	$("#order_review").appendTo(".col-1");
 	$(".checkout-sidebar").appendTo(".col-2");
 	$(".woocommerce").addClass("checkout-holder");
-	$(".woocommerce-billing-fields > h3").html("STEP 1: ENTER ACCOUNT DETAILS");
+	//$(".woocommerce-billing-fields > h3").html("STEP 1: ENTER ACCOUNT DETAILS");
 	$("#mobile").val("324234234324423").hide();
 	$(".woocommerce-additional-fields").hide();
-	
+
+	$('.form-row').each(function(){
+		$(this).addClass('form-group row');
+	});
+
+	$('.form-row input, .form-row select').each(function(){
+		$(this).addClass('form-control');
+		$(this).wrap('<span class="input-wrapper"></span>')
+	});
+
+	$('#billing_first_name_field, #billing_last_name_field, #billing_email_field, #billing_phone_field, #account_password_field, #billing_address_1_field, #billing_city_field, #billing_state_field, #billing_postcode_field, #billing_country_field').each(function(){
+		$(this).find('label').addClass('col-md-3 col-form-label');
+		$(this).find('.input-wrapper').addClass('col-md-9');
+	});
+
+	//checkout field grouping
+	var checkout_panel_1 = [
+		"#billing_first_name_field",
+		"#billing_last_name_field", 
+		"#billing_email_field",
+		"#billing_phone_field", 
+		"#account_password_field"
+	];
+
+	var checkout_panel_2 = [
+		"#billing_address_1_field",
+		"#billing_city_field", 
+		"#billing_state_field",
+		"#billing_postcode_field", 
+		"#billing_country_field"
+	];
+
+	$('.woocommerce-billing-fields__field-wrapper').append('<div id="checkout-panel-1" class="panel panel-default"><div class="panel-heading">STEP 1: ENTER ACCOUNT DETAILS</div><div class="panel-body"></div></div>');
+	for (i = 0; i < checkout_panel_1.length; i++) {
+		if($(checkout_panel_1[i]).length){
+			var html = $(checkout_panel_1[i]).html();
+			$(checkout_panel_1[i]).remove();
+		    $("#checkout-panel-1 .panel-body").append('<div class="form-group row" id="'+ checkout_panel_1[i] +'">'+ html +'</div>');
+		}	
+	}
+
+	$('.woocommerce-billing-fields__field-wrapper').append('<div id="checkout-panel-2" class="panel panel-default"><div class="panel-heading">STEP 2: ENTER BILLING ADDRESS</div><div class="panel-body"></div></div>');
+	for (i = 0; i < checkout_panel_2.length; i++) {
+		var html = $(checkout_panel_2[i]).html();
+		$(checkout_panel_2[i]).remove();
+	    $("#checkout-panel-2 .panel-body").append('<div class="form-group row" id="'+ checkout_panel_2[i] +'">'+ html +'</div>');
+	}
+	$('#checkout-panel-3').each(function(){
+		$('#panel-checkout-payment').after($(this)[0].outerHTML);
+		$(this).remove();
+		$('#checkout-panel-3 h5').after($('.woocommerce-checkout-review-order-table')[0].outerHTML);
+	});
 });

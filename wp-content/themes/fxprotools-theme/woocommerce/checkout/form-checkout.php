@@ -35,6 +35,8 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 add_filter( 'woocommerce_checkout_fields' , 'custom_override_checkout_fields1' );
 function custom_override_checkout_fields1( $fields ) {
 	unset($fields['order']['order_comments']);
+	unset($fields['billing']['billing_address_2']);
+	unset($fields['billing']['billing_company']);
     return $fields;
 }
 
@@ -56,13 +58,13 @@ function custom_override_checkout_fields2($fields) {
     $fields['billing']['billing_last_name']['priority'] = 2;
     $fields['billing']['billing_email']['priority'] = 3;
     $fields['billing']['billing_phone']['priority'] = 4;
-    $fields['billing']['billing_company']['priority'] = 10;
-    $fields['billing']['billing_country']['priority'] = 11;
     $fields['billing']['billing_state']['priority'] = 5;
     $fields['billing']['billing_address_1']['priority'] = 6;
     $fields['billing']['billing_address_2']['priority'] = 7;
     $fields['billing']['billing_city']['priority'] = 8;
     $fields['billing']['billing_postcode']['priority'] = 9;
+    $fields['billing']['billing_company']['priority'] = 10;
+    $fields['billing']['billing_country']['priority'] = 11;
     return $fields;
 }
 
@@ -119,7 +121,7 @@ function custom_override_default_locale_fields( $fields ) {
 		</div>
 		<div class="checkout-sidebar-item">
 			<h3>HERE'S WHAT YOU ARE GETTING...</h3>
-			<ul class="check-list">
+			<ul class="check-lit">
 				<li>Access to our private online membership site.</li>
 				<li>Eye-opening video success training that provides simple, step by step rules for getting your online business up and running.</li>
 				<li>Access to your own personal team of coaches who are ready to work one-on-one with you to help you achieve success.</li>
@@ -146,6 +148,42 @@ function custom_override_default_locale_fields( $fields ) {
 			</div>
 		</div>
 	</div>
+
+	<div id="checkout-panel-3" class="panel panel-default panel-gray">
+		<div class="panel-body">
+			<h5>Order Summary <span>Price:</span></h5>
+			<div class="term-wrap row">
+				<div class="col-md-1 col-xs-1">
+					<input type="checkbox" value="1">
+				</div>
+				<div class="col-md-11 col-xs-11 no-pad-left">
+					<strong> <u>Yes, please don't let my access expire.</u></strong><br>
+					<span class="term-wrap-text">
+						After 30 days please keep my ASPIRE membership running (until I choose to cancel) for $37/month.
+						<br><span class="highlight">Includes Personal Coach.</span>
+					</span>
+				</div>
+				<br>
+				<div class="col-md-1 col-xs-1">
+					<input type="checkbox" value="1">
+				</div>
+				<div class="col-md-11 col-xs-11 no-pad-left">
+					<span class="term-wrap-text">
+						I agree with the
+						<a href="#" onclick="window.open('#', 'newwindow', 'width=500, height=700'); return false">Purchase Agreement</a>,
+						<a href="#" onclick="window.open('#', 'newwindow', 'width=500, height=700'); return false">Refund Policy</a>,
+						<a href="#" onclick="window.open('#', 'newwindow', 'width=500, height=700'); return false">Terms of Service</a>,
+						and <a href="#" onclick="window.open('#', 'newwindow', 'width=500, height=700'); return false">Privacy Policy</a>.
+					</span>
+				</div>
+			</div>
+			<div class="col-md-12 submit-btn-wrap">
+				<div class="text-center">
+					<button type="submit" id="submit-btn" class="btn btn-danger btn-lg m-b-md btn-lg-w-text">Finish My Order <span class="fa fa-angle-right"></span> </button>
+				</div>
+			</div>
+	 	</div>
+	 </div>
 
 </form>
 
