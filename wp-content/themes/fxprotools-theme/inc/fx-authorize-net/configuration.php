@@ -9,7 +9,7 @@
  * @copyright  2014 Braintree, a division of PayPal, Inc.
  */
 
-class Odz_Braintree_Configuration
+class FX_Authorize_Net_Configuration
 {
     public static $global;
 
@@ -48,7 +48,7 @@ class Odz_Braintree_Configuration
      */
     public static function reset()
     {
-        self::$global = new Odz_Braintree_Configuration();
+        self::$global = new FX_Authorize_Net_Configuration();
     }
 
     public static function gateway()
@@ -331,4 +331,4 @@ class Odz_Braintree_Configuration
         error_log('[Braintree] ' . $message);
     }
 }
-Odz_Braintree_Configuration::reset();
+FX_Authorize_Net_Configuration::reset();
