@@ -13,7 +13,7 @@ $date_filter = isset($_GET['date_from']) ? array( 'date_from' => $_GET['date_fro
 <?php get_header(); ?>
 
 	<?php get_template_part('inc/templates/nav-marketing'); ?>
-	<?php if ( WC_Subscriptions_Manager::user_has_subscription( '', $product_id, 'active') || current_user_can('administrator')  ): ?>
+	<?php if ( wcs_user_has_subscription( '', $product_id, 'active') || current_user_can('administrator')  ): ?>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">

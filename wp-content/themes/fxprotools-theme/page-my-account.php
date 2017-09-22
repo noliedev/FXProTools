@@ -1,10 +1,16 @@
-<?php get_header(); ?>
+<?php 
+get_header(); 
+$checklist = get_user_checklist();
 
-<?php  
-
-//update user meta
-foreach($_POST as $user_key => $user_value){
-	update_usermeta( get_current_user_id(), $user_key,  $user_value );
+if( $_SERVER['REQUEST_METHOD'] === 'POST'){
+	foreach($_POST as $key => $value){
+		update_usermeta( get_current_user_id(), $key,  $value );
+	}
+	//for onboard checklist
+	if( !$checklist['verified_profile'] ){
+		$checklist['verified_profile'] = true;
+		update_user_meta( get_current_user_id(), '_onboard_checklist', $checklist );
+	}
 }
 
 ?>

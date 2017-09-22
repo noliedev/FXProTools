@@ -28,6 +28,7 @@ if(!class_exists('ThemeSettings')){
 			add_action('user_register', array($this, 'register_user_checklist'));
 			add_action('user_register', array($this, 'send_email_verification'));
 			add_action('user_register', array($this, 'register_affiliate'));
+			add_action('affwp_notify_on_approval', array($this, 'disable_affiliate_welcome_email'));
 		}
 
 		public function enforce_page_access()
@@ -373,79 +374,10 @@ if(!class_exists('ThemeSettings')){
 			$affiliate_id = affwp_add_affiliate($data);
 		}
 
-		public function add_new_user_fields( $user ) { ?>
-			<h3>General Information</h3>
-			<table class="form-table">
-				<tr>
-					<th><label for="c_bday">Birthday</label></th>
-					<td>
-						<input type="date" name="c_bday" id="c_bday" value="<?php echo esc_attr( get_the_author_meta( 'c_bday', $user->ID ) ); ?>" class="regular-text" /><br />
-					</td>
-				</tr>
-				<?php if(get_the_author_meta( 'c_bday', $user->ID )){ ?>
-				<tr>
-					<th><label for="c_age">Age</label></th>
-					<td>
-						<input type="text" disabled="disabled" name="c_age" id="c_age" value="<?php echo date_diff(date_create(get_the_author_meta( 'c_bday', $user->ID )), date_create('today'))->y; ?>" class="regular-text" /><br />
-					</td>
-				</tr>
-				<?php } ?>
-				<tr>
-					<th><label for="c_gender">Gender</label></th>
-					<td>
-						<select name="c_gender" id="c_gender">
-							<option value="Male" <?php if(get_the_author_meta( 'c_gender', $user->ID ) == "Male"){echo 'selected';} ?>>Male</option>
-							<option value="Female" <?php if(get_the_author_meta( 'c_gender', $user->ID ) == "Female"){echo 'selected';} ?>>Female</option>
-						</select>
-					</td>
-				</tr>
-			</table>
-		<?php }
-
-		function save_new_user_fields($user_id) {
-			update_usermeta( $user_id, 'c_bday', $_POST['c_bday'] );
-			update_usermeta( $user_id, 'c_gender', $_POST['c_gender'] );
+		public function disable_affiliate_welcome_email(){
+			return false;
 		}
-
-		function add_c_bday_checkout( $checkout_fields = array() ) {
-		    $checkout_fields['order']['c_bday'] = array(
-		        'type'          => 'text',
-		        'class'         => array('form-row form-row-wide'),
-		        'label'         => __('Date of Birth'),
-		        'required'      => true, 
-		        );
-		    return $checkout_fields;
-		}
-
-		function add_c_gender_checkout( $checkout_fields = array() ) {
-		    $checkout_fields['order']['c_gender'] = array(
-		        'type'          => 'select',
-				'required'	=> true,
-				'class'         => array('form-row', 'form-row-wide'),
-				'label'         => 'Gender',
-				'options'	=> array(
-					'Male'	=> 'Male',
-					'Female'	=> 'Female'
-				)
-		    );
-		    return $checkout_fields;
-		}
-
-		function add_checkout_script() {
-		    echo '<script> jQuery(function() { jQuery("#c_bday").attr("type","date"); }) </script>';
-		}
-
-		function save_custom_checkout_fields( $customer_id, $posted ) {
-		    if (isset($posted['c_bday'])) {
-		        $dob = sanitize_text_field( $posted['c_bday'] );
-		        update_user_meta( $customer_id, 'c_bday', $dob);
-		    }
-		    if (isset($posted['c_gender'])) {
-		        $dob = sanitize_text_field( $posted['c_gender'] );
-		        update_user_meta( $customer_id, 'c_gender', $dob);
-		    }
-		}
-
+		
 		function track_user_history()
 		{
 			//delete_user_meta(get_current_user_id(), "track_user_history");

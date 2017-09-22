@@ -1,8 +1,8 @@
 <?php 
 $trial = 14;
-$market_scanner =  WC_Subscriptions_Manager::user_has_subscription( '', 47, 'active');
-$distributor_package =  WC_Subscriptions_Manager::user_has_subscription( '', 48, 'active');
-$auto_trader = WC_Subscriptions_Manager::user_has_subscription( '', 49, 'active');
+$market_scanner =  wcs_user_has_subscription( '', 47, 'active');
+$distributor_package =  wcs_user_has_subscription( '', 48, 'active');
+$auto_trader = wcs_user_has_subscription( '', 49, 'active');
 $coaching = wc_customer_bought_product( '', get_current_user_id(), 50);
 ?>
 <?php get_header(); ?>

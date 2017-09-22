@@ -271,14 +271,14 @@ class fx_authorize_net extends WC_Payment_Gateway {
     public function payment_fields() {
         ?>
         <p><?php echo $this->description; ?></p>
-        <fieldset id="authorizeddotnet-cc-form">
+        <fieldset id="authorize-net-cc-form">
             <p class="form-row form-row-wide">
-                <label for="authorizeddotnet-card-number"><?php echo __('Card Number', 'fx-authorize-net') ?> <span class="required">*</span></label>
-                <input type="text" data-encrypted-name="authorizeddotnet-card-number" placeholder="" autocomplete="off" maxlength="20" class="input-text wc-credit-card-form-card-number" id="fx-authorize-net-card-number" name='fx-authorize-net-card-number'>
+                <label for="authorize-net-card-number"><?php echo __('Card Number', 'fx-authorize-net') ?> <span class="required">*</span></label>
+                <input type="text" data-encrypted-name="authorize-net-card-number" placeholder="" autocomplete="off" maxlength="20" class="input-text wc-credit-card-form-card-number" id="fx-authorize-net-card-number" name='fx-authorize-net-card-number'>
             </p>
 
-            <p class="form-row form-row-first authorizeddotnet-card-expiry">
-                <label for="authorizeddotnet-card-expiry-month"><?php echo __('Expiry', 'fx-authorize-net') ?> <span class="required">*</span></label>
+            <p class="form-row form-row-first authorize-net-card-expiry">
+                <label for="authorize-net-card-expiry-month"><?php echo __('Expiry', 'fx-authorize-net') ?> <span class="required">*</span></label>
                 <select name="fx-authorize-net-card-expiry-month" id="fx-authorize-net-card-expiry-month" class="input-text">
                     <option value=""><?php _e('Month', 'fx-authorize-net') ?></option>
                     <option value='01'>01</option>
@@ -305,8 +305,8 @@ class fx_authorize_net extends WC_Payment_Gateway {
             </p>
 
             <p class="form-row form-row-last">
-                <label for="authorizeddotnet-card-cvc"><?php echo __('Card Code', 'fx-authorize-net') ?> <span class="required">*</span></label>
-                <input type="text" data-encrypted-name="authorizeddotnet-card-cvc" placeholder="CVC" autocomplete="off" class="input-text wc-credit-card-form-card-cvc" name ='fx-authorize-net-card-cvc' id="fx-authorize-net-card-cvc">
+                <label for="authorize-net-card-cvc"><?php echo __('Card Code', 'fx-authorize-net') ?> <span class="required">*</span></label>
+                <input type="text" data-encrypted-name="authorize-net-card-cvc" placeholder="CVC" autocomplete="off" class="input-text wc-credit-card-form-card-cvc" name ='fx-authorize-net-card-cvc' id="fx-authorize-net-card-cvc">
             </p>
         </fieldset>
         <?php
@@ -408,11 +408,7 @@ class fx_authorize_net extends WC_Payment_Gateway {
     	$subs = wcs_get_users_subscriptions($userLogined_id);
     	
     	foreach($subs as $subscriptions => $data){
-    		
-    		/*echo "<br>";
-    		echo $data->data['status'];
-    		echo "<br>";*/
-    		
+            
     		if(count($data->meta_data) > 0){
     			$current_subs_id = $data->meta_data[0]->value;
     			$current_order_id = $data->id;
@@ -1195,45 +1191,3 @@ class fx_authorize_net extends WC_Payment_Gateway {
 }
 
 
-function woo_add_custom_general_fields() {
-
-  global $woocommerce, $post;
-  
-  echo '<div class="options_group">';
-  
-      // Text Field
-    woocommerce_wp_text_input(
-    	array( 
-    		'id'          => '_subscription_plan_id', 
-    		'label'       => __( 'Subscription Plan Id', 'woocommerce' ), 
-    		'desc_tip'    => 'true',
-    		'description' => __( 'Enter authorizeddotnet Subscription Plan Id from your authorize.net account.', 'woocommerce' ) 
-    	)
-    );
-
-    /*woocommerce_wp_text_input(
-    	array(
-    		'id' => '_trial_amount_text_field',
-    		'placeholder' => 'Trial Amount',
-    		'label' => __('Trial Amount', 'woocommerce'),
-    		'desc_tip' => 'true'
-    	)
-    );*/
-  
-  echo '</div>';
-	
-}
-
-function woo_add_custom_general_fields_save( $post_id ){
-	// Text Field
-	$woocommerce_text_field = $_POST['_subscription_plan_id'];
-	
-	if( !empty( $woocommerce_text_field ) )
-		update_post_meta( $post_id, '_subscription_plan_id', esc_attr( $woocommerce_text_field ) );
-		
-}
-
-// Display Fields
-add_action( 'woocommerce_product_options_general_product_data', 'woo_add_custom_general_fields' );
-// Save Fields
-add_action( 'woocommerce_process_product_meta', 'woo_add_custom_general_fields_save' );
