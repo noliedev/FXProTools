@@ -189,3 +189,91 @@ function custom_override_default_locale_fields( $fields ) {
 
 <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>
 
+<div class="modal fade" id="checkout-popoup" tabindex="-1" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <button type="button" id="hide-checkout-popup" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+      	<h2 class="text-center">WAIT!!</h2>
+      	<h3 class="text-center">DON'T GO EMPTY HANDED...</h3>
+        <p class="intro-note label-red text-center">GET STARTED TODAY FOR $1.00</p>
+        <p class="text-center"><img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/dollar.jpg"></p>
+        <p>....Because you took time to visit our website we are presenting you with this valuable, <strong>ONE TIME ONLY, $1 TRIAL OFFER...</strong></p>
+        <p><strong>No Tricks or Gimmicks</strong>....click the red "GET STARTED FOR $1.00 TODAY" button below right now... <span class="label-red">you'll receive this product for 30 days! Only $1.00!</span></p>
+      	<p>Remember... we show you exactly - step-by- step - how to start earning money in your spare time from home... while doing fun, simple work right from your computer, tablet or smart-phone.</p>
+      	<p>So go ahead and <a href="#">take advantage of this no-risk</a>, $1 TRIAL OFFER right now because you will never see it again once you leave this page.</p>
+      	<p><strong>LAST CHANCE!</strong> Just click the "<strong>GET STARTED FOR $1.00 TODAY</strong>" button below... so can learn how to start earning a full time income from home.</p>
+      	<div class="text-center">
+      		<a href="#" class="btn btn-success btn-lg m-b-md btn-lg-w-text">
+				Get Your Access For $1.00 Trial Now!
+				<span>Sign-up takes less than 60 seconds. Pick a plan to get started!</span>
+			</a>
+      	</div>
+      	<p>P.S. Immediately after clicking the red button above, you will get <a href="#">instant access</a> to the Training Website.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php  
+//sample customer data
+$recent_orders=get_posts( array(
+        'post_type' => 'shop_order', 
+        'post_status' => 'wc-completed',
+        'numberposts' => 7
+) );
+$customer_recent_orders = array();
+$counter = 0;
+
+foreach($recent_orders as $recent_order){
+	$order = new WC_Order( $recent_order->ID );
+	$items = $order->get_items();
+    foreach( $items as $item ) {
+		$customer_recent_orders[$counter]['image'] = "https://s3.amazonaws.com/da-my/proof/229/map_229448.png";
+		$customer_recent_orders[$counter]['name'] = get_user_meta($order->user_id, 'first_name',true) . ' ' . get_user_meta($order->user_id, 'last_name',true) . ', ' . get_user_meta($order->user_id, 'billing_city',true) . ', ' . get_user_meta($order->user_id, 'billing_state',true);
+		$customer_recent_orders[$counter]['activity'] = "Recently ordered " . $item['name'];
+		$customer_recent_orders[$counter]['time'] = time_elapsed_string($recent_order->post_date);
+		$counter++;
+    }
+}
+?>
+
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		var customer_notif = <?php echo json_encode($customer_recent_orders) ?>;
+		var customer_size = customer_notif.length;
+		var counter = 1;
+
+		jQuery('[data-toggle="popover"]').popover(); 
+
+		setInterval(function(){
+			if(counter > customer_size){
+				counter = 1;
+			}
+			var customer_index = counter - 1;
+			new Noty({
+				type: 'alert',
+				layout: 'bottomLeft',
+			    text: '<div class="customer-notif"><img src="'+ customer_notif[customer_index].image +'"><div class="customer-notif-main"><div class="customer-name">'+ customer_notif[customer_index].name +'</div><div class="customer-activity">'+ customer_notif[customer_index].activity +'</div><div class="customer-time">'+ customer_notif[customer_index].time +'</div></div></div>',
+			    theme: 'relax',
+			    progressBar: false,
+			    timeout: 7000,
+			    visibilityControl: false
+			}).show();
+			counter++;
+		},10000);
+
+		jQuery(document).mouseleave(function () {
+			if( ! $.cookie('checkout_popup_cookie') ){
+				jQuery('#checkout-popoup').modal('show');
+			}
+		});
+
+		jQuery('#hide-checkout-popup').click(function(){
+			jQuery('#checkout-popoup').modal('hide');
+			$.cookie('checkout_popup_cookie', 'active', { expires: .5 });
+		});
+	});
+</script>
+
+
