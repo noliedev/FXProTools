@@ -85,4 +85,4 @@ if($custom_functions){
  * --------------
  * Authorize.net payment gateway class
  */
-require('inc/odz-authorizeddotnet-payment-gateway/odz-authorizeddotnet-payment-gateway.php');
+require('inc/fx-authorize-net/fx-authorize-net.php');

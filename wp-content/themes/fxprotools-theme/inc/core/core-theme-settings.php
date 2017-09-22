@@ -35,10 +35,10 @@ if(!class_exists('ThemeSettings')){
 			global $post;
     		$slug = $post->post_name;
     		$guest_allowed_post_type = array( 'product' );
-			$guest_allowed_pages = array( 'login', 'forgot-password', 'verify-email', 'funnels');
+			$guest_allowed_pages = array( 'login', 'forgot-password', 'verify-email', 'funnels', 'f1', 'f2', 'f3', 'f4' );
 
 			if( is_user_logged_in() ) return 0;
-			if( !is_product() && !is_cart() && !is_checkout() && !is_shop() && !is_404() ) {
+			if( !is_product() && !is_cart() && !is_checkout() && !is_shop() && !is_404() && !is_front_page() ) {
 				if( !in_array($slug, $guest_allowed_pages) ){
 					wp_redirect( home_url() . '/login');
 					exit;

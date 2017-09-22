@@ -6,16 +6,6 @@
  * All custom functions
  */
 
-// add_action('init', 'check_authentication');
-// function check_authentication(){
-// 	if(!is_user_logged_in()){
-// 		get_site_url() . '/login/';
-// 		// Force using of js to avoid too many redirect and header sent errors
-// 		// echo "<script>location.href = {$url};</script>";
-// 	}
-// }
-
-
 function get_courses_by_product_id($product_id)
 {
 	$courses_ids = get_post_meta($product_id , '_related_course'); 
@@ -136,7 +126,7 @@ function get_funnels()
 function property_occurence_count($array, $property, $value){
 	$count = 0;
 	foreach ($array as $object) {
-	    if ($object->{$property} == $value) $count++;
+	    if ( preg_replace('{/$}', '', $object->{$property} ) == $value) $count++;
 	}
 	return $count;
 }
@@ -196,12 +186,16 @@ function get_funnel_stats($funnel_id, $date_filter = array())
 	$sales_stats = array( 'customer_sales' => 0, 'distributor_sales' => 0);
 
 	//all
-	$cp_stats['page_views']['all'] = property_occurence_count($visits, 'url', $funnel['cp_url']);
-	$lp_stats['page_views']['all'] = property_occurence_count($visits, 'url', $funnel['lp_url']);
+	$cp_stats['page_views']['all'] = property_occurence_count($visits, 'url', preg_replace('{/$}', '', $funnel['cp_url']) );
+	$lp_stats['page_views']['all'] = property_occurence_count($visits, 'url', preg_replace('{/$}', '', $funnel['lp_url']) );
 
 	//unique
 	$cp_stats['page_views']['unique'] = get_unique_property_count($visits, 'ip', $funnel['cp_url']);
 	$lp_stats['page_views']['unique'] = get_unique_property_count($visits, 'ip', $funnel['lp_url']);
+
+	//opt ins
+	$cp_stats['opt_ins']['count'] = get_property_count($visits, 'referral_id', $funnel['cp_url']);
+	$cp_stats['opt_ins']['rate'] = $cp_stats['opt_ins']['count'] < 1 ? 0 :  round( $cp_stats['opt_ins']['count'] / $cp_stats['page_views']['all'] * 100, 2);
 
 	//sales
 	$lp_stats['sales']['count'] = get_property_count($visits, 'referral_id', $funnel['lp_url']);
