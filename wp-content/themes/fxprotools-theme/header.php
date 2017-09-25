@@ -4,7 +4,7 @@
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<title><?php echo wp_title( ' | ', false, right ); bloginfo( 'name' );?></title>
+	<title><?php echo wp_title( ' | ', false, 'right' ); bloginfo( 'name' );?></title>
 	<?php wp_head(); ?>
 </head>
 
@@ -37,7 +37,7 @@
 									<span>Products</span>
 								</a>
 							</li>
-							<?php  if ( WC_Subscriptions_Manager::user_has_subscription( '', 48, 'active') || current_user_can('administrator') ): ?>
+							<?php  if ( wcs_user_has_subscription( '', 48, 'active') || current_user_can('administrator') ): ?>
 							<li>
 								<a href="<?php bloginfo('url'); ?>/marketing/funnels">
 									<img src="<?php bloginfo('template_url'); ?>/assets/img/ico-share.png" class="img-responsive" width="44" height="44">

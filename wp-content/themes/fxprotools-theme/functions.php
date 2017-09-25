@@ -42,6 +42,7 @@ $theme_version	= $theme['Version'];
 $core_settings = [
 	'core-admin-settings.php',
 	'core-theme-settings.php',
+    'core-woocommerce-settings.php'
 ];
 
 foreach ($core_settings as $cs) {
@@ -85,4 +86,4 @@ if($custom_functions){
  * --------------
  * Authorize.net payment gateway class
  */
-require('inc/fx-authorize-net/fx-authorize-net.php');
+//require('inc/fx-authorize-net/fx-authorize-net.php');
