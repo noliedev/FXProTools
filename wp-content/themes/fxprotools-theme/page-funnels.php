@@ -10,7 +10,7 @@ $funnels = get_funnels();
 $referral = "/?ref=" . affwp_get_affiliate_id( get_current_user_id() );
 ?>
 <?php get_header(); ?>
-	<?php if ( wcs_user_has_subscription( '', $product_id, 'active') || current_user_can('administrator') ): ?>
+	<?php if ( is_user_fx_distributor() || current_user_can('administrator') ): ?>
 		<?php get_template_part('inc/templates/nav-marketing'); ?>
 
 		<div class="container">

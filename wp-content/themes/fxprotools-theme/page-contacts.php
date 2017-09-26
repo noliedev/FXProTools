@@ -8,7 +8,7 @@ $wp_query->query_vars['_prod_data'] = $_product;
 
 	<?php get_template_part('inc/templates/nav-marketing'); ?>
 
-	<?php if (wcs_user_has_subscription( '', $product_id, 'active') || current_user_can('administrator')  ): ?>
+	<?php if ( is_user_fx_distributor() || current_user_can('administrator')  ): ?>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">

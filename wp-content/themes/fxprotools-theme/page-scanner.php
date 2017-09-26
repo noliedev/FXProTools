@@ -7,7 +7,7 @@
 ?>
 <?php get_header(); ?>
 
-	<?php if ( wcs_user_has_subscription( '', $product_id, 'active') || WC_Subscriptions_Manager::user_has_subscription( '', 48, 'active')  || current_user_can('administrator') ) : ?>
+	<?php if ( is_user_fx_distributor() ||  wcs_user_has_subscription( '', $product_id, 'active')  || current_user_can('administrator') ) : ?>
 		<?php get_template_part('inc/templates/nav-products'); ?>
 		<div class="container">
 			<div class="row">

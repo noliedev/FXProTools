@@ -7,7 +7,7 @@
 
 <?php get_header(); ?>
 
-	<?php if ( wcs_user_has_subscription( '', $product_id, 'active') || current_user_can('administrator')  ) : ?>
+	<?php if ( user_has_coaching() || current_user_can('administrator')  ) : ?>
 		<?php get_template_part('inc/templates/nav-products'); ?>
 		<div class="container">
 			<div class="row">

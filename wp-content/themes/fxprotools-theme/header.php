@@ -7,7 +7,6 @@
 	<title><?php echo wp_title( ' | ', false, 'right' ); bloginfo( 'name' );?></title>
 	<?php wp_head(); ?>
 </head>
-
 <body <?php body_class(); ?>>
 
 	<div class="<?php echo !is_home() ? 'fx-wrapper' : ''; ?> <?php echo is_page(array('login', 'forgot-password')) ? 'fx-login' : ''; ?>">
@@ -37,7 +36,7 @@
 									<span>Products</span>
 								</a>
 							</li>
-							<?php  if ( wcs_user_has_subscription( '', 48, 'active') || current_user_can('administrator') ): ?>
+							<?php  if ( is_user_fx_distributor() || current_user_can('administrator') ): ?>
 							<li>
 								<a href="<?php bloginfo('url'); ?>/marketing/funnels">
 									<img src="<?php bloginfo('template_url'); ?>/assets/img/ico-share.png" class="img-responsive" width="44" height="44">

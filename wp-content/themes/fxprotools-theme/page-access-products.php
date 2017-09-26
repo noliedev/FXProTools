@@ -1,5 +1,8 @@
 <?php 
-$trial = 14;
+$trial_details = get_trial_details();
+if( is_array($trial_details) ){
+	$trial_remaining_days = floor( (strtotime( $trial_details['expiration_date'] ) - time()) / (60 * 60 * 24));
+}
 $market_scanner =  wcs_user_has_subscription( '', 47, 'active');
 $distributor_package =  wcs_user_has_subscription( '', 48, 'active');
 $auto_trader = wcs_user_has_subscription( '', 49, 'active');
@@ -29,7 +32,7 @@ $coaching = wc_customer_bought_product( '', get_current_user_id(), 50);
 					</div>
 					<div class="fx-board-content">
 						<ol>
-							<li>Free Trial (<?php echo $trial; ?> Days / Active)</li>
+							<?php if($trial_remaining_days > 0): ?><li>Free Trial (<?php echo $trial_remaining_days; ?> Days / Active)</li><?php endif;?>
 							<li>Distributor Package (<?php echo $distributor_package  || current_user_can('administrator') ? 'Active' : 'Upgrade'; ?>)</li>
 							<li>FX Auto Trader (<?php echo $auto_trader || current_user_can('administrator')  ? 'Active' : 'Upgrade'; ?>)</li>
 							<li>Coaching (<?php echo $coaching || current_user_can('administrator')  ? 'Active' : 'Upgrade'; ?>)</li>

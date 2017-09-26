@@ -348,6 +348,112 @@ function forced_lesson_time()
 	} 
 }
 
+function get_trial_details(){
+	 $orders = get_posts( array(
+        'numberposts' => - 1,
+        'meta_key'    => '_customer_user',
+        'meta_value'  => get_current_user_id(),
+        'post_type'   => wc_get_order_types( 'view-orders' ),
+        'post_status' => array( 'wc-processing', 'wc-completed' )
+    ) );
+    $products_ordered = array(); 
+    foreach ( $orders as $order => $data ) { 
+        $order_data = new WC_Order( $data->ID );
+        foreach ( $order_data->get_items() as $key => $item ) {
+            $products_ordered[ $item['product_id'] ] = $data->post_date; 
+        }
+    }
+    $trial_product_ids = array( 2881, 2879, 2873 );
+    $trial_purchase_date = '';
+	foreach($trial_product_ids as $id){
+		if( isset( $products_ordered[ $id ] ) ){
+			$trial_length = get_post_meta($id, '_subscription_length', true);
+			$trial_purchase_date = $products_ordered[ $id ];
+			$expiration_date = date( "Y-m-d H:i:s", strtotime("+" . $trial_length . " days", strtotime( $trial_purchase_date )));
+			return array('trial_length' => $trial_length, 'purchase_date' => $trial_purchase_date, 'expiration_date' => $expiration_date);
+		}
+	}
+
+}
+
+function get_user_subscription_level()
+{
+	$user_subscription = '';
+
+	if( is_user_fx_distributor(false) ){
+		$user_subscription = 'distributor';
+	}
+
+	elseif( is_user_fx_distributor(true) ){
+		$user_subscription = 'trial-distributor';
+	}
+
+	elseif( is_user_fx_customer(false) ){
+		$user_subscription = 'customer';
+	}
+
+	elseif( is_user_fx_customer(true) ){
+		$user_subscription = 'trial-customer';
+	}
+
+	else{
+		$user_subscription = 'subscriber';
+	}
+
+	return $user_subscription;
+}
+
+function is_user_fx_customer( $include_trial = true )
+{
+	if($include_trial){
+		$trial_products = array( 2879, 2873 );
+		foreach($trial_products as $product){
+			if( wcs_user_has_subscription( '', $product, 'active') ){
+				return true;
+			} 
+		}
+	}
+	$subscription_products = array( 2699, 47 );
+	foreach($subscription_products as $s){
+		if( wcs_user_has_subscription( '', $s, 'active') ){
+			return true;
+		} 
+	}
+	return false;  
+}
+
+
+function is_user_fx_distributor( $include_trial = true )
+{
+	if($include_trial){
+		$trial_products = array( 2881 );
+		foreach($trial_products as $product){
+			if( wcs_user_has_subscription( '', $product, 'active') ){
+				return true;
+			} 
+		}
+	}
+	$subscription_products = array( 48 );
+	foreach($subscription_products as $s){
+		if( wcs_user_has_subscription( '', $s, 'active') ){
+			return true;
+		} 
+	}
+
+	return false;  
+}
+
+function user_has_autotrader()
+{
+	return wcs_user_has_subscription( '', 49, 'active');
+}
+
+
+function user_has_coaching()
+{
+	return wcs_user_has_subscription( '', 50, 'active');
+}
+
 function active_subscription_list($from_date=null, $to_date=null)
 {
 
