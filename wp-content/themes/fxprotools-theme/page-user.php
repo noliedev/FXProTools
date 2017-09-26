@@ -4,8 +4,7 @@ foreach($_POST as $user_key => $user_value)
 {
 	update_usermeta( $_GET['id'], $user_key,  $user_value );
 }
-?>test
-<?php print_r( get_the_author_meta('track_user_history', get_current_user_id()) ); ?>
+?>
 	<?php get_template_part('inc/templates/nav-marketing'); ?>
 
 	<div class="container">
@@ -145,6 +144,32 @@ foreach($_POST as $user_key => $user_value)
 									</form>
 								</div>
 								<div class="tab-pane fade" id="c">
+									<div class="user-cancellation">
+										<div class="progress">
+										  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 80%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">STEP 3 of 3</div>
+										</div>
+										<h2 class="text-center;">WAIT! Final Step BEFORE Your Account Is Deleted!</h2>
+										<p>This is a special one time offer! You may not see this offer available again if you close this page.</p>
+										<p>You don't currently qualify for any downgraded plan option other then "Paused". </p>
+										<div class="row">
+											<div class="col-md-6">
+												<h3>Pause Account - $9.99 Month</h3>
+											</div>
+											<div class="col-md-6">
+												<a href="#" class="btn btn-danger btn-block btn-lg">Pause My Account - $9.99 / Month</a>
+											</div>
+										</div>
+										<p>(If you pause, your pages will not display live, you won't be able to use the ClickFunnels App... but we'll keep your subdomain reserved and all your pages and funnels waiting so you can resume your account anytime.)</p>
+										<div class="row">
+											<div class="col-md-6">
+												<h3>Or...Finalize Account Cancellation:</h3>
+											</div>
+											<div class="col-md-6">
+												<button type="button" data-toggle="modal" data-target="#cancellation-modal" class="btn btn-danger btn-block btn-lg">Finalize Cancellation</button>
+											</div>
+										</div>
+										<p><strong>IMPORTANT:</strong> If you cancel your account, please note that your username (USER_NAME) will be made available for someone else; any progress and access to pages you've created will be disabled; optins and leads will not be collected; and videos will not display if you added your own.</p>
+									</div>
 									<table id="table-purchases" class="table table-bordered table-hover">
 										<thead>
 											<tr>
@@ -158,6 +183,7 @@ foreach($_POST as $user_key => $user_value)
 										<tbody>
 											<?php 
 												$customer_orders = get_customer_orders($_GET['id']);
+												$purchase_counter = 1;
 												foreach($customer_orders as $customer_order){
 												?>
 													<tr>
@@ -177,40 +203,61 @@ foreach($_POST as $user_key => $user_value)
 														?>
 														
 														<td><?php echo wc_get_order_statuses()[$customer_order->post_status]; ?></td>
-														<td class="text-center"><a href="#" class="btn btn-default view-purchase-details">Details</a></td>
+														<td class="text-center"><a href="#" data-target="purchase-detail-item-<?php echo $purchase_counter; ?>" class="btn btn-default view-purchase-details">Details</a></td>
 													</tr>
+
+												<div id="purchase-detail-item-<?php echo $purchase_counter; ?>" class="row purchase-detail-item">
+													<div class="col-md-12">
+														<p class="text-bold">Purchase Date</p>
+														<ul class="list-info">
+															<li><span>Created:</span> <?php echo $customer_order->post_date; ?></li>
+															
+														</ul>
+													</div>
+													<div class="col-md-12">
+														<div class="fx-separator"></div>
+													</div>
+													<div class="col-md-12">
+														<p class="text-bold">Purchase Details</p>
+														<ul class="list-info">
+															<?php foreach( $order_item as $product ) { ?>
+																<li><span>Name:</span> <?php echo $product['name'] ?></li>
+																<li><span>Unit Price:</span> $<?php echo $product['total'] ?></li>
+															<?php } ?>
+														</ul>
+														<p class="text-bold">Purchase Details</p>
+														<p>The card on file for your account ends with 7576</p>
+														<div class="row">
+															<div class="col-md-6">
+																<a href="#" class="btn btn-success btn-lg btn-block">Update Payment Information</a>
+															</div>
+															<div class="col-md-6">
+																<a href="#" class="btn btn-success btn-lg btn-block">Choose Another Plan</a>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-12">
+														<div class="fx-separator"></div>
+													</div>
+												</div>
 											<?php
+													$purchase_counter++;
 												}
 											?>
 										</tbody>
 									</table>
 									<div id="view-purchase-details">
-										<div class="row">
-											<div class="col-md-12">
-												<p class="text-bold">Purchase Date</p>
-												<ul class="list-info">
-													<li><span>Created:</span> 2017-07-16 2:00PM</li>
-													
-												</ul>
-											</div>
-											<div class="col-md-12">
-												<div class="fx-separator"></div>
-											</div>
-											<div class="col-md-12">
-												<p class="text-bold">Purchase Details</p>
-												<ul class="list-info">
-													<li><span>Name:</span> Basic Product</li>
-													<li><span>Unit Price:</span> $140</li>
-												</ul>
-											</div>
-											<div class="col-md-12">
-												<div class="fx-separator"></div>
-											</div>
-											<div class="col-md-12">
-												<p class="text-bold">Comission</p>
-												<ul class="list-info">
-													<li>You Earned: <strong>$10.00</strong> for this product purchase</li>
-												</ul>
+										<div class="purchase-details-info"></div>
+										<div class="panel panel-default">
+											<div class="clearfix">
+												<div class="col-md-12">
+													<h3 class="m-b-md">Cancel Purchase</h3>
+													<div class="progress">
+													  <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 33%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">STEP 1 of 3</div>
+													</div>
+													<p><a href="<?php echo get_option('home'); ?>/cancel-step-1" class="btn btn-danger btn-lg">Start Cancellation Process</a></p>
+													<p><strong>IMPORTANT:</strong> If you cancel your account, please note that your subdomain (mastermindmedia) will be made available for someone else; any funnels and pages you've created will be disabled; optins and leads will not be collected; and videos will not play.</p>
+												</div>
 											</div>
 										</div>
 										<a href="#" id="close-purchase-details" class="btn btn-default m-t-md">Back to List of Purchases</a>
@@ -262,4 +309,117 @@ foreach($_POST as $user_key => $user_value)
 			</div>
 		</div>
 	</div>
+
+<!-- Modal -->
+<div class="modal fade" id="cancellation-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">ARE YOU SURE?</h4>
+      </div>
+      <div class="modal-body">
+        <p><strong>IMPORTANT:</strong> If you cancel your account, please note that your username (<?php echo get_the_author_meta('user_login', $_GET['id']); ?>) will be made available for someone else; any progress and access to pages you've created will be disabled; optins and leads will not be collected; and videos will not display if you added your own.</p>
+        <div class="title-loader">
+        	<div class="spinner">
+			  <div class="rect1"></div>
+			  <div class="rect2"></div>
+			  <div class="rect3"></div>
+			  <div class="rect4"></div>
+			  <div class="rect5"></div>
+			</div>
+			<h4>Removing Access to Training...</h4>
+        </div>
+        <p>4 Binary Options Courses<br>
+		12 Training Lessons<br>
+		4 Forex Courses<br>
+		14 Forex Training Lessons</p>
+		<div class="title-loader">
+        	<div class="spinner">
+			  <div class="rect1"></div>
+			  <div class="rect2"></div>
+			  <div class="rect3"></div>
+			  <div class="rect4"></div>
+			  <div class="rect5"></div>
+			</div>
+			<h4>Removing Access to Software...</h4>
+        </div>
+		<p>1 Forex Scanners<br>
+		1 Binary Scanner<br>
+		All Trading Tools</p>
+		<div class="title-loader">
+        	<div class="spinner">
+			  <div class="rect1"></div>
+			  <div class="rect2"></div>
+			  <div class="rect3"></div>
+			  <div class="rect4"></div>
+			  <div class="rect5"></div>
+			</div>
+			<h4>Removing Access to Webinars / Coaching...</h4>
+        </div>
+		<p>30 Forex Webinars<br>
+		20 Binary Webinars</p>
+		<div class="title-loader">
+        	<div class="spinner">
+			  <div class="rect1"></div>
+			  <div class="rect2"></div>
+			  <div class="rect3"></div>
+			  <div class="rect4"></div>
+			  <div class="rect5"></div>
+			</div>
+			<h4>Deleting Contacts...</h4>
+        </div>
+		<div class="title-loader">
+        	<div class="spinner">
+			  <div class="rect1"></div>
+			  <div class="rect2"></div>
+			  <div class="rect3"></div>
+			  <div class="rect4"></div>
+			  <div class="rect5"></div>
+			</div>
+			<h4>Removing Access To Pages...</h4>
+        </div>
+		<div class="row">
+			<div class="col-md-6">
+				<h4>Or...Finalize Account Cancellation:</h4>
+			</div>
+			<div class="col-md-6">
+				<div class="btn-2-holder">
+					<button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+					<button type="button" class="btn btn-danger">YES</button>
+				</div>
+			</div>
+		</div>
+		<p><strong>IMPORTANT:</strong> If you cancel your account, please note that your username (USER_NAME) will be made available for someone else; any progress and access to pages you've created will be disabled; optins and leads will not be collected; and videos will not display if you added your own.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php get_footer(); ?>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.view-purchase-details').click(function(e){
+			e.preventDefault();
+			var html = $('#'+$(this).attr('data-target'))[0].outerHTML;
+			$('#view-purchase-details .purchase-details-info').html('');
+			$('#view-purchase-details .purchase-details-info').prepend(html);
+			$('#table-purchases').hide();
+			$('#view-purchase-details').fadeIn();
+		});
+		$('#close-purchase-details').click(function(e){
+			e.preventDefault();
+			$('#view-purchase-details').hide();
+			$('#table-purchases').fadeIn();
+		});
+	});
+</script>
+
+<?php if($_GET['cancel'] == "yes"){ ?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.marketing-contacts a[href="#c"]').click();
+		$('.tab-pane#c').addClass('tab-pane-cancellation');
+	});
+</script>
+<?php } ?>
