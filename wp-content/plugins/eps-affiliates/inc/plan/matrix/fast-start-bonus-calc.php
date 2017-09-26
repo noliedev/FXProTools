@@ -43,7 +43,7 @@
 */
  function _check_fsb_already_paid($uid = '', $assc_uid = ''){
 	$query = array();
-	$query['#select']  =_table_name('afl_global_pool_bonus_transactions');
+	$query['#select']  =_table_name('afl_user_transactions');
 	$query['#where']   = array(
 		'hidden_transaction = 0',
 		'deleted = 0',

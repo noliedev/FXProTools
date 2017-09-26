@@ -180,6 +180,15 @@
 				),
 				array('uid' => $user)
 			);
+   	$wpdb->update(
+				_table_name('afl_unilevel_user_genealogy'),
+				array(
+					'remote_user_mlmid' 	 => $data['userMlmId'],
+					'remote_sponsor_mlmid' => $data['sponsor_mlmid'],
+					'status' 							 => $status
+				),
+				array('uid' => $user)
+			);
  }
 /*
  * ------------------------------------------------------------------
@@ -195,6 +204,15 @@
 		global $wpdb;
    	$wpdb->update(
 				_table_name('afl_user_holding_tank'),
+				array(
+					'remote_user_mlmid' 	 => $data['userMlmId'],
+					'remote_sponsor_mlmid' => $data['sponsor_mlmid'],
+					'status' 							 => $status
+				),
+				array('uid' => $user)
+			);
+   	$wpdb->update(
+				_table_name('afl_unilevel_user_holding_tank'),
 				array(
 					'remote_user_mlmid' 	 => $data['userMlmId'],
 					'remote_sponsor_mlmid' => $data['sponsor_mlmid'],

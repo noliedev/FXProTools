@@ -9,13 +9,13 @@ function afl_unilevel_my_customers () {
 function afl_unilevel_my_customers_form () {
 		$pagination = new CI_Pagination;
 
-		$config['total_rows'] =  count(_my_customers());
+		$config['total_rows'] =  count(_my_customers_uni());
 		$config['base_url'] 	= '?page=affiliate-eps-my-customers';
 		$config['per_page'] 	= 50;
 
 		
 		$index = !empty($_GET['page_count']) ? $_GET['page_count'] : 0;
-		$data  = _my_customers($index, $config['per_page']);
+		$data  = _my_customers_uni($index, $config['per_page']);
 
 		$pagination->initialize($config);
 		$links = $pagination->create_links();
@@ -52,7 +52,7 @@ function afl_unilevel_my_customers_form () {
 
 			$rows[$key]['markup_2'] = array(
 				'#type' =>'markup',
-				'#markup'=> date('Y-m-d',$value->created)
+				'#markup'=> afl_system_date_format($value->created,TRUE)
 			);
 		}
 		$table['#rows'] = $rows;
@@ -62,7 +62,7 @@ function afl_unilevel_my_customers_form () {
 		echo apply_filters('afl_render_table',$table);
 }
 
-function _my_customers ($index = 0, $limit = '') {
+function _my_customers_uni ($index = 0, $limit = '') {
 	$uid = get_uid();
 
 	$query = array();

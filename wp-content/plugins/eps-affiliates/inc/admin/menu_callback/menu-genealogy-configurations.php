@@ -118,50 +118,43 @@ function afl_genealogy_configuration_form_submit ($form_state){
 	function afl_system_reset ($remove_user = '') {
 		global $wpdb;
 		$wpdb->query("DELETE FROM `"._table_name('afl_user_genealogy')."` WHERE `uid` != ".afl_root_user()." ");
+		$wpdb->query("DELETE FROM `"._table_name('afl_unilevel_user_genealogy')."` WHERE `uid` != ".afl_root_user()." ");
 		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_business_funds')."`");
-		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_business_transactions')."`");
-		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_business_transactions_overview')."`");
 		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_payout_history')."`");
-		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_payout_requests')."`");
 		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_ranks')."`");
-		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_rank_history')."`");
 		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_transactions')."`");
-		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_transactions_errors')."`");
-		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_transaction_authorization')."`");
 		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_downlines')."`");
-		
+		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_unilevel_user_downlines')."`");
+
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_fund')."`");
 		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_holding_tank')."`");
+		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_unilevel_user_holding_tank')."`");
 		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_payment_methods')."`");
-		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_transactions')."`");
-		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_user_transactions_overview')."`");
 		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_purchases')."`");
 		
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_tree_last_insertion_positions')."`");
+		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_unilevel_tree_last_insertion_positions')."`");
 
 		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_customer')."`");
+		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_processing_queue')."`");
 		
-		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_unilevel_user_downlines')."`");
-
-		$wpdb->query("DELETE FROM `"._table_name('afl_unilevel_user_genealogy')."` WHERE `uid` != ".afl_root_user()." ");
-		
-		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_unilevel_user_holding_tank')."`");
+		$wpdb->query("TRUNCATE TABLE `"._table_name('afl_log_messages')."`");
 		
 	}
 /*

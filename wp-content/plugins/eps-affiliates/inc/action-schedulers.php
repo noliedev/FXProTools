@@ -221,6 +221,52 @@
  }
 
 
+
+
+
+
+ /*
+ * -------------------------------------------------------------
+ * Open the deactive user spot for another one activation
+ * -------------------------------------------------------------
+*/
+	function eps_affiliates_deactived_spot_openup_cron_activation() {
+		if( !wp_next_scheduled( 'eps_affiliates_deactived_spot_openup_cron' ) ) {  
+		   wp_schedule_event( time(), 'everyhour', 'eps_affiliates_deactived_spot_openup_cron' );  
+		}
+	}
+/*
+ * -------------------------------------------------------------
+ * unschedule event upon plugin deactivation
+ * -------------------------------------------------------------
+*/
+	function eps_affiliates_deactived_spot_openup_cron_deactivation() {	
+		// find out when the last event was scheduled
+		$timestamp = wp_next_scheduled ('eps_affiliates_deactived_spot_openup_cron');
+		// unschedule previous event if any
+		wp_unschedule_event ($timestamp, 'eps_affiliates_deactived_spot_openup_cron');
+	} 
+/*
+ * ------------------------------------------------------------
+ * Monthly matrix commision payout
+ *
+ * check month starting
+ * get all active users
+ * get total actived month of a user
+ * get actived downlines of this user
+ * give count * actived month count amount
+ * ------------------------------------------------------------
+*/
+ function eps_affiliates_deactived_spot_openup_cron_callback () {
+	 	require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/plan/matrix/inactive-user-spot-openup.php';
+		if (function_exists('_matrix_inactive_user_spot_open_up')) {
+			_matrix_inactive_user_spot_open_up();
+		}
+ }
+
+
+
+
 /*
  * -------------------------------------------------------------
  * Custom interval
@@ -258,6 +304,7 @@
 
 	add_action('wp', 'eps_affiliates_remote_users_embedd_cron_activation');
 
+	add_action('wp', 'eps_affiliates_deactived_spot_openup_cron_activation');
 /*
  * -------------------------------------------------------------
  * All the scheduler deactivation hooks comes here
@@ -269,6 +316,7 @@
 	register_deactivation_hook (__FILE__, 'eps_affiliates_monthly_matrix_compensation_payout_deactivation');
 	register_deactivation_hook (__FILE__, 'eps_affiliates_monthly_pool_bonus_payout_deactivation');
 	register_deactivation_hook (__FILE__, 'eps_affiliates_remote_users_embedd_cron_deactivation');
+	register_deactivation_hook (__FILE__, 'eps_affiliates_deactived_spot_openup_cron_deactivation');
 
 
 /*
@@ -313,3 +361,10 @@
 */
 	add_action ('eps_affiliates_remote_users_embedd_cron', 'eps_affiliates_remote_users_embedd_cron_callback');
 
+/*
+ * -------------------------------------------------------------
+ * Open the inactived user spot for another user, when he has 
+ * been in deatived for maximum allowed days / months/year
+ * -------------------------------------------------------------
+*/
+	add_action ('eps_affiliates_deactived_spot_openup_cron', 'eps_affiliates_deactived_spot_openup_cron_callback');

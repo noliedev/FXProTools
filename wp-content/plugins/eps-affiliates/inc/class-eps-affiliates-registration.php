@@ -351,10 +351,8 @@ class Eps_affiliates_registration {
 			 	 * calculate the fast start bonus
 			 	 * ---------------------------------------------------------------------- 
 			 	*/
-				 	require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/plan/matrix/fast-start-bonus-calc.php';
-				 	if ( function_exists('calculate_distributor_fast_start_bonus')) {
-				 		calculate_distributor_fast_start_bonus( $post_data['sponsor_uid'], $post_data['uid'] );
-				 	}
+
+				 	do_action('afl_calculate_fast_start_bonus',$post_data['uid'],$post_data['sponsor_uid']);
 
 				}
 			}

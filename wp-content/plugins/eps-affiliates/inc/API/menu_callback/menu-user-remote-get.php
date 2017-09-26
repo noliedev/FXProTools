@@ -92,7 +92,6 @@
 		 	$form1['#prefix'] ='<div class="form-group row">';
 		 	$form1['#suffix'] ='</div>';
 
-
 	 		$form1['access'] = array(
 		 		'#name' => 'access',
 		 		'#type' => 'submit',
@@ -103,9 +102,10 @@
 		 			)
 		 		),
 		 	);
+
 		 	$form1['markup'] = array(
 		 		'#type' => 'markup',
-		 		'#markup' => '  <div id="progress"></div><div id="message"></div>'
+		 		'#markup' => '<div id="progress"></div><div id="message"></div>'
 		 	);
 		 	echo afl_render_form($form1);
 	 	}
@@ -151,7 +151,6 @@
  		);
 
  		$result = db_select($query, 'get_row');
-
  		if ( !empty($result->remote_user_mlmid )) 
  			$f_flag = 1;
  		else 
@@ -172,7 +171,7 @@
  		else 
  			$s_flag = 0;
 
- 		return $f_flag*$s_flag;
+ 		return ($f_flag*$s_flag);
  	}
  /*
  	* -------------------------------------------------------------------------------------
@@ -184,20 +183,21 @@
  	 			unset($_POST['set_remote_mlm_id']);
  	 			_set_remote_mlm_id_root_user_form_submit($_POST);
  	 		}
+
  	 		$form1['#action'] = $_SERVER['REQUEST_URI'];
 		 	$form1['#method'] = 'post';
 		 	$form1['#prefix'] ='<div class="form-group row">';
 		 	$form1['#suffix'] ='</div>';
 
-		 	$form1['fieldset'] = array(
+		 	$form1['fieldset1'] = array(
 		 		'#type'=>'fieldset',
 		 		'#title'=>'Set Roort user remote mlm id'
 		 	);
-		 	$form1['fieldset']['remote_mlm_id'] = array(
+		 	$form1['fieldset1']['remote_mlm_id'] = array(
 		 		'#type'=>'textfield',
 		 		'#title'=>__('Root user remote mlm id')
 		 	);
-		 	$form1['fieldset']['set_remote_mlm_id'] = array(
+		 	$form1['fieldset1']['set_remote_mlm_id'] = array(
 		 		'#name' => 'set_remote_mlm_id',
 		 		'#type' => 'submit',
 		 		'#value' => 'Submit',
@@ -259,7 +259,12 @@
 	 		'#type'=>'fieldset',
 	 		'#title'=>'Reset last API Fetch ID'
 	 	);
-	 
+	 	
+	 	$form1['fieldset']['markup'] = array(
+	 		'#type' => 'markup',
+	 		'#markup' => 'Current value : '.afl_variable_get('remote_user_get_last_get_id',1),
+	 	);
+
 	 	$form1['fieldset']['reset_last_fetch_id'] = array(
 	 		'#name' => 'reset_last_fetch_id',
 	 		'#type' => 'submit',

@@ -50,19 +50,18 @@
  		
  		//check conidition meets
  		$required_gv = afl_variable_get('rank_'.$rank.'_gv',0);
-
  		//get maximum group volume required for this rank
  		$max_taken 			= afl_variable_get('rank_'.$rank.'_max_gv_taken_1_leg',0);
- 		$maximum_taken 	= afl_commission($required_gv, $max_taken);
+ 		$maximum_taken 	= afl_commission($max_taken,$required_gv);
+ 		
  		//get maximum taken from a leg
  		//check with the maximum 
  		$user_gv = 0;
  		foreach ($legs_gv as $key => $amount) {
- 			$user_gv = ($amount > $maximum_taken) ? $maximum_taken : $amount;
+ 			$user_gv += ($amount > $maximum_taken) ? $maximum_taken : $amount;
  		}
 
  		$user_gv = $my_pv + $user_gv;
-
  		if ($required_gv <= $user_gv  ){
  			return true;
  		} else {
@@ -690,3 +689,36 @@ function _get_company_profit_yearly () {
 		$resp = db_select($query, 'get_row');
 		return $resp;
 }
+/*
+ * --------------------------------------------------
+ * Get howmany days the current rank holding...
+ * --------------------------------------------------
+*/
+ 	function _user_current_rank_holding_days ($uid = ''){ 
+ 		$days = 0;
+ 		if ( !empty($uid)) {
+ 			//get the user rank from ranks table
+ 			$rank_det 		= afl_rank_details($uid);
+ 			$current_date = afl_date();
+ 			$rank_updated_date = !empty($rank_det->updated) ? $rank_det->updated : 0;
+ 			if ( $rank_updated_date ) {
+ 				$datediff 		 = $current_date - $rank_updated_date;
+ 				$days = floor($datediff / (60 * 60 * 24));
+ 			}
+ 		}
+ 		return $days;
+ 	}
+/*
+ * -------------------------------------------------
+ * Get rank details
+ * -------------------------------------------------
+*/
+	function afl_rank_details($uid = ''){
+		$query = array();
+		$query['#select'] = _table_name('afl_ranks');
+		$query['#where'] = array(
+			'uid='.$uid
+		);
+		$result = db_select($query, 'get_results');
+		return $result;
+	}

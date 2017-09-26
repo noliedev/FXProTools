@@ -187,6 +187,160 @@
 	add_filter('afl_withdrawal_fee_credited',
 						 'afl_withdrawal_fee_credited_callback',
 						 10,1);
+/*
+ * -----------------------------------------------------------
+ * Give the faststart bonus
+ * -----------------------------------------------------------
+*/
+	add_action('afl_calculate_fast_start_bonus',
+						 'afl_calculate_fast_start_bonus_callback',
+						 10,2);
+
+/*
+ * -----------------------------------------------------------
+ * Save the fsb PV when refer someone
+ * -----------------------------------------------------------
+*/
+	add_action('afl_calculate_fast_start_bonus_pv',
+						 'afl_calculate_fast_start_bonus_pv_callback',
+						 10,1);
+/*
+ * ----------------------------------------------------------
+ * Get how many days the current rank holding of a user
+ * ----------------------------------------------------------
+*/
+ add_action('afl_rank_holding_days_template',
+ 						'afl_rank_holding_days_template_callback',
+ 						10,1);
+/*
+ * ----------------------------------------------------------
+ * my customers count
+ * ----------------------------------------------------------
+*/
+ add_filter('afl_my_customers_count',
+ 						'afl_my_customers_count_callback',
+ 						10,1);
+/*
+ * ----------------------------------------------------------
+ * my customers count
+ * ----------------------------------------------------------
+*/
+ add_filter('afl_my_distributors_count',
+ 						'afl_my_distributors_count_callback',
+ 						10,1);
+/*
+ * ----------------------------------------------------------
+ * my customers count
+ * ----------------------------------------------------------
+*/
+ add_action('afl_my_customers_count_template',
+ 						'afl_my_customers_count_template_callback',
+ 						10,1);
+/*
+ * ----------------------------------------------------------
+ * my customers count
+ * ----------------------------------------------------------
+*/
+ add_action('afl_my_distributors_count_template',
+ 						'afl_my_distributors_count_template_callback',
+ 						10,1);
 
 
-// pr(apply_filters('afl_withdrawal_completed', array('uid'=>22614,'associated_uid'=>22614, 'amount_paid' => 2,'order_id' => 1,'transaction_date'=>afl_date())),1);
+/* ----------------------------------- E_WALLET ----------------------------------------------------------*/
+/*
+ * ---------------------------------------------------------
+ * E-wallet today earnings
+ * ---------------------------------------------------------
+*/
+	 add_filter('afl_ewallet_today_earnings',
+ 						'afl_ewallet_today_earnings_callback',
+ 						10,1);
+/*
+ * ---------------------------------------------------------
+ * E-wallet today earnings
+ * ---------------------------------------------------------
+*/
+	 add_action('afl_ewallet_today_earnings_template',
+ 						'afl_ewallet_today_earnings_template_callback');
+
+/*
+ * ---------------------------------------------------------
+ * E-wallet today earnings
+ * ---------------------------------------------------------
+*/
+	 add_filter('afl_ewallet_yesterday_earnings',
+ 						'afl_ewallet_yesterday_earnings_callback',
+ 						10,1);
+/*
+ * ---------------------------------------------------------
+ * E-wallet today earnings
+ * ---------------------------------------------------------
+*/
+	 add_action('afl_ewallet_yesterday_earnings_template',
+ 						'afl_ewallet_yesterday_earnings_template_callback');
+
+/*
+ * ---------------------------------------------------------
+ * E-wallet today earnings
+ * ---------------------------------------------------------
+*/
+	 add_filter('afl_ewallet_last_week_earnings',
+ 						'afl_ewallet_last_week_earnings_callback',
+ 						10,1);
+/*
+ * ---------------------------------------------------------
+ * E-wallet today earnings
+ * ---------------------------------------------------------
+*/
+	 add_action('afl_ewallet_last_week_earnings_template',
+ 						'afl_ewallet_last_week_earnings_template_callback');
+
+/*
+ * ---------------------------------------------------------
+ * E-wallet today earnings
+ * ---------------------------------------------------------
+*/
+	 add_filter('afl_ewallet_last_month_earnings',
+ 						'afl_ewallet_last_month_earnings_callback',
+ 						10,1);
+/*
+ * ---------------------------------------------------------
+ * E-wallet today earnings
+ * ---------------------------------------------------------
+*/
+	 add_action('afl_ewallet_last_month_earnings_template',
+ 						'afl_ewallet_last_month_earnings_template_callback');
+
+/*
+ * ---------------------------------------------------------
+ * E-wallet today earnings
+ * ---------------------------------------------------------
+*/
+	 add_filter('afl_ewallet_all_time_earnings',
+ 						'afl_ewallet_all_time_earnings_callback',
+ 						10,1);
+/*
+ * ---------------------------------------------------------
+ * E-wallet today earnings
+ * ---------------------------------------------------------
+*/
+	 add_action('afl_ewallet_all_time_earnings_template',
+ 						'afl_ewallet_all_time_earnings_template_callback');
+
+/*
+ * ---------------------------------------------------------
+ * E-wallet All summary blocks 
+ * ---------------------------------------------------------
+*/
+	 add_action('afl_ewallet_all_earnings_summary_blocks_template',
+ 							'afl_ewallet_all_earnings_summary_blocks_template_callback');
+/* ----------------------------------- E_WALLET ----------------------------------------------------------*/
+
+add_filter('afl_distributor_team_volume',
+ 						'afl_distributor_team_volume_callback',
+ 						10,1);
+
+add_filter('afl_distributor_personal_volume',
+ 						'afl_distributor_personal_volume_callback',
+ 						10,1);
+// pr(apply_filters('afl_ewallet_last_week_earnings',get_uid()),1);

@@ -2,6 +2,12 @@
 /* --------- All the action hooks ------------------------*/
 add_action('init', 'common_scripts_load');
 function common_scripts_load(){
+
+  wp_enqueue_style( 'fontawsome-css', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/font-awesome-4.7.0/css/font-awesome.min.css');
+	wp_enqueue_style( 'bootstrap-css', EPSAFFILIATE_PLUGIN_ASSETS.'css/bootstrap/css/bootstrap.css');
+
+
+
 	wp_register_script( 'jquery-js',  EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.min.js');
 	wp_enqueue_script( 'jquery-js' );
 
@@ -211,11 +217,25 @@ function eps_affiliates_admin_notices () {
  	add_action('wp_ajax_nopriv_afl_user_expand_genealogy', 'afl_expand_user_genealogy_tree');
 /*
  * ------------------------------------------------------------
- * Genealogy tree expand
+ * Genealogy tree expand unilevel
  * ------------------------------------------------------------
 */
 	add_action('wp_ajax_afl_unilevel_user_expand_genealogy', 'afl_unilevel_expand_user_genealogy_tree');
  	add_action('wp_ajax_nopriv_afl_unilevel_user_expand_genealogy', 'afl_unilevel_expand_user_genealogy_tree');
+/*
+ * ------------------------------------------------------------
+ * Genealogy tree expand toggle genealogy
+ * ------------------------------------------------------------
+*/
+	add_action('wp_ajax_afl_user_expand_toggle_genealogy', 'afl_user_expand_toggle_genealogy');
+ 	add_action('wp_ajax_nopriv_afl_user_expand_toggle_genealogy', 'afl_user_expand_toggle_genealogy');
+/*
+ * ------------------------------------------------------------
+ * Unilevel Genealogy tree expand toggle genealogy
+ * ------------------------------------------------------------
+*/
+	add_action('wp_ajax_afl_unilevel_user_expand_toggle_genealogy', 'afl_unilevel_user_expand_toggle_genealogy');
+ 	add_action('wp_ajax_nopriv_afl_unilevel_user_expand_toggle_genealogy', 'afl_unilevel_user_expand_toggle_genealogy');
 /*
  * ------------------------------------------------------------
  * E wallet summary datatable
@@ -298,6 +318,29 @@ function eps_affiliates_admin_notices () {
  add_action('wp_ajax_afl_auto_place_user_ajax', 'afl_auto_place_user_ajax_callback');
  add_action('wp_ajax_nopriv_afl_auto_place_user_ajax', 'afl_auto_place_user_ajax_callback');
 
+ /*
+ * ------------------------------------------------------------
+ * Toggle holding tank genealogy user left
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_user_holding_genealogy_toggle_left', 
+ 						'afl_user_holding_genealogy_toggle_left_callback'
+ 						);
+ add_action('wp_ajax_nopriv_afl_user_holding_genealogy_toggle_left', 
+ 						'afl_user_holding_genealogy_toggle_left_callback'
+ 						);
+
+/*
+ * ------------------------------------------------------------
+ * Toggle holding tank genealogy user right
+ * ------------------------------------------------------------
+*/
+ add_action('wp_ajax_afl_user_holding_genealogy_toggle_right', 
+ 						'afl_user_holding_genealogy_toggle_right_callback'
+ 						);
+ add_action('wp_ajax_nopriv_afl_user_holding_genealogy_toggle_right', 
+ 						'afl_user_holding_genealogy_toggle_right_callback'
+ 						);
 
  /*
  * ------------------------------------------------------------
@@ -433,6 +476,8 @@ function eps_affiliates_admin_notices () {
 			'affiliate-eps-refered-members',
 			'affiliate-eps-add-new-customer',
 			'affiliate-eps-my-customers',
+			'affiliate-eps-user-holding-toggle-placement',
+			'affiliate-eps-user-holding-genealogy-toggle-placement',
 
 			//unilevel network
 			'affiliate-eps-unilevel-user-network',
@@ -442,6 +487,7 @@ function eps_affiliates_admin_notices () {
 			'affiliate-eps-unilevel-refered-members',
 			'affiliate-eps-unilevel-add-new-customer',
 			'affiliate-eps-unilevel-my-customers',
+			'affiliate-eps-user-unilevel-holding-genealogy-toggle-placement',
 
 			//e-wallet
 			'affiliate-eps-e-wallet-summary',

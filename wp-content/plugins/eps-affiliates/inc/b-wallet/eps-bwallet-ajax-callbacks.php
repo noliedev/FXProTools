@@ -68,7 +68,7 @@ function afl_admin_business_trans_datatable_callback(){
 	     	$value->display_name." (".$value->associated_user_id.")",
 	 			number_format(afl_get_commerce_amount($value->amount_paid), 2, '.', ',')." " .$value->currency_code ,
 	     	$status,
-	     	$value->transaction_date,  	
+	     	afl_system_date_format($value->transaction_date),  	
 	     	$value->additional_notes
    		];
 		}
@@ -166,7 +166,7 @@ function afl_admin_business_income_datatable_callback(){
 	     	$value->display_name." (".$value->associated_user_id.")",
 	 			number_format(afl_get_commerce_amount($value->amount_paid), 2, '.', ',')." " .$value->currency_code ,
 	     	$status,
-	     	$value->transaction_date,  	
+	     	afl_system_date_format($value->transaction_date),  	
 	     	$value->additional_notes
    		];
 		}
@@ -217,7 +217,7 @@ function afl_admin_business_expense_datatable_callback(){
 	     	$value->display_name." (".$value->associated_user_id.")",
 	 			number_format(afl_get_commerce_amount($value->amount_paid), 2, '.', ',')." " .$value->currency_code ,
 	     	$status,
-	     	$value->transaction_date,  	
+	     	afl_system_date_format($value->transaction_date),  	
 	     	$value->additional_notes
    		];
 		}

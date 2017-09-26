@@ -361,7 +361,15 @@ class Eps_affiliates_unilevel_registration {
 				 			$level, $newly_added_pos,
 				 			_table_name('afl_unilevel_tree_last_insertion_positions')
 				 	);
-
+				/*
+			 	 * ---------------------------------------------------------------------- 
+			 	 * calculate the fast start bonus not for customer
+			 	 * ---------------------------------------------------------------------- 
+			 	*/
+			 		$user_roles = afl_user_roles($post_data['uid']);
+			 		if ( !array_key_exists('afl_customer', $user_roles)) {
+				 		do_action('afl_calculate_fast_start_bonus',$post_data['uid'],$post_data['sponsor_uid']);
+			 		}
 				}
 			}
 		}

@@ -282,7 +282,7 @@ if ($('.custom-business-all-trans-table').length) {
   }
 
 
-  /*
+/*
 * -------------------------------------------
 * Data tables for business income report
 * -------------------------------------------
@@ -536,6 +536,76 @@ function expandUnilevelTree(obj) {
       }
     }
 }
+
+
+/*
+ * -------------------------------------------------------------
+ * Expand genealogy tree on click  expense
+ * -------------------------------------------------------------
+*/
+  function expandToggleMatrixTree(obj) {
+    $(obj).find('i').toggleClass('fa-times-circle fa-plus-circle');
+      var $uid = $(obj).attr('data-user-id');
+
+      if($(obj).find('i').hasClass('fa-plus-circle')){
+        $('.append-child-'+$uid).html('');
+        $(obj).parent().parent().removeClass('hv-item-parent');
+
+      } else{
+        $(obj).parent().parent().addClass('hv-item-parent');
+
+        if ($uid != undefined) {
+          $.ajax({
+            type :'POST',
+            data : {
+              action:'afl_user_expand_toggle_genealogy',
+              uid:$uid,
+            },
+            url:ajax_object.ajaxurl,
+            success: function(data){
+              if (data.length) {
+                $(data).hide().appendTo('.append-child-'+$uid).fadeIn(1000);
+                // $('.append-child-'+$uid).append(data).fadeIn('slow');
+              }
+            }
+          });
+        }
+      }
+  }
+/*
+ * -------------------------------------------------------------
+ * Expand unilevel genealogy tree on click  expense
+ * -------------------------------------------------------------
+*/
+  function expandToggleUnilevelTree(obj) {
+    $(obj).find('i').toggleClass('fa-times-circle fa-plus-circle');
+      var $uid = $(obj).attr('data-user-id');
+
+      if($(obj).find('i').hasClass('fa-plus-circle')){
+        $('.append-child-'+$uid).html('');
+        $(obj).parent().parent().removeClass('hv-item-parent');
+
+      } else{
+        $(obj).parent().parent().addClass('hv-item-parent');
+
+        if ($uid != undefined) {
+          $.ajax({
+            type :'POST',
+            data : {
+              action:'afl_unilevel_user_expand_toggle_genealogy',
+              uid:$uid,
+            },
+            url:ajax_object.ajaxurl,
+            success: function(data){
+              if (data.length) {
+                $(data).hide().appendTo('.append-child-'+$uid).fadeIn(1000);
+                // $('.append-child-'+$uid).append(data).fadeIn('slow');
+              }
+            }
+          });
+        }
+      }
+  }
 /*
  * ----------------------------------------------------------------
  * Add error class
@@ -569,3 +639,141 @@ function expandUnilevelTree(obj) {
        $('.progress-bar').css( 'width' ,percent+'%');
     }
   }
+/*
+ * -------------------------------------------------------------
+ * Toggle holding tank node to left
+ * -------------------------------------------------------------
+*/
+  function _toggle_holding_node_left(object){
+    var toggle_left_id = $(object).attr('data-toggle-uid');
+    var sponsor        = $('#sponsor').val(); 
+    var tree           = $('#tree').val();
+    $.ajax({
+      type :'POST',
+      data : {
+        action:'afl_user_holding_genealogy_toggle_left',
+        uid:toggle_left_id,
+        sponsor:sponsor,
+        tree:tree
+
+      },
+      url:ajax_object.ajaxurl,
+      success: function(data){
+         data = JSON.parse(data);
+        if (data!=null) {
+         $('.toggle-save-placement-button').attr('data-toggle-uid',data.uid)
+         html_tag = _theme_toggle_holding_genealogy_user(data);
+         $(object).parent('.toggle-user-placement-toggle-area').html(html_tag);
+        }
+      }
+    });
+  }
+/*
+ * -------------------------------------------------------------
+ * Toggle holding tank node to right
+ * -------------------------------------------------------------
+*/
+  function _toggle_holding_node_right(object){
+    var toggle_right_id = $(object).attr('data-toggle-uid');
+    var sponsor         = $('#sponsor').val(); 
+    var tree            = $('#tree').val();
+    
+      $.ajax({
+        type :'POST',
+        data : {
+          action:'afl_user_holding_genealogy_toggle_right',
+          uid:toggle_right_id,
+          sponsor:sponsor,
+          tree:tree
+
+        },
+        url:ajax_object.ajaxurl,
+        success: function(data){
+            data = JSON.parse(data);
+          if (data!=null) {
+            $('.toggle-save-placement-button').attr('data-toggle-uid',data.uid)
+            html_tag = _theme_toggle_holding_genealogy_user(data);
+            $(object).parent('.toggle-user-placement-toggle-area').html(html_tag);
+          }
+        }
+      });
+  }
+/*
+ * -------------------------------------------------------------
+ * Place user toggel genealogy selected position
+ * -------------------------------------------------------------
+*/
+  function _toggle_holding_node_place(object){
+    var place_holding_uid       = $(object).attr('data-toggle-uid');
+    var place_holding_parent    = $(object).attr('data-toggle-parent');
+    var place_holding_position  = $(object).attr('data-toggle-position');
+    var tree_mode               = $('#tree').val(); 
+    var sponsor                 = $('#sponsor').val(); 
+    if ( place_holding_uid == 0) {
+      alert('Please choose a holding user.');
+      return false;
+    }
+    $.confirm({
+      title: 'Confirm',
+      content: 'Really you want to place the holding user to this parent?',
+      icon: 'fa fa-question-circle',
+      animation: 'scale',
+      closeAnimation: 'scale',
+      opacity: 0.5,
+      buttons: {
+        'confirm': {
+            text: 'Proceed',
+            btnClass: 'btn-blue',
+            action: function () {
+              $.ajax({
+                type :'POST',
+                data : {
+                  action:'afl_place_user_from_tank',
+                  user_id:place_holding_uid,
+                  sponsor:sponsor,
+                  parent:place_holding_parent,
+                  position :place_holding_position, 
+                  tree_mode :tree_mode, 
+                },
+                url:ajax_object.ajaxurl,
+                success: function(data){
+                  var data = JSON.parse(data);
+                  if (data['status'] == 1) {
+                    $.alert('Success. the member has been placed successfully.');
+                  }
+                   setTimeout(function() { window.location.reload(true); }, 500 );
+                }
+              });
+            }
+        },
+        cancel: function () {
+        },
+      }
+    });
+
+  }
+
+/* -------------------------------------------------------------------------------------- */
+/*
+ * ------------------------------------------------------------
+ * Theme 
+ * ------------------------------------------------------------
+*/
+  function _theme_toggle_holding_genealogy_user (json_data) {
+      var html_tag = '';
+      html_tag += '<span class="toggle-left-arrow" data-toggle-uid="'+json_data.uid+'" onclick="_toggle_holding_node_left(this)">';
+      html_tag += '<i class="fa fa-caret-left fa-5x"></i>';
+      html_tag += '</span>';
+      html_tag += '<div class="holding-toggle-user-image">';
+      html_tag += '<img src="'+json_data.image_url+'">';
+      html_tag += '</div>';
+      html_tag += '<span class="toggle-right-arrow" data-toggle-uid="'+json_data.uid+'" onclick="_toggle_holding_node_right(this)">';
+      html_tag += '<i class="fa fa-caret-right fa-5x"></i>';
+      html_tag += '</span>';
+      html_tag += '<p>';
+      html_tag += json_data.user_login;
+      html_tag += '</p>';
+      html_tag += '</div>';
+      return html_tag;
+  }
+/* -------------------------------------------------------------------------------------- */

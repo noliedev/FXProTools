@@ -1217,7 +1217,7 @@ if(!function_exists('afl_get_rank_names')){
 		if (isset($filter['member_rank'])) {
 			$query['#where'][] = '`'._table_name('afl_unilevel_user_downlines').'`.`member_rank`= '.$filter['member_rank'];
 		}
-		//if filter fields
+		// if filter fields
 		if (isset($filter['fields'])) {
 			$query['fields'] = empty($query['fields']) ? array() : $query['fields'];
 			$fields = array_merge($query['fields'],$filter['fields']);
@@ -1370,7 +1370,8 @@ if(!function_exists('afl_get_rank_names')){
 		$query['#join'] 	= array(
 			_table_name('users') => array(
 				'#condition' => '`wp_users`.`ID`=`'._table_name('afl_user_genealogy').'`.`uid`'
-			)
+			),
+
 		);
 		// $query['#fields'] = array(
 		// 	_table_name('afl_user_genealogy') => array('uid')
@@ -1379,7 +1380,8 @@ if(!function_exists('afl_get_rank_names')){
 			'`'._table_name('afl_user_genealogy').'`.`referrer_uid`='.$uid.''
 		);
 		$query['#order_by'] = array(
-			'`'._table_name('afl_user_genealogy').'`.`level`' => 'ASC'
+			'`'._table_name('afl_user_genealogy').'`.`level`' => 'ASC',
+			'`'._table_name('afl_user_genealogy').'`.`relative_position`' => 'ASC'
 		);
 
 		//if level condition
@@ -2268,7 +2270,7 @@ if ( !function_exists('get_user_by') ){
 * Render rank in the html format
 * ----------------------------------------------------------------------
 */
- function render_rank ($rank = '') {
+ function render_rank ($rank = '', $ret_rank_name = '') {
 		if ( empty( $rank ) ) {
 			$rank_name = 'Active';
 		} else {
@@ -2276,7 +2278,10 @@ if ( !function_exists('get_user_by') ){
 		}
 
 		$rank_color = afl_variable_get('rank_'.$rank.'_color','#eea236');
-
+		if ( !empty($ret_rank_name)) {
+			$rank_name 	= $ret_rank_name;
+			$rank_color = '#000066';
+		}
  	  return '<span style="display: inline; padding: .2em .6em .3em; font-size: 100%;font-weight: 700;line-height: 1; color: #fff;
         text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em;background-color:'.$rank_color.';">'.$rank_name.' </span>';
  }
@@ -2313,6 +2318,44 @@ if ( !function_exists('get_user_by') ){
 		);
 		$query['#fields'] = array(
 			_table_name('afl_unilevel_user_downlines') => array('relative_position')
+		);
+
+		$res = db_select($query, 'get_var');
+		return $res;
+	}
+/*
+ * ----------------------------------------------------------------------
+ * Get relative position from a user
+ * ----------------------------------------------------------------------
+*/
+  function get_level_from ($from = '', $uid = '') {
+		$query = array();
+		$query['#select'] = _table_name('afl_user_downlines');
+		$query['#where'] = array(
+			'`'._table_name('afl_user_downlines').'`.`uid`='.$from,
+			'`'._table_name('afl_user_downlines').'`.`downline_user_id`='.$uid
+		);
+		$query['#fields'] = array(
+			_table_name('afl_user_downlines') => array('level')
+		);
+
+		$res = db_select($query, 'get_var');
+		return $res;
+	}
+/*
+ * ----------------------------------------------------------------------
+ * Get unilevel relative position from a user
+ * ----------------------------------------------------------------------
+*/
+  function get_unilevel_level_from ($from = '', $uid = '') {
+		$query = array();
+		$query['#select'] = _table_name('afl_unilevel_user_downlines');
+		$query['#where'] = array(
+			'`'._table_name('afl_unilevel_user_downlines').'`.`uid`='.$from,
+			'`'._table_name('afl_unilevel_user_downlines').'`.`downline_user_id`='.$uid
+		);
+		$query['#fields'] = array(
+			_table_name('afl_unilevel_user_downlines') => array('level')
 		);
 
 		$res = db_select($query, 'get_var');
@@ -2617,7 +2660,7 @@ function afl_get_payment_method_details($uid = 0, $method_name = ''){
 
 	 	if ( $return_uids ) {
 	 		$query['#fields'] = array(
-	 			$table => array('uid')
+	 			$table => array('uid','relative_position')
 	 		);
 
 	 	}
@@ -2656,6 +2699,35 @@ function afl_get_payment_method_details($uid = 0, $method_name = ''){
 
 	 	return $gv_array;
  	}
+ /*
+ * --------------------------------------------------------------------
+ * Get direct legs group volume details
+ * --------------------------------------------------------------------
+*/
+	function _get_user_direct_legs_gv_with_position( $uid = '', $return_sum = FALSE, $tree = 'matrix') {
+		$gv_array = [];
+		$sum = 0;
+	 	$legs = _get_user_direct_legs($uid, TRUE, FALSE, $tree);
+	 	foreach ($legs as $key => $value) {
+	 		//group volume of user
+	 		$gv = _get_user_gv($value->uid);
+	 		//self volume
+	 		$pv = _get_user_pv($value->uid);
+	 		//customer sales
+	 		$leg_customer_sale = 0;
+	 		$leg_customer_sale 	= get_user_downline_customers_sales($value->uid,TRUE);
+			
+	 		$gv_array[$value->relative_position]['sales'] = $gv + $pv + $leg_customer_sale; 
+	 		$gv_array[$value->relative_position]['uid'] 	= $value->uid; 
+	 		$sum = $sum + $gv;
+	 	}
+
+	 	if ( $return_sum ) {
+	 		return $sum;
+	 	}
+
+	 	return $gv_array;
+ 	}
 /*
  * --------------------------------------------------------------------
  * Create an array from the inout object array
@@ -2673,3 +2745,52 @@ function afl_get_payment_method_details($uid = 0, $method_name = ''){
 
  	return $ret_arr;
  }
+/*
+ * --------------------------------------------------------------------
+ * Get holding tank node
+ * --------------------------------------------------------------------
+*/
+	function _get_holding_tank_node ($uid = '', $tree = ''){
+		$query = array();
+		$table = _table_name('afl_user_holding_tank');
+		if ( $tree == 'unilevel') {
+			$table = _table_name('afl_unilevel_user_holding_tank');
+		}
+    $query['#select'] = $table;
+    $query['#join']  = array(
+      'wp_users' => array(
+        '#condition' => '`wp_users`.`ID`=`'.$table.'`.`uid`'
+      ),
+    );
+    $query['#fields']  = array(
+      'wp_users' => array(
+        'display_name'
+      ),
+      ''.$table.'' => array(
+        'parent_uid','uid','created','day_remains','remote_sponsor_mlmid'
+      )
+    );
+   	$query['#where'] = array(
+      '`'.$table.'`.`referrer_uid`='.$uid.'',
+    );
+   	$query['#order_by'] = array(
+      '`level`' => 'ASC',
+      // '`uid`'   => 'ASC'
+    );
+    
+    $tank_users = db_select($query, 'get_results');
+    return $tank_users;
+	}
+
+/*
+ * -------------------------------------------------------------
+ * System date format
+ * -------------------------------------------------------------
+*/
+	function afl_system_date_format($date = '', $timestamp = FALSE) {
+		$system_date_format = afl_variable_get('afl_var_system_date_format', 'Y-m-d');
+		if ($timestamp) {
+			return date($system_date_format, $date);
+		}
+		return date('Y-m-d',strtotime($date));
+	}

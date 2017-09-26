@@ -11,171 +11,417 @@ function afl_ewallet_summary(){
 	afl_content_wrapper_end();
 }
 
-function afl_ewallet_summary_callback(){
-
-	$uid = get_current_user_id();
-
-	if (isset($_GET['uid'])) {
-		$uid = $_GET['uid'];
-	}
-	//get user downlines details based on the uid
-
-
-	wp_register_script( 'jquery-data-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
-	wp_enqueue_script( 'jquery-data-table' );
-
-	wp_register_script( 'jquery-data-bootstrap-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/dataTables.bootstrap.min.js');
-	wp_enqueue_script( 'jquery-data-bootstrap-table' );
-
-	wp_enqueue_style( 'plan-develoepr', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/css/dataTables.bootstrap.min.css');
-
-	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/dataTables.bootstrap.min.js');
-	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.dataTables.min.js');
-
-?>
-<div class="data-filters"></div>
-
-<table id="afl-ewallet-summary-table" class="table table-striped table-bordered dt-responsive nowrap custom-ewallet-summary-table" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Category</th>
-                <th>Amount</th>
-            </tr>
-        </thead>
-    </table>
-	<?php 
-
+function afl_ewallet_all_transactions(){
+	echo afl_eps_page_header();
+	afl_content_wrapper_begin();
+	afl_ewallet_all_transactions_callback();
+	afl_content_wrapper_end();
 }
+
+function afl_ewallet_income_report(){
+	echo afl_eps_page_header();
+	afl_content_wrapper_begin();
+	afl_ewallet_income_report_callback();
+	afl_content_wrapper_end();
+}
+
+function afl_ewallet_withdrawal_report(){
+	echo afl_eps_page_header();
+	afl_content_wrapper_begin();
+	afl_ewallet_withdrawal_report_callback();
+	afl_content_wrapper_end();
+}
+
+function afl_ewallet_summary_callback(){
+		$uid = get_uid();
+
+		do_action('afl_ewallet_all_earnings_summary_blocks_template');
+		
+
+		if (isset($_GET['uid'])) {
+			$uid = $_GET['uid'];
+		}
+
+		//get user downlines details based on the uid
+		// $data = afl_unilevel_get_user_downlines($uid);
+	
+		$pagination = new CI_Pagination;
+
+		$config['total_rows'] =  (_get_ewallet_summary($uid,array(),TRUE));
+		$config['base_url'] 	= '?page=affiliate-eps-e-wallet';
+		$config['per_page'] 	= 50;
+
+		
+		$index = !empty($_GET['page_count']) ? $_GET['page_count'] : 0;
+		$filter = array(
+			'start' => $index,
+			'length' =>$config['per_page']
+		);
+		// $filter['fields'] = array(
+		//   _table_name('afl_unilevel_user_downlines') => array('level'),
+		//   _table_name('afl_unilevel_user_genealogy') => array('member_rank', 'relative_position','created'),
+		//   _table_name('users') => array('display_name', 'ID')
+		//  );
+		$data  = _get_ewallet_summary($uid,$filter);
+		// pr($data);
+		
+		$pagination->initialize($config);
+		$links = $pagination->create_links();
+
+		$table = array();
+		$table['#links']  = $links;
+		$table['#name'] 			= '';
+		// $table['#title'] 			= 'Business Profit Overview(Monthly)';
+		$table['#prefix'] 		= '';
+		$table['#suffix'] 		= '';
+		$table['#attributes'] = array(
+						'class' => array(
+								'table',
+								'table-bordered',
+								'my-table-center',
+							)
+						);
+
+		$table['#header'] = array(
+			__('#'),
+			__('Category'),
+			__('Amount'),
+			__('Details'),
+		);
+		$rows = array();
+
+		foreach ($data as $key => $value) {
+			$rows[$key]['markup_0'] = array(
+				'#type' =>'markup',
+				'#markup'=> ($index * 1) + ($key + 1)
+			);
+			$rows[$key]['markup_1'] = array(
+				'#type' =>'markup',
+				'#markup'=> ucfirst(strtolower($value->category)),
+			);
+			$rows[$key]['markup_2'] = array(
+				'#type' =>'markup',
+				'#markup'=> afl_format_payment_amount($value->balance).$value->currency_code  	
+			);
+		}
+	
+		$table['#rows'] = $rows;
+
+		echo apply_filters('afl_render_table',$table);
+}
+/*
+ * -------------------------------------------------
+ * E-wallet summary
+ * -------------------------------------------------
+*/
+	function _get_ewallet_summary ($uid = '', $filters = array(), $count = FALSE) {
+		global $wpdb;
+		if (empty($uid)) {
+			$uid  = get_uid();
+		}
+		$result = $wpdb->get_results("SELECT `"._table_name('afl_user_transactions')."`.`category`,`currency_code`, SUM(`"._table_name('afl_user_transactions')."`.`balance`) as balance  FROM `"._table_name('afl_user_transactions')."` WHERE `uid` = $uid GROUP BY `category` DESC");
+		if ( $count ) {
+			return count($result);
+		}
+		return $result;
+	}
 /*
  * ------------------------------------------------
  * User e-wallet all trsnsation 
  * ------------------------------------------------
 */
-function afl_ewallet_all_transactions(){
-	echo afl_eps_page_header();
-	$uid = get_current_user_id();
+function afl_ewallet_all_transactions_callback(){
+		$uid = get_uid();
 
-	if (isset($_GET['uid'])) {
-		$uid = $_GET['uid'];
-	}
-	//get user downlines details based on the uid
+		do_action('afl_ewallet_all_earnings_summary_blocks_template');
+		
 
-	afl_content_wrapper_begin();
+		if (isset($_GET['uid'])) {
+			$uid = $_GET['uid'];
+		}
 
-	wp_register_script( 'jquery-data-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
-	wp_enqueue_script( 'jquery-data-table' );
+		//get user downlines details based on the uid
+		// $data = afl_unilevel_get_user_downlines($uid);
+	
+		$pagination = new CI_Pagination;
 
-	wp_register_script( 'jquery-data-bootstrap-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/dataTables.bootstrap.min.js');
-	wp_enqueue_script( 'jquery-data-bootstrap-table' );
+		$config['total_rows'] =  (get_all_user_transaction_details($uid,array(),TRUE));
+		$config['base_url'] 	= '?page=affiliate-eps-ewallet-all-transactions';
+		$config['per_page'] 	= 50;
 
-	wp_enqueue_style( 'plan-develoepr', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/css/dataTables.bootstrap.min.css');
+		
+		$index = !empty($_GET['page_count']) ? $_GET['page_count'] : 0;
+		$filter = array(
+			'start' => $index,
+			'length' =>$config['per_page']
+		);
+		// $filter['fields'] = array(
+		//   _table_name('afl_unilevel_user_downlines') => array('level'),
+		//   _table_name('afl_unilevel_user_genealogy') => array('member_rank', 'relative_position','created'),
+		//   _table_name('users') => array('display_name', 'ID')
+		//  );
+		$data  = get_all_user_transaction_details($uid,$filter);
+		
+		$pagination->initialize($config);
+		$links = $pagination->create_links();
 
-	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/dataTables.bootstrap.min.js');
-	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.dataTables.min.js');
+		$table = array();
+		$table['#links']  = $links;
+		$table['#name'] 			= '';
+		// $table['#title'] 			= 'Business Profit Overview(Monthly)';
+		$table['#prefix'] 		= '';
+		$table['#suffix'] 		= '';
+		$table['#attributes'] = array(
+						'class' => array(
+								'table',
+								'table-bordered',
+								'my-table-center',
+							)
+						);
 
-?>
-<div class="data-filters"></div>
+		$table['#header'] = array(
+			__('#'),
+			__('Payment Source'),
+			__('Associate Member'),
+			__('Amount'),
+			__('Credit Status'),
+			__('Date'),
+			__('Notes'),
+		);
+		$rows = array();
 
-<table id="afl-ewallet-transaction-table" class="table table-striped table-bordered dt-responsive nowrap custom-ewallet-all-trans-table" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Payment Source</th>
-                <th>Associate Member</th>
-                <th>Amount</th>
-                <th>Credit Status</th>
-                <th>Date</th>
-                <th>Notes</th>
-            </tr>
-        </thead>
-    </table>
-	<?php 
-		afl_content_wrapper_end();
+		foreach ($data as $key => $value) {
+			$rows[$key]['markup_0'] = array(
+				'#type' =>'markup',
+				'#markup'=> ($index * 1) + ($key + 1)
+			);
+			$rows[$key]['markup_1'] = array(
+				'#type' =>'markup',
+				'#markup'=> ucfirst(strtolower($value->category))
+			);
+			$rows[$key]['markup_2'] = array(
+				'#type' =>'markup',
+				'#markup'=> $value->display_name." (".$value->associated_user_id.")",
+			);
+			$rows[$key]['markup_3'] = array(
+				'#type' =>'markup',
+				'#markup'=> afl_format_payment_amount($value->amount_paid).$value->currency_code,
+			);
+
+			if($value->credit_status == 1 ){
+				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
+			}
+			else{
+				$status =  "<button type='button' class='btn btn-danger'>Debit</button>";
+			}
+
+			$rows[$key]['markup_4'] = array(
+				'#type' =>'markup',
+				'#markup'=> $status,
+			);
+			$rows[$key]['markup_5'] = array(
+				'#type' =>'markup',
+				'#markup'=> afl_system_date_format($value->transaction_date) , 	
+			);
+			$rows[$key]['markup_6'] = array(
+				'#type' =>'markup',
+				'#markup'=> $value->notes , 	
+			);
+		}
+	
+		$table['#rows'] = $rows;
+
+		echo apply_filters('afl_render_table',$table);
 }
 
 
-function afl_ewallet_income_report(){
-	echo afl_eps_page_header();
-	$uid = get_current_user_id();
+function afl_ewallet_income_report_callback(){
+		$uid = get_uid();
+		if (isset($_GET['uid'])) {
+			$uid = $_GET['uid'];
+		}
 
-	if (isset($_GET['uid'])) {
-		$uid = $_GET['uid'];
-	}
-	//get user downlines details based on the uid
+		//get user downlines details based on the uid
+		// $data = afl_unilevel_get_user_downlines($uid);
+	
+		$pagination = new CI_Pagination;
 
-	afl_content_wrapper_begin();
+		$config['total_rows'] =  (get_all_user_transaction_details($uid,array(),TRUE,1));
+		$config['base_url'] 	= '?page=affiliate-eps-ewallet-income-report';
+		$config['per_page'] 	= 50;
 
-	wp_register_script( 'jquery-data-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
-	wp_enqueue_script( 'jquery-data-table' );
+		
+		$index = !empty($_GET['page_count']) ? $_GET['page_count'] : 0;
+		$filter = array(
+			'start' => $index,
+			'length' =>$config['per_page']
+		);
+		// $filter['fields'] = array(
+		//   _table_name('afl_unilevel_user_downlines') => array('level'),
+		//   _table_name('afl_unilevel_user_genealogy') => array('member_rank', 'relative_position','created'),
+		//   _table_name('users') => array('display_name', 'ID')
+		//  );
+		$data  = get_all_user_transaction_details($uid,$filter,FALSE,1);
+		
+		$pagination->initialize($config);
+		$links = $pagination->create_links();
 
-	wp_register_script( 'jquery-data-bootstrap-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/dataTables.bootstrap.min.js');
-	wp_enqueue_script( 'jquery-data-bootstrap-table' );
+		$table = array();
+		$table['#links']  = $links;
+		$table['#name'] 			= '';
+		// $table['#title'] 			= 'Business Profit Overview(Monthly)';
+		$table['#prefix'] 		= '';
+		$table['#suffix'] 		= '';
+		$table['#attributes'] = array(
+						'class' => array(
+								'table',
+								'table-bordered',
+								'my-table-center',
+							)
+						);
 
-	wp_enqueue_style( 'plan-develoepr', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/css/dataTables.bootstrap.min.css');
+		$table['#header'] = array(
+			__('#'),
+			__('Payment Source'),
+			__('Associate Member'),
+			__('Amount'),
+			__('Credit Status'),
+			__('Date'),
+		);
+		$rows = array();
 
-	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/dataTables.bootstrap.min.js');
-	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.dataTables.min.js');
+		foreach ($data as $key => $value) {
+			$rows[$key]['markup_0'] = array(
+				'#type' =>'markup',
+				'#markup'=> ($index * 1) + ($key + 1)
+			);
+			$rows[$key]['markup_1'] = array(
+				'#type' =>'markup',
+				'#markup'=> ucfirst(strtolower($value->category))
+			);
+			$rows[$key]['markup_2'] = array(
+				'#type' =>'markup',
+				'#markup'=> $value->display_name." (".$value->associated_user_id.")",
+			);
+			$rows[$key]['markup_3'] = array(
+				'#type' =>'markup',
+				'#markup'=> afl_format_payment_amount($value->amount_paid).$value->currency_code,
+			);
 
-?>
-<div class="data-filters"></div>
+			if($value->credit_status == 1 ){
+				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
+			}
+			else{
+				$status =  "<button type='button' class='btn btn-danger'>Debit</button>";
+			}
 
-<table id="afl-ewallet-income-table" class="table table-striped table-bordered dt-responsive nowrap custom-ewallet-income-table" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Payment Source</th>
-                <th>Associate Member</th>
-                <th>Amount</th>
-                <th>Credit Status</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-    </table>
-	<?php 
-		afl_content_wrapper_end();
+			$rows[$key]['markup_4'] = array(
+				'#type' =>'markup',
+				'#markup'=> $status,
+			);
+			$rows[$key]['markup_5'] = array(
+				'#type' =>'markup',
+				'#markup'=> afl_system_date_format($value->transaction_date) , 	
+			);
+		}
+	
+		$table['#rows'] = $rows;
 
+		echo apply_filters('afl_render_table',$table);
 }
 
 
-function afl_ewallet_withdrawal_report(){
-	echo afl_eps_page_header();
-	$uid = get_current_user_id();
+function afl_ewallet_withdrawal_report_callback(){
+	$uid = get_uid();
+		if (isset($_GET['uid'])) {
+			$uid = $_GET['uid'];
+		}
 
-	if (isset($_GET['uid'])) {
-		$uid = $_GET['uid'];
-	}
-	//get user downlines details based on the uid
+		//get user downlines details based on the uid
+		// $data = afl_unilevel_get_user_downlines($uid);
+	
+		$pagination = new CI_Pagination;
 
-	afl_content_wrapper_begin();
+		$config['total_rows'] =  (get_all_user_transaction_details($uid,array(),TRUE,0));
+		$config['base_url'] 	= '?page=affiliate-eps-ewallet-withdraw-report';
+		$config['per_page'] 	= 50;
 
-	wp_register_script( 'jquery-data-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/jquery.dataTables.min.js');
-	wp_enqueue_script( 'jquery-data-table' );
+		
+		$index = !empty($_GET['page_count']) ? $_GET['page_count'] : 0;
+		$filter = array(
+			'start' => $index,
+			'length' =>$config['per_page']
+		);
+		// $filter['fields'] = array(
+		//   _table_name('afl_unilevel_user_downlines') => array('level'),
+		//   _table_name('afl_unilevel_user_genealogy') => array('member_rank', 'relative_position','created'),
+		//   _table_name('users') => array('display_name', 'ID')
+		//  );
+		$data  = get_all_user_transaction_details($uid,$filter,FALSE,0);
+		
+		$pagination->initialize($config);
+		$links = $pagination->create_links();
 
-	wp_register_script( 'jquery-data-bootstrap-table',  EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/js/dataTables.bootstrap.min.js');
-	wp_enqueue_script( 'jquery-data-bootstrap-table' );
+		$table = array();
+		$table['#links']  = $links;
+		$table['#name'] 			= '';
+		// $table['#title'] 			= 'Business Profit Overview(Monthly)';
+		$table['#prefix'] 		= '';
+		$table['#suffix'] 		= '';
+		$table['#attributes'] = array(
+						'class' => array(
+								'table',
+								'table-bordered',
+								'my-table-center',
+							)
+						);
 
-	wp_enqueue_style( 'plan-develoepr', EPSAFFILIATE_PLUGIN_ASSETS.'plugins/dataTables/css/dataTables.bootstrap.min.css');
+		$table['#header'] = array(
+			__('#'),
+			__('Expense Source'),
+			__('Associate Member'),
+			__('Amount'),
+			__('Credit Status'),
+			__('Transaction'),
+		);
+		$rows = array();
 
-	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/dataTables.bootstrap.min.js');
-	// wp_enqueue_scripts( 'jquery-data-table', EPSAFFILIATE_PLUGIN_ASSETS.'js/jquery.dataTables.min.js');
+		foreach ($data as $key => $value) {
+			$rows[$key]['markup_0'] = array(
+				'#type' =>'markup',
+				'#markup'=> ($index * 1) + ($key + 1)
+			);
+			$rows[$key]['markup_1'] = array(
+				'#type' =>'markup',
+				'#markup'=> ucfirst(strtolower($value->category))
+			);
+			$rows[$key]['markup_2'] = array(
+				'#type' =>'markup',
+				'#markup'=> $value->display_name." (".$value->associated_user_id.")",
+			);
+			$rows[$key]['markup_3'] = array(
+				'#type' =>'markup',
+				'#markup'=> afl_format_payment_amount($value->amount_paid).$value->currency_code,
+			);
 
-?>
-<div class="data-filters"></div>
+			if($value->credit_status == 1 ){
+				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
+			}
+			else{
+				$status =  "<button type='button' class='btn btn-danger'>Debit</button>";
+			}
 
-<table id="afl-ewallet-expense-table" class="table table-striped table-bordered dt-responsive nowrap custom-ewallet-expense-table" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Expense Source</th>
-                <th>Associate Member</th>
-                <th>Amount</th>
-                <th>Credit Status</th>
-                <th>Transaction Date</th>
-            </tr>
-        </thead>
-    </table>
-	<?php 
-		afl_content_wrapper_end();
+			$rows[$key]['markup_4'] = array(
+				'#type' =>'markup',
+				'#markup'=> $status,
+			);
+			$rows[$key]['markup_5'] = array(
+				'#type' =>'markup',
+				'#markup'=> afl_system_date_format($value->transaction_date) , 	
+			);
+		}
+	
+		$table['#rows'] = $rows;
 
+		echo apply_filters('afl_render_table',$table);
 }

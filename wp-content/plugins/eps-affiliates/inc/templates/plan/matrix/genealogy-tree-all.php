@@ -112,40 +112,42 @@ if (!empty($parent)) :
                             <div class="hv-item">
                                   <div class="">
                                      <div class="person">
-                    <ul class="bxslider">
-                      <li>
-                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
-                        <p class="name">
-                         abc
-                        </p>
-                      </li>
-                      <li>
-                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
-                        <p class="name">
-                         abc
-                        </p>
-                      </li>
-                      <li>
-                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
-                        <p class="name">
-                         abc
-                        </p>
-                      </li>
-                    </ul>
-                    
-                    <script type="text/javascript">
-                    // $(document).ready(function(){
-                    //   $('.bxslider').bxSlider({
-                    //     pager: false, // disables pager
-                    //     slideWidth: 150,
-                    //     // nextSelector: '.bxRight',
-                    //     // prevSelector: '.bxLeft',
-                    //     // mode: 'fade',
-                    //     // captions: true
-                    //   });
-                      
-                    // });
-                    </script>      
+                                        <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                                     
+                                     <!--  <ul class="bxslider">
+                                        <li>
+                                          <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                                          <p class="name">
+                                           abc
+                                          </p>
+                                        </li>
+                                        <li>
+                                          <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                                          <p class="name">
+                                           abc
+                                          </p>
+                                        </li>
+                                        <li>
+                                          <img src="<?= EPSAFFILIATE_PLUGIN_ASSETS.'images/no-user.png'; ?>" alt="">
+                                          <p class="name">
+                                           abc
+                                          </p>
+                                        </li>
+                                      </ul>
+                                      
+                                      <script type="text/javascript">
+                                      // $(document).ready(function(){
+                                      //   $('.bxslider').bxSlider({
+                                      //     pager: false, // disables pager
+                                      //     slideWidth: 150,
+                                      //     // nextSelector: '.bxRight',
+                                      //     // prevSelector: '.bxLeft',
+                                      //     // mode: 'fade',
+                                      //     // captions: true
+                                      //   });
+                                        
+                                      // });
+                                      </script>   -->    
                    </div>
                                   </div>
                             </div>
