@@ -1,7 +1,7 @@
 <?php 
-$trial_details = get_trial_details();
-if( is_array($trial_details) ){
-	$trial_remaining_days = floor( (strtotime( $trial_details['expiration_date'] ) - time()) / (60 * 60 * 24));
+$trial_end_date = get_trial_end_date();
+if( $trial_end_date ){
+	$trial_remaining_days = floor( (strtotime( $trial_end_date ) - time()) / (60 * 60 * 24));
 }
 $market_scanner =  wcs_user_has_subscription( '', 47, 'active');
 $distributor_package =  wcs_user_has_subscription( '', 48, 'active');

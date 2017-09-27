@@ -274,10 +274,11 @@ function get_user_referrals()
 	}
 }
 
-function time_elapsed_string($datetime, $full = false) 
+function random_checkout_time_elapsed(  $full = false) 
 {
     $now = new DateTime;
-    $ago = new DateTime($datetime);
+    $ago = new DateTime;
+    $ago->modify("-" .  mt_rand(15, 3600) . " seconds"); 
     $diff = $now->diff($ago);
     $diff->w = floor($diff->d / 7);
     $diff->d -= $diff->w * 7;
@@ -348,31 +349,28 @@ function forced_lesson_time()
 	} 
 }
 
-function get_trial_details(){
-	 $orders = get_posts( array(
-        'numberposts' => - 1,
-        'meta_key'    => '_customer_user',
-        'meta_value'  => get_current_user_id(),
-        'post_type'   => wc_get_order_types( 'view-orders' ),
-        'post_status' => array( 'wc-processing', 'wc-completed' )
-    ) );
-    $products_ordered = array(); 
-    foreach ( $orders as $order => $data ) { 
-        $order_data = new WC_Order( $data->ID );
-        foreach ( $order_data->get_items() as $key => $item ) {
-            $products_ordered[ $item['product_id'] ] = $data->post_date; 
-        }
-    }
-    $trial_product_ids = array( 2881, 2879, 2873 );
-    $trial_purchase_date = '';
-	foreach($trial_product_ids as $id){
-		if( isset( $products_ordered[ $id ] ) ){
-			$trial_length = get_post_meta($id, '_subscription_length', true);
-			$trial_purchase_date = $products_ordered[ $id ];
-			$expiration_date = date( "Y-m-d H:i:s", strtotime("+" . $trial_length . " days", strtotime( $trial_purchase_date )));
-			return array('trial_length' => $trial_length, 'purchase_date' => $trial_purchase_date, 'expiration_date' => $expiration_date);
+function get_trial_end_date(){
+	$subscriptions = wcs_get_users_subscriptions();
+	
+	foreach($subscriptions as $s){
+		$related_orders_ids = $s->get_related_orders();
+
+		foreach ( $related_orders_ids as $order_id ) {
+		    $order = new WC_Order( $order_id );
+		    $items = $order->get_items();
+
+		    foreach($items as $key => $item){
+		    	$subscription_type = wc_get_order_item_meta($key, 'subscription-type', true);
+		    	
+		    	if($subscription_type == 'trial'){
+					$subscription = wcs_get_subscription( $s->ID );
+					return $subscription->get_date( 'end' );
+		    	}
+		    }
 		}
 	}
+
+	return 0;
 
 }
 
@@ -403,16 +401,8 @@ function get_user_subscription_level()
 	return $user_subscription;
 }
 
-function is_user_fx_customer( $include_trial = true )
+function is_user_fx_customer()
 {
-	if($include_trial){
-		$trial_products = array( 2879, 2873 );
-		foreach($trial_products as $product){
-			if( wcs_user_has_subscription( '', $product, 'active') ){
-				return true;
-			} 
-		}
-	}
 	$subscription_products = array( 2699, 47 );
 	foreach($subscription_products as $s){
 		if( wcs_user_has_subscription( '', $s, 'active') ){
@@ -423,23 +413,14 @@ function is_user_fx_customer( $include_trial = true )
 }
 
 
-function is_user_fx_distributor( $include_trial = true )
+function is_user_fx_distributor()
 {
-	if($include_trial){
-		$trial_products = array( 2881 );
-		foreach($trial_products as $product){
-			if( wcs_user_has_subscription( '', $product, 'active') ){
-				return true;
-			} 
-		}
-	}
 	$subscription_products = array( 48 );
 	foreach($subscription_products as $s){
 		if( wcs_user_has_subscription( '', $s, 'active') ){
 			return true;
 		} 
 	}
-
 	return false;  
 }
 
@@ -452,61 +433,6 @@ function user_has_autotrader()
 function user_has_coaching()
 {
 	return wcs_user_has_subscription( '', 50, 'active');
-}
-
-function active_subscription_list($from_date=null, $to_date=null)
-{
-
-    // Get all customer orders
-    $subscriptions = get_posts( array(
-        'numberposts' => -1,
-        'post_type'   => 'shop_subscription', // Subscription post type
-        'post_status' => 'wc-in-active', // Active subscription
-        'post_author' => '2913', // by user_id
-        'orderby' => 'post_date', // ordered by date
-        'order' => 'ASC',
-        'date_query' => array( // Start & end date
-            array(
-                'after'     => $from_date,
-                'before'    => $to_date,
-                'inclusive' => true,
-            ),
-        ),
-    ) );
-    
-    //return $subscriptions;
-
-    // Styles (temporary, only for demo display) should be removed
-    echo "<style>
-        .subscription_list th, .subscription_list td{border:solid 1px #666; padding:2px 5px;}
-        .subscription_list th{font-weight:bold}
-        .subscription_list td{text-align:center}
-    </style>";
-
-    // Displaying list in an html table
-    echo "<table class='shop_table subscription_list'>
-        <tr>
-            <th>" . __( 'User ID', 'your_theme_domain' ) . "</th>
-            <th>" . __( 'User Name', 'your_theme_domain' ) . "</th>
-            <th>" . __( 'Subscription Id', 'your_theme_domain' ) . "</th>
-            <th>" . __( 'Date', 'your_theme_domain' ) . "</th>
-        </tr>
-            ";
-    // Going through each current customer orders
-    foreach ( $subscriptions as $subscription ) {
-        $subscription_date = array_shift( explode( ' ', $subscription->post_date ) ); // subscription date
-        $subscr_meta_data = get_post_meta($subscription->ID); // subscription meta data
-        $customer_id = $subscr_meta_data['_customer_user'][0]; // customer ID
-        $customer_name = $subscr_meta_data['_billing_first_name'][0] . ' ' . $subscr_meta_data['_billing_last_name'][0]; // customer name
-        $wc_authorizeddotnet_gateway_subscription_id = $subscr_meta_data['wc_authorizeddotnet_gateway_subscription_id'][0];	// subscription ID
-        echo "</tr>
-				<td>$customer_id</td>
-                <td>$customer_name</td>
-                <td>$wc_authorizeddotnet_gateway_subscription_id</td>
-                <td>$subscription_date</td>
-            </tr>";
-    }
-    echo '</table>';
 }
 
 function get_customer_orders($user_id){

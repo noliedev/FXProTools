@@ -152,22 +152,9 @@ function custom_override_default_locale_fields( $fields ) {
 	<div id="checkout-panel-3" class="panel panel-default panel-gray">
 		<div class="panel-body">
 			<h5>Order Summary <span>Price:</span></h5>
-			<div class="term-wrap row">
-				<div class="col-md-1 col-xs-1">
-					<input type="checkbox" value="1">
-				</div>
-				<div class="col-md-11 col-xs-11 no-pad-left">
-					<strong> <u>Yes, please don't let my access expire.</u></strong><br>
-					<span class="term-wrap-text">
-						After 30 days please keep my ASPIRE membership running (until I choose to cancel) for $37/month.
-						<br><span class="highlight">Includes Personal Coach.</span>
-					</span>
-				</div>
-				<br>
-				<div class="col-md-1 col-xs-1">
-					<input type="checkbox" value="1">
-				</div>
-				<div class="col-md-11 col-xs-11 no-pad-left">
+			<div class="term-wrap">
+				<div class="no-pad-left">
+					<input type="checkbox" class="woocommerce-form__input woocommerce-form__input-checkbox" name="terms" id="terms">
 					<span class="term-wrap-text">
 						I agree with the
 						<a href="#" onclick="window.open('#', 'newwindow', 'width=500, height=700'); return false">Purchase Agreement</a>,
@@ -179,7 +166,7 @@ function custom_override_default_locale_fields( $fields ) {
 			</div>
 			<div class="col-md-12 submit-btn-wrap">
 				<div class="text-center">
-					<button type="submit" id="submit-btn" class="btn btn-danger btn-lg m-b-md btn-lg-w-text">Finish My Order <span class="fa fa-angle-right"></span> </button>
+					<button type="submit" id="submit-btn" name="woocommerce_checkout_place_order" id="submitorder" class="btn btn-danger btn-lg m-b-md btn-lg-w-text">Finish My Order <span class="fa fa-angle-right"></span> </button>
 				</div>
 			</div>
 	 	</div>
@@ -217,10 +204,10 @@ function custom_override_default_locale_fields( $fields ) {
 
 <?php  
 //sample customer data
-$recent_orders=get_posts( array(
+$recent_orders = get_posts( array(
         'post_type' => 'shop_order', 
         'post_status' => 'wc-completed',
-        'numberposts' => 7
+        'numberposts' => 15
 ) );
 $customer_recent_orders = array();
 $counter = 0;
@@ -232,7 +219,7 @@ foreach($recent_orders as $recent_order){
 		$customer_recent_orders[$counter]['image'] = "https://s3.amazonaws.com/da-my/proof/229/map_229448.png";
 		$customer_recent_orders[$counter]['name'] = get_user_meta($order->user_id, 'first_name',true) . ' ' . get_user_meta($order->user_id, 'last_name',true) . ', ' . get_user_meta($order->user_id, 'billing_city',true) . ', ' . get_user_meta($order->user_id, 'billing_state',true);
 		$customer_recent_orders[$counter]['activity'] = "Recently ordered " . $item['name'];
-		$customer_recent_orders[$counter]['time'] = time_elapsed_string($recent_order->post_date);
+		$customer_recent_orders[$counter]['time'] = random_checkout_time_elapsed();
 		$counter++;
     }
 }
@@ -271,9 +258,34 @@ foreach($recent_orders as $recent_order){
 
 		jQuery('#hide-checkout-popup').click(function(){
 			jQuery('#checkout-popoup').modal('hide');
-			$.cookie('checkout_popup_cookie', 'active', { expires: .5 });
+			$.cookie('checkout_popup_cookie', 'active', { expires: 12 });
 		});
 	});
 </script>
 
 
+<?php
+$trial_packages = array( 48 => 2881, 47 => 2879, 2699 => 2873);
+$trial_version_available = false;
+
+foreach( WC()->cart->get_cart() as $cart_item ){
+    if( isset( $trial_packages[ $cart_item['product_id'] ] ) ){
+    	$trial_version_available = true;
+    }
+}
+
+if ($trial_version_available):
+?>
+<script type="text/javascript">
+	jQuery(document).mouseleave(function () {
+		if( ! $.cookie('checkout_popup_cookie') ){
+			jQuery('#checkout-popoup').modal('show');
+		}
+	});
+
+	jQuery('#hide-checkout-popup').click(function(){
+		jQuery('#checkout-popoup').modal('hide');
+		$.cookie('checkout_popup_cookie', 'active', { expires: 12 });
+	});
+</script>
+<?php endif; ?>

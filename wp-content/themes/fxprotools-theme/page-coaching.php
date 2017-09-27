@@ -1,8 +1,6 @@
 <?php
 	$product_id = 50; 
-	$wp_query->query_vars['_prod_id'] = $product_id;
-	$_product = wc_get_product( $product_id );
-	$wp_query->query_vars['_prod_data'] = $_product;
+	$product = wc_get_product( $product_id );
 ?>
 
 <?php get_header(); ?>

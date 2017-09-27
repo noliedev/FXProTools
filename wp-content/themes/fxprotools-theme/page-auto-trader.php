@@ -1,9 +1,7 @@
 <?php
 	$product_id = 49; //auto trader package
-	$wp_query->query_vars['_prod_id'] = $product_id;
+	$product = wc_get_product( $product_id );
 	$courses = get_courses_by_product_id( $product_id  ); 
-	$_product = wc_get_product( $product_id );
-	$wp_query->query_vars['_prod_data'] = $_product;
 ?>
 <?php get_header(); ?>
 

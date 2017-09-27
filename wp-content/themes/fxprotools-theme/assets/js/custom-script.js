@@ -85,8 +85,6 @@ jQuery(document).ready( function($) {
 	    $("#checkout-panel-2 .panel-body").append('<div class="form-group row" id="'+ checkout_panel_2[i] +'">'+ html +'</div>');
 	}
 	$('#checkout-panel-3').each(function(){
-		$('#panel-checkout-payment').after($(this)[0].outerHTML);
-		$(this).remove();
-		$('#checkout-panel-3 h5').after($('.woocommerce-checkout-review-order-table')[0].outerHTML);
+		$('.woocommerce-checkout-review-order-table').clone().insertAfter("#checkout-panel-3 h5");
 	});
 });

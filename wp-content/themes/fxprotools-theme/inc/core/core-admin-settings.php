@@ -161,14 +161,6 @@ if(!class_exists('AdminSettings')){
 						'placeholder' => 'Short Description',
 						'name' => esc_html__( 'Short Description', 'fxprotools' ),
 					),
-					array(
-						'id' => $prefix . 'trial_length',
-						'name' => esc_html__( 'Trial Length', 'fxprotools' ),
-						'desc' => esc_html__( 'Trial Length in Days (If a trial product)', 'fxprotools' ),
-						'placeholder' => '14',
-						'min' => '1',
-						'max' => '30',
-					),
 				),
 			);
 

@@ -18,8 +18,34 @@
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-}
+} 
 ?>
+<?php if ($gateway->id == 'authorize_net_cim_credit_card'): ?>
+<li class="wc_payment_method payment_method_<?php echo $gateway->id; ?>">
+	<input id="payment_method_<?php echo $gateway->id; ?>" type="radio" class="input-radio" name="payment_method" value="<?php echo esc_attr( $gateway->id ); ?>" <?php checked( $gateway->chosen, true ); ?> data-order_button_text="<?php echo esc_attr( $gateway->order_button_text ); ?>" />
+	
+	
+ 	<div class="panel panel-default">
+		<div class="panel-heading">STEP 3: PAYMENT INFORMATION</div>
+		<div class="panel-body">
+			<div class="panel-note">
+				<p>This website utilizes some of the most advanced techniques to protect your information including technical, administrative and even physical safeguards againts unauthorized access, misuse and improper disclosure.</p>
+			</div>
+	 		<div class="form-group row ">
+			    <div class="col-md-9 col-xs-12">
+				    <div class="row">
+				    	<div class="col-md-12 payment-form">
+				    		<?php if ( $gateway->has_fields() || $gateway->get_description() ) : ?>
+				     			<?php $gateway->payment_fields(); ?>
+				     		<?php endif; ?>
+				    	</div>
+					</div>
+				</div>
+	 		</div>
+		 </div>
+	</div>
+</li>
+<?php else: ?>
 <li class="wc_payment_method payment_method_<?php echo $gateway->id; ?>">
 	<input id="payment_method_<?php echo $gateway->id; ?>" type="radio" class="input-radio" name="payment_method" value="<?php echo esc_attr( $gateway->id ); ?>" <?php checked( $gateway->chosen, true ); ?> data-order_button_text="<?php echo esc_attr( $gateway->order_button_text ); ?>" />
 
@@ -32,3 +58,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	<?php endif; ?>
 </li>
+<?php endif; ?>

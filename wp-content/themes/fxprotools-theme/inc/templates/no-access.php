@@ -1,3 +1,10 @@
+<?php
+global $product;
+$product_name = $product->get_title();
+$product_price = $product->get_sign_up_fee();
+$product_price = $product_price == 0 ? $product->get_regular_price() : $product_price;
+
+?>
 <div class="fx-access-denied-container">
 	<div class="fx-access-denied-top">
 		<div class="container">
@@ -60,11 +67,11 @@
 						<div class="heading">
 							<p class="text-left">It looks like in order for your to see this page / content you will need to upgrade your account, see details below:</p>
 							<h3 class="text-normal">Forex & Binary Options</h3>
-							<h1 class="m-t-none"><?php echo $wp_query->query_vars['_prod_data']->get_title(); ?></h1>
+							<h1 class="m-t-none"><?php echo $product_name; ?></h1>
 						</div>
 						<div class="text-center">
-							<h2 class="m-b-md"><?php echo wc_price($wp_query->query_vars['_prod_data']->get_regular_price()); ?></h2>
-							<a href="<?php echo get_the_permalink($wp_query->query_vars['_prod_id']); ?>" class="btn btn-danger block btn-lg m-b-md btn-lg-w-text">
+							<h2 class="m-b-md"><?php echo wc_price( $product_price ); ?></h2>
+							<a href="<?php echo get_the_permalink($product->ID); ?>" class="btn btn-danger block btn-lg m-b-md btn-lg-w-text">
 								Get Instant Access Now!
 								<span>Training + Forex &amp; Binary Auto Trader</span>
 							</a>
@@ -77,7 +84,7 @@
 				<div class="note">
 					<img src="http://via.placeholder.com/600x300?text=Video" class="img-responsive centered-block m-b-sm">
 					<p class="text-center">Find out about becoming a trader during the next free webinar.</p>
-					<a href="<?php echo get_the_permalink($wp_query->query_vars['_prod_id']); ?>" class="btn btn-danger block btn-lg m-b-md btn-lg-w-text">Upgrade Your Account!</a>
+					<a href="<?php echo get_the_permalink($product->ID); ?>" class="btn btn-danger block btn-lg m-b-md btn-lg-w-text">Upgrade Your Account!</a>
 				</div>
 			</div>
 		</div>
