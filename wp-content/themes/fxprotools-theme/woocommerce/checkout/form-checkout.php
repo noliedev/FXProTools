@@ -176,7 +176,7 @@ function custom_override_default_locale_fields( $fields ) {
 
 <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>
 
-<div class="modal fade" id="checkout-popoup" tabindex="-1" data-backdrop="static" data-keyboard="false">
+<div class="modal fade normal checkout-popup" id="checkout-popup-1" tabindex="-1" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <button type="button" id="hide-checkout-popup" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
@@ -191,7 +191,7 @@ function custom_override_default_locale_fields( $fields ) {
       	<p>So go ahead and <a href="#">take advantage of this no-risk</a>, $1 TRIAL OFFER right now because you will never see it again once you leave this page.</p>
       	<p><strong>LAST CHANCE!</strong> Just click the "<strong>GET STARTED FOR $1.00 TODAY</strong>" button below... so can learn how to start earning a full time income from home.</p>
       	<div class="text-center">
-      		<a href="#" class="btn btn-success btn-lg m-b-md btn-lg-w-text">
+      		<a href="#" class="btn btn-success btn-lg m-b-md btn-lg-w-text btn-trial">
 				Get Your Access For $1.00 Trial Now!
 				<span>Sign-up takes less than 60 seconds. Pick a plan to get started!</span>
 			</a>
@@ -202,89 +202,112 @@ function custom_override_default_locale_fields( $fields ) {
   </div>
 </div>
 
+<div class="modal fade trial checkout-popup" id="checkout-popup-2" tabindex="-1" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <button type="button" id="hide-checkout-popup" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+      	<h2 class="text-center">WAIT!!</h2>
+      	<h3 class="text-center">PLEASE FINISH THE TRIAL CHECKOUT...</h3>
+      	<br>
+      	<p>P.S. Immediately after clicking the red button above, you will get <a href="#">instant access</a> to the Training Website.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade default checkout-popup" id="checkout-popup-3" tabindex="-1" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <button type="button" id="hide-checkout-popup" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+      	<h2 class="text-center">WAIT!!</h2>
+      	<h3 class="text-center">THIS IS ONLY A ONE TIME OFFER!...</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php  
-//sample customer data
-$recent_orders = get_posts( array(
-        'post_type' => 'shop_order', 
-        'post_status' => 'wc-completed',
-        'numberposts' => 15
-) );
-$customer_recent_orders = array();
-$counter = 0;
 
-foreach($recent_orders as $recent_order){
-	$order = new WC_Order( $recent_order->ID );
-	$items = $order->get_items();
-    foreach( $items as $item ) {
-		$customer_recent_orders[$counter]['image'] = "https://s3.amazonaws.com/da-my/proof/229/map_229448.png";
-		$customer_recent_orders[$counter]['name'] = get_user_meta($order->user_id, 'first_name',true) . ' ' . get_user_meta($order->user_id, 'last_name',true) . ', ' . get_user_meta($order->user_id, 'billing_city',true) . ', ' . get_user_meta($order->user_id, 'billing_state',true);
-		$customer_recent_orders[$counter]['activity'] = "Recently ordered " . $item['name'];
-		$customer_recent_orders[$counter]['time'] = random_checkout_time_elapsed();
-		$counter++;
-    }
-}
-?>
+	$recent_orders = get_posts( array(
+	        'post_type' => 'shop_order', 
+	        'post_status' => 'wc-completed',
+	        'numberposts' => 15
+	) );
+	$customer_recent_orders = array();
+	$counter = 0;
 
-<script type="text/javascript">
-	jQuery(document).ready(function(){
-		var customer_notif = <?php echo json_encode($customer_recent_orders) ?>;
-		var customer_size = customer_notif.length;
-		var counter = 1;
+	foreach($recent_orders as $recent_order){
+		$order = new WC_Order( $recent_order->ID );
+		$items = $order->get_items();
+	    foreach( $items as $item ) {
+			$customer_recent_orders[$counter]['image'] = "https://s3.amazonaws.com/da-my/proof/229/map_229448.png";
+			$customer_recent_orders[$counter]['name'] = get_user_meta($order->user_id, 'first_name',true) . ' ' . get_user_meta($order->user_id, 'last_name',true) . ', ' . get_user_meta($order->user_id, 'billing_city',true) . ', ' . get_user_meta($order->user_id, 'billing_state',true);
+			$customer_recent_orders[$counter]['activity'] = "Recently ordered " . $item['name'];
+			$customer_recent_orders[$counter]['time'] = random_checkout_time_elapsed();
+			$counter++;
+	    }
+	}
+	?>
 
-		jQuery('[data-toggle="popover"]').popover(); 
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+			var customer_notif = <?php echo json_encode($customer_recent_orders) ?>;
+			var customer_size = customer_notif.length;
+			var counter = 1;
 
-		setInterval(function(){
-			if(counter > customer_size){
-				counter = 1;
-			}
-			var customer_index = counter - 1;
-			new Noty({
-				type: 'alert',
-				layout: 'bottomLeft',
-			    text: '<div class="customer-notif"><img src="'+ customer_notif[customer_index].image +'"><div class="customer-notif-main"><div class="customer-name">'+ customer_notif[customer_index].name +'</div><div class="customer-activity">'+ customer_notif[customer_index].activity +'</div><div class="customer-time">'+ customer_notif[customer_index].time +'</div></div></div>',
-			    theme: 'relax',
-			    progressBar: false,
-			    timeout: 7000,
-			    visibilityControl: false
-			}).show();
-			counter++;
-		},10000);
+			jQuery('[data-toggle="popover"]').popover(); 
 
-		jQuery(document).mouseleave(function () {
-			if( ! $.cookie('checkout_popup_cookie') ){
-				jQuery('#checkout-popoup').modal('show');
-			}
+			setInterval(function(){
+				if(counter > customer_size){
+					counter = 1;
+				}
+				var customer_index = counter - 1;
+				new Noty({
+					type: 'alert',
+					layout: 'bottomLeft',
+				    text: '<div class="customer-notif"><img src="'+ customer_notif[customer_index].image +'"><div class="customer-notif-main"><div class="customer-name">'+ customer_notif[customer_index].name +'</div><div class="customer-activity">'+ customer_notif[customer_index].activity +'</div><div class="customer-time">'+ customer_notif[customer_index].time +'</div></div></div>',
+				    theme: 'relax',
+				    progressBar: false,
+				    timeout: 7000,
+				    visibilityControl: false
+				}).show();
+				counter++;
+			},10000);
 		});
-
-		jQuery('#hide-checkout-popup').click(function(){
-			jQuery('#checkout-popoup').modal('hide');
-			$.cookie('checkout_popup_cookie', 'active', { expires: 12 });
-		});
-	});
-</script>
+	</script>
 
 
 <?php
-$trial_packages = array( 48 => 2881, 47 => 2879, 2699 => 2873);
-$trial_version_available = false;
+$popup_type = '';
 
 foreach( WC()->cart->get_cart() as $cart_item ){
-    if( isset( $trial_packages[ $cart_item['product_id'] ] ) ){
-    	$trial_version_available = true;
-    }
+	if($cart_item['variation']['attribute_subscription-type'] == 'normal'){
+		$popup_type = 'normal';
+		$trial_product_link = get_permalink($cart_item['product_id']) . '?attribute_subscription-type=trial';
+	}
+	elseif($cart_item['variation']['attribute_subscription-type'] == 'trial'){
+		$popup_type = 'trial';
+	}
+	else{
+		$popup_type = 'default';
+	}
 }
 
-if ($trial_version_available):
+if ( isset($popup_type) ):
 ?>
 <script type="text/javascript">
 	jQuery(document).mouseleave(function () {
 		if( ! $.cookie('checkout_popup_cookie') ){
-			jQuery('#checkout-popoup').modal('show');
+			<?php if($popup_type == 'normal'): ?>
+				jQuery('.checkout-popup.<?php echo $popup_type;?>').find('.btn-trial').attr('href', '<?php echo $trial_product_link;?>');
+			<?php endif; ?>
+			jQuery('.checkout-popup.<?php echo $popup_type;?>').modal('show');
 		}
 	});
-
 	jQuery('#hide-checkout-popup').click(function(){
-		jQuery('#checkout-popoup').modal('hide');
+		jQuery('.checkout-popup.<?php echo $popup_type;?>').modal('hide');
 		$.cookie('checkout_popup_cookie', 'active', { expires: 12 });
 	});
 </script>
