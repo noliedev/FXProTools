@@ -58,6 +58,7 @@ foreach($_POST as $user_key => $user_value)
 								<li><a href="#d" data-toggle="tab">Memberships</a></li>
 								<li><a href="#e" data-toggle="tab">Genealogy</a></li>
 								<li><a href="#f" data-toggle="tab">Recent Activity</a></li>
+								<li><a href="<?php echo wp_logout_url('/login/'); ?>">Logout</a></li>
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="a">
@@ -265,6 +266,35 @@ foreach($_POST as $user_key => $user_value)
 								</div>
 								<div class="tab-pane fade" id="d">
 									<p class="text-bold">Memberships Section</p>
+									<?php  
+										$customer_subscriptions = get_posts( array(
+										    'numberposts' => -1,
+										    'meta_key'    => '_customer_user', 
+										    'meta_value'  => $_GET['id'], // Or $user_id
+										    'post_type'   => 'shop_subscription', // WC orders post type
+										    'post_status' => 'wc-active' // Only orders with status "completed"
+										) );
+										//print_r($customer_subscriptions);
+										// Iterating through each post subscription object
+										foreach( $customer_subscriptions as $customer_subscription ){
+
+										    // IMPORTANT HERE: Getting an instance of the WC_Subscription object <==  <==  <==  <==
+										    $subscription = new WC_Subscription($customer_subscription->ID);
+
+										    // Getting the related ORDER ID   <==  <==  <==  <==  <==  <==  <==  <==  <==  <==  <==
+										    $order_id = $subscription->order->id;
+
+										    // Getting an instance of the related WC_ORDER object   <==  <==  <==  <==  <==  <== 
+										    $order = $subscription->order;
+										    //echo '<pre>';print_r($order);echo '</pre>';
+
+										    //print_r($customer_subscriptions);
+										    // Optionally: displaying the WC_Subscription object raw data
+										    //echo '<pre>';print_r($subscription);echo '</pre>';
+										    
+										    //echo '<pre>';print_r($subscription->get_related_orders());echo '</pre>';
+										}
+									?>
 								</div>
 								<div class="tab-pane fade" id="e">
 									<p class="text-bold">Genealogy Section</p>
@@ -279,26 +309,24 @@ foreach($_POST as $user_key => $user_value)
 											</tr>
 										</thead>
 										<tbody>
+											<?php  
+											$counter = 1;
+											$recent_activity = get_user_meta( get_current_user_id(), "track_user_history" )[0];
+											$reverse = array_reverse($recent_activity, true);
+											foreach($reverse as $activity){
+											?>
 											<tr>
-												<td>Page Title Goes Here</td>
-												<td>http://urlgoeshere.com?ref=username</td>
-												<td>1 Day Ago</td>
+												<td><?php echo $activity['title']; ?></td>
+												<td><?php echo $activity['link']; ?></td>
+												<td><?php echo time_elapsed_string($activity['time']); ?></td>
 											</tr>
-											<tr>
-												<td>Page Title Goes Here</td>
-												<td>http://urlgoeshere.com?ref=username</td>
-												<td>2 Days Ago</td>
-											</tr>
-											<tr>
-												<td>Page Title Goes Here</td>
-												<td>http://urlgoeshere.com?ref=username</td>
-												<td>15 Day Ago</td>
-											</tr>
-											<tr>
-												<td>Page Title Goes Here</td>
-												<td>http://urlgoeshere.com?ref=username</td>
-												<td>1 Month Ago</td>
-											</tr>
+											<?php
+													if($counter > 10){
+														break;
+													}
+													$counter++;
+												}
+											?>
 										</tbody>
 									</table>
 								</div>

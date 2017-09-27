@@ -70,7 +70,7 @@
 				</div>
 				<div class="panel panel-default">
 					<h2>Get Live Training?</h2>
-					<h3 class="text-center">You can join our experts live on our next online webinar for an in-depth look at our platform and recieve free forex tips.</h3>
+					<h3 class="text-center">You can join our experts live on our next on line webinar for an in-depth look at our platform and recieve free forex tips.</h3>
 					<div class="text-center m-b-md btn-holder">
 						<a href="#" class="btn btn-success btn-lg">Reserve Your Spot</a>
 					</div>

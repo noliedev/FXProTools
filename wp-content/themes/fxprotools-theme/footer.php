@@ -22,7 +22,7 @@
 					<ul class="footer-nav">
 						<li><a href="#">IBO Agreement</a></li>
 						<li><a href="#">Earnings Disclaimer</a></li>
-						<li><a href="#">Policies &amp; Procedures</a></li>
+						<li><a href="?php echo wp_logout_url('/login/'); ?>">Logout</a></li>
 					</ul>
 				</div>
 				<div class="clearfix"></div>
