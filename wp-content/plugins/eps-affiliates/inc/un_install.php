@@ -86,7 +86,10 @@
 		  		$tbl_prefix.'afl_user_transactions_overview',
 		  		
 		  		$tbl_prefix.'afl_purchases',
+		  		
 		  		$tbl_prefix.'afl_tree_last_insertion_positions',
+		  		$tbl_prefix.'afl_unilevel_tree_last_insertion_positions',
+
 		  		$tbl_prefix.'afl_customer',
 		  		$tbl_prefix.'afl_log_messages',
 		  		$tbl_prefix.'afl_global_pool_bonus_transactions',

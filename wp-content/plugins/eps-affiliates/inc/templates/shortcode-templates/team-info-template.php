@@ -33,17 +33,30 @@
 			    <div class="row">
 			      <div class="col-md-6">
 			      	<ul class="profile-info">
-			      		<li class="profile-header">Sponsor Info:</li>
-			      		<li>Sponsor Name : 		<?php echo !empty($sponsor->display_name) ? $sponsor->display_name : 'Not Available';?> </li>
-			      		<li>Sponsor MLM ID : 	<?php echo !empty($sponsor_node->remote_user_mlmid) ? $sponsor_node->remote_user_mlmid : 'Not Available';?> </li>
-			      		<li>Sponsor Email : 	<?php echo !empty($sponsor->user_email) ? $sponsor->user_email : 'Not Available';?></li>
+			      		<li class="profile-header">Team Info:</li>
+			      		<li>Team/Leg ID : <?php echo !empty($node->display_name) ? $node->display_name : 'Not Available';?> </li>
+			      		<li>Team/Leg Volume:<?=  apply_filters('afl_distributor_team_volume',$node->uid); ?> </li>
+			      		<li>Personal Volume : 	<?= apply_filters('afl_distributor_personal_volume',$node->uid);?></li>
 			      	</ul>
 			      </div>
 			      <div class="col-md-6">
-			      <div></div>
-			      	<a href="?page=abc" class="button-link">View Direct Upline</a>
+				      <div class="row">
+				      	<div class="col-md-6">
+				      		<a href="#" class="button-link"><?= __('Distributors').' : '.apply_filters('afl_my_distributors_count',$node->uid); ?></a>
+				      	</div>
+				      	<div class="col-md-6">
+				      		<a href="#" class="button-link"><?= __('Customers').' : '.apply_filters('afl_my_customers_count',$node->uid); ?></a>
+				      	</div>
+				      </div>
 			      </div>
 			    </div>
+
+	      	<div class="row">
+		      	<div class="col-md-6">
+		      		<a href="#" class="button-link"><?= __('View Team Tree'); ?></a>
+		      	</div>
+		      </div>
+		      
 			  </div>
 		  </div>
 		</div>

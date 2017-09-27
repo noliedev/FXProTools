@@ -256,6 +256,25 @@
 					'#menu_slug' 			=> 'affiliate-eps-my-customers', 
 					'#page_callback' 	=> 'afl_my_customers', 
 				);
+
+				// $menu['holding_toggle_placement'] = array(
+				// 	// '#parent'					=> 'no-parent',
+				// 	'#parent'					=> 'affiliate-eps-user-network',
+				// 	'#page_title'			=> __( '', '' ),    
+				// 	'#menu_title' 		=> __( 'Holding tank toggle placement', 'Holding-tank-toggle-placement' ),    
+				// 	'#access_callback'=> 'afl_network_view', 
+				// 	'#menu_slug' 			=> 'affiliate-eps-user-holding-toggle-placement', 
+				// 	'#page_callback' 	=> 'afl_holding_tank_toggle_placement', 
+				// );
+				$menu['holding_genealogy_toggle_placement'] = array(
+					// '#parent'					=> 'no-parent',
+					'#parent'					=> 'affiliate-eps-user-network',
+					'#page_title'			=> __( '', '' ),    
+					'#menu_title' 		=> __( 'Holding tank Genealogy toggle placement', 'Holding-tank-genealogy-toggle-placement' ),    
+					'#access_callback'=> 'afl_network_view', 
+					'#menu_slug' 			=> 'affiliate-eps-user-holding-genealogy-toggle-placement', 
+					'#page_callback' 	=> 'afl_holding_tank_genealogy_toggle_placement', 
+				);
 				afl_system_admin_menu($menu);
 
 			}
@@ -347,6 +366,17 @@
 					'#menu_slug' 			=> 'affiliate-eps-unilevel-my-customers', 
 					'#page_callback' 	=> 'afl_unilevel_my_customers', 
 				);
+
+				$menu['holding_genealogy_toggle_placement'] = array(
+					// '#parent'					=> 'no-parent',
+					'#parent'					=> 'affiliate-eps-unilevel-user-network',
+					'#page_title'			=> __( '', '' ),    
+					'#menu_title' 		=> __( 'Holding tank Genealogy toggle placement', 'Holding-tank-genealogy-toggle-placement' ),    
+					'#access_callback'=> 'afl_unilevel_network_view', 
+					'#menu_slug' 			=> 'affiliate-eps-user-unilevel-holding-genealogy-toggle-placement', 
+					'#page_callback' 	=> 'afl_unilevel_holding_tank_genealogy_toggle_placement', 
+				);
+
 				afl_system_admin_menu($menu);
 
 			}

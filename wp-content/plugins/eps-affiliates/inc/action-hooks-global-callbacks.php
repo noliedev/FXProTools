@@ -85,6 +85,10 @@
 			do_action('eps_affiliates_calculate_affiliate_rank', $uid);
 		}
 
+		$category = 'Product Purchase';
+		if ( !empty($args['category'])) {
+			$category = $args['category'];
+		}
 		//insert details into transactions table
 		$afl_date_splits = afl_date_splits(afl_date());
 	  $transaction = array();
@@ -98,8 +102,8 @@
     $transaction['hidden_transaction'] 	= 0;
     $transaction['credit_status'] 			= 0;
     $transaction['amount_paid'] 				= afl_commerce_amount($args['afl_point']);
-    $transaction['category'] 						= 'Product Purchase';
-    $transaction['notes'] 							= 'Product Purchase';
+    $transaction['category'] 						= $category;
+    $transaction['notes'] 							= $category;
     $transaction['transaction_day'] 		= $afl_date_splits['d'];
     $transaction['transaction_month'] 	= $afl_date_splits['m'];
     $transaction['transaction_year'] 		= $afl_date_splits['y'];
@@ -311,6 +315,15 @@
 													'uid' => $uid
 												)
 											);
+		 			$update_id = $wpdb->update(
+									$table_prefix.'afl_unilevel_user_genealogy',
+									array(
+										'member_rank' => $i
+									),
+									array(
+										'uid' => $uid
+									)
+								);
 		 		endif;
 
 				// pr ($i) ;
@@ -320,6 +333,13 @@
 					//update rank in user downlines
 					$update_id = $wpdb->update(
 							_table_name('afl_user_downlines'),
+							array(
+								'member_rank' => $i
+							),
+							array('downline_user_id' => $uid)
+						);
+					$update_id = $wpdb->update(
+							_table_name('afl_unilevel_user_downlines'),
 							array(
 								'member_rank' => $i
 							),
@@ -889,3 +909,348 @@
 
 	    return $response;
  	}
+ /*
+  * ----------------------------------------------------
+  * Give fast start bonus
+  * ----------------------------------------------------
+ */
+  function afl_calculate_fast_start_bonus_callback($uid = '', $sponsor_id = ''){
+		require_once EPSAFFILIATE_PLUGIN_DIR . 'inc/plan/matrix/fast-start-bonus-calc.php';
+	 	if ( function_exists('calculate_distributor_fast_start_bonus')) {
+	 		calculate_distributor_fast_start_bonus( $sponsor_id, $uid );
+	 	}
+  }
+
+/*
+ * ----------------------------------------------------
+ * Provide fastart bonus pv when achieve fsb
+ * ----------------------------------------------------
+*/
+ function afl_calculate_fast_start_bonus_pv_callback ($uid = '') {
+ 	if ( !empty($uid)) {
+ 		if ( afl_variable_get('enable_fast_start_bonus')) {
+ 			if ( afl_variable_get('fast_start_bonus_pv')) {
+ 					$afl_date_splits = afl_date_splits(afl_date());
+				  $transaction = array();
+			    $transaction['uid'] 								= $uid;
+			    $transaction['associated_user_id'] 	= $uid;
+			    $transaction['currency_code'] 			= afl_currency();
+			    $transaction['order_id'] 						= 1;
+			    $transaction['int_payout'] 					= 0;
+			    $transaction['hidden_transaction'] 	= 0;
+			    $transaction['credit_status'] 			= 1;
+			    $transaction['amount_paid'] 				= afl_commerce_amount(afl_variable_get('fast_start_bonus_pv'));
+			    $transaction['afl_points'] 					= afl_commerce_amount(afl_variable_get('fast_start_bonus_pv'));
+			    $transaction['category'] 						= 'FAST START BONUS PV';
+			    $transaction['notes'] 							= 'FAST START BONUS PV';
+			    $transaction['transaction_day'] 		= $afl_date_splits['d'];
+			    $transaction['transaction_month'] 	= $afl_date_splits['m'];
+			    $transaction['transaction_year'] 		= $afl_date_splits['y'];
+			    
+			    $transaction['transaction_week'] 		= $afl_date_splits['w'];
+			    $transaction['transaction_date'] 		= afl_date_combined($afl_date_splits);
+			    $transaction['created'] 						= afl_date();
+			    $transaction['additional_notes'] 		= 'Fast start bonus pv';
+				  //to mbr transaction
+					$res = apply_filters('eps_commerce_purchase_complete',$transaction);
+ 			}
+ 		}
+ 	}
+ }
+/*
+ * ----------------------------------------------------
+ * Rank holding days template
+ * ----------------------------------------------------
+*/
+ 	function afl_rank_holding_days_template_callback ($uid = '') {
+ 		$days = _user_current_rank_holding_days($uid);
+ 		return afl_get_template( 'eps-affiliate-holding-rank-days.php', array( 'days' => $days ) );
+ 	}
+/*
+ * ----------------------------------------------------
+ * my customers total count
+ * ----------------------------------------------------
+*/
+	function afl_my_customers_count_callback ($uid = '') {
+		return count(_my_customers_uids($uid));
+	}
+/*
+ * ----------------------------------------------------
+ * my distributors total count
+ * ----------------------------------------------------
+*/
+	function afl_my_distributors_count_callback ($uid = '') {
+		return _get_user_distributor_count($uid);
+	}
+/*
+ * ----------------------------------------------------
+ * customers count template
+ * ----------------------------------------------------
+*/
+	function afl_my_customers_count_template_callback () {
+		return afl_get_template( 'plan/eps-affiliate-customer-count-template.php');
+	}
+/*
+ * ----------------------------------------------------
+ * distributor count template
+ * ----------------------------------------------------
+*/
+	function afl_my_distributors_count_template_callback () {
+		return afl_get_template( 'plan/eps-affiliate-distributor-count-template.php');
+	}
+
+
+
+/**
+ | ---------------------------------------------------------------------------------------------------
+ | All the ewallet summary blocks actions and filters
+ | --------------------------------------------------------------------------------------------------
+ | 
+ | 
+ | 
+*/
+
+/*
+ * ---------------------------------------------------
+ * E-walet today earnings
+ * ---------------------------------------------------
+*/
+	function afl_ewallet_today_earnings_callback ($uid = '') {
+		if (empty($uid)) {
+			$uid = get_uid();
+		}
+
+		$afl_date = afl_date();
+		$query = array();
+		$query['#select'] = _table_name('afl_user_transactions');
+		$query['#where'] = array(
+			'uid = '.$uid,
+			// 'credit_status = 1',
+			'deleted = 0',
+			'hidden_transaction = 0'
+		);
+		$query['#where'] = array(
+			'created='.$afl_date
+		);
+		$query['#expression'] = array(
+			'SUM(balance) as total'
+		);
+
+		$resp = db_select($query, 'get_row');
+		return !empty($resp->total) ? afl_format_payment_amount($resp->total, TRUE) : 0;;
+	}
+/*
+ * --------------------------------------------------
+ * E-walet today earnings template
+ * --------------------------------------------------
+*/
+	function afl_ewallet_today_earnings_template_callback () {
+		return afl_get_template( 'eps-affiliates/e-wallet/eps-affiliate-e-wallet-today-template.php');
+	}
+
+/*
+ * ---------------------------------------------------
+ * E-walet yesterday earnings
+ * ---------------------------------------------------
+*/
+	function afl_ewallet_yesterday_earnings_callback ($uid = '') {
+		if (empty($uid)) {
+			$uid = get_uid();
+		}
+
+		$afl_date 	= afl_date();
+		$yesterday 	=  strtotime('-1 day',$afl_date);
+
+		$query = array();
+		$query['#select'] = _table_name('afl_user_transactions');
+		$query['#where'] = array(
+			'uid = '.$uid,
+			// 'credit_status = 1',
+			'deleted = 0',
+			'hidden_transaction = 0'
+		);
+		$query['#where'] = array(
+			'created='.$yesterday
+		);
+		$query['#expression'] = array(
+			'SUM(balance) as total'
+		);
+
+		$resp = db_select($query, 'get_row');
+		return !empty($resp->total) ? afl_format_payment_amount($resp->total, TRUE) : 0;;
+	}
+/*
+ * --------------------------------------------------
+ * E-walet yesterday earnings template
+ * --------------------------------------------------
+*/
+	function afl_ewallet_yesterday_earnings_template_callback () {
+		return afl_get_template( 'eps-affiliates/e-wallet/eps-affiliate-e-wallet-yesterday-template.php');
+	}
+
+/*
+ * ---------------------------------------------------
+ * E-walet last week earnings
+ * ---------------------------------------------------
+*/
+	function afl_ewallet_last_week_earnings_callback ($uid = '') {
+		if (empty($uid)) {
+			$uid = get_uid();
+		}
+
+		$afl_date 	= afl_date();
+		$last_week_date 	= strtotime('-1 week',$afl_date);
+		$afl_date_splits 	= afl_date_splits($last_week_date);		
+
+		$query = array();
+		$query['#select'] = _table_name('afl_user_transactions');
+		$query['#where'] = array(
+			'uid = '.$uid,
+			// 'credit_status = 1',
+			'deleted = 0',
+			'hidden_transaction = 0'
+		);
+		$query['#where'] = array(
+			'transaction_month='.$afl_date_splits['m'],
+			'transaction_year='.$afl_date_splits['y'],
+			'transaction_week='.$afl_date_splits['w'],
+		);
+		$query['#expression'] = array(
+			'SUM(balance) as total'
+		);
+
+		$resp = db_select($query, 'get_row');
+		return !empty($resp->total) ? afl_format_payment_amount($resp->total, TRUE) : 0;;
+	}
+/*
+ * --------------------------------------------------
+ * E-walet last week earnings template
+ * --------------------------------------------------
+*/
+	function afl_ewallet_last_week_earnings_template_callback () {
+		return afl_get_template( 'eps-affiliates/e-wallet/eps-affiliate-e-wallet-last-week-template.php');
+	}
+/*
+ * ---------------------------------------------------
+ * E-walet last month earnings
+ * ---------------------------------------------------
+*/
+	function afl_ewallet_last_month_earnings_callback ($uid = '') {
+		if (empty($uid)) {
+			$uid = get_uid();
+		}
+
+		$afl_date 	= afl_date();
+		$last_mnth 	= strtotime('-1 month',$afl_date);
+		$afl_date_splits = afl_date_splits($last_mnth);		
+		// pr(date('Y-m-d',$afl_date));
+		// pr(date('Y-m-d',$last_mnth));
+		$query = array();
+		$query['#select'] = _table_name('afl_user_transactions');
+		$query['#where'] = array(
+			'uid = '.$uid,
+			// 'credit_status = 1',
+			'deleted = 0',
+			'hidden_transaction = 0'
+		);
+		$query['#where'] = array(
+			'transaction_month='.$afl_date_splits['m'],
+			'transaction_year='.$afl_date_splits['y'],
+		);
+		$query['#expression'] = array(
+			'SUM(balance) as total'
+		);
+
+		$resp = db_select($query, 'get_row');
+		return !empty($resp->total) ? afl_format_payment_amount($resp->total, TRUE) : 0;;
+	}
+/*
+ * --------------------------------------------------
+ * E-walet last month earnings template
+ * --------------------------------------------------
+*/
+	function afl_ewallet_last_month_earnings_template_callback () {
+		return afl_get_template( 'eps-affiliates/e-wallet/eps-affiliate-e-wallet-last-month-template.php');
+	}
+
+
+/*
+ * ---------------------------------------------------
+ * E-walet all time earnings
+ * ---------------------------------------------------
+*/
+	function afl_ewallet_all_time_earnings_callback ($uid = '') {
+		if (empty($uid)) {
+			$uid = get_uid();
+		}
+
+		$afl_date 	= afl_date();
+		$last_mnth 	= strtotime('-1 month',$afl_date);
+		$afl_date_splits = afl_date_splits($last_mnth);		
+		// pr(date('Y-m-d',$afl_date));
+		// pr(date('Y-m-d',$last_mnth));
+		$query = array();
+		$query['#select'] = _table_name('afl_user_transactions');
+		$query['#where'] = array(
+			'uid = '.$uid,
+			// 'credit_status = 1',
+			'deleted = 0',
+			'hidden_transaction = 0'
+		);
+		// $query['#where'] = array(
+		// 	'transaction_month='.$afl_date_splits['m'],
+		// 	'transaction_year='.$afl_date_splits['y'],
+		// );
+		$query['#expression'] = array(
+			'SUM(balance) as total'
+		);
+
+		$resp = db_select($query, 'get_row');
+		return !empty($resp->total) ? afl_format_payment_amount($resp->total, TRUE) : 0;;
+	}
+/*
+ * --------------------------------------------------
+ * E-walet all time earnings template
+ * --------------------------------------------------
+*/
+	function afl_ewallet_all_time_earnings_template_callback () {
+		return afl_get_template( 'eps-affiliates/e-wallet/eps-affiliate-e-wallet-all-time-template.php');
+	}
+/*
+ * --------------------------------------------------
+ * E-wallet-summary all blocks
+ * --------------------------------------------------
+*/
+	function afl_ewallet_all_earnings_summary_blocks_template_callback () {
+		return afl_get_template( 'eps-affiliates/e-wallet/eps-affiliate-e-wallet-all-summary-blocks.php');
+	}
+/*
+ * --------------------------------------------------
+ * Team volume
+ * --------------------------------------------------
+*/
+	function afl_distributor_team_volume_callback ($uid = '') {
+		$my_pv   = _get_user_pv($uid);
+ 		$legs_gv = _get_user_direct_legs_gv($uid);
+
+ 		//get maximum group volume required for this rank
+ 		// $max_taken 			= afl_variable_get('rank_'.$rank.'_max_gv_taken_1_leg',0);
+ 		// $maximum_taken 	= afl_commission($max_taken,$required_gv);
+
+ 		$user_gv = 0;
+ 		foreach ($legs_gv as $key => $amount) {
+ 			// $user_gv += ($amount > $maximum_taken) ? $maximum_taken : $amount;
+ 			$user_gv += $amount;
+ 		}
+ 		$user_gv = $my_pv + $user_gv;
+ 		return $user_gv;
+	}
+/*
+ * --------------------------------------------------
+ * PErsonal Volume
+ * --------------------------------------------------
+*/
+	function afl_distributor_personal_volume_callback ($uid = '') {
+		$my_pv   = _get_user_pv($uid);
+		return $my_pv;
+	}

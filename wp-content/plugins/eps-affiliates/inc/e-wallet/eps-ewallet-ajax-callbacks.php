@@ -4,82 +4,82 @@
  * User e-wallet trsnsation summary
  * ------------------------------------------------
 */
-function afl_user_ewallet_summary_data_table_callback(){
+// function afl_user_ewallet_summary_data_table_callback(){
 
-		global $wpdb;
-		$uid 					 = get_current_user_id();
-		$result = $wpdb->get_results("SELECT `"._table_name('afl_user_transactions')."`.`category`,`currency_code`, SUM(`"._table_name('afl_user_transactions')."`.`balance`) as balance  FROM `"._table_name('afl_user_transactions')."` WHERE `uid` = $uid GROUP BY `category` DESC");
-		$output = [
-	    "draw" 						=> 1,
-	    "recordsTotal" 		=> 25,
-	    "recordsFiltered" 	=> 2,
-	    "data" 						=> [],
-		];
-		foreach ($result as $key => $value) {
-			$output['data'][] = [
-	   		$key+1,
-	     	$value->category,
-	     	afl_format_payment_amount($value->balance).$value->currency_code  	
-   		];
-		}
-	echo json_encode($output);
-	die();
-}
+// 		global $wpdb;
+// 		$uid 					 = get_current_user_id();
+// 		$result = $wpdb->get_results("SELECT `"._table_name('afl_user_transactions')."`.`category`,`currency_code`, SUM(`"._table_name('afl_user_transactions')."`.`balance`) as balance  FROM `"._table_name('afl_user_transactions')."` WHERE `uid` = $uid GROUP BY `category` DESC");
+// 		$output = [
+// 	    "draw" 						=> 1,
+// 	    "recordsTotal" 		=> 25,
+// 	    "recordsFiltered" 	=> 2,
+// 	    "data" 						=> [],
+// 		];
+// 		foreach ($result as $key => $value) {
+// 			$output['data'][] = [
+// 	   		$key+1,
+// 	     	$value->category,
+// 	     	afl_format_payment_amount($value->balance).$value->currency_code  	
+//    		];
+// 		}
+// 	echo json_encode($output);
+// 	die();
+// }
 
 /*
  * ------------------------------------------------
  * User e-wallet all trsnsaction 
  * ------------------------------------------------
 */
-function afl_user_ewallet_all_transaction_data_table(){
-	global $wpdb;
-	$uid 						 = afl_current_uid();
+// function afl_user_ewallet_all_transaction_data_table(){
+// 	global $wpdb;
+// 	$uid 						 = afl_current_uid();
 	
-$input_valu = $_POST;
- 	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
-     $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
-  }
-  if(!empty($input_valu['search']['value'])) {
-     $filter['search_valu'] = $input_valu['search']['value'];
-  }
+// $input_valu = $_POST;
+//  	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
+//      $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
+//   }
+//   if(!empty($input_valu['search']['value'])) {
+//      $filter['search_valu'] = $input_valu['search']['value'];
+//   }
  
-  $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
-  $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
+//   $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
+//   $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
 
-  $result_count = get_all_user_transaction_details($uid,array(),TRUE); 
-  $filter_count = get_all_user_transaction_details($uid,$filter,TRUE); 
+//   $result_count = get_all_user_transaction_details($uid,array(),TRUE); 
+//   $filter_count = get_all_user_transaction_details($uid,$filter,TRUE); 
 
-// 
-    $result = get_all_user_transaction_details($uid,$filter);
+// // 
+//     $result = get_all_user_transaction_details($uid,$filter);
 
-  	$output = [
-     "draw" 						=> $input_valu['draw'],
-     "recordsTotal" 		=> $result_count,
-     "recordsFiltered" 	=> $filter_count,
-     "data" 						=> [],
-   ];
-    $result = get_all_user_transaction_details($uid,$filter);
-		foreach ($result as $key => $value) { 
-			if($value->credit_status == 1 ){
-				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
-			}
-			else{
-				$status =  "<button type='button' class='btn btn-danger'>Debit</button>";
-			}
-			$output['data'][] = [
-	   		$key+1,
-	     	ucfirst(strtolower($value->category)),
-	     	$value->display_name." (".$value->associated_user_id.")",
-	 			// number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
-	 			afl_format_payment_amount($value->amount_paid).$value->currency_code,
-	     	$status,
-	     	$value->transaction_date , 	
-	     	$value->notes  	
-   		];
-		}
-	echo json_encode($output);
-	die();
-}
+//   	$output = [
+//      "draw" 						=> $input_valu['draw'],
+//      "recordsTotal" 		=> $result_count,
+//      "recordsFiltered" 	=> $filter_count,
+//      "data" 						=> [],
+//    ];
+//     $result = get_all_user_transaction_details($uid,$filter);
+// 		foreach ($result as $key => $value) { 
+// 			if($value->credit_status == 1 ){
+// 				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
+// 			}
+// 			else{
+// 				$status =  "<button type='button' class='btn btn-danger'>Debit</button>";
+// 			}
+// 			$output['data'][] = [
+// 	   		$key+1,
+// 	     	ucfirst(strtolower($value->category)),
+// 	     	$value->display_name." (".$value->associated_user_id.")",
+// 	 			// number_format($value->amount_paid, 2, '.', ',')." " .$value->currency_code ,
+// 	 			afl_format_payment_amount($value->amount_paid).$value->currency_code,
+// 	     	$status,
+// 	     	afl_system_date_format($value->transaction_date) , 	
+// 	     	$value->notes  	
+//    		];
+// 		}
+// 	echo json_encode($output);
+// 	die();
+// }
 /*
  * ------------------------------------------------
  * Common function for  e-wallet trsnsaction 
@@ -131,96 +131,96 @@ function get_all_user_transaction_details ($uid = '7', $filter = array(), $count
 }
 
 
-function afl_user_ewallet_income_data_table(){
-	global $wpdb;
-	$uid 						 = get_current_user_id();
-	// $uid = 7;
+// function afl_user_ewallet_income_data_table(){
+// 	global $wpdb;
+// 	$uid 						 = get_current_user_id();
+// 	// $uid = 7;
  
-	$input_valu = $_POST;
- 	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
-     $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
-  }
-  if(!empty($input_valu['search']['value'])) {
-     $filter['search_valu'] = $input_valu['search']['value'];
-  }
+// 	$input_valu = $_POST;
+//  	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
+//      $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
+//   }
+//   if(!empty($input_valu['search']['value'])) {
+//      $filter['search_valu'] = $input_valu['search']['value'];
+//   }
  
-  $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
-  $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
+//   $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
+//   $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
 
-  $result_count = get_all_user_transaction_details($uid,array(),TRUE,1); 
-  $filter_count = get_all_user_transaction_details($uid,$filter,TRUE,1);
-  $result 			= get_all_user_transaction_details($uid,$filter,FALSE,1);
-  	$output = [
-     "draw" 						=> $input_valu['draw'],
-     "recordsTotal" 		=> $result_count,
-     "recordsFiltered" 	=> $filter_count,
-     "data" 						=> [],
-   ];
-    $result = get_all_user_transaction_details($uid,$filter,FALSE,1);
-		foreach ($result as $key => $value) { 
-			if($value->credit_status == 1 ){
-				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
-			}
-			else{
-				$status =  "<button type='button' class='btn btn-danger'>Debit</button>";
-			}
-			$output['data'][] = [
-	   		$key+1,
-	     	ucfirst(strtolower($value->category)),
-	     	$value->display_name." (".$value->associated_user_id.")",
-	 			afl_format_payment_amount($value->amount_paid).$value->currency_code,
-	     	$status,
-	     	$value->transaction_date  	
-   		];
-		}
-	echo json_encode($output);
-	die();
-}
+//   $result_count = get_all_user_transaction_details($uid,array(),TRUE,1); 
+//   $filter_count = get_all_user_transaction_details($uid,$filter,TRUE,1);
+//   $result 			= get_all_user_transaction_details($uid,$filter,FALSE,1);
+//   	$output = [
+//      "draw" 						=> $input_valu['draw'],
+//      "recordsTotal" 		=> $result_count,
+//      "recordsFiltered" 	=> $filter_count,
+//      "data" 						=> [],
+//    ];
+//     $result = get_all_user_transaction_details($uid,$filter,FALSE,1);
+// 		foreach ($result as $key => $value) { 
+// 			if($value->credit_status == 1 ){
+// 				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
+// 			}
+// 			else{
+// 				$status =  "<button type='button' class='btn btn-danger'>Debit</button>";
+// 			}
+// 			$output['data'][] = [
+// 	   		$key+1,
+// 	     	ucfirst(strtolower($value->category)),
+// 	     	$value->display_name." (".$value->associated_user_id.")",
+// 	 			afl_format_payment_amount($value->amount_paid).$value->currency_code,
+// 	     	$status,
+// 	     	afl_system_date_format($value->transaction_date)  	
+//    		];
+// 		}
+// 	echo json_encode($output);
+// 	die();
+// }
 
-function afl_user_ewallet_expense_report_data_table(){
-	global $wpdb;
-	$uid 						 = get_current_user_id();
-	// $uid = 7;
+// function afl_user_ewallet_expense_report_data_table(){
+// 	global $wpdb;
+// 	$uid 						 = get_current_user_id();
+// 	// $uid = 7;
  
-	$input_valu = $_POST;
- 	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
-     $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
-  }
-  if(!empty($input_valu['search']['value'])) {
-     $filter['search_valu'] = $input_valu['search']['value'];
-  }
+// 	$input_valu = $_POST;
+//  	if(!empty($input_valu['order'][0]['column']) && !empty($fields[$input_valu['order'][0]['column']])){
+//      $filter['order'][$fields[$input_valu['order'][0]['column']]] = !empty($input_valu['order'][0]['dir']) ? $input_valu['order'][0]['dir'] : 'ASC';
+//   }
+//   if(!empty($input_valu['search']['value'])) {
+//      $filter['search_valu'] = $input_valu['search']['value'];
+//   }
  
-  $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
-  $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
+//   $filter['start'] 		= !empty($input_valu['start']) 	? $input_valu['start'] 	: 0;
+//   $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 5;
 
-  $result_count = get_all_user_transaction_details($uid,array(),TRUE,0); 
-  $filter_count = get_all_user_transaction_details($uid,$filter,TRUE,0);
-  $result 			= get_all_user_transaction_details($uid,$filter,FALSE,0);
-  	$output = [
-     "draw" 						=> $input_valu['draw'],
-     "recordsTotal" 		=> $result_count,
-     "recordsFiltered" 	=> $filter_count,
-     "data" 						=> [],
-   ];
-    $result = get_all_user_transaction_details($uid,$filter,FALSE,0);
-		foreach ($result as $key => $value) { 
-			if($value->credit_status == 1 ){
-				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
-			}
-			else{
-				$status =  "<button type='button' class='btn btn-danger'>Debit</button>";
-			}
-			$output['data'][] = [
-	   		$key+1,
-	     	ucfirst(strtolower($value->category)),
-	     	$value->display_name." (".$value->associated_user_id.")",
-	 			afl_get_commerce_amount($value->amount_paid)." " .$value->currency_code ,
-	     	$status,
-	     	$value->transaction_date  	
-   		];
-		}
-	echo json_encode($output);
-	die();
-}
+//   $result_count = get_all_user_transaction_details($uid,array(),TRUE,0); 
+//   $filter_count = get_all_user_transaction_details($uid,$filter,TRUE,0);
+//   $result 			= get_all_user_transaction_details($uid,$filter,FALSE,0);
+//   	$output = [
+//      "draw" 						=> $input_valu['draw'],
+//      "recordsTotal" 		=> $result_count,
+//      "recordsFiltered" 	=> $filter_count,
+//      "data" 						=> [],
+//    ];
+//     $result = get_all_user_transaction_details($uid,$filter,FALSE,0);
+// 		foreach ($result as $key => $value) { 
+// 			if($value->credit_status == 1 ){
+// 				$status =  "<button type='button' class='btn btn-success btn-sm'>Credit</button>";
+// 			}
+// 			else{
+// 				$status =  "<button type='button' class='btn btn-danger'>Debit</button>";
+// 			}
+// 			$output['data'][] = [
+// 	   		$key+1,
+// 	     	ucfirst(strtolower($value->category)),
+// 	     	$value->display_name." (".$value->associated_user_id.")",
+// 	 			afl_get_commerce_amount($value->amount_paid)." " .$value->currency_code ,
+// 	     	$status,
+// 	     	afl_system_date_format($value->transaction_date)  	
+//    		];
+// 		}
+// 	echo json_encode($output);
+// 	die();
+// }
 
 

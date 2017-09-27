@@ -7,6 +7,10 @@ function afl_unilevel_refered_members () {
 }
 
 function afl_unilevel_refered_members_callback () {
+
+	do_action('afl_my_distributors_count_template');
+	do_action('afl_my_customers_count_template');
+	
 	$uid = get_uid();
 
 	if (isset($_GET['uid'])) {
@@ -65,6 +69,7 @@ function afl_unilevel_refered_members_callback () {
 		$rows = array();
 
 		foreach ($data as $key => $value) {
+			$user_roles =  afl_user_roles($value->ID);
 			$rows[$key]['markup_0'] = array(
 				'#type' =>'markup',
 				'#markup'=> ($index * 1) + ($key + 1)
@@ -87,11 +92,12 @@ function afl_unilevel_refered_members_callback () {
 			);
 			$rows[$key]['markup_5'] = array(
 				'#type' =>'markup',
-				'#markup'=> render_rank($value->member_rank)
+				'#markup'=> (array_key_exists('afl_customer',$user_roles)) ? render_rank('','Customer'):render_rank($value->member_rank)
+				
 			);
 			$rows[$key]['markup_6'] = array(
 				'#type' =>'markup',
-				'#markup'=> $value->created
+				'#markup'=> afl_system_date_format($value->created,TRUE)
 			);
 		}
 	

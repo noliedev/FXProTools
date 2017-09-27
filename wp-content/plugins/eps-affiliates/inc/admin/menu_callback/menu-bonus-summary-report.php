@@ -37,11 +37,11 @@ function _bonus_nd_incentives_table () {
 						'class' => array(
 								'table',
 								'table-bordered',
-								'my-table-center',
 							)
 						);
 
 		$table['#header'] = array(
+			__('#'),
 			__('Title of Bonus'),
 			__('Rank Name'),
 			__('Details'),
@@ -51,33 +51,72 @@ function _bonus_nd_incentives_table () {
 		$max_rank = afl_variable_get('number_of_ranks');
 		if ( $max_rank ) {
 			for ( $i = 1 ; $i <= $max_rank; $i++ ) {
-				if ( afl_variable_get('rank_'.$i.'_incentives','')) {
-					$rows[$i]['markup_incentive'] = array(
-						'#type' =>'markup',
-						'#markup'=> afl_variable_get('rank_'.$i.'_incentives','')
-					);
+				$rows[$i]['markup_slno'] = array(
+					'#type' =>'markup',
+					'#markup'=> $i
+				);
+				$rows[$i]['markup_incentive'] = array(
+					'#type' =>'markup',
+					'#markup'=> afl_variable_get('rank_'.$i.'_incentives','???')
+				);
 
-					$rows[$i]['markup_rank_name'] = array(
-						'#type' =>'markup',
-						'#markup'=> afl_variable_get('rank_'.$i.'_name','')
-					);
+				$rows[$i]['markup_rank_name'] = array(
+					'#type' =>'markup',
+					'#markup'=> afl_variable_get('rank_'.$i.'_name','Rank '.$i)
+				);
 
-					$rows[$i]['markup_details'] = array(
-						'#type' =>'markup',
-						'#markup'=> afl_variable_get('rank_'.$i.'_name','')
-					);
-				}
+				$rows[$i]['markup_details'] = array(
+					'#type' =>'markup',
+					'#markup'=> _get_furthrer_qualification_to_achieve_rank($i)
+				);
 			}
 		}
-
-
 		$table['#rows'] = $rows;
-
-	
-
 		echo apply_filters('afl_render_table',$table);
 }
 
 function _get_bonus_nd_incentives ( $index = 0, $limit = '' ) {
 
+}
+
+function _get_furthrer_qualification_to_achieve_rank ($rank = '', $uid = '') {
+	$ret_string = '';
+	$rank_got 	= '';
+
+	if (empty($uid)) {
+		$uid = get_uid();
+	}
+
+	//check pv meets
+	if (!_check_required_pv_meets($uid, $rank)) {
+		$required = afl_variable_get('rank_'.$rank.'_pv',0);
+		$earned 	= _get_user_pv($uid); 
+
+		$ret_string .= '</br>* You need '.($required - $earned).' more Personal volume to unlock this';
+	}
+	
+	//check gv meets
+	if (!_check_required_gv_meets($uid, $rank)) {
+		$required = afl_variable_get('rank_'.$rank.'_gv',0);
+		$earned 	= _get_user_gv_v1($uid); 
+
+		$ret_string .= '</br>* You need '.($required - $earned).' more Group volume to unlock this';
+	}
+	//check distributor count meets
+	if (!_check_required_distributors_meets($uid, $rank)) {
+		$required = afl_variable_get('rank_'.$rank.'_no_of_distributors',0);
+		$earned 	= _get_user_distributor_count($uid); 
+
+		$ret_string .= '</br>* You need '.($required - $earned).' more distributors to unlock this';
+	}
+
+	// //check distributor count meets
+	// if (!_check_required_qualifications_meets($uid, $rank)) {
+	// 	$required = afl_variable_get('rank_'.$rank.'_no_of_distributors',0);
+	// 	$earned 	= _get_user_distributor_count($uid); 
+
+	// 	$ret_string .= '</br>* You need '.($required - $earned).' more distributors to unlock this';
+	// }
+	
+	return $ret_string;
 }

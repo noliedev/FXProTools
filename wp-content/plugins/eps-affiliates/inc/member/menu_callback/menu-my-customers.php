@@ -52,7 +52,7 @@ function afl_my_customers_form () {
 
 			$rows[$key]['markup_2'] = array(
 				'#type' =>'markup',
-				'#markup'=> date('Y-m-d',$value->created)
+				'#markup'=> afl_system_date_format($value->created,TRUE)
 			);
 		}
 		$table['#rows'] = $rows;

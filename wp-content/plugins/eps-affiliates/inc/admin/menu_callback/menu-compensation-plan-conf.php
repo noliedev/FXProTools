@@ -17,7 +17,7 @@ function afl_admin_compensation_plan_configuration() {
  * ------------------------------------------------------------------
 */
 	function afl_admin_compensation_plan_config_tabs () {
-		$matrix_active = $basic_active = $fsb_active = '';
+		$matrix_active = $basic_active = $fsb_active = $incentives_active = $other = '';
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'basic';  
 		
 		switch ($active_tab) {
@@ -29,6 +29,12 @@ function afl_admin_compensation_plan_configuration() {
 			break;
 			case 'fast-start-bonus':
 					$fsb_active  = 'active';
+			break;
+			case 'incentives':
+					$incentives_active  = 'active';
+			break;
+			case 'extra-configs':
+					$other  = 'active';
 			break;
 		}
 		  //here render the tabs
@@ -44,7 +50,12 @@ function afl_admin_compensation_plan_configuration() {
 		  echo '<li class="'.$fsb_active.'">
 		            	<a href="?page=affiliate-eps-compensation-plan-configurations&tab=fast-start-bonus" >Fast Start Bonus</a>  
 		          </li>';
-
+		  echo '<li class="'.$incentives_active.'">
+		            	<a href="?page=affiliate-eps-compensation-plan-configurations&tab=incentives" >Incentives</a>  
+		          </li>';
+		   echo '<li class="'.$other.'">
+		            	<a href="?page=affiliate-eps-compensation-plan-configurations&tab=extra-configs" >Extra configs</a>  
+		          </li>';
 		  echo '</ul>';
 
 		  switch ($active_tab) {
@@ -56,6 +67,12 @@ function afl_admin_compensation_plan_configuration() {
 		  	break;
 		  	case 'fast-start-bonus':
 		  		afl_admin_fsb_compensation_config_();
+		  	break;
+		  	case 'incentives':
+		  		afl_admin_incentives_config();
+		  	break;
+		  	case 'extra-configs':
+		  		afl_admin_extra_config();
 		  	break;
 		  }
 
@@ -415,6 +432,13 @@ function afl_admin_compensation_plan_form_submit($POST){
  		'#required'	=> TRUE
   );
 
+  $form['fast_start_bonus_pv'] = array(
+ 		'#title' 	=> 'Fast start Bonus PV',
+ 		'#type'  	=> 'text',
+ 		'#default_value'=> !empty($post['fast_start_bonus_pv']) ? $post['fast_start_bonus_pv'] : afl_variable_get('fast_start_bonus_pv',''),
+ 		'#required'	=> TRUE
+  );
+
   $form['submit'] = array(
  		'#type' => 'submit',
  		'#value' => 'Save configuration'
@@ -438,6 +462,16 @@ function afl_admin_compensation_plan_form_submit($POST){
 	 			'rule_is_numeric'
 	 		)
 	 	);
+
+	 	$rules[] = array(
+	 		'value'=> $form_state['fast_start_bonus_pv'],
+	 		'name' =>'Fast start bonus pv',
+	 		'field' =>'fast_start_bonus_pv',
+	 		'rules' => array(
+	 			'rule_required',
+	 			'rule_is_numeric'
+	 		)
+	 	);
 	 	$resp  = set_form_validation_rule($rules);
 	 	return $resp;
 	}
@@ -456,6 +490,156 @@ function afl_admin_compensation_plan_form_submit($POST){
 				afl_variable_set( $key, '' );
 			}
 		}
+		foreach ($form_state as $key => $value) {
+			afl_variable_set($key, $value);
+		}
+		wp_set_message('Configuration has been saved successfully', 'success');
+	}
+
+
+
+/*
+ * ----------------------------------------------------------------------------
+ * Incentives configurations
+ * ----------------------------------------------------------------------------
+*/
+ function afl_admin_incentives_config () {
+ 	if (isset($_POST['submit'])) {
+ 		unset($_POST['submit']);
+ 		if (afl_admin_incentives_config_validation($_POST)) {
+ 			afl_admin_incentives_config_submit($_POST);
+ 		}
+ 	}
+
+ 	$form = array();
+	$form['#action'] = $_SERVER['REQUEST_URI'];
+ 	$form['#method'] = 'post';
+ 	$form['#prefix'] ='<div class="form-group row">';
+ 	$form['#suffix'] ='</div>';
+
+ 	$form['rank_holding_consecutive_days'] = array(
+ 		'#title' 	=> 'Rank holding days',
+ 		'#type'  	=> 'textfield',
+ 		'#default_value'=> !empty($post['rank_holding_consecutive_days']) ? $post['rank_holding_consecutive_days'] : afl_variable_get('rank_holding_consecutive_days',''),
+ 		'#required'=>TRUE
+  );
+  $form['submit'] = array(
+ 		'#type' => 'submit',
+ 		'#value' => 'Save configuration'
+ 	);
+ 	echo afl_render_form($form);
+ }
+/*
+ * ----------------------------------------------------------------------------
+ * Validation
+ * ----------------------------------------------------------------------------
+*/
+ function afl_admin_incentives_config_validation ($form_state = array()) {
+ 		$rules[] = array(
+	 		'value'=> $form_state['rank_holding_consecutive_days'],
+	 		'name' =>'Rank holding consicutive days',
+	 		'field' =>'rank_holding_consecutive_days',
+	 		'rules' => array(
+	 			'rule_required',
+	 			'rule_is_numeric'
+	 		)
+	 	);
+	 	$resp  = set_form_validation_rule($rules);
+	 	return $resp;
+ }
+/*
+ * ----------------------------------------------------------------------------
+ * Submit
+ * ----------------------------------------------------------------------------
+*/
+ 	function afl_admin_incentives_config_submit ($form_state = array()) {
+ 		foreach ($form_state as $key => $value) {
+			afl_variable_set($key, $value);
+		}
+		wp_set_message('Configuration has been saved successfully', 'success');
+
+ 	}
+
+ /*
+  * -------------------------------------------------------------------------
+  * Extra configurations
+  * -------------------------------------------------------------------------
+ */
+ 	function afl_admin_extra_config () {
+ 		if (isset($_POST['submit'])) {
+ 			unset($_POST['submit']);
+ 			if ( afl_admin_extra_config_validation($_POST) ) {
+ 				afl_admin_extra_config_submit($_POST);
+ 			}
+ 		}
+ 		$form = array();
+		$form['#action'] = $_SERVER['REQUEST_URI'];
+	 	$form['#method'] = 'post';
+	 	$form['#prefix'] ='<div class="form-group row">';
+	 	$form['#suffix'] ='</div>';
+
+	 	$form['fieldset'] = array(
+	 		'#type'=>'fieldset',
+	 		'#title'=>'Cancelled spot openup'
+	 	);
+
+	 	$form['fieldset']['cancelled_genealogy_spot_openup_period'] = array(
+	 		'#title' 	=> 'Spot openup period',
+	 		'#type'  	=> 'select',
+	 		'#options'=> array(
+	 			'day' 	=> 'Day',
+	 			'month'	=> 'Month',
+	 			'year'	=> 'Year'
+	 		),
+	 		'#default_value'=> !empty($post['cancelled_genealogy_spot_openup_period']) ? $post['cancelled_genealogy_spot_openup_period'] : afl_variable_get('cancelled_genealogy_spot_openup_period',''),
+	 		'#required'=>TRUE
+	  );
+	  $form['fieldset']['cancelled_genealogy_spot_openup_period_value'] = array(
+	 		'#title' 	=> 'Spot openup period value',
+	 		'#type'  	=> 'textfield',
+	 		'#default_value'=> !empty($post['cancelled_genealogy_spot_openup_period_value']) ? $post['cancelled_genealogy_spot_openup_period_value'] : afl_variable_get('cancelled_genealogy_spot_openup_period_value',''),
+	 		'#required'=>TRUE
+	  );
+
+   	$form['submit'] = array(
+	 		'#type' => 'submit',
+	 		'#value' => 'Save configuration'
+	 	);
+ 		echo afl_render_form($form);
+
+ 	}
+/*
+ * -------------------------------------------------------------------------
+ * Extra configurations validation
+ * -------------------------------------------------------------------------
+*/
+	function afl_admin_extra_config_validation ($form_state = array()) {
+		$rules[] = array(
+	 		'value'=> $form_state['cancelled_genealogy_spot_openup_period'],
+	 		'name' =>'Spot openup period',
+	 		'field' =>'cancelled_genealogy_spot_openup_period',
+	 		'rules' => array(
+	 			'rule_required',
+	 		)
+	 	);
+	 	$rules[] = array(
+	 		'value'=> $form_state['cancelled_genealogy_spot_openup_period_value'],
+	 		'name' =>'Spot openup period value',
+	 		'field' =>'cancelled_genealogy_spot_openup_period_value',
+	 		'rules' => array(
+	 			'rule_required',
+	 			'rule_is_numeric'
+	 		)
+	 	);
+	 	$resp  = set_form_validation_rule($rules);
+	 	return $resp;
+	}
+/*
+ * -------------------------------------------------------------------------
+ * Extra configurations validation
+ * -------------------------------------------------------------------------
+*/
+	function afl_admin_extra_config_submit ($form_state = array()) {
 		foreach ($form_state as $key => $value) {
 			afl_variable_set($key, $value);
 		}

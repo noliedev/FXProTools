@@ -127,6 +127,16 @@ function afl_admin_variable_configurations (){
 	 		'#suffix' 				=> '</div>',
 	 		'#description'		=> __('these roles could be displayed in the eps affiliates roles permission table')
 	 	);
+
+	 	//system date format
+	 	$form['afl_var_system_date_format'] = array(
+	 		'#type' 					=> 'textfield',
+	 		'#title' 					=> 'System date format',
+	 		'#default_value' 	=> afl_variable_get('afl_var_system_date_format', ''),
+	 		'#prefix'					=> '<div class="form-group row">',
+	 		'#suffix' 				=> '</div>',
+	 	);
+
 	 	$form['submit'] = array(
 	 		'#type' => 'submit',
 	 		'#value' =>'Save configuration'

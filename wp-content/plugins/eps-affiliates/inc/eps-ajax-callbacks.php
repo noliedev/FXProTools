@@ -153,8 +153,8 @@ function member_users_auto_complete_callback($search_key = '') {
   $filter['length'] 	= !empty($input_valu['length']) ? $input_valu['length'] : 50;
 
   $filter['fields'] = array(
-  _table_name('afl_user_downlines') => array('level'),
-  _table_name('afl_user_genealogy') => array('member_rank', 'relative_position','created'),
+  _table_name('afl_user_downlines') => array('level','relative_position'),
+  _table_name('afl_user_genealogy') => array('member_rank','created'),
   _table_name('users') => array('display_name', 'ID')
  );
   $result_count = afl_get_user_downlines($uid,array(),TRUE);
@@ -178,7 +178,7 @@ function member_users_auto_complete_callback($search_key = '') {
    		$value->level,
       $value->relative_position,
    		render_rank($value->member_rank),
-   		date('Y-m-d',$value->created)
+   		afl_system_date_format($value->created,TRUE)
    	];
    }
    echo json_encode($output);
@@ -234,7 +234,7 @@ function member_users_auto_complete_callback($search_key = '') {
       $value->level,
       $value->relative_position,
       render_rank($value->member_rank),
-      date('Y-m-d',$value->created)
+      afl_system_date_format($value->created,TRUE)
     ];
    }
    echo json_encode($output);
@@ -256,6 +256,22 @@ function member_users_auto_complete_callback($search_key = '') {
  function afl_unilevel_expand_user_genealogy_tree () {
   
   afl_get_template('plan/unilevel/genealogy-tree-expanded.php');
+ }
+ /*
+ * -------------------------------------------------------------------------
+ * Expand Genealogy tree Toggle
+ * -------------------------------------------------------------------------
+*/
+ function afl_user_expand_toggle_genealogy () {
+  afl_get_template('plan/matrix/holding-toggle-genealogy-tree-expanded.php');
+ }
+/*
+ * -------------------------------------------------------------------------
+ * Expand unilevel Genealogy tree Toggle
+ * -------------------------------------------------------------------------
+*/
+ function afl_unilevel_user_expand_toggle_genealogy () {
+  afl_get_template('plan/unilevel/unilevel-holding-toggle-genealogy-tree-expanded.php');
  }
  /*
   * ------------------------------------------------------------------------
@@ -343,21 +359,33 @@ function member_users_auto_complete_callback($search_key = '') {
  function afl_place_user_from_tank_callback () {
   global $wpdb;
   $response = array();
-
   if (!empty($_POST['user_id']) && !empty($_POST['sponsor']) && !empty($_POST['parent']) && !empty($_POST['position'])) {
       $parent    = extract_sponsor_id($_POST['parent']);
       $sponsor  = $_POST['sponsor'];
       $uid      = $_POST['user_id'];
       $position = $_POST['position'];
 
-      //add the role afl_member to the user if he has no role
-      if (!has_role($uid, 'afl_member')){
-        $theUser = new WP_User($uid);
-        $theUser->add_role( 'afl_member' );
-      }
+      /*
+       * ------------------------------------------------
+       * Checking  the user is customer or not
+       * if customer only remove the role holding member
+       * else provide the role afl_member
+       * ------------------------------------------------
+      */
+        $user_roles = afl_user_roles($uid);
+        if ( !array_key_exists('afl_customer', $user_roles)) {
+          if (!has_role($uid, 'afl_member')){
+            $theUser = new WP_User($uid);
+            $theUser->remove_role( 'holding_member' );
+            $theUser->add_role( 'afl_member' );
+          }
+        } else {
+          $theUser = new WP_User($uid);
+          $theUser->remove_role( 'holding_member' );
+        }
 
       $tree_mode = !empty($_POST['tree_mode']) ? $_POST['tree_mode'] : 'matrix'; 
-    //insert user to genealogy
+      //insert user to genealogy
       $afl_date_splits = afl_date_splits(afl_date());
 
       $genealogy_table = $wpdb->prefix . 'afl_user_genealogy';
@@ -379,7 +407,6 @@ function member_users_auto_complete_callback($search_key = '') {
       $ins_data['joined_year']        = $afl_date_splits['y'];
       $ins_data['joined_week']        = $afl_date_splits['w'];
       $ins_data['joined_date']        = afl_date_combined($afl_date_splits);
-
 
       $ins_id = $wpdb->insert($genealogy_table, $ins_data);
 
@@ -466,6 +493,19 @@ function member_users_auto_complete_callback($search_key = '') {
 
       }
 
+
+      /*
+       * ---------------------------------------------------------------------- 
+       * calculate the fast start bonus not for customer
+       * ---------------------------------------------------------------------- 
+      */
+        $user_roles = afl_user_roles($uid);
+        if ( !array_key_exists('afl_customer', $user_roles)) {
+          do_action('afl_calculate_fast_start_bonus',$uid,$_POST['sponsor']);
+        }
+
+
+
       //remove user from tank
       if ( $tree_mode == 'unilevel') {
         $wpdb->delete(_table_name('afl_unilevel_user_holding_tank'), array('uid'=>$uid));
@@ -507,3 +547,147 @@ function member_users_auto_complete_callback($search_key = '') {
     die();
   }
  }
+/*
+ * -------------------------------------------------------------
+ * Get the next user from the holding tank basd on uid passed
+ * -------------------------------------------------------------
+*/
+  function afl_user_holding_genealogy_toggle_right_callback () {
+    $table = 'afl_user_holding_tank';
+    if ( isset($_POST['tree']) && $_POST['tree'] == 'unilevel') {
+      $table = 'afl_unilevel_user_holding_tank';
+    }
+
+    $table = _table_name($table);
+    if (isset($_POST['sponsor'])) {
+      if (isset($_POST['uid'])) {
+        $query  = array();
+        $query['#select'] = ($table);
+        $query['#join']   = array(
+            _table_name('users') => array(
+              '#condition'=>'`'._table_name('users').'`.`ID`=`'.$table.'`.`uid`'
+            )
+          );
+        $query['#where']  = array(
+          '`'.$table.'`.`uid`>'.$_POST['uid'],
+          '`'.$table.'`.`referrer_uid`='.$_POST['sponsor']
+        );
+        $result = db_select($query, 'get_row');
+        //if the detail doesnot exist send the first row
+        if ( empty($result)) {
+          $query['#select'] = ($table);
+          $query['#join']   = array(
+            _table_name('users') => array(
+              '#condition'=>'`'._table_name('users').'`.`ID`=`'.$table.'`.`uid`'
+            )
+          );
+          $query['#where']  = array(
+            '`'.$table.'`.`referrer_uid`='.$_POST['sponsor']
+          );
+          $result = db_select($query, 'get_row');
+        }
+      } else {
+          $query['#select'] = ($table);
+          $query['#join']   = array(
+            _table_name('users') => array(
+              '#condition'=>'`'._table_name('users').'`.`ID`=`'.$table.'`.`uid`'
+            )
+          );
+          $query['#where']  = array(
+            '`'.$table.'`.`referrer_uid`='.$_POST['sponsor']
+          );
+          $result = db_select($query, 'get_row');
+      }
+       if (!empty($result)) {
+        $result->image_url = EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png';
+      }
+      // echo _theme_toggle_holding_user($result);
+      echo json_encode($result);
+      die();
+    }
+  }
+/*
+ * -------------------------------------------------------------
+ * Get the next user from the holding tank basd on uid passed
+ * -------------------------------------------------------------
+*/
+  function afl_user_holding_genealogy_toggle_left_callback () {
+    $table = 'afl_user_holding_tank';
+    
+    if ( isset($_POST['tree']) && $_POST['tree'] == 'unilevel') {
+      $table = 'afl_unilevel_user_holding_tank';
+    }
+
+    $table = _table_name($table);
+
+    if (isset($_POST['uid']) && isset($_POST['sponsor'])) {
+      $query  = array();
+      $query['#select'] = ($table);
+      $query['#join']   = array(
+        _table_name('users') => array(
+          '#condition'=>'`'._table_name('users').'`.`ID`=`'.$table.'`.`uid`'
+        )
+      );
+      $query['#where']  = array(
+        '`'.$table.'`.`uid`<'.$_POST['uid'],
+        '`'.$table.'`.`referrer_uid`='.$_POST['sponsor']
+      );
+      $result = db_select($query, 'get_row');
+      //if the detail doesnot exist send the first row
+      if ( empty($result)) {
+        $query['#select'] = ($table);
+        $query['#join']   = array(
+          _table_name('users') => array(
+            '#condition'=>'`'._table_name('users').'`.`ID`=`'.$table.'`.`uid`'
+          )
+        );
+        $query['#where']  = array(
+          '`'.$table.'`.`referrer_uid`='.$_POST['sponsor']
+        );
+        $result = db_select($query, 'get_row');
+      }
+    } else {
+        $query['#select'] = ($table);
+        $query['#join']   = array(
+          _table_name('users') => array(
+            '#condition'=>'`'._table_name('users').'`.`ID`=`'.$table.'`.`uid`'
+          )
+        );
+        $query['#where']  = array(
+          '`'.$table.'`.`referrer_uid`='.$_POST['sponsor']
+        );
+        $result = db_select($query, 'get_row');
+    }
+      if (!empty($result)) {
+        $result->image_url = EPSAFFILIATE_PLUGIN_ASSETS.'images/avathar.png';
+      }
+      // echo _theme_toggle_holding_user($result);
+      echo json_encode($result);
+
+      die();
+  }
+/*
+ * ----------------------------------------------------------------
+ *
+ * ----------------------------------------------------------------
+*/
+  function _theme_toggle_holding_user ($data  =array()) {
+    $html_tag = '';
+    if (!empty($data)) {
+      $html_tag .= '<span class="toggle-left-arrow" data-toggle-uid="'.$data->uid.'" onclick="_toggle_holding_node_left(this)">';
+      $html_tag .= '<i class="fa fa-caret-left fa-5x"></i>';
+      $html_tag .= '</span>';
+      $html_tag .= '<div class="holding-toggle-user-image">';
+      $html_tag .= '<img src="'.EPSAFFILIATE_PLUGIN_ASSETS."images/no-user.png".'">';
+      $html_tag .= '</div>';
+      $html_tag .= '<span class="toggle-right-arrow" onclick="_toggle_holding_node_right(this)">';
+      $html_tag .= '<i class="fa fa-caret-right fa-5x"></i>';
+      $html_tag .= '</span>';
+      $html_tag .= '<p>';
+      $html_tag .= $data->user_login;
+      $html_tag .= '</p>';
+      $html_tag .= '</div>';
+   
+    }
+    return $html_tag;
+  }
