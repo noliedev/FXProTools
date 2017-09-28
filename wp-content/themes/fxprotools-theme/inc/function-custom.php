@@ -116,7 +116,7 @@ function get_funnels()
 	$args = array(
 		'posts_per_page'   => -1,
 		'orderby'          => 'menu_order',
-		'order'			   => 'DESC',
+		'order'			   => 'ASC',
 		'post_status'      => 'publish',
 		'post_type'		   => 'fx_funnel',
 	);
