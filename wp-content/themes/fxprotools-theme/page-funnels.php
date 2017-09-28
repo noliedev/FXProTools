@@ -31,7 +31,11 @@ $referral = "/?ref=" . affwp_get_affiliate_id( get_current_user_id() );
 						<p>Let us do most of the work for you</p>
 					</div>
 					<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-						<?php $count = 0; foreach($funnels as $post): setup_postdata($post); $count++; $stats = get_funnel_stats( get_the_ID() ); ?>
+						<?php
+							$count = 0;
+							foreach($funnels as $post): setup_postdata($post); $count++; 
+							$stats = get_funnel_stats( get_the_ID() );
+						?>
 						<div class="accordion-group panel-default">
 							<div class="panel-heading" role="tab" id="heading-<?php echo $count;?>">
 								<h4 class="panel-title">
@@ -267,8 +271,10 @@ $referral = "/?ref=" . affwp_get_affiliate_id( get_current_user_id() );
 								</div>
 							</div>
 						</div>
-						<?php endforeach; ?>
-						<?php wp_reset_query(); ?>
+						<?php
+							endforeach;
+							wp_reset_query();
+						?>
 					</div>
 					<?php endif;?>
 				</div>
