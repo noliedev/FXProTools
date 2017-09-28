@@ -111,7 +111,7 @@ function custom_override_default_locale_fields( $fields ) {
 	
 	<div class="checkout-sidebar">
 		<div class="checkout-sidebar-item">
-			<img src="https://forcefactor.me/assets/images/product/aspire.png">
+			<img src="<?php bloginfo('template_directory');?>/assets/img/checkout/sidebar-banner.png" class="img-responsive">
 		</div>
 		<div class="checkout-sidebar-item">
 			<h3>What Our Members Are Saying...</h3>
@@ -298,15 +298,18 @@ foreach( WC()->cart->get_cart() as $cart_item ){
 if ( isset($popup_type) ):
 ?>
 <script type="text/javascript">
-	jQuery(document).mouseleave(function () {
-		if( ! $.cookie('checkout_popup_cookie') ){
+	jQuery(document).on('mouseleave', customer_exit_intent);
+
+	function customer_exit_intent(e){
+		if( !$.cookie('checkout_popup_cookie') &&  e.clientY < 60  ){
 			<?php if($popup_type == 'normal'): ?>
 				jQuery('.checkout-popup.<?php echo $popup_type;?>').find('.btn-trial').attr('href', '<?php echo $trial_product_link;?>');
 			<?php endif; ?>
 			jQuery('.checkout-popup.<?php echo $popup_type;?>').modal('show');
 		}
-	});
-	jQuery('#hide-checkout-popup').click(function(){
+	}
+	
+	jQuery('.close').click(function(){
 		jQuery('.checkout-popup.<?php echo $popup_type;?>').modal('hide');
 		$.cookie('checkout_popup_cookie', 'active', { expires: 12 });
 	});
