@@ -114,7 +114,7 @@ $referral = "/?ref=" . affwp_get_affiliate_id( get_current_user_id() );
 																			<label>Custom Background Image:</label>
 																			<input type="text" class="form-control" value="">
 																			<a href="#" class="btn btn-default">Upload</a>
-																			<a href="#" class="btn btn-default">Preview</a>
+																			<a href="<?php echo $page_url; ?>" class="btn btn-default" target="_blank">Preview</a>
 																			<div class="clearfix"></div>
 																		</div>
 																	</div>
@@ -199,7 +199,7 @@ $referral = "/?ref=" . affwp_get_affiliate_id( get_current_user_id() );
 																			<div class="clearfix"></div>
 																			<input type="text" class="form-control" id="lp-url-<?php echo $count;?>" value="<?php echo $page_url;?>">
 																			<button href="#" class="btn btn-default btn-copy" data-clipboard-target="#lp-url-<?php echo $count;?>">Copy</button>
-																			<a href="#" class="btn btn-default">Preview</a>
+																			<a href="<?php echo $page_url; ?>" class="btn btn-default" target="_blank">Preview</a>
 																			<div class="clearfix"></div>
 																		</div>
 																		<div class="form-group url-group one">
