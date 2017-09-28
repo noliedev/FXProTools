@@ -65,7 +65,7 @@ if(!class_exists('ThemeSettings')){
 		public function enforce_page_access()
 		{
 			global $post;
-			if( !isset($post) )}{return;}
+			if( !isset($post) ){return;}
     		$slug = $post->post_name;
     		$guest_allowed_post_type = array( 'product' );
 			$guest_allowed_pages = array( 'login', 'forgot-password', 'verify-email', 'funnels', 'f1', 'f2', 'f3', 'f4' );
