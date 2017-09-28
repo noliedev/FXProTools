@@ -19,6 +19,7 @@ if(!class_exists('ThemeSettings')){
 
 			add_action('wp_enqueue_scripts', array($this, 'enqueue_theme_assets'));
 			add_action('wp', array($this, 'enforce_page_access'));
+			add_filter('login_redirect', array($this, 'customer_login_redirect'));
 			add_action('init', array($this, 'course_category_rewrite'));
 			add_action('template_redirect',  array($this, 'course_category_template'));
 			add_filter('query_vars',  array($this,'course_category_vars'));
@@ -76,6 +77,11 @@ if(!class_exists('ThemeSettings')){
 					exit;
 				}
 			}
+		}
+
+
+		function customer_login_redirect( $redirect_to, $request, $user ){
+		    return home_url('dashboard');
 		}
 
 		public function course_category_rewrite()
