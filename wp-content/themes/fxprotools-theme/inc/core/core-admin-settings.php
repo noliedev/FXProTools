@@ -173,16 +173,22 @@ if(!class_exists('AdminSettings')){
 				'autosave' => false,
 				'fields' => array(
 					array(
-						'id' => $prefix . 'capture_page_url',
-						'type' => 'text',
-						'name' => esc_html__( 'Capture Page URL', 'fxprotools' ),
-						'size' => 100,
-					),
-					array(
 						'id' => $prefix . 'capture_page_title',
 						'type' => 'text',
 						'name' => esc_html__( 'Capture Page Title', 'fxprotools' ),
-						'size' => 100,
+						'size' => 80,
+					),
+					array(
+						'id' => $prefix . 'capture_sub_title',
+						'type' => 'text',
+						'name' => esc_html__( 'Capture Sub Title', 'fxprotools' ),
+						'size' => 80,
+					),
+					array(
+						'id' => $prefix . 'capture_page_url',
+						'type' => 'text',
+						'name' => esc_html__( 'Funnel URL', 'fxprotools' ),
+						'size' => 80,
 					),
 					array(
 						'id' => $prefix . 'capture_page_thumbnail',
@@ -203,16 +209,22 @@ if(!class_exists('AdminSettings')){
 				'autosave' => false,
 				'fields' => array(
 					array(
-						'id' => $prefix . 'landing_page_url',
-						'type' => 'text',
-						'name' => esc_html__( 'Landing Page URL', 'fxprotools' ),
-						'size' => 100,
-					),
-					array(
 						'id' => $prefix . 'landing_page_title',
 						'type' => 'text',
 						'name' => esc_html__( 'Landing Page Title', 'fxprotools' ),
-						'size' => 100,
+						'size' => 80,
+					),
+					array(
+						'id' => $prefix . 'landing_sub_title',
+						'type' => 'text',
+						'name' => esc_html__( 'Landing Page Sub Title', 'fxprotools' ),
+						'size' => 80,
+					),
+					array(
+						'id' => $prefix . 'landing_page_url',
+						'type' => 'text',
+						'name' => esc_html__( 'Funnel URL', 'fxprotools' ),
+						'size' => 80,
 					),
 					array(
 						'id' => $prefix . 'landing_page_thumbnail',
