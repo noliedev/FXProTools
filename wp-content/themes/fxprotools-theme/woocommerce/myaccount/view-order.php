@@ -23,6 +23,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
+
+<?php  
+	//order id for /user page
+	if($_GET['order_id']){
+		$order_id = $_GET['order_id'];
+		$order = wc_get_order( $order_id );
+	}
+?>
+
 <p><?php
 	/* translators: 1: order number 2: order date 3: order status */
 	printf(

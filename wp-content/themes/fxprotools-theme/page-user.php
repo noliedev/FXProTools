@@ -7,7 +7,7 @@ foreach($_POST as $user_key => $user_value)
 ?>
 	<?php get_template_part('inc/templates/nav-marketing'); ?>
 
-	<div class="container">
+	<div class="container woocommerce">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="fx-header-title">
@@ -171,82 +171,115 @@ foreach($_POST as $user_key => $user_value)
 										</div>
 										<p><strong>IMPORTANT:</strong> If you cancel your account, please note that your username (USER_NAME) will be made available for someone else; any progress and access to pages you've created will be disabled; optins and leads will not be collected; and videos will not display if you added your own.</p>
 									</div>
-									<table id="table-purchases" class="table table-bordered table-hover">
-										<thead>
-											<tr>
-												<th>Time</th>
-												<th>Product</th>
-												<th>Amount</th>
-												<th>Status</th>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody>
-											<?php 
-												$customer_orders = get_customer_orders($_GET['id']);
-												$purchase_counter = 1;
-												foreach($customer_orders as $customer_order){
-												?>
-													<tr>
-														<td><?php echo time_elapsed_string($customer_order->post_date); ?></td>
-														<?php  
-															$order = new WC_Order( $customer_order->ID );
 
-													        $product_list = '';
-													        $order_item = $order->get_items();
+									<?php
+									$my_orders_columns = apply_filters( 'woocommerce_my_account_my_orders_columns', array(
+										'order-number'  => __( 'Order', 'woocommerce' ),
+										'order-date'    => __( 'Date', 'woocommerce' ),
+										'order-status'  => __( 'Status', 'woocommerce' ),
+										'order-total'   => __( 'Total', 'woocommerce' ),
+										'order-actions' => '&nbsp;',
+									) );
 
-													        foreach( $order_item as $product ) {
-													    ?>
-													    		<td><?php echo $product['name'] ?></td>
-																<td>$<?php echo $product['total']; ?></td>
-													    <?php
-													        }
-														?>
-														
-														<td><?php echo wc_get_order_statuses()[$customer_order->post_status]; ?></td>
-														<td class="text-center"><a href="#" data-target="purchase-detail-item-<?php echo $purchase_counter; ?>" class="btn btn-default view-purchase-details">Details</a></td>
+									$customer_orders = get_posts( apply_filters( 'woocommerce_my_account_my_orders_query', array(
+										'numberposts' => $order_count,
+										'meta_key'    => '_customer_user',
+										'meta_value'  => $_GET['id'],
+										'post_type'   => wc_get_order_types( 'view-orders' ),
+										'post_status' => array_keys( wc_get_order_statuses() ),
+									) ) );
+
+									if ( $customer_orders ){ ?>
+
+										<p class="text-bold">Purchases</p>
+
+										<table class="shop_table shop_table_responsive my_account_orders">
+
+											<thead>
+												<tr>
+													<?php foreach ( $my_orders_columns as $column_id => $column_name ) : ?>
+														<th class="<?php echo esc_attr( $column_id ); ?>"><span class="nobr"><?php echo esc_html( $column_name ); ?></span></th>
+													<?php endforeach; ?>
+												</tr>
+											</thead>
+
+											<tbody>
+												<?php foreach ( $customer_orders as $customer_order ) :
+													$order      = wc_get_order( $customer_order );
+													$item_count = $order->get_item_count();
+													?>
+													<tr class="order">
+														<?php foreach ( $my_orders_columns as $column_id => $column_name ) : ?>
+															<td class="<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
+																<?php if ( has_action( 'woocommerce_my_account_my_orders_column_' . $column_id ) ) : ?>
+																	<?php do_action( 'woocommerce_my_account_my_orders_column_' . $column_id, $order ); ?>
+
+																<?php elseif ( 'order-number' === $column_id ) : ?>
+																	<a href="<?php echo esc_url( $order->get_view_order_url() ); ?>">
+																		<?php echo _x( '#', 'hash before order number', 'woocommerce' ) . $order->get_order_number(); ?>
+																	</a>
+
+																<?php elseif ( 'order-date' === $column_id ) : ?>
+																	<time datetime="<?php echo esc_attr( $order->get_date_created()->date( 'c' ) ); ?>"><?php echo esc_html( wc_format_datetime( $order->get_date_created() ) ); ?></time>
+
+																<?php elseif ( 'order-status' === $column_id ) : ?>
+																	<?php echo esc_html( wc_get_order_status_name( $order->get_status() ) ); ?>
+
+																<?php elseif ( 'order-total' === $column_id ) : ?>
+																	<?php
+																	/* translators: 1: formatted order total 2: total order items */
+																	printf( _n( '%1$s for %2$s item', '%1$s for %2$s items', $item_count, 'woocommerce' ), $order->get_formatted_order_total(), $item_count );
+																	?>
+
+																<?php elseif ( 'order-actions' === $column_id ) : ?>
+																	<?php
+																		$actions = array(
+																			'pay'    => array(
+																				'url'  => $order->get_checkout_payment_url(),
+																				'name' => __( 'Pay', 'woocommerce' ),
+																			),
+																			'view'   => array(
+																				'url'  => $order->get_view_order_url(),
+																				'name' => __( 'View', 'woocommerce' ),
+																			),
+																			'cancel' => array(
+																				'url'  => $order->get_cancel_order_url( wc_get_page_permalink( 'myaccount' ) ),
+																				'name' => __( 'Cancel', 'woocommerce' ),
+																			),
+																		);
+
+																		if ( ! $order->needs_payment() ) {
+																			unset( $actions['pay'] );
+																		}
+
+																		if ( ! in_array( $order->get_status(), apply_filters( 'woocommerce_valid_order_statuses_for_cancel', array( 'pending', 'failed' ), $order ) ) ) {
+																			unset( $actions['cancel'] );
+																		}
+
+																		if ( $actions = apply_filters( 'woocommerce_my_account_my_orders_actions', $actions, $order ) ) {
+																			foreach ( $actions as $key => $action ) {
+																				echo '<a href="' . get_the_permalink() . '?id=' . $_GET['id'] . '&order_id=' . $order->get_order_number() . '" class="button ' . sanitize_html_class( $key ) . '">' . esc_html( $action['name'] ) . '</a>';
+																			}
+																		}
+																	?>
+																<?php endif; ?>
+															</td>
+														<?php endforeach; ?>
 													</tr>
+												<?php endforeach; ?>
+											</tbody>
+										</table>
 
-												<div id="purchase-detail-item-<?php echo $purchase_counter; ?>" class="row purchase-detail-item">
-													<div class="col-md-12">
-														<p class="text-bold">Purchase Date</p>
-														<ul class="list-info">
-															<li><span>Created:</span> <?php echo $customer_order->post_date; ?></li>
-															
-														</ul>
-													</div>
-													<div class="col-md-12">
-														<div class="fx-separator"></div>
-													</div>
-													<div class="col-md-12">
-														<p class="text-bold">Purchase Details</p>
-														<ul class="list-info">
-															<?php foreach( $order_item as $product ) { ?>
-																<li><span>Name:</span> <?php echo $product['name'] ?></li>
-																<li><span>Unit Price:</span> $<?php echo $product['total'] ?></li>
-															<?php } ?>
-														</ul>
-														<p class="text-bold">Purchase Details</p>
-														<p>The card on file for your account ends with 7576</p>
-														<div class="row">
-															<div class="col-md-6">
-																<a href="#" class="btn btn-success btn-lg btn-block">Update Payment Information</a>
-															</div>
-															<div class="col-md-6">
-																<a href="#" class="btn btn-success btn-lg btn-block">Choose Another Plan</a>
-															</div>
-														</div>
-													</div>
-													<div class="col-md-12">
-														<div class="fx-separator"></div>
-													</div>
-												</div>
-											<?php
-													$purchase_counter++;
-												}
-											?>
-										</tbody>
-									</table>
+										<?php if($_GET['order_id']){ ?>
+										<div class="purchases-view-order">
+											<?php get_template_part('woocommerce/myaccount/view-order'); ?>
+											<a href="#" id="back-to-purchases" class="btn btn-default">Back to Purchases</a>
+										</div>
+										<?php } ?>
+
+									<?php }else{ ?>
+										<p>No purchases found.</p>
+									<?php } ?>
 									<div id="view-purchase-details">
 										<div class="purchase-details-info"></div>
 										<div class="panel panel-default">
@@ -266,35 +299,82 @@ foreach($_POST as $user_key => $user_value)
 								</div>
 								<div class="tab-pane fade" id="d">
 									<p class="text-bold">Memberships Section</p>
-									<?php  
-										$customer_subscriptions = get_posts( array(
-										    'numberposts' => -1,
-										    'meta_key'    => '_customer_user', 
-										    'meta_value'  => $_GET['id'], // Or $user_id
-										    'post_type'   => 'shop_subscription', // WC orders post type
-										    'post_status' => 'wc-active' // Only orders with status "completed"
-										) );
-										//print_r($customer_subscriptions);
-										// Iterating through each post subscription object
-										foreach( $customer_subscriptions as $customer_subscription ){
-
-										    // IMPORTANT HERE: Getting an instance of the WC_Subscription object <==  <==  <==  <==
-										    $subscription = new WC_Subscription($customer_subscription->ID);
-
-										    // Getting the related ORDER ID   <==  <==  <==  <==  <==  <==  <==  <==  <==  <==  <==
-										    $order_id = $subscription->order->id;
-
-										    // Getting an instance of the related WC_ORDER object   <==  <==  <==  <==  <==  <== 
-										    $order = $subscription->order;
-										    //echo '<pre>';print_r($order);echo '</pre>';
-
-										    //print_r($customer_subscriptions);
-										    // Optionally: displaying the WC_Subscription object raw data
-										    //echo '<pre>';print_r($subscription);echo '</pre>';
-										    
-										    //echo '<pre>';print_r($subscription->get_related_orders());echo '</pre>';
-										}
+									<?php 
+										//update subscription data based on user id param
+										$subscriptions = wcs_get_users_subscriptions( $_GET['id'] );
 									?>
+
+									<div class="woocommerce_account_subscriptions">
+
+										<?php if ( WC_Subscriptions::is_woocommerce_pre( '2.6' ) ) : ?>
+										<h2><?php esc_html_e( 'My Subscriptions', 'woocommerce-subscriptions' ); ?></h2>
+										<?php endif; ?>
+
+										<?php if ( ! empty( $subscriptions ) ) : ?>
+										<table class="shop_table shop_table_responsive my_account_subscriptions my_account_orders">
+
+										<thead>
+											<tr>
+												<th class="subscription-id order-number"><span class="nobr"><?php esc_html_e( 'Subscription', 'woocommerce-subscriptions' ); ?></span></th>
+												<th class="subscription-status order-status"><span class="nobr"><?php esc_html_e( 'Status', 'woocommerce-subscriptions' ); ?></span></th>
+												<th class="subscription-next-payment order-date"><span class="nobr"><?php echo esc_html_x( 'Next Payment', 'table heading', 'woocommerce-subscriptions' ); ?></span></th>
+												<th class="subscription-total order-total"><span class="nobr"><?php echo esc_html_x( 'Total', 'table heading', 'woocommerce-subscriptions' ); ?></span></th>
+												<th class="subscription-actions order-actions">&nbsp;</th>
+											</tr>
+										</thead>
+
+										<tbody>
+										<?php foreach ( $subscriptions as $subscription_id => $subscription ) : ?>
+											<tr class="order">
+												<td class="subscription-id order-number" data-title="<?php esc_attr_e( 'ID', 'woocommerce-subscriptions' ); ?>">
+													<a href="<?php echo esc_url( $subscription->get_view_order_url() ); ?>"><?php echo esc_html( sprintf( _x( '#%s', 'hash before order number', 'woocommerce-subscriptions' ), $subscription->get_order_number() ) ); ?></a>
+													<?php do_action( 'woocommerce_my_subscriptions_after_subscription_id', $subscription ); ?>
+												</td>
+												<td class="subscription-status order-status" data-title="<?php esc_attr_e( 'Status', 'woocommerce-subscriptions' ); ?>">
+													<?php echo esc_attr( wcs_get_subscription_status_name( $subscription->get_status() ) ); ?>
+												</td>
+												<td class="subscription-next-payment order-date" data-title="<?php echo esc_attr_x( 'Next Payment', 'table heading', 'woocommerce-subscriptions' ); ?>">
+													<?php echo esc_attr( $subscription->get_date_to_display( 'next_payment' ) ); ?>
+													<?php if ( ! $subscription->is_manual() && $subscription->has_status( 'active' ) && $subscription->get_time( 'next_payment' ) > 0 ) : ?>
+														<?php
+														// translators: placeholder is the display name of a payment gateway a subscription was paid by
+														$payment_method_to_display = sprintf( __( 'Via %s', 'woocommerce-subscriptions' ), $subscription->get_payment_method_to_display() );
+														$payment_method_to_display = apply_filters( 'woocommerce_my_subscriptions_payment_method', $payment_method_to_display, $subscription );
+														?>
+													<br/><small><?php echo esc_attr( $payment_method_to_display ); ?></small>
+													<?php endif; ?>
+												</td>
+												<td class="subscription-total order-total" data-title="<?php echo esc_attr_x( 'Total', 'Used in data attribute. Escaped', 'woocommerce-subscriptions' ); ?>">
+													<?php echo wp_kses_post( $subscription->get_formatted_order_total() ); ?>
+												</td>
+												<td class="subscription-actions order-actions">
+													<a href="<?php echo get_the_permalink() . '?id=' . $_GET['id'] . '&subs_id=' . $subscription->get_order_number() ?>" class="button view"><?php echo esc_html_x( 'View', 'view a subscription', 'woocommerce-subscriptions' ); ?></a>
+													<?php do_action( 'woocommerce_my_subscriptions_actions', $subscription ); ?>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+										</tbody>
+
+										</table>
+										<?php else : ?>
+
+											<p class="no_subscriptions">
+												<?php
+												// translators: placeholders are opening and closing link tags to take to the shop page
+												printf( esc_html__( 'You have no active subscriptions. Find your first subscription in the %sstore%s.', 'woocommerce-subscriptions' ), '<a href="' . esc_url( apply_filters( 'woocommerce_subscriptions_message_store_url', get_permalink( wc_get_page_id( 'shop' ) ) ) ) . '">', '</a>' );
+												?>
+											</p>
+
+										<?php endif; ?>
+
+									</div>
+
+									<?php if($_GET['subs_id']){ ?>
+									<div class="membership-view-subs">
+										<?php get_template_part('woocommerce/myaccount/view-subscription'); ?>
+										<a href="#" id="back-to-memberships" class="btn btn-default">Back to Memberships</a>
+									</div>
+									<?php } ?>
 								</div>
 								<div class="tab-pane fade" id="e">
 									<p class="text-bold">Genealogy Section</p>
@@ -312,20 +392,25 @@ foreach($_POST as $user_key => $user_value)
 											<?php  
 											$counter = 1;
 											$recent_activity = get_user_meta( get_current_user_id(), "track_user_history" )[0];
+
 											$reverse = array_reverse($recent_activity, true);
-											foreach($reverse as $activity){
+											foreach($reverse as $act_data){
+												if($counter <= 10){
+													if($act_data['title']){
 											?>
-											<tr>
-												<td><?php echo $activity['title']; ?></td>
-												<td><?php echo $activity['link']; ?></td>
-												<td><?php echo time_elapsed_string($activity['time']); ?></td>
-											</tr>
+														<tr>
+															<td><?php echo $act_data['title'] ?></td>
+															<td><a href="<?php echo $act_data['link'] ?>"><?php echo $act_data['link'] ?></a></td>
+															<td><?php echo random_checkout_time_elapsed($act_data['time']) ?></td>
+														</tr>
 											<?php
-													if($counter > 10){
-														break;
+														$counter++;
 													}
-													$counter++;
+												}else{
+													break;
 												}
+											}
+
 											?>
 										</tbody>
 									</table>
@@ -440,6 +525,7 @@ foreach($_POST as $user_key => $user_value)
 			$('#view-purchase-details').hide();
 			$('#table-purchases').fadeIn();
 		});
+
 	});
 </script>
 
@@ -448,6 +534,34 @@ foreach($_POST as $user_key => $user_value)
 	$(document).ready(function(){
 		$('.marketing-contacts a[href="#c"]').click();
 		$('.tab-pane#c').addClass('tab-pane-cancellation');
+	});
+</script>
+<?php } ?>
+
+<?php if($_GET['order_id']){ ?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.marketing-contacts a[href="#c"]').click();
+		$('.tab-pane#c .my_account_orders').hide();
+		$('#back-to-purchases').click(function(e){
+			e.preventDefault();
+			$('.tab-pane#c .my_account_orders').fadeIn();
+			$('.purchases-view-order').hide();
+		});
+	});
+</script>
+<?php } ?>
+
+<?php if($_GET['subs_id']){ ?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.marketing-contacts a[href="#d"]').click();
+		$('.tab-pane#d .my_account_subscriptions').hide();
+		$('#back-to-memberships').click(function(e){
+			e.preventDefault();
+			$('.tab-pane#d .my_account_subscriptions').fadeIn();
+			$('.membership-view-subs').hide();
+		});
 	});
 </script>
 <?php } ?>

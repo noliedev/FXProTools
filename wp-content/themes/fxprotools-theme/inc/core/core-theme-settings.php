@@ -27,7 +27,7 @@ if(!class_exists('ThemeSettings')){
 			add_action('user_register', array($this, 'send_email_verification'));
 			add_action('user_register', array($this, 'register_affiliate'));
 			add_action('affwp_notify_on_approval', array($this, 'disable_affiliate_welcome_email'));
-			add_action('wp_footer', array($this, 'track_user_history'));
+			add_action('wp', array($this, 'track_user_history'));
 			
 		}
 
@@ -153,7 +153,6 @@ if(!class_exists('ThemeSettings')){
 		{
 			//delete_user_meta(get_current_user_id(), "track_user_history");
 		    $track_user_history = get_user_meta( get_current_user_id(), "track_user_history" )[0];
-		    //$track_user_history = $track_user_history . ',' . get_the_permalink();
 		    if(!$track_user_history){
 		    	$track_user_history = array();
 		    }
