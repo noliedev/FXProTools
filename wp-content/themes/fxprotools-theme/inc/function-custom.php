@@ -374,33 +374,6 @@ function get_trial_end_date(){
 
 }
 
-function get_user_subscription_level()
-{
-	$user_subscription = '';
-
-	if( is_user_fx_distributor(false) ){
-		$user_subscription = 'distributor';
-	}
-
-	elseif( is_user_fx_distributor(true) ){
-		$user_subscription = 'trial-distributor';
-	}
-
-	elseif( is_user_fx_customer(false) ){
-		$user_subscription = 'customer';
-	}
-
-	elseif( is_user_fx_customer(true) ){
-		$user_subscription = 'trial-customer';
-	}
-
-	else{
-		$user_subscription = 'subscriber';
-	}
-
-	return $user_subscription;
-}
-
 function is_user_fx_customer()
 {
 	$subscription_products = array( 2699, 47 );

@@ -19,7 +19,6 @@ if(!class_exists('ThemeSettings')){
 
 			add_action('wp_enqueue_scripts', array($this, 'enqueue_theme_assets'));
 			add_action('wp', array($this, 'enforce_page_access'));
-			add_action('wp', array($this, 'check_trial_subscription'));
 			add_action('init', array($this, 'course_category_rewrite'));
 			add_action('template_redirect',  array($this, 'course_category_template'));
 			add_filter('query_vars',  array($this,'course_category_vars'));
@@ -77,16 +76,6 @@ if(!class_exists('ThemeSettings')){
 					exit;
 				}
 			}
-		}
-
-		public function check_trial_subscription(){
-			if( is_user_logged_in() ){
-				$subscription_level = get_user_subscription_level();
-				if( $subscription_level == 'subscriber' ){
-					//wp_redirect( home_url() . '/access-denied/');
-				}
-			}
-			
 		}
 
 		public function course_category_rewrite()
