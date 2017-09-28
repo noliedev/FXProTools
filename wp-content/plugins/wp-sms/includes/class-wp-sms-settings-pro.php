@@ -383,10 +383,10 @@ class WP_SMS_Settings_Pro {
 				),
 				'register_verify_sms' => array(
 					'id'      => 'register_verify_sms',
-					'name'    => __( 'Register with mobile', 'wp-sms' ),
+					'name'    => __( 'Verify registration', 'wp-sms' ),
 					'type'    => 'checkbox',
 					'options' => $options,
-					'desc'    => __( 'Register and verify user in wordpress with sms verification', 'wp-sms' ),
+					'desc'    => __( 'Verify user registration in WordPress with SMS. The feature stabled with WordPress default form.<br>The <code>manage_options</code> caps don\'t need to registration in login form.', 'wp-sms' ),
 				),
 			) ),
 			// Options for BuddyPress tab
@@ -534,8 +534,9 @@ class WP_SMS_Settings_Pro {
 					'type' => 'textarea',
 					'desc' => __( 'Enter the contents of the sms message.', 'wp-sms' ) . '<br>' .
 					          sprintf(
-						          __( 'Order id: %s, Order status: %s', 'wp-sms' ),
+						          __( 'Order id: %s, Order number: %s, Order status: %s', 'wp-sms' ),
 						          '<code>%order_id%</code>',
+						          '<code>%order_number%</code>',
 						          '<code>%status%</code>'
 					          )
 				),
@@ -557,8 +558,9 @@ class WP_SMS_Settings_Pro {
 					'type' => 'textarea',
 					'desc' => __( 'Enter the contents of the sms message.', 'wp-sms' ) . '<br>' .
 					          sprintf(
-						          __( 'Order id: %s, Order status: %s, Customer name: %s, Customer family: %s', 'wp-sms' ),
+						          __( 'Order id: %s, Order number: %s, Order status: %s, Customer name: %s, Customer family: %s', 'wp-sms' ),
 						          '<code>%order_id%</code>',
+						          '<code>%order_number%</code>',
 						          '<code>%status%</code>',
 						          '<code>%billing_first_name%</code>',
 						          '<code>%billing_last_name%</code>'
