@@ -65,6 +65,7 @@ if(!class_exists('ThemeSettings')){
 		public function enforce_page_access()
 		{
 			global $post;
+			if( !isset($post) )}{return;}
     		$slug = $post->post_name;
     		$guest_allowed_post_type = array( 'product' );
 			$guest_allowed_pages = array( 'login', 'forgot-password', 'verify-email', 'funnels', 'f1', 'f2', 'f3', 'f4' );
@@ -163,7 +164,7 @@ if(!class_exists('ThemeSettings')){
 		    );
 		    array_push($track_user_history, $data);
 
-			update_usermeta(get_current_user_id(), 'track_user_history', $track_user_history);
+			update_user_meta(get_current_user_id(), 'track_user_history', $track_user_history);
 		}
 	}
 }
