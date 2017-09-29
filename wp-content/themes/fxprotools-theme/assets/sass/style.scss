@@ -22,3 +22,13 @@ $green: #03ae78;
 @import '_common'; // Common Styles
 @import '_forms';  // Form Styles
 @import '_custom'; // All custom styles that are not common to other pages
+
+
+
+ul.fx-nav-options-sub {
+    position: absolute;
+    display:none
+}
+ul.fx-nav-options > li:hover ul.fx-nav-options-sub  {
+    display: block;
+}
