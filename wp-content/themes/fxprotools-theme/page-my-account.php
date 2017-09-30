@@ -64,6 +64,7 @@ if( $_SERVER['REQUEST_METHOD'] === 'POST'){
 							<li><a href="#b" data-toggle="tab">Edit Contact</a></li>
 							<li><a href="#c" data-toggle="tab">Purchases</a></li>
 							<li><a href="#d" data-toggle="tab">Memberships</a></li>
+							<li><a href="#g" data-toggle="tab">Genealogy</a></li>
 							<li><a href="#e" data-toggle="tab">Your Sponsor</a></li>
 							<li><a href="#f" data-toggle="tab">Recent Activity</a></li>
 						</ul>
@@ -195,6 +196,11 @@ if( $_SERVER['REQUEST_METHOD'] === 'POST'){
 							</div>
 							<div class="tab-pane fade" id="d">
 								<p class="text-bold">Memberships Section</p>
+							</div>
+							<div class="tab-pane fade" id="g">
+								<?php echo do_shortcode('[afl_sponsor_info]'); ?>
+								<?php echo do_shortcode('[afl_team_info]'); ?>
+								<?php echo do_shortcode('[afl_genealogy_info]'); ?>
 							</div>
 							<div class="tab-pane fade" id="e">
 								<p class="text-bold">Sponsor Section</p>

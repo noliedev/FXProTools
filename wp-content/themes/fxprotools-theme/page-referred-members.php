@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-	<?php get_template_part('inc/templates/nav-wallet'); ?>
+	<?php get_template_part('inc/templates/nav-team'); ?>
 
 	<div class="container">
 		<div class="row">
@@ -13,56 +13,9 @@
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<table class="table table-bordered with-padding">
-					<thead>
-						<tr>
-							<th class="small text-center">Member</th>
-							<th class="small text-center">Package Amount</th>
-							<th class="small text-center">Joined Date</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="text-center">Member 1</td>
-							<td class="text-center">$140.00</td>
-							<td class="text-center">July 21, 2017</td>
-						</tr>
-						<tr>
-							<td class="text-center">Member 2</td>
-							<td class="text-center">$140.00</td>
-							<td class="text-center">July 21, 2017</td>
-						</tr>
-						<tr>
-							<td class="text-center">Member 3</td>
-							<td class="text-center">$140.00</td>
-							<td class="text-center">July 21, 2017</td>
-						</tr>
-						<tr>
-							<td class="text-center">Member 4</td>
-							<td class="text-center">$140.00</td>
-							<td class="text-center">July 21, 2017</td>
-						</tr>
-						<tr>
-							<td class="text-center">Member 5</td>
-							<td class="text-center">$140.00</td>
-							<td class="text-center">July 21, 2017</td>
-						</tr>
-						<tr>
-							<td class="text-center">Member 6</td>
-							<td class="text-center">$140.00</td>
-							<td class="text-center">July 21, 2017</td>
-						</tr>
-						<tr>
-							<td class="text-center">Member 7</td>
-							<td class="text-center">$140.00</td>
-							<td class="text-center">July 21, 2017</td>
-						</tr>
-					</tbody>
-				</table>
+				<?php echo do_shortcode('[afl_eps_matrix_reffered_downlines]'); ?>
 			</div>
 		</div>
 	</div>
-
 	
-
 <?php get_footer(); ?>
